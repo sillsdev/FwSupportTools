@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ProcessLanguagesBld
 {
@@ -16,19 +13,20 @@ namespace ProcessLanguagesBld
 		/// <returns>Zero if successful, otherwise number of .po files that led to an error.</returns>
 		static int Main(string[] args)
 		{
-			if (args.Length != 2)
+			if (args.Length != 3)
 			{
 				Console.WriteLine("ERROR: ProcessLanguagesBld.exe usage:");
-				Console.WriteLine("ProcessLanguagesBld.exe <FW-path> <FW-Output-Release-path>");
-				Console.WriteLine(args.Length + " argument(s) supplied. Must supply exactly 2 arguments.");
+				Console.WriteLine("ProcessLanguagesBld.exe <Debug|Release> <FW-path> <FW-Output-Release-path>");
+				Console.WriteLine(args.Length + " argument(s) supplied. Must supply exactly 3 arguments.");
 				return -1;
 			}
 
 			// Set up main object to process .po files:
 			var langProc = new LanguageProcessor();
 
-			langProc.FwRoot = args[0];
-			langProc.FwOutput = args[1];
+			langProc.Config = args[0];
+			langProc.FwRoot = args[1];
+			langProc.FwOutput = args[2];
 
 			return langProc.Run();
 		}
