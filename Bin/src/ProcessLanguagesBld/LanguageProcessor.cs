@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
 
@@ -15,9 +11,11 @@ namespace ProcessLanguagesBld
 	/// </summary>
 	class LanguageProcessor
 	{
+		private string m_config; // e.g. Release
 		private string m_fwRoot; // e.g. C:\FW-WW
 		private string m_fwOutput; // e.g. C:\FW-WW\Output\Release
 
+		public string Config { set { m_config = value; } }
 		public string FwRoot { set { m_fwRoot = value; } }
 		public string FwOutput { set { m_fwOutput = value; } }
 
@@ -38,11 +36,11 @@ namespace ProcessLanguagesBld
 				{
 					// Process current .po file, storinng console output in log:
 					string log;
-					if (!processFile(currentFile, out log))
+					if (!ProcessFile(currentFile, out log))
 						numFailures++;
 
 					// Slot current log file into array at index matching current language:
-					int index = Array.FindIndex<string>(poFiles, poFile => (poFile == currentFile));
+					int index = Array.FindIndex(poFiles, poFile => (poFile == currentFile));
 					if (index != -1)
 						localizationLogs[index] = log;
 				}
@@ -70,11 +68,10 @@ namespace ProcessLanguagesBld
 		/// <param name="currentFile">Path to a .po file</param>
 		/// <param name="log">Output log of processing</param>
 		/// <returns>True if successful, false if there is an error</returns>
-		private bool processFile(string currentFile, out string log)
+		private bool ProcessFile(string currentFile, out string log)
 		{
 			// Get the language code embedded in the .po file name:
-			var language = StringExtensions.Replace(
-				Path.GetFileNameWithoutExtension(currentFile), "messages.", "", StringComparison.InvariantCultureIgnoreCase);
+			var language = Path.GetFileNameWithoutExtension(currentFile).Replace("messages.", "", StringComparison.InvariantCultureIgnoreCase);
 			// Get the path to the Bld directory:
 			var bldDirectory = Path.Combine(m_fwRoot, "bld");
 
@@ -162,7 +159,10 @@ namespace ProcessLanguagesBld
 		/// <summary>
 		/// Runs NAnt on the given target(s).
 		/// </summary>
-		/// <param name="target">The NAnt target(s) to run</param>
+		/// <param name="targets">The NAnt target(s) to run</param>
+		/// <param name="language">The language code e.g. "es" or "zh-CN"</param>
+		/// <param name="log">An output of status, error messages etc.</param>
+		/// <returns>Exit code of NAnt process</returns>
 		private int Nant(string targets, string language, out string log)
 		{
 			// Write a temporary batch file containing a few DOS commands needed to run NAnt in the right context:
@@ -174,7 +174,7 @@ namespace ProcessLanguagesBld
 			// We need to specify .NET 3.5 to avoid errors on Windows 7 64-bit machines which
 			// come with part of .NET 4.0 installed. When we move beyond .NET 3.5, we will need
 			// to change this line:
-			batchFile.WriteLine("..\\bin\\nant\\bin\\nant -t:net-3.5 release " + targets);
+			batchFile.WriteLine("..\\bin\\nant\\bin\\nant -t:net-3.5 " + m_config + " " + targets);
 			batchFile.Close();
 
 			var nantProc = new Process();
@@ -204,7 +204,7 @@ namespace ProcessLanguagesBld
 		/// </summary>
 		/// <param name="str">A string</param>
 		/// <returns>Quoted string</returns>
-		private string Quote(string str)
+		private static string Quote(string str)
 		{
 			return "\"" + str + "\"";
 		}
