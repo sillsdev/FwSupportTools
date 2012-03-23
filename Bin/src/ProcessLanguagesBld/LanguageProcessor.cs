@@ -171,10 +171,7 @@ namespace ProcessLanguagesBld
 			batchFile.WriteLine("set fwroot=" + m_fwRoot);
 			batchFile.WriteLine("set path=%fwroot%\\DistFiles;%path%");
 			batchFile.WriteLine("cd " + Path.Combine(m_fwRoot, "bld"));
-			// We need to specify .NET 3.5 to avoid errors on Windows 7 64-bit machines which
-			// come with part of .NET 4.0 installed. When we move beyond .NET 3.5, we will need
-			// to change this line:
-			batchFile.WriteLine("..\\bin\\nant\\bin\\nant -t:net-3.5 " + m_config + " " + targets);
+			batchFile.WriteLine("..\\bin\\nant\\bin\\nant " + m_config + " " + targets);
 			batchFile.Close();
 
 			var nantProc = new Process();
