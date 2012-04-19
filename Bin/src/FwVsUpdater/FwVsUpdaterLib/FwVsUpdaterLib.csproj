@@ -37,8 +37,8 @@
 	<BootstrapperEnabled>true</BootstrapperEnabled>
 	<StartupObject>
 	</StartupObject>
-	<TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
-	<TargetFrameworkProfile />
+	<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+	<TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 	<DebugSymbols>true</DebugSymbols>
@@ -79,8 +79,8 @@
 	<Compile Include="FwPath.Designer.cs">
 	  <DependentUpon>FwPath.cs</DependentUpon>
 	</Compile>
-	<Compile Include="LibSettingsProvider.cs" />
 	<Compile Include="Main.cs" />
+	<Compile Include="PortableSettingsProvider.cs" />
 	<Compile Include="ProgressDialog.cs">
 	  <SubType>Form</SubType>
 	</Compile>
