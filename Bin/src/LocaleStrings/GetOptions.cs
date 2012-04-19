@@ -180,7 +180,7 @@ namespace SIL.FieldWorks.Common.Utils
 			}
 		}
 
-		static string s_sError = null;
+		static string s_sError;
 
 		/// <summary>
 		/// This static method parses the command line, storing the parameter values, and
