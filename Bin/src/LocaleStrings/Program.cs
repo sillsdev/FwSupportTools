@@ -37,7 +37,7 @@ namespace LocaleStrings
 		/// DistFiles directory used on developer machine, but missing on end-user machines.
 		/// We want to be able to run this on end-user machines to build the strings-???.xml file.
 		/// </summary>
-		static string s_DistFiles = "";
+		static string s_DistFiles = "";		// cannot be null -- used in Path.Combine below.
 
 		static void Main(string[] args)
 		{
@@ -62,7 +62,7 @@ namespace LocaleStrings
 					false);
 				CommandLineOptions.StringParam spRoot = new CommandLineOptions.StringParam("r",
 					"root",
-					"The root directory of the FieldWorks source tree (typically C:\\FW)",
+					"The root directory of the FieldWorks source tree (typically C:\\FW or /home/user/FW)",
 					null);
 				CommandLineOptions.StringParam spPOTFile = new CommandLineOptions.StringParam("p",
 					"pot",
@@ -119,9 +119,9 @@ namespace LocaleStrings
 				if (spRoot.HasValue)
 				{
 					sRoot = spRoot.Value;
-					string devPath = Path.Combine(sRoot, "distfiles");
+					string devPath = Path.Combine(sRoot, "DistFiles");
 					if (Directory.Exists(devPath))
-						s_DistFiles = "distfiles/";
+						s_DistFiles = "DistFiles";
 				}
 				else
 					sRoot = GetRootDir();
@@ -154,8 +154,9 @@ namespace LocaleStrings
 					string sLocale = spTest.Value;
 					if (VerifyValidLocale(sLocale))
 					{
-						string sOutputFile = Path.Combine(sRoot,
-							String.Format("Localizations\\messages.{0}.po", sLocale));
+						string sBase = Path.Combine(sRoot, "Localizations");
+						string sOutputFile = Path.Combine(sBase,
+							String.Format("messages.{0}.po", sLocale));
 						if (File.Exists(sOutputFile) && !bpForce.Value)
 						{
 							Usage(String.Format("{0} already exists.  Use --force to overwrite",
@@ -625,7 +626,7 @@ namespace LocaleStrings
 			if (idx == sRootDir.Length - 9)
 			{
 				sRootDir = sRootDir.Substring(0, idx);
-				s_DistFiles = "distfiles/";
+				s_DistFiles = "DistFiles";
 			}
 			return sRootDir;
 		}
@@ -858,10 +859,9 @@ namespace LocaleStrings
 		private static void StoreLocalizedStrings(string sMsgFile, string sRoot)
 		{
 			string sLoc = GetLocaleFromMsgFile(sMsgFile);
-			string sEngFile = Path.Combine(sRoot,
-				s_DistFiles + "Language Explorer/Configuration/strings-en.xml");
-			string sNewFile = Path.Combine(sRoot,
-				s_DistFiles + "Language Explorer/Configuration/strings-" + sLoc + ".xml");
+			string sBase = Path.Combine(sRoot, s_DistFiles);
+			string sEngFile = Path.Combine(sBase, "Language Explorer/Configuration/strings-en.xml");
+			string sNewFile = Path.Combine(sBase, "Language Explorer/Configuration/strings-" + sLoc + ".xml");
 			File.Delete(sNewFile);
 			POString posHeader;
 			Dictionary<string, POString> dictTrans = LoadPOFile(sMsgFile, out posHeader);
@@ -1137,7 +1137,8 @@ namespace LocaleStrings
 		private static void ExtractFromXmlConfigFiles(string sRoot, List<POString> rgsPOStrings)
 		{
 			// Get the list of configuration files to process.
-			string sRootDir = Path.Combine(sRoot, s_DistFiles + "Language Explorer/Configuration");
+			string sBase = Path.Combine(sRoot, s_DistFiles);
+			string sRootDir = Path.Combine(sBase, "Language Explorer/Configuration");
 			string[] rgsLocConfigFiles = FindAllFiles(sRootDir, "strings-*.xml");
 			List<string> lssLocConfigFiles = new List<string>(rgsLocConfigFiles.Length);
 			for (int i = 0; i < rgsLocConfigFiles.Length; ++i)
@@ -1150,7 +1151,7 @@ namespace LocaleStrings
 				if (!lssLocConfigFiles.Contains(rgsConfigFiles[i].ToLower()))
 					lssConfigFiles.Add(rgsConfigFiles[i]);
 			}
-			sRootDir = Path.Combine(sRoot, s_DistFiles + "Parts");
+			sRootDir = Path.Combine(sBase, "Parts");
 			// Let's not include the auto-generated parts and layouts for now.
 			//rgsConfigFiles = FindAllFiles(sRootDir, "*.xml");
 			rgsConfigFiles = FindAllFiles(sRootDir, "Standard*.xml");
@@ -1355,7 +1356,8 @@ namespace LocaleStrings
 		/// <param name="rgsPOStrings"></param>
 		private static void ProcessXmlStringsFile(string sRoot, List<POString> rgsPOStrings)
 		{
-			string sFile = Path.Combine(sRoot, s_DistFiles + "Language Explorer/Configuration/strings-en.xml");
+			string sBase = Path.Combine(sRoot, s_DistFiles);
+			string sFile = Path.Combine(sBase, "Language Explorer/Configuration/strings-en.xml");
 			XmlDocument xdoc = new XmlDocument();
 			xdoc.Load(sFile);
 			ProcessStringsElement(xdoc.DocumentElement, rgsPOStrings);
