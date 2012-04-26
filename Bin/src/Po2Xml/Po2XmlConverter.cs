@@ -23,14 +23,13 @@ namespace Po2Xml
 
 		public int Run()
 		{
-			var writer = new XmlDocument();
-			writer.CreateProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"format-html.xsl\"");
+			var writer = XmlWriter.Create(XmlFilePath);
+			writer.WriteWhitespace(Environment.NewLine);
+			writer.WriteProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"format-html.xsl\"");
+			writer.WriteWhitespace(Environment.NewLine);
+			writer.WriteStartElement("messages");
 
-			XmlElement messages = writer.CreateElement("messages");
-			messages.AppendChild(writer.CreateTextNode(Environment.NewLine));
-			writer.AppendChild(messages);
-
-			var msg = new PoMessage(writer, messages, Roundtrip);
+			var msg = new PoMessageWriter(writer, Roundtrip);
 
 			var fileInput = new StreamReader(PoFilePath);
 			while (fileInput.Peek() >= 0)
@@ -89,10 +88,8 @@ namespace Po2Xml
 
 			}
 			msg.Flush();
-			var fs = new FileStream(XmlFilePath, FileMode.Create);
-			Console.WriteLine("Writing xml file to: {0}", XmlFilePath);
-			writer.Save(fs);
-			fs.Close();
+			writer.WriteEndDocument();
+			writer.Close();
 			return 0;
 		}
 
@@ -103,15 +100,14 @@ namespace Po2Xml
 		/// <returns></returns>
 		private string RemoveEscapeChars(string p)
 		{
-			var result = p.Replace("\\n", "&#10;");
+			var result = p.Replace("\\n", "&#0xA;");
 			result = result.Replace("\\", "");
 			return result;
 		}
 
-		internal class PoMessage
+		internal class PoMessageWriter
 		{
-			private readonly XmlDocument m_writer;
-			private readonly XmlElement m_messages;
+			private readonly XmlWriter m_writer;
 			private readonly bool m_roundtrip;
 			private readonly string m_indent;
 			private List<string> m_msgid;
@@ -160,10 +156,9 @@ namespace Po2Xml
 				get { return m_flags; }
 			}
 
-			public PoMessage(XmlDocument writer, XmlElement messages, bool roundtrip = false, string indent = "  ")
+			public PoMessageWriter(XmlWriter writer, bool roundtrip = false, string indent = "  ")
 			{
 				m_writer = writer;
-				m_messages = messages;
 				m_roundtrip = roundtrip;
 				m_indent = indent;
 				Reset();
@@ -190,51 +185,50 @@ namespace Po2Xml
 
 			private void Write()
 			{
-				var msg = m_writer.CreateElement("msg");
-				msg.AppendChild(m_writer.CreateTextNode(Environment.NewLine));
-				m_messages.AppendChild(msg);
-				m_messages.AppendChild(m_writer.CreateTextNode(Environment.NewLine));
+				m_writer.WriteWhitespace(Environment.NewLine);
+				m_writer.WriteStartElement("msg");
+				m_writer.WriteWhitespace(Environment.NewLine);
 
 				if (m_roundtrip)
 				{
 					// Support exact round-tripping using multiple <key> and <str> child elements:
 					foreach (var t in m_msgid)
-						WriteElement(msg, "key", t);
+						WriteElement("key", t);
 					foreach (var t in m_msgstr)
-						WriteElement(msg, "str", t);
+						WriteElement("str", t);
 				}
 				else
 				{
 					// Concatenate parts into single <key> and <str> child elements:
-					WriteElement(msg, "key", string.Join("", m_msgid));
-					WriteElement(msg, "str", string.Join("", m_msgstr));
+					WriteElement("key", string.Join("", m_msgid));
+					WriteElement("str", string.Join("", m_msgstr));
 				}
 				foreach (var t in m_usrcomment)
-					WriteElement(msg, "comment", t);
+					WriteElement("comment", t);
 				foreach (var t in m_dotcomment)
-					WriteElement(msg, "info", t);
+					WriteElement("info", t);
 				foreach (var t in m_reference)
-					WriteElement(msg, "ref", t);
+					WriteElement("ref", t);
 				foreach (var t in m_flags)
-					WriteElement(msg, "flags", t);
+					WriteElement("flags", t);
+				m_writer.WriteEndElement();
+				m_writer.WriteWhitespace(Environment.NewLine);
 			}
 
-			private void WriteElement(XmlElement msg, string name, string data, params string[] attrs)
+			private void WriteElement(string name, string data, params string[] attrs)
 			{
-				var element = m_writer.CreateElement(name);
-				element.InnerText = data;
-
+				m_writer.WriteWhitespace(m_indent);
+				m_writer.WriteStartElement(name);
 				for (int i = 0; i < attrs.Length; i++)
 				{
 					if (i + 1 >= attrs.Length)
 						throw new ArgumentException("ERROR: List of attributes for XML element " + name +
 													" is missing data for attribute " + attrs[i]);
-					element.SetAttribute(attrs[i], attrs[i + 1]);
+					m_writer.WriteAttributeString(attrs[i], attrs[i + 1]);
 				}
-
-				msg.AppendChild(m_writer.CreateTextNode(m_indent));
-				msg.AppendChild(element);
-				msg.AppendChild(m_writer.CreateTextNode(Environment.NewLine));
+				m_writer.WriteRaw(data);
+				m_writer.WriteEndElement();
+				m_writer.WriteWhitespace(Environment.NewLine);
 			}
 		}
 	}
