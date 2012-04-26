@@ -5,11 +5,11 @@
 	<Platform Condition=" '$(Platform)' == '' ">x86</Platform>
 	<ProductVersion>8.0.30703</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{4F3D0334-3DCC-4C4A-B245-7F0B9CA95A21}</ProjectGuid>
+	<ProjectGuid>{56A2DB69-CDB3-4A66-86F8-CD3F69175D49}</ProjectGuid>
 	<OutputType>Exe</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
-	<RootNamespace>ProcessLanguagesBld</RootNamespace>
-	<AssemblyName>ProcessLanguagesBld</AssemblyName>
+	<RootNamespace>Po2Xml</RootNamespace>
+	<AssemblyName>Po2Xml</AssemblyName>
 	<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
 	<TargetFrameworkProfile>Client</TargetFrameworkProfile>
 	<FileAlignment>512</FileAlignment>
@@ -47,7 +47,7 @@
 	<Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-	<Compile Include="LanguageProcessor.cs" />
+	<Compile Include="Po2XmlConverter.cs" />
 	<Compile Include="Program.cs" />
 	<Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -36,7 +36,7 @@ namespace ProcessLanguagesBld
 			Parallel.ForEach(poFiles, currentFile =>
 				{
 					// Process current .po file, storinng console output in log:
-					string log;
+					string log = "";
 					if (!ProcessFile(currentFile, out log))
 						numFailures++;
 
@@ -112,16 +112,16 @@ namespace ProcessLanguagesBld
 					// This must come after findstrProc.StandardOutput.ReadToEnd() to avoid deadlocks.
 			}
 
-			// Run the po2xml.py utility:
-			var po2xmlPath = Path.Combine(bldDirectory, "po2xml.py");
+			// Convert .po file to XML by running the Po2Xml utility:
 			var languageXml = Path.Combine(m_fwOutput, language + ".xml");
 
 			using (var po2XmlProc = new Process())
 			{
+
 				po2XmlProc.StartInfo.UseShellExecute = false;
 				po2XmlProc.StartInfo.RedirectStandardOutput = true;
-				po2XmlProc.StartInfo.FileName = "python";
-				po2XmlProc.StartInfo.Arguments = string.Format("{0} -o {1} {2}", Quote(po2xmlPath), Quote(languageXml), Quote(currentFile));
+				po2XmlProc.StartInfo.FileName =  Path.Combine(m_fwRoot, "bin\\Po2Xml.exe");
+				po2XmlProc.StartInfo.Arguments = string.Format("-o {0} {1}", Quote(languageXml), Quote(currentFile));
 				po2XmlProc.StartInfo.WorkingDirectory = bldDirectory;
 				po2XmlProc.Start();
 
@@ -130,7 +130,7 @@ namespace ProcessLanguagesBld
 				po2XmlProc.WaitForExit();
 				if (po2XmlProc.ExitCode != 0)
 				{
-					Console.WriteLine("Error: " + po2XmlProc + " returned error " + po2XmlProc.ExitCode +
+					Console.WriteLine("Error: Po2Xml returned error " + po2XmlProc.ExitCode +
 						" for language " + language + ".");
 					return false;
 				}
