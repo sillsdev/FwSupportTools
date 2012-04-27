@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Diagnostics;
@@ -14,6 +14,7 @@ namespace ProcessLanguagesBld
 		private string m_config; // e.g. Release
 		private string m_fwRoot; // e.g. C:\FW-WW
 		private string m_fwOutput; // e.g. C:\FW-WW\Output\Release
+		private readonly bool IsUnix = (Environment.OSVersion.Platform == PlatformID.Unix);
 
 		public string Config { set { m_config = value; } }
 		public string FwRoot { set { m_fwRoot = value; } }
@@ -73,17 +74,28 @@ namespace ProcessLanguagesBld
 			// Get the language code embedded in the .po file name:
 			var language = Path.GetFileNameWithoutExtension(currentFile).Replace("messages.", "", StringComparison.InvariantCultureIgnoreCase);
 			// Get the path to the Bld directory:
-			var bldDirectory = Path.Combine(m_fwRoot, "bld");
+			var bldDirectory = Path.Combine(m_fwRoot, "Bld");
 
 			// Initiate log:
 			log = "Localization for " + currentFile + " (language + " + language + "):" + Environment.NewLine;
 
 			// Run findstr.exe utility to look for known issues and common errors:
-			var findstrProc = new Process();
+			using (var findstrProc = new Process())
+			{
 			findstrProc.StartInfo.UseShellExecute = false;
 			findstrProc.StartInfo.RedirectStandardOutput = true;
+				if (IsUnix)
+				{
+					findstrProc.StartInfo.FileName = "/bin/grep";
+					findstrProc.StartInfo.Arguments =
+						"-e \"[{][oOlLi][}]\" -e \"[{][0-9][{]\" -e \"[}][0-9][}]\"" + Quote(currentFile);
+				}
+				else
+				{
 			findstrProc.StartInfo.FileName = "cmd.exe";
-			findstrProc.StartInfo.Arguments = "/c findstr.exe /N \"{o} {O} {l} {L} {i} {0{ {1{ }0} }1}\" " + Quote(currentFile);
+					findstrProc.StartInfo.Arguments =
+						"/c findstr.exe /N \"{o} {O} {l} {L} {i} {0{ {1{ }0} }1}\" " + Quote(currentFile);
+				}
 			findstrProc.StartInfo.WorkingDirectory = bldDirectory;
 			findstrProc.Start();
 
@@ -91,32 +103,37 @@ namespace ProcessLanguagesBld
 			string output = findstrProc.StandardOutput.ReadToEnd();
 			if (output.Length > 0)
 			{
-				log += "Found invalid strings in the " + currentFile + " PO data: " + Environment.NewLine + output + Environment.NewLine;
+					log += "Found invalid strings in the " + currentFile + " PO data: " + Environment.NewLine +
+						output + Environment.NewLine;
 				return false;
 			}
 
-			findstrProc.WaitForExit(); // This must come after findstrProc.StandardOutput.ReadToEnd() to avoid deadlocks.
+				findstrProc.WaitForExit();
+					// This must come after findstrProc.StandardOutput.ReadToEnd() to avoid deadlocks.
+			}
 
-			// Run the po2xml.bat utility:
-			var po2xmlPath = Path.Combine(bldDirectory, "po2xml.bat");
+			// Convert .po file to XML by running the Po2Xml utility:
 			var languageXml = Path.Combine(m_fwOutput, language + ".xml");
-			var po2xmlArgs = Quote(currentFile) + " " + Quote(languageXml);
 
-			var po2xmlProc = new Process();
-			po2xmlProc.StartInfo.UseShellExecute = false;
-			po2xmlProc.StartInfo.RedirectStandardOutput = true;
-			po2xmlProc.StartInfo.FileName = po2xmlPath;
-			po2xmlProc.StartInfo.Arguments = po2xmlArgs;
-			po2xmlProc.StartInfo.WorkingDirectory = bldDirectory;
-			po2xmlProc.Start();
-
-			log += po2xmlProc.StandardOutput.ReadToEnd() + Environment.NewLine;
-
-			po2xmlProc.WaitForExit();
-			if (po2xmlProc.ExitCode != 0)
+			using (var po2XmlProc = new Process())
 			{
-				Console.WriteLine("Error: " + po2xmlProc + " returned error " + po2xmlProc.ExitCode + " for language " + language + ".");
+
+				po2XmlProc.StartInfo.UseShellExecute = false;
+				po2XmlProc.StartInfo.RedirectStandardOutput = true;
+				po2XmlProc.StartInfo.FileName =  Path.Combine(m_fwRoot, "bin\\Po2Xml.exe");
+				po2XmlProc.StartInfo.Arguments = string.Format("-o {0} {1}", Quote(languageXml), Quote(currentFile));
+				po2XmlProc.StartInfo.WorkingDirectory = bldDirectory;
+				po2XmlProc.Start();
+
+				log += po2XmlProc.StandardOutput.ReadToEnd() + Environment.NewLine;
+
+				po2XmlProc.WaitForExit();
+				if (po2XmlProc.ExitCode != 0)
+			{
+					Console.WriteLine("Error: Po2Xml returned error " + po2XmlProc.ExitCode +
+						" for language " + language + ".");
 				return false;
+			}
 			}
 
 			// Run NAnt on target "buildLocalizedDlls":
@@ -132,10 +149,11 @@ namespace ProcessLanguagesBld
 			}
 
 			// Run the LocaleStrings.exe utility:
-			var localeStringsPath = Path.Combine(m_fwRoot, "Bin\\LocaleStrings.exe");
+			var localeStringsPath = Path.Combine(m_fwRoot, Path.Combine("Bin", "LocaleStrings.exe"));
 			var localeStringsArgs = "--root " + Quote(m_fwRoot) + " --store " + Quote(currentFile);
 
-			var localeStringsProc = new Process();
+			using (var localeStringsProc = new Process())
+			{
 			localeStringsProc.StartInfo.UseShellExecute = false;
 			localeStringsProc.StartInfo.RedirectStandardOutput = true;
 			localeStringsProc.StartInfo.FileName = localeStringsPath;
@@ -148,12 +166,14 @@ namespace ProcessLanguagesBld
 			localeStringsProc.WaitForExit();
 			if (localeStringsProc.ExitCode != 0)
 			{
-				Console.WriteLine("Error: " + localeStringsPath + " returned error " + localeStringsProc.ExitCode + " for language " + language + ".");
+					Console.WriteLine("Error: " + localeStringsPath + " returned error " +
+						localeStringsProc.ExitCode + " for language " + language + ".");
 				return false;
 			}
 
 			// Return "success" code:
 			return true;
+		}
 		}
 
 		/// <summary>
@@ -165,6 +185,7 @@ namespace ProcessLanguagesBld
 		/// <returns>Exit code of NAnt process</returns>
 		private int Nant(string targets, string language, out string log)
 		{
+			// TODO-Linux: needs to be done differently
 			// Write a temporary batch file containing a few DOS commands needed to run NAnt in the right context:
 			var batchFilePath = Path.Combine(m_fwRoot, language + "_nant.bat");
 			var batchFile = new StreamWriter(batchFilePath);
@@ -174,7 +195,8 @@ namespace ProcessLanguagesBld
 			batchFile.WriteLine("..\\bin\\nant\\bin\\nant " + m_config + " " + targets);
 			batchFile.Close();
 
-			var nantProc = new Process();
+			using (var nantProc = new Process())
+			{
 			nantProc.StartInfo.UseShellExecute = false;
 			nantProc.StartInfo.RedirectStandardError = true;
 			nantProc.StartInfo.RedirectStandardOutput = true;
@@ -189,11 +211,13 @@ namespace ProcessLanguagesBld
 			log = output + Environment.NewLine;
 
 			if (error.Length > 0)
-				log += language + ": Error calling NAnt target(s) " + targets + ": " + error + Environment.NewLine;
+					log += language + ": Error calling NAnt target(s) " + targets + ": " +
+						error + Environment.NewLine;
 
 			File.Delete(batchFilePath);
 
 			return nantProc.ExitCode;
+		}
 		}
 
 		/// <summary>
