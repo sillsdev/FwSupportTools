@@ -88,6 +88,7 @@ namespace Po2Xml
 
 			}
 			msg.Flush();
+			writer.WriteWhitespace(Environment.NewLine);
 			writer.WriteEndDocument();
 			writer.Close();
 			return 0;
@@ -212,7 +213,6 @@ namespace Po2Xml
 				foreach (var t in m_flags)
 					WriteElement("flags", t);
 				m_writer.WriteEndElement();
-				m_writer.WriteWhitespace(Environment.NewLine);
 			}
 
 			private void WriteElement(string name, string data, params string[] attrs)
