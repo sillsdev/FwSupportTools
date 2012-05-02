@@ -11,9 +11,9 @@ namespace ProcessLanguagesBld
 	/// </summary>
 	class LanguageProcessor
 	{
-		private string m_config; // e.g. Release
-		private string m_fwRoot; // e.g. C:\FW-WW
-		private string m_fwOutput; // e.g. C:\FW-WW\Output\Release
+		private string m_config; // e.g. Release or Debug
+		private string m_fwRoot; // e.g. C:\FW-WW or /home/steve/WW
+		private string m_fwOutput; // e.g. C:\FW-WW\Output or /home/steve/WW/Output_i686
 		private readonly bool IsUnix = (Environment.OSVersion.Platform == PlatformID.Unix);
 
 		public string Config { set { m_config = value; } }
@@ -36,7 +36,7 @@ namespace ProcessLanguagesBld
 			Parallel.ForEach(poFiles, currentFile =>
 				{
 					// Process current .po file, storinng console output in log:
-					string log = "";
+					string log;
 					if (!ProcessFile(currentFile, out log))
 						numFailures++;
 
@@ -88,7 +88,7 @@ namespace ProcessLanguagesBld
 				{
 					findstrProc.StartInfo.FileName = "/bin/grep";
 					findstrProc.StartInfo.Arguments =
-						"-e \"[{][oOlLi][}]\" -e \"[{][0-9][{]\" -e \"[}][0-9][}]\"" + Quote(currentFile);
+						"-E -n -e {[oOlLiI]} -e [{}][0-9]{ -e }[0-9][{}] " + Quote(currentFile);
 				}
 				else
 				{
@@ -120,7 +120,7 @@ namespace ProcessLanguagesBld
 
 				po2XmlProc.StartInfo.UseShellExecute = false;
 				po2XmlProc.StartInfo.RedirectStandardOutput = true;
-				po2XmlProc.StartInfo.FileName =  Path.Combine(m_fwRoot, "bin\\Po2Xml.exe");
+				po2XmlProc.StartInfo.FileName = Path.Combine(m_fwRoot, Path.Combine("Bin", "Po2Xml.exe"));
 				po2XmlProc.StartInfo.Arguments = string.Format("-o {0} {1}", Quote(languageXml), Quote(currentFile));
 				po2XmlProc.StartInfo.WorkingDirectory = bldDirectory;
 				po2XmlProc.Start();
@@ -185,16 +185,33 @@ namespace ProcessLanguagesBld
 		/// <returns>Exit code of NAnt process</returns>
 		private int Nant(string targets, string language, out string log)
 		{
-			// TODO-Linux: needs to be done differently
-			// Write a temporary batch file containing a few DOS commands needed to run NAnt in the right context:
-			var batchFilePath = Path.Combine(m_fwRoot, language + "_nant.bat");
-			var batchFile = new StreamWriter(batchFilePath);
-			batchFile.WriteLine("set fwroot=" + m_fwRoot);
-			batchFile.WriteLine("set path=%fwroot%\\DistFiles;%path%");
-			batchFile.WriteLine("cd " + Path.Combine(m_fwRoot, "bld"));
-			batchFile.WriteLine("..\\bin\\nant\\bin\\nant " + m_config + " " + targets);
-			batchFile.Close();
-
+			string batchFilePath;
+			if (IsUnix)
+			{
+				// Write a temporary batch file containing a few DOS commands needed to run NAnt in the right context:
+				batchFilePath = Path.Combine(m_fwRoot, language + "_nant.sh");
+				var batchFile = new StreamWriter(batchFilePath);
+				batchFile.WriteLine("#!/bin/sh");
+				batchFile.WriteLine(String.Format("cd {0}", Path.Combine(m_fwRoot, "Bld")));
+				batchFile.Write(String.Format("FWROOT={0} ", m_fwRoot));
+				batchFile.Write(String.Format("PATH={0}:$PATH ", Path.Combine(m_fwRoot, "DistFiles")));
+				batchFile.WriteLine(String.Format("{0} {1} {2}",
+					Path.Combine(Path.Combine(Path.Combine(Path.Combine(m_fwRoot, "Bin"), "nant"), "bin"), "nant"),
+					m_config, targets));
+				batchFile.Close();
+				MakeExecutable(batchFilePath);
+			}
+			else
+			{
+				// Write a temporary batch file containing a few DOS commands needed to run NAnt in the right context:
+				batchFilePath = Path.Combine(m_fwRoot, language + "_nant.bat");
+				var batchFile = new StreamWriter(batchFilePath);
+				batchFile.WriteLine("set fwroot=" + m_fwRoot);
+				batchFile.WriteLine("set path=%fwroot%\\DistFiles;%path%");
+				batchFile.WriteLine("cd " + Path.Combine(m_fwRoot, "bld"));
+				batchFile.WriteLine("..\\bin\\nant\\bin\\nant " + m_config + " " + targets);
+				batchFile.Close();
+			}
 			using (var nantProc = new Process())
 			{
 				nantProc.StartInfo.UseShellExecute = false;
@@ -228,6 +245,33 @@ namespace ProcessLanguagesBld
 		private static string Quote(string str)
 		{
 			return "\"" + str + "\"";
+		}
+
+		/// <summary>
+		/// Make the file executable (on Linux/Unix).  Unfortunately, chmod cannot be accessed
+		/// from libc.so, and the .Net file security classes aren't implemented enough in Mono
+		/// to do anything, so we have to run a program!
+		/// </summary>
+		private void MakeExecutable(string filePath)
+		{
+			if (!IsUnix)
+				return;	// not needed on Windows.
+			using (var proc = new Process())
+			{
+				proc.StartInfo.UseShellExecute = false;
+				proc.StartInfo.RedirectStandardError = true;
+				proc.StartInfo.RedirectStandardOutput = true;
+				proc.StartInfo.FileName = "chmod";
+				proc.StartInfo.Arguments = String.Format("+x {0}", filePath);
+				proc.Start();
+				string output = proc.StandardOutput.ReadToEnd();
+				string error = proc.StandardError.ReadToEnd();
+				if (output.Length > 0 || error.Length > 0)
+				{
+					// This should never happen!
+				}
+				proc.WaitForExit();
+			}
 		}
 	}
 

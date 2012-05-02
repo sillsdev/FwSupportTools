@@ -43,7 +43,7 @@ namespace Po2Xml
 				if(m.Success)
 				{
 					//Debug.Assert(msg.Current != null);
-					msg.Current.Add(RemoveEscapeChars(m.Groups[1].ToString()));
+					msg.Current.Add(EscapeCharsProperly(m.Groups[1].ToString()));
 				}
 				else
 				{
@@ -52,26 +52,26 @@ namespace Po2Xml
 				m = new Regex("msgid \"(.*)\"", RegexOptions.Singleline).Match(l);
 				if(m.Success)
 				{
-					msg.Msgid = new List<String> { RemoveEscapeChars(m.Groups[1].ToString()) };
+					msg.Msgid = new List<String> { EscapeCharsProperly(m.Groups[1].ToString()) };
 					msg.Current = msg.Msgid;
 				}
 				m = new Regex("msgstr \"(.*)\"", RegexOptions.Singleline).Match(l);
 				if (m.Success)
 				{
-					msg.Msgstr = new List<String> { RemoveEscapeChars(m.Groups[1].ToString()) };
+					msg.Msgstr = new List<String> { EscapeCharsProperly(m.Groups[1].ToString()) };
 					msg.Current = msg.Msgstr;
 				}
 
 				m = new Regex("# \\s*(.*)").Match(l);
 				if (m.Success)
 				{
-					msg.UsrComment.Add(m.Groups[1].ToString());
+					msg.UsrComment.Add(EscapeCharsProperly(m.Groups[1].ToString()));
 				}
 
 				m = new Regex("#\\.\\s*(.*)").Match(l);
 				if (m.Success)
 				{
-					msg.DotComment.Add(m.Groups[1].ToString());
+					msg.DotComment.Add(EscapeCharsProperly(m.Groups[1].ToString()));
 				}
 
 				m = new Regex("#:\\s*(.*)").Match(l);
@@ -95,13 +95,13 @@ namespace Po2Xml
 		}
 
 		/// <summary>
-		/// This will remove all escape characters with the exception of \n from the given string.
+		/// This will remove all \ escape characters with the exception of \n from the given string.
+		/// It also escapes characters that XML needs to be escaped with &...;.
 		/// </summary>
-		/// <param name="p"></param>
-		/// <returns></returns>
-		private string RemoveEscapeChars(string p)
+		private string EscapeCharsProperly(string p)
 		{
-			var result = p.Replace("\\n", "&#0xA;");
+			var result = System.Security.SecurityElement.Escape(p);
+			result = result.Replace("\\n", "&#x0A;");
 			result = result.Replace("\\", "");
 			return result;
 		}
