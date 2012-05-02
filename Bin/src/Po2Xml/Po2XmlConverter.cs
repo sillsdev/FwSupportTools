@@ -39,51 +39,52 @@ namespace Po2Xml
 					break;
 
 				// Continuation string?
-				var m = (new Regex("\\s*\"(.*)\"")).Match(l);
+				var m = (new Regex("^\\s*\"(.*)\"")).Match(l);
 				if(m.Success)
 				{
 					//Debug.Assert(msg.Current != null);
-					msg.Current.Add(EscapeCharsProperly(m.Groups[1].ToString()));
+					msg.Current.Add(EscapeForXml(UnescapeBackslashes(m.Groups[1].ToString())));
+					continue;
 				}
 				else
 				{
 					msg.Flush();
 				}
-				m = new Regex("msgid \"(.*)\"", RegexOptions.Singleline).Match(l);
+				m = new Regex("^msgid \"(.*)\"", RegexOptions.Singleline).Match(l);
 				if(m.Success)
 				{
-					msg.Msgid = new List<String> { EscapeCharsProperly(m.Groups[1].ToString()) };
+					msg.Msgid = new List<String> { EscapeForXml(UnescapeBackslashes(m.Groups[1].ToString())) };
 					msg.Current = msg.Msgid;
 				}
-				m = new Regex("msgstr \"(.*)\"", RegexOptions.Singleline).Match(l);
+				m = new Regex("^msgstr \"(.*)\"", RegexOptions.Singleline).Match(l);
 				if (m.Success)
 				{
-					msg.Msgstr = new List<String> { EscapeCharsProperly(m.Groups[1].ToString()) };
+					msg.Msgstr = new List<String> { EscapeForXml(UnescapeBackslashes(m.Groups[1].ToString())) };
 					msg.Current = msg.Msgstr;
 				}
 
-				m = new Regex("# \\s*(.*)").Match(l);
+				m = new Regex("^# \\s*(.*)").Match(l);
 				if (m.Success)
 				{
-					msg.UsrComment.Add(EscapeCharsProperly(m.Groups[1].ToString()));
+					msg.UsrComment.Add(EscapeForXml(m.Groups[1].ToString()));
 				}
 
-				m = new Regex("#\\.\\s*(.*)").Match(l);
+				m = new Regex("^#\\.\\s*(.*)").Match(l);
 				if (m.Success)
 				{
-					msg.DotComment.Add(EscapeCharsProperly(m.Groups[1].ToString()));
+					msg.DotComment.Add(EscapeForXml(m.Groups[1].ToString()));
 				}
 
-				m = new Regex("#:\\s*(.*)").Match(l);
+				m = new Regex("^#:\\s*(.*)").Match(l);
 				if (m.Success)
 				{
-					msg.Reference.Add(m.Groups[1].ToString());
+					msg.Reference.Add(EscapeForXml(m.Groups[1].ToString()));
 				}
 
-				m = new Regex("#,\\s*(.*)").Match(l);
+				m = new Regex("^#,\\s*(.*)").Match(l);
 				if (m.Success)
 				{
-					msg.Flags.Add(m.Groups[1].ToString());
+					msg.Flags.Add(EscapeForXml(m.Groups[1].ToString()));
 				}
 
 			}
@@ -95,14 +96,47 @@ namespace Po2Xml
 		}
 
 		/// <summary>
-		/// This will remove all \ escape characters with the exception of \n from the given string.
-		/// It also escapes characters that XML needs to be escaped with &...;.
+		/// This escapes characters that XML may need to be escaped with &...;.
 		/// </summary>
-		private string EscapeCharsProperly(string p)
+		private string EscapeForXml(string p)
 		{
 			var result = System.Security.SecurityElement.Escape(p);
-			result = result.Replace("\\n", "&#x0A;");
-			result = result.Replace("\\", "");
+			if (result.IndexOfAny(new char[] { '\n', '\r' }) >= 0)
+			{
+				result = result.Replace("\n", "&#x0A;");
+				result = result.Replace("\r", "&#x0D;");
+			}
+			return result;
+		}
+
+		/// <summary>
+		/// This interprets the \ escape characters.
+		/// </summary>
+		private string UnescapeBackslashes(string p)
+		{
+			var result = p;
+			for (int idx = result.IndexOf('\\', 0); idx >= 0 && idx < result.Length; idx = result.IndexOf('\\', idx))
+			{
+				switch (result[idx + 1])
+				{
+					case 'n':
+						result = result.Remove(idx, 2);
+						result = result.Insert(idx, "\n");
+						break;
+					case 'r':
+						result = result.Remove(idx, 2);
+						result = result.Insert(idx, "\r");
+						break;
+					case 't':
+						result = result.Remove(idx, 2);
+						result = result.Insert(idx, "\t");
+						break;
+					default:
+						result = result.Remove(idx, 1);
+						break;
+				}
+				++idx;		// Move past the remaining character (might be \).
+			}
 			return result;
 		}
 
