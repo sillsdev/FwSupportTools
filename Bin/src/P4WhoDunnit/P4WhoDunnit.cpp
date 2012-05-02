@@ -12,7 +12,7 @@
 
 
 // Variables needed throughout:
-const char * pszTempFile = "_j_u_n_k";
+char * pszTempFile = NULL;
 char * pszClientFileName;
 const int cchGeneral = 1024;
 char rgchDepotFileName[cchGeneral] = { 0 };
@@ -396,6 +396,14 @@ int main(int argc, char* argv[])
 	pszClientFileName = argv[1];
 	int nLineNumber = atoi(argv[2]);
 
+	// Create path to temporary file:
+	char * pszTemp = new char [1024];
+	GetEnvironmentVariable("TEMP", pszTemp, 1024);
+	pszTempFile = new char [1024];
+	sprintf_s(pszTempFile, 1024, "%s\\_j_u_n_k", pszTemp);
+	delete[] pszTemp;
+	pszTemp = NULL;
+
 	// Read the relevant line from the file:
 	FILE * file;
 	if (0 != fopen_s(&file, pszClientFileName, "rt"))
@@ -451,6 +459,9 @@ int main(int argc, char* argv[])
 	FindAndReportEarliest(nHeadRevision, rgchSouceLine, nLineNumber, 0, pszSubString, "");
 
 	printf("Finished.\n");
+
+	delete[] pszTempFile;
+	pszTempFile = NULL;
 
 	return 0;
 }
