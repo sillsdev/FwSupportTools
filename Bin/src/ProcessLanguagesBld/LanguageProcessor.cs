@@ -82,8 +82,8 @@ namespace ProcessLanguagesBld
 			// Run findstr.exe utility to look for known issues and common errors:
 			using (var findstrProc = new Process())
 			{
-			findstrProc.StartInfo.UseShellExecute = false;
-			findstrProc.StartInfo.RedirectStandardOutput = true;
+				findstrProc.StartInfo.UseShellExecute = false;
+				findstrProc.StartInfo.RedirectStandardOutput = true;
 				if (IsUnix)
 				{
 					findstrProc.StartInfo.FileName = "/bin/grep";
@@ -92,21 +92,21 @@ namespace ProcessLanguagesBld
 				}
 				else
 				{
-			findstrProc.StartInfo.FileName = "cmd.exe";
+					findstrProc.StartInfo.FileName = "cmd.exe";
 					findstrProc.StartInfo.Arguments =
 						"/c findstr.exe /N \"{o} {O} {l} {L} {i} {0{ {1{ }0} }1}\" " + Quote(currentFile);
 				}
-			findstrProc.StartInfo.WorkingDirectory = bldDirectory;
-			findstrProc.Start();
+				findstrProc.StartInfo.WorkingDirectory = bldDirectory;
+				findstrProc.Start();
 
-			// Grab the standard output:
-			string output = findstrProc.StandardOutput.ReadToEnd();
-			if (output.Length > 0)
-			{
+				// Grab the standard output:
+				string output = findstrProc.StandardOutput.ReadToEnd();
+				if (output.Length > 0)
+				{
 					log += "Found invalid strings in the " + currentFile + " PO data: " + Environment.NewLine +
 						output + Environment.NewLine;
-				return false;
-			}
+					return false;
+				}
 
 				findstrProc.WaitForExit();
 					// This must come after findstrProc.StandardOutput.ReadToEnd() to avoid deadlocks.
@@ -129,11 +129,11 @@ namespace ProcessLanguagesBld
 
 				po2XmlProc.WaitForExit();
 				if (po2XmlProc.ExitCode != 0)
-			{
+				{
 					Console.WriteLine("Error: Po2Xml returned error " + po2XmlProc.ExitCode +
 						" for language " + language + ".");
-				return false;
-			}
+					return false;
+				}
 			}
 
 			// Run NAnt on target "buildLocalizedDlls":
@@ -154,26 +154,26 @@ namespace ProcessLanguagesBld
 
 			using (var localeStringsProc = new Process())
 			{
-			localeStringsProc.StartInfo.UseShellExecute = false;
-			localeStringsProc.StartInfo.RedirectStandardOutput = true;
-			localeStringsProc.StartInfo.FileName = localeStringsPath;
-			localeStringsProc.StartInfo.Arguments = localeStringsArgs;
-			localeStringsProc.StartInfo.WorkingDirectory = bldDirectory;
-			localeStringsProc.Start();
+				localeStringsProc.StartInfo.UseShellExecute = false;
+				localeStringsProc.StartInfo.RedirectStandardOutput = true;
+				localeStringsProc.StartInfo.FileName = localeStringsPath;
+				localeStringsProc.StartInfo.Arguments = localeStringsArgs;
+				localeStringsProc.StartInfo.WorkingDirectory = bldDirectory;
+				localeStringsProc.Start();
 
-			log += localeStringsProc.StandardOutput.ReadToEnd() + Environment.NewLine;
+				log += localeStringsProc.StandardOutput.ReadToEnd() + Environment.NewLine;
 
-			localeStringsProc.WaitForExit();
-			if (localeStringsProc.ExitCode != 0)
-			{
+				localeStringsProc.WaitForExit();
+				if (localeStringsProc.ExitCode != 0)
+				{
 					Console.WriteLine("Error: " + localeStringsPath + " returned error " +
 						localeStringsProc.ExitCode + " for language " + language + ".");
-				return false;
-			}
+					return false;
+				}
 
-			// Return "success" code:
-			return true;
-		}
+				// Return "success" code:
+				return true;
+			}
 		}
 
 		/// <summary>
@@ -188,18 +188,17 @@ namespace ProcessLanguagesBld
 			string batchFilePath;
 			if (IsUnix)
 			{
-				// Write a temporary batch file containing a few DOS commands needed to run NAnt in the right context:
+				// Write a temporary shell script containing a few commands needed to run NAnt in the right context:
 				batchFilePath = Path.Combine(m_fwRoot, language + "_nant.sh");
 				var batchFile = new StreamWriter(batchFilePath);
 				batchFile.WriteLine("#!/bin/sh");
-				batchFile.WriteLine(String.Format("cd {0}", Path.Combine(m_fwRoot, "Bld")));
-				batchFile.Write(String.Format("FWROOT={0} ", m_fwRoot));
-				batchFile.Write(String.Format("PATH={0}:$PATH ", Path.Combine(m_fwRoot, "DistFiles")));
-				batchFile.WriteLine(String.Format("{0} {1} {2}",
+				batchFile.WriteLine("cd {0}", Path.Combine(m_fwRoot, "Bld"));
+				batchFile.Write("FWROOT={0} ", m_fwRoot);
+				batchFile.Write("PATH={0}:$PATH ", Path.Combine(m_fwRoot, "DistFiles"));
+				batchFile.WriteLine("{0} {1} {2}",
 					Path.Combine(Path.Combine(Path.Combine(Path.Combine(m_fwRoot, "Bin"), "nant"), "bin"), "nant"),
-					m_config, targets));
+					m_config, targets);
 				batchFile.Close();
-				MakeExecutable(batchFilePath);
 			}
 			else
 			{
@@ -214,27 +213,35 @@ namespace ProcessLanguagesBld
 			}
 			using (var nantProc = new Process())
 			{
-			nantProc.StartInfo.UseShellExecute = false;
-			nantProc.StartInfo.RedirectStandardError = true;
-			nantProc.StartInfo.RedirectStandardOutput = true;
-			nantProc.StartInfo.FileName = batchFilePath;
-			nantProc.Start();
+				nantProc.StartInfo.UseShellExecute = false;
+				nantProc.StartInfo.RedirectStandardError = true;
+				nantProc.StartInfo.RedirectStandardOutput = true;
+				if (IsUnix)
+				{
+					nantProc.StartInfo.FileName = "/bin/sh";
+					nantProc.StartInfo.Arguments = batchFilePath;
+				}
+				else
+				{
+					nantProc.StartInfo.FileName = batchFilePath;
+				}
+				nantProc.Start();
 
-			string output = nantProc.StandardOutput.ReadToEnd();
-			string error = nantProc.StandardError.ReadToEnd();
+				string output = nantProc.StandardOutput.ReadToEnd();
+				string error = nantProc.StandardError.ReadToEnd();
 
-			nantProc.WaitForExit();
+				nantProc.WaitForExit();
 
-			log = output + Environment.NewLine;
+				log = output + Environment.NewLine;
 
-			if (error.Length > 0)
+				if (error.Length > 0)
 					log += language + ": Error calling NAnt target(s) " + targets + ": " +
 						error + Environment.NewLine;
 
-			File.Delete(batchFilePath);
+				File.Delete(batchFilePath);
 
-			return nantProc.ExitCode;
-		}
+				return nantProc.ExitCode;
+			}
 		}
 
 		/// <summary>
@@ -245,33 +252,6 @@ namespace ProcessLanguagesBld
 		private static string Quote(string str)
 		{
 			return "\"" + str + "\"";
-		}
-
-		/// <summary>
-		/// Make the file executable (on Linux/Unix).  Unfortunately, chmod cannot be accessed
-		/// from libc.so, and the .Net file security classes aren't implemented enough in Mono
-		/// to do anything, so we have to run a program!
-		/// </summary>
-		private void MakeExecutable(string filePath)
-		{
-			if (!IsUnix)
-				return;	// not needed on Windows.
-			using (var proc = new Process())
-			{
-				proc.StartInfo.UseShellExecute = false;
-				proc.StartInfo.RedirectStandardError = true;
-				proc.StartInfo.RedirectStandardOutput = true;
-				proc.StartInfo.FileName = "chmod";
-				proc.StartInfo.Arguments = String.Format("+x {0}", filePath);
-				proc.Start();
-				string output = proc.StandardOutput.ReadToEnd();
-				string error = proc.StandardError.ReadToEnd();
-				if (output.Length > 0 || error.Length > 0)
-				{
-					// This should never happen!
-				}
-				proc.WaitForExit();
-			}
 		}
 	}
 
