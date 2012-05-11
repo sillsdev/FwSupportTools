@@ -39,69 +39,104 @@ namespace Po2Xml
 					break;
 
 				// Continuation string?
-				var m = (new Regex("\\s*\"(.*)\"")).Match(l);
+				var m = (new Regex("^\\s*\"(.*)\"")).Match(l);
 				if(m.Success)
 				{
 					//Debug.Assert(msg.Current != null);
-					msg.Current.Add(RemoveEscapeChars(m.Groups[1].ToString()));
+					msg.Current.Add(EscapeForXml(UnescapeBackslashes(m.Groups[1].ToString())));
+					continue;
 				}
 				else
 				{
 					msg.Flush();
 				}
-				m = new Regex("msgid \"(.*)\"", RegexOptions.Singleline).Match(l);
+				m = new Regex("^msgid \"(.*)\"", RegexOptions.Singleline).Match(l);
 				if(m.Success)
 				{
-					msg.Msgid = new List<String> { RemoveEscapeChars(m.Groups[1].ToString()) };
+					msg.Msgid = new List<String> { EscapeForXml(UnescapeBackslashes(m.Groups[1].ToString())) };
 					msg.Current = msg.Msgid;
 				}
-				m = new Regex("msgstr \"(.*)\"", RegexOptions.Singleline).Match(l);
+				m = new Regex("^msgstr \"(.*)\"", RegexOptions.Singleline).Match(l);
 				if (m.Success)
 				{
-					msg.Msgstr = new List<String> { RemoveEscapeChars(m.Groups[1].ToString()) };
+					msg.Msgstr = new List<String> { EscapeForXml(UnescapeBackslashes(m.Groups[1].ToString())) };
 					msg.Current = msg.Msgstr;
 				}
 
-				m = new Regex("# \\s*(.*)").Match(l);
+				m = new Regex("^# \\s*(.*)").Match(l);
 				if (m.Success)
 				{
-					msg.UsrComment.Add(m.Groups[1].ToString());
+					msg.UsrComment.Add(EscapeForXml(m.Groups[1].ToString()));
 				}
 
-				m = new Regex("#\\.\\s*(.*)").Match(l);
+				m = new Regex("^#\\.\\s*(.*)").Match(l);
 				if (m.Success)
 				{
-					msg.DotComment.Add(m.Groups[1].ToString());
+					msg.DotComment.Add(EscapeForXml(m.Groups[1].ToString()));
 				}
 
-				m = new Regex("#:\\s*(.*)").Match(l);
+				m = new Regex("^#:\\s*(.*)").Match(l);
 				if (m.Success)
 				{
-					msg.Reference.Add(m.Groups[1].ToString());
+					msg.Reference.Add(EscapeForXml(m.Groups[1].ToString()));
 				}
 
-				m = new Regex("#,\\s*(.*)").Match(l);
+				m = new Regex("^#,\\s*(.*)").Match(l);
 				if (m.Success)
 				{
-					msg.Flags.Add(m.Groups[1].ToString());
+					msg.Flags.Add(EscapeForXml(m.Groups[1].ToString()));
 				}
 
 			}
 			msg.Flush();
+			writer.WriteWhitespace(Environment.NewLine);
 			writer.WriteEndDocument();
 			writer.Close();
 			return 0;
 		}
 
 		/// <summary>
-		/// This will remove all escape characters with the exception of \n from the given string.
+		/// This escapes characters that XML may need to be escaped with &...;.
 		/// </summary>
-		/// <param name="p"></param>
-		/// <returns></returns>
-		private string RemoveEscapeChars(string p)
+		private string EscapeForXml(string p)
 		{
-			var result = p.Replace("\\n", "&#0xA;");
-			result = result.Replace("\\", "");
+			var result = System.Security.SecurityElement.Escape(p);
+			if (result.IndexOfAny(new char[] { '\n', '\r' }) >= 0)
+			{
+				result = result.Replace("\n", "&#x0A;");
+				result = result.Replace("\r", "&#x0D;");
+			}
+			return result;
+		}
+
+		/// <summary>
+		/// This interprets the \ escape characters.
+		/// </summary>
+		private string UnescapeBackslashes(string p)
+		{
+			var result = p;
+			for (int idx = result.IndexOf('\\', 0); idx >= 0 && idx < result.Length; idx = result.IndexOf('\\', idx))
+			{
+				switch (result[idx + 1])
+				{
+					case 'n':
+						result = result.Remove(idx, 2);
+						result = result.Insert(idx, "\n");
+						break;
+					case 'r':
+						result = result.Remove(idx, 2);
+						result = result.Insert(idx, "\r");
+						break;
+					case 't':
+						result = result.Remove(idx, 2);
+						result = result.Insert(idx, "\t");
+						break;
+					default:
+						result = result.Remove(idx, 1);
+						break;
+				}
+				++idx;		// Move past the remaining character (might be \).
+			}
 			return result;
 		}
 
@@ -212,7 +247,6 @@ namespace Po2Xml
 				foreach (var t in m_flags)
 					WriteElement("flags", t);
 				m_writer.WriteEndElement();
-				m_writer.WriteWhitespace(Environment.NewLine);
 			}
 
 			private void WriteElement(string name, string data, params string[] attrs)
