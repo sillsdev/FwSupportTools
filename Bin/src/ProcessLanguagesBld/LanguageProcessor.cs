@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Diagnostics;
@@ -188,18 +188,17 @@ namespace ProcessLanguagesBld
 			string batchFilePath;
 			if (IsUnix)
 			{
-				// Write a temporary batch file containing a few DOS commands needed to run NAnt in the right context:
+				// Write a temporary shell script containing a few commands needed to run NAnt in the right context:
 				batchFilePath = Path.Combine(m_fwRoot, language + "_nant.sh");
 				var batchFile = new StreamWriter(batchFilePath);
 				batchFile.WriteLine("#!/bin/sh");
-				batchFile.WriteLine(String.Format("cd {0}", Path.Combine(m_fwRoot, "Bld")));
-				batchFile.Write(String.Format("FWROOT={0} ", m_fwRoot));
-				batchFile.Write(String.Format("PATH={0}:$PATH ", Path.Combine(m_fwRoot, "DistFiles")));
-				batchFile.WriteLine(String.Format("{0} {1} {2}",
+				batchFile.WriteLine("cd {0}", Path.Combine(m_fwRoot, "Bld"));
+				batchFile.Write("FWROOT={0} ", m_fwRoot);
+				batchFile.Write("PATH={0}:$PATH ", Path.Combine(m_fwRoot, "DistFiles"));
+				batchFile.WriteLine("{0} {1} {2}",
 					Path.Combine(Path.Combine(Path.Combine(Path.Combine(m_fwRoot, "Bin"), "nant"), "bin"), "nant"),
-					m_config, targets));
+					m_config, targets);
 				batchFile.Close();
-				MakeExecutable(batchFilePath);
 			}
 			else
 			{
@@ -217,7 +216,15 @@ namespace ProcessLanguagesBld
 				nantProc.StartInfo.UseShellExecute = false;
 				nantProc.StartInfo.RedirectStandardError = true;
 				nantProc.StartInfo.RedirectStandardOutput = true;
-				nantProc.StartInfo.FileName = batchFilePath;
+				if (IsUnix)
+				{
+					nantProc.StartInfo.FileName = "/bin/sh";
+					nantProc.StartInfo.Arguments = batchFilePath;
+				}
+				else
+				{
+					nantProc.StartInfo.FileName = batchFilePath;
+				}
 				nantProc.Start();
 
 				string output = nantProc.StandardOutput.ReadToEnd();
@@ -245,33 +252,6 @@ namespace ProcessLanguagesBld
 		private static string Quote(string str)
 		{
 			return "\"" + str + "\"";
-		}
-
-		/// <summary>
-		/// Make the file executable (on Linux/Unix).  Unfortunately, chmod cannot be accessed
-		/// from libc.so, and the .Net file security classes aren't implemented enough in Mono
-		/// to do anything, so we have to run a program!
-		/// </summary>
-		private void MakeExecutable(string filePath)
-		{
-			if (!IsUnix)
-				return;	// not needed on Windows.
-			using (var proc = new Process())
-			{
-				proc.StartInfo.UseShellExecute = false;
-				proc.StartInfo.RedirectStandardError = true;
-				proc.StartInfo.RedirectStandardOutput = true;
-				proc.StartInfo.FileName = "chmod";
-				proc.StartInfo.Arguments = String.Format("+x {0}", filePath);
-				proc.Start();
-				string output = proc.StandardOutput.ReadToEnd();
-				string error = proc.StandardError.ReadToEnd();
-				if (output.Length > 0 || error.Length > 0)
-				{
-					// This should never happen!
-				}
-				proc.WaitForExit();
-			}
 		}
 	}
 
