@@ -55,14 +55,6 @@ namespace SIL.Fieldworks.Test
 
 		kcptMultiUnicode = 16,
 
-		kcptBigString = 17,
-
-		kcptMultiBigString = 18,
-
-		kcptBigUnicode = 19,
-
-		kcptMultiBigUnicode = 20,
-
 		kcptMinObj = 23,
 
 		kcptOwningAtom = 23,
