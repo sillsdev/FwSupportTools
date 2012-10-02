@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="XmlConverter" default="convert.xsl">
+	<description>XML conversion for FW 6.0 -> 7.0 migration</description>
+
+	<target name="convert.xsl" description="Generate model-specific stylesheet">
+		<style style="generate.xsl" in="MasterFieldWorksModel.xml" out="convert.xsl"/>
+	</target>
+
+	<target name="clean" description="Remove all generated files">
+		<delete file="convert.xsl" failonerror="false"/>
+	</target>
+</project>

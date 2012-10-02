@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+	<ProductVersion>9.0.21022</ProductVersion>
+	<SchemaVersion>2.0</SchemaVersion>
+	<ProjectGuid>{9A87D31B-FD25-44CA-B1FF-84956BB4C408}</ProjectGuid>
+	<OutputType>Exe</OutputType>
+	<AssemblyName>ReadKey</AssemblyName>
+	<FileUpgradeFlags>
+	</FileUpgradeFlags>
+	<UpgradeBackupLocation>
+	</UpgradeBackupLocation>
+	<OldToolsVersion>2.0</OldToolsVersion>
+	<PublishUrl>publish\</PublishUrl>
+	<Install>true</Install>
+	<InstallFrom>Disk</InstallFrom>
+	<UpdateEnabled>false</UpdateEnabled>
+	<UpdateMode>Foreground</UpdateMode>
+	<UpdateInterval>7</UpdateInterval>
+	<UpdateIntervalUnits>Days</UpdateIntervalUnits>
+	<UpdatePeriodically>false</UpdatePeriodically>
+	<UpdateRequired>false</UpdateRequired>
+	<MapFileExtensions>true</MapFileExtensions>
+	<ApplicationRevision>0</ApplicationRevision>
+	<ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+	<IsWebBootstrapper>false</IsWebBootstrapper>
+	<UseApplicationTrust>false</UseApplicationTrust>
+	<BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+	<DebugSymbols>true</DebugSymbols>
+	<DebugType>full</DebugType>
+	<Optimize>false</Optimize>
+	<OutputPath>bin\Debug</OutputPath>
+	<DefineConstants>DEBUG</DefineConstants>
+	<ErrorReport>prompt</ErrorReport>
+	<WarningLevel>4</WarningLevel>
+	<Commandlineparameters>LM "SOFTWARE/SIL/" "Icu36Dir"</Commandlineparameters>
+	<EnvironmentVariables>
+	  <EnvironmentVariables />
+	</EnvironmentVariables>
+	<PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+	<DebugType>none</DebugType>
+	<Optimize>false</Optimize>
+	<OutputPath>bin\Release</OutputPath>
+	<ErrorReport>prompt</ErrorReport>
+	<WarningLevel>4</WarningLevel>
+	<PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+	<Compile Include="ReadKey.cs" />
+  </ItemGroup>
+  <ItemGroup>
+	<BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+	  <Visible>False</Visible>
+	  <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+	  <Install>true</Install>
+	</BootstrapperPackage>
+	<BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+	  <Visible>False</Visible>
+	  <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+	  <Install>false</Install>
+	</BootstrapperPackage>
+	<BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+	  <Visible>False</Visible>
+	  <ProductName>.NET Framework 3.5</ProductName>
+	  <Install>false</Install>
+	</BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+	<MonoDevelop>
+	  <Properties>
+		<GtkDesignInfo gtkVersion="2.12.0" />
+	  </Properties>
+	</MonoDevelop>
+	<VisualStudio />
+  </ProjectExtensions>
+</Project>
