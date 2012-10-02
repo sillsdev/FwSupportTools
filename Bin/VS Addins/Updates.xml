@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UpdateDesc>
+	<files>
+		<file name="FwNantAddIn.msi" ignoreFirstTime="true" exitVS="true" vs="2005,2008"/>
+		<file name="FwNantVSPackage.vsix" vs="2010" exitVS="true"/>
+		<file name="FwTemplates.msi" vs="2005"/>
+		<file name="FwTemplates2008.msi" vs="2008"/>
+		<file name="FwTemplates2010.msi" vs="2010"/>
+		<file name="FwAddin.msi" exitVS="true"/>
+		<file name="FwWizardExtension.dll"/>
+	</files>
+</UpdateDesc>
