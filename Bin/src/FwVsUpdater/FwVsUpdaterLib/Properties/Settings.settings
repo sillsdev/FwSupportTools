@@ -1,0 +1,24 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SIL.FieldWorks.DevTools.FwVsUpdater.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+	<Setting Name="LastCheck" Provider="LibSettingsProvider" Type="System.DateTime" Scope="User">
+	  <Value Profile="(Default)">1900-01-01</Value>
+	</Setting>
+	<Setting Name="FwRoot" Provider="LibSettingsProvider" Type="System.String" Scope="User">
+	  <Value Profile="(Default)" />
+	</Setting>
+	<Setting Name="FileHashKeys" Provider="LibSettingsProvider" Type="System.Collections.Specialized.StringCollection" Scope="User">
+	  <Value Profile="(Default)" />
+	</Setting>
+	<Setting Name="FileHashValues" Provider="LibSettingsProvider" Type="System.Collections.Specialized.StringCollection" Scope="User">
+	  <Value Profile="(Default)" />
+	</Setting>
+	<Setting Name="RemoteLocation" Provider="LibSettingsProvider" Type="System.String" Scope="Application">
+	  <Value Profile="(Default)">bin\VS Addins</Value>
+	</Setting>
+	<Setting Name="UpdateInProgress" Provider="LibSettingsProvider" Type="System.Boolean" Scope="User">
+	  <Value Profile="(Default)">False</Value>
+	</Setting>
+  </Settings>
+</SettingsFile>
