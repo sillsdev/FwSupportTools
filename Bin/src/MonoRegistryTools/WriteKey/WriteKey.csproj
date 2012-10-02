@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+	<ProductVersion>9.0.21022</ProductVersion>
+	<ProjectGuid>{9DA3634E-AC1C-4F7E-B21D-BA018D6E6201}</ProjectGuid>
+	<OutputType>Exe</OutputType>
+	<AssemblyName>WriteKey</AssemblyName>
+	<SchemaVersion>2.0</SchemaVersion>
+	<FileUpgradeFlags>
+	</FileUpgradeFlags>
+	<UpgradeBackupLocation>
+	</UpgradeBackupLocation>
+	<OldToolsVersion>2.0</OldToolsVersion>
+	<IsWebBootstrapper>false</IsWebBootstrapper>
+	<ManifestCertificateThumbprint>6237B96D66A6D76075C0E7D83623185F3CDA8F93</ManifestCertificateThumbprint>
+	<ManifestKeyFile>WriteKey_TemporaryKey.pfx</ManifestKeyFile>
+	<GenerateManifests>true</GenerateManifests>
+	<TargetZone>LocalIntranet</TargetZone>
+	<SignManifests>true</SignManifests>
+	<PublishUrl>publish\</PublishUrl>
+	<Install>true</Install>
+	<InstallFrom>Disk</InstallFrom>
+	<UpdateEnabled>false</UpdateEnabled>
+	<UpdateMode>Foreground</UpdateMode>
+	<UpdateInterval>7</UpdateInterval>
+	<UpdateIntervalUnits>Days</UpdateIntervalUnits>
+	<UpdatePeriodically>false</UpdatePeriodically>
+	<UpdateRequired>false</UpdateRequired>
+	<MapFileExtensions>true</MapFileExtensions>
+	<ApplicationRevision>1</ApplicationRevision>
+	<ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+	<UseApplicationTrust>false</UseApplicationTrust>
+	<BootstrapperEnabled>true</BootstrapperEnabled>
+	<ApplicationManifest>WriteKey.exe.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+	<DebugSymbols>true</DebugSymbols>
+	<DebugType>full</DebugType>
+	<Optimize>false</Optimize>
+	<OutputPath>bin\Debug</OutputPath>
+	<DefineConstants>DEBUG</DefineConstants>
+	<ErrorReport>prompt</ErrorReport>
+	<WarningLevel>4</WarningLevel>
+	<PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+	<DebugType>none</DebugType>
+	<Optimize>false</Optimize>
+	<OutputPath>bin\Release</OutputPath>
+	<ErrorReport>prompt</ErrorReport>
+	<WarningLevel>4</WarningLevel>
+	<PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+	<MonoDevelop>
+	  <Properties>
+		<GtkDesignInfo gtkVersion="2.12.0" />
+	  </Properties>
+	</MonoDevelop>
+	<VisualStudio />
+  </ProjectExtensions>
+  <ItemGroup>
+	<Compile Include="Properties\AssemblyInfo.cs" />
+	<Compile Include="WriteKey.cs" />
+  </ItemGroup>
+  <ItemGroup>
+	<BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+	  <Visible>False</Visible>
+	  <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+	  <Install>true</Install>
+	</BootstrapperPackage>
+	<BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+	  <Visible>False</Visible>
+	  <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+	  <Install>false</Install>
+	</BootstrapperPackage>
+	<BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+	  <Visible>False</Visible>
+	  <ProductName>.NET Framework 3.5</ProductName>
+	  <Install>false</Install>
+	</BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+	<None Include="Properties\app.manifest" />
+	<None Include="WriteKey.exe.manifest" />
+	<None Include="WriteKey_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+	<Reference Include="System" />
+  </ItemGroup>
+</Project>
