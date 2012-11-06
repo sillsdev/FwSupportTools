@@ -146,20 +146,7 @@ namespace FwAddin
 			try
 			{
 				// Use GhostDoc if available
-				string addinName = string.Empty;
-				foreach (AddIn addin in m_applicationObject.AddIns)
-				{
-					if (addin.Name == "GhostDoc")
-					{
-						addinName = (addin.ProgID == "SubMain.GhostDoc.Connect") ?
-							"Tools.SubMain.GhostDoc.DocumentThis" : "Weigelt.GhostDoc.AddIn.DocumentThis";
-						break;
-					}
-				}
-				if (addinName != string.Empty)
-					m_applicationObject.ExecuteCommand(addinName, string.Empty);
-				else
-					fGhostDoc = false;
+				m_applicationObject.ExecuteCommand("Weigelt.GhostDoc.AddIn.DocumentThis", string.Empty);
 			}
 			catch
 			{

@@ -471,14 +471,14 @@ bool FilesNeedResolving()
 void RebuildAll()
 {
 	char szCmd[300];
-	sprintf(szCmd, "%s\\bin\\nant\\bin\\nant.exe -t:net-3.5 -buildfile:%s\\bld\\FieldWorks.build remakefw "
+	sprintf(szCmd, "%s\\bin\\nant\\bin\\nant.exe -buildfile:%s\\bld\\FieldWorks.build remakefw "
 		"remakefw-failOnError", gpszRoot, gpszRoot);
 	int nResult = system(szCmd);
 	if (nResult != 0)
 		FatalError("Build failed.");
 
 	// just run tests:
-	// c:\FW\bin\nant\bin\nant.exe -t:net-3.5 -buildfile:c:\FW\bld\FieldWorks.build test all remakefw-failOnError
+	// c:\FW\bin\nant\bin\nant.exe -buildfile:c:\FW\bld\FieldWorks.build test all remakefw-failOnError
 }
 
 

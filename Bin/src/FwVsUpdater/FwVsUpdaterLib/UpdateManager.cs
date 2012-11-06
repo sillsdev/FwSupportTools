@@ -214,7 +214,7 @@ namespace SIL.FieldWorks.DevTools.FwVsUpdater
 		private void UpdateFiles()
 		{
 			bool fAskedUserToExit = false; // will be set to true as soon as we have asked user
-			using (var dlg = new ProgressDialog())
+			using (ProgressDialog dlg = new ProgressDialog())
 			{
 				dlg.ProgressBar.Maximum = m_FilesToUpdate.Length;
 				dlg.Show();
@@ -233,37 +233,22 @@ namespace SIL.FieldWorks.DevTools.FwVsUpdater
 					try
 					{
 						string extension = Path.GetExtension(file.Name).ToLower();
-						if (extension == ".msi")
+						if (extension == ".msi" || extension == ".vsi" || extension == ".vsix")
 						{
 							// Install this file
-							using (var process = new Process())
-							{
-								process.StartInfo.FileName = Path.Combine(m_UpdatePath, file.Name);
-								process.StartInfo.CreateNoWindow = true;
-								process.StartInfo.Arguments = "/quiet";
-								process.Start();
-								process.WaitForExit();
-								Trace.WriteLine(DateTime.Now + ": Exit code: " + process.ExitCode);
-							}
-						}
-						else if (extension == ".vsi" || extension == ".vsix")
-						{
-							// Install this file
-							using (var process = new Process())
-							{
-								process.StartInfo.FileName = "vsixinstaller";
-								process.StartInfo.CreateNoWindow = true;
-								process.StartInfo.Arguments = string.Format("/q /i \"{0}\"", Path.Combine(m_UpdatePath, file.Name));
-								process.Start();
-								process.WaitForExit();
-								Trace.WriteLine(DateTime.Now + ": Exit code: " + process.ExitCode);
-							}
+							Process process = new Process();
+							process.StartInfo.FileName = Path.Combine(m_UpdatePath, file.Name);
+							process.StartInfo.CreateNoWindow = true;
+							process.StartInfo.Arguments = "/quiet";
+							process.Start();
+							process.WaitForExit();
+							Trace.WriteLine(DateTime.Now + ": Exit code: " + process.ExitCode);
 						}
 						else if (extension == ".dll")
 						{
 							// Install in the GAC
 							string fileName = Path.Combine(m_UpdatePath, file.Name);
-							var publish = new Publish();
+							Publish publish = new Publish();
 							publish.GacInstall(fileName);
 							Trace.WriteLine(DateTime.Now + ": Installed in GAC");
 						}
@@ -329,14 +314,12 @@ namespace SIL.FieldWorks.DevTools.FwVsUpdater
 				{
 					if (dlg != null)
 						dlg.InstallText = "Restarting Visual Studio";
-					using (var process = new Process())
-					{
-						process.StartInfo.FileName = m_VisualStudio;
-						bool fSuccess = process.Start();
-						Trace.WriteLine(DateTime.Now + ": Restarting Visual Studio from " +
-										m_VisualStudio + ". Result: " + fSuccess);
-						m_VisualStudio = null;
-					}
+					Process process = new Process();
+					process.StartInfo.FileName = m_VisualStudio;
+					bool fSuccess = process.Start();
+					Trace.WriteLine(DateTime.Now + ": Restarting Visual Studio from " +
+						m_VisualStudio + ". Result: " + fSuccess);
+					m_VisualStudio = null;
 				}
 				catch (Exception e)
 				{
@@ -353,7 +336,7 @@ namespace SIL.FieldWorks.DevTools.FwVsUpdater
 		/// ------------------------------------------------------------------------------------
 		private void CloseVsIfNeeded()
 		{
-			foreach (var file in m_FilesToUpdate)
+			foreach (UpdateFile file in m_FilesToUpdate)
 			{
 				if (file.ExitVs)
 				{
@@ -372,7 +355,7 @@ namespace SIL.FieldWorks.DevTools.FwVsUpdater
 		/// ------------------------------------------------------------------------------------
 		private StringCollection CopyArray(ICollection src)
 		{
-			var dest = new StringCollection();
+			StringCollection dest = new StringCollection();
 			foreach (string s in src)
 				dest.Add(s);
 
@@ -386,6 +369,7 @@ namespace SIL.FieldWorks.DevTools.FwVsUpdater
 		/// ------------------------------------------------------------------------------------
 		private void StartUpdater()
 		{
+			// Install this file
 			using (var process = new Process())
 			{
 				process.StartInfo.FileName = Path.Combine(Path.GetDirectoryName(

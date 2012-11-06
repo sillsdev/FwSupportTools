@@ -22,12 +22,18 @@
 		"Entry"
 		{
 		"MsmKey" = "8:_04E8AC410FC25BA34A594D10AE6BE505"
-		"OwnerKey" = "8:_DB5AA5D49EF01CB8C99F624D80734D5C"
+		"OwnerKey" = "8:_0798DC9326C76709F57F006EBDE63520"
 		"MsmSig" = "8:_UNDEFINED"
 		}
 		"Entry"
 		{
 		"MsmKey" = "8:_04E8AC410FC25BA34A594D10AE6BE505"
+		"OwnerKey" = "8:_B162177AD5CD4C77A50BEE66C19E1CE6"
+		"MsmSig" = "8:_UNDEFINED"
+		}
+		"Entry"
+		{
+		"MsmKey" = "8:_0798DC9326C76709F57F006EBDE63520"
 		"OwnerKey" = "8:_B162177AD5CD4C77A50BEE66C19E1CE6"
 		"MsmSig" = "8:_UNDEFINED"
 		}
@@ -52,7 +58,7 @@
 		"Entry"
 		{
 		"MsmKey" = "8:_7133DB780BE565DC9A8C41E4644C44BF"
-		"OwnerKey" = "8:_DB5AA5D49EF01CB8C99F624D80734D5C"
+		"OwnerKey" = "8:_0798DC9326C76709F57F006EBDE63520"
 		"MsmSig" = "8:_UNDEFINED"
 		}
 		"Entry"
@@ -76,13 +82,7 @@
 		"Entry"
 		{
 		"MsmKey" = "8:_C9BCE03B20D60AD06C8DEB45D343C0A5"
-		"OwnerKey" = "8:_DB5AA5D49EF01CB8C99F624D80734D5C"
-		"MsmSig" = "8:_UNDEFINED"
-		}
-		"Entry"
-		{
-		"MsmKey" = "8:_DB5AA5D49EF01CB8C99F624D80734D5C"
-		"OwnerKey" = "8:_B162177AD5CD4C77A50BEE66C19E1CE6"
+		"OwnerKey" = "8:_0798DC9326C76709F57F006EBDE63520"
 		"MsmSig" = "8:_UNDEFINED"
 		}
 		"Entry"
@@ -118,7 +118,7 @@
 		"Entry"
 		{
 		"MsmKey" = "8:_UNDEFINED"
-		"OwnerKey" = "8:_DB5AA5D49EF01CB8C99F624D80734D5C"
+		"OwnerKey" = "8:_0798DC9326C76709F57F006EBDE63520"
 		"MsmSig" = "8:_UNDEFINED"
 		}
 	}
@@ -220,6 +220,37 @@
 					}
 				}
 			"SourcePath" = "8:EnvDTE.dll"
+			"TargetName" = "8:"
+			"Tag" = "8:"
+			"Folder" = "8:_604C52D082364A4883F8FC5888AB1B42"
+			"Condition" = "8:"
+			"Transitive" = "11:FALSE"
+			"Vital" = "11:TRUE"
+			"ReadOnly" = "11:FALSE"
+			"Hidden" = "11:FALSE"
+			"System" = "11:FALSE"
+			"Permanent" = "11:FALSE"
+			"SharedLegacy" = "11:FALSE"
+			"PackageAs" = "3:1"
+			"Register" = "3:1"
+			"Exclude" = "11:FALSE"
+			"IsDependency" = "11:TRUE"
+			"IsolateTo" = "8:"
+			}
+			"{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_0798DC9326C76709F57F006EBDE63520"
+			{
+			"AssemblyRegister" = "3:1"
+			"AssemblyIsInGAC" = "11:FALSE"
+			"AssemblyAsmDisplayName" = "8:EnvDTE90, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+				"ScatterAssemblies"
+				{
+					"_0798DC9326C76709F57F006EBDE63520"
+					{
+					"Name" = "8:EnvDTE90.dll"
+					"Attributes" = "3:512"
+					}
+				}
+			"SourcePath" = "8:EnvDTE90.dll"
 			"TargetName" = "8:"
 			"Tag" = "8:"
 			"Folder" = "8:_604C52D082364A4883F8FC5888AB1B42"
@@ -368,37 +399,6 @@
 			"IsDependency" = "11:TRUE"
 			"IsolateTo" = "8:"
 			}
-			"{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_DB5AA5D49EF01CB8C99F624D80734D5C"
-			{
-			"AssemblyRegister" = "3:1"
-			"AssemblyIsInGAC" = "11:FALSE"
-			"AssemblyAsmDisplayName" = "8:EnvDTE90, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
-				"ScatterAssemblies"
-				{
-					"_DB5AA5D49EF01CB8C99F624D80734D5C"
-					{
-					"Name" = "8:EnvDTE90.dll"
-					"Attributes" = "3:512"
-					}
-				}
-			"SourcePath" = "8:EnvDTE90.dll"
-			"TargetName" = "8:"
-			"Tag" = "8:"
-			"Folder" = "8:_604C52D082364A4883F8FC5888AB1B42"
-			"Condition" = "8:"
-			"Transitive" = "11:FALSE"
-			"Vital" = "11:TRUE"
-			"ReadOnly" = "11:FALSE"
-			"Hidden" = "11:FALSE"
-			"System" = "11:FALSE"
-			"Permanent" = "11:FALSE"
-			"SharedLegacy" = "11:FALSE"
-			"PackageAs" = "3:1"
-			"Register" = "3:1"
-			"Exclude" = "11:FALSE"
-			"IsDependency" = "11:TRUE"
-			"IsolateTo" = "8:"
-			}
 			"{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_FB9AEF74788F689D3BDC45324DCF45BD"
 			{
 			"AssemblyRegister" = "3:1"
@@ -509,14 +509,14 @@
 		{
 		"Name" = "8:Microsoft Visual Studio"
 		"ProductName" = "8:FwAddin"
-		"ProductCode" = "8:{28BB552D-62CA-44F9-95CA-DB55063709DF}"
-		"PackageCode" = "8:{ACC0656A-7329-4FAE-9A5E-4858E783D42A}"
+		"ProductCode" = "8:{046BDAD7-A32C-4C66-B55E-290276F9C6CF}"
+		"PackageCode" = "8:{2F8E5B6D-C1AE-4C6E-B083-EC46E173497E}"
 		"UpgradeCode" = "8:{8AE72C82-06EF-4449-9551-352B1F1F4277}"
 		"RestartWWWService" = "11:FALSE"
 		"RemovePreviousVersions" = "11:TRUE"
 		"DetectNewerInstalledVersion" = "11:TRUE"
 		"InstallAllUsers" = "11:TRUE"
-		"ProductVersion" = "8:1.1.1"
+		"ProductVersion" = "8:1.0.10"
 		"Manufacturer" = "8:SIL International"
 		"ARPHELPTELEPHONE" = "8:"
 		"ARPHELPLINK" = "8:"

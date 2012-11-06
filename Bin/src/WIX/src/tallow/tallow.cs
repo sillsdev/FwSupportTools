@@ -16,17 +16,6 @@
 // </summary>
 //-------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************
- *
- * IMPORTANT NOTICE:
- * If this program is compiled/linked for x64, or for "any CPU" on a 64-bit system, and you try to
- * run it on a 32-bit assembly, it will fail whn it tries to load that assembly, throwing a
- * BadImageFormatException.
- * Similarly, if this program is compiled/linked for x86, or for "any CPU" on a 32-bit system, and
- * you try to run it on a 64-bit assembly, you will probably get the same issue.
- *
- *************************************************************************************************/
-
 namespace Microsoft.Tools.WindowsInstallerXml.Tools
 {
 	using System;
@@ -267,9 +256,6 @@ namespace Microsoft.Tools.WindowsInstallerXml.Tools
 						try
 						{
 							RegistrationServices regSvcs = new RegistrationServices();
-							// The following line will throw a BadImageFormatException if there is a mismatch
-							// between the x86/x64 status of the tallow.exe and the assembly about to be loaded.
-							// (See comment at start of file for more info.)
 							Assembly a = Assembly.LoadFrom(assembly);
 
 							// Must call this before overriding registry hives to prevent binding failures
