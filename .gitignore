@@ -1,0 +1,25 @@
+# other files
+*.user
+*.ncb
+*.sln
+*.suo
+*.o
+*_ReSharper*
+*~
+*.pidb
+*.userprefs
+*.usertasks
+*.resources
+*.bak
+*.swp
+*.pyc
+*.log
+*.vshost.exe*
+*.sdf
+*.opensdf
+
+.dotest/
+.depend
+
+bin/
+obj/
