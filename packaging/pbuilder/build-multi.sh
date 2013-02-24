@@ -57,8 +57,15 @@ do
 		do
 			PACKAGE=${SRC%.dsc}
 			RESULT="$PBUILDERDIR/$DIST/$ARCH/result"
-			DEB1="$RESULT/${PACKAGE}_${ARCH}.deb"
-			DEB2="$RESULT/${PACKAGE}+${DIST}1_${ARCH}.deb"
+			CH1="$RESULT/${PACKAGE}_${ARCH}.changes"
+			CH2="$RESULT/${PACKAGE}+${DIST}1_${ARCH}.changes"
+
+			if [ -e $CH1 ]
+			then
+				CHANGES=$CH1
+			else
+				CHANGES=$CH2
+			fi
 
 			OPTS=()
 
@@ -74,7 +81,7 @@ do
 				fi
 			fi
 
-			if [ $SRC -nt $DEB1 -a $SRC -nt $DEB2 ]
+			if [ $SRC -nt $CHANGES ]
 			then
 				echo PACKAGE=$PACKAGE DIST=$DIST ARCH=$ARCH
 				$NOOP setarch $(cpuarch $ARCH) pbuilder --build "${OPTS[@]}" $SRC
