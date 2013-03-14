@@ -44,54 +44,54 @@ namespace LocaleStrings
 			try
 			{
 				int iOpt;
-				CommandLineOptions.BoolParam bpExtract = new CommandLineOptions.BoolParam("x",
+				var bpExtract = new CommandLineOptions.BoolParam("x",
 					"extract",
 					"Extract localizable strings into a POT file.",
 					false);
-				CommandLineOptions.BoolParam bpExcludeFlex = new CommandLineOptions.BoolParam("",
+				var bpExcludeFlex = new CommandLineOptions.BoolParam("",
 					"no-flex",
 					"Don't extract strings specific to Language Explorer",
 					false);
-				CommandLineOptions.BoolParam bpExcludeTE = new CommandLineOptions.BoolParam("",
+				var bpExcludeTE = new CommandLineOptions.BoolParam("",
 					"no-te",
 					"Don't extract strings specific to Translation Editor",
 					false);
-				CommandLineOptions.BoolParam bpStore = new CommandLineOptions.BoolParam("s",
+				var bpStore = new CommandLineOptions.BoolParam("s",
 					"store",
 					"Store strings from the PO file into the Language Explorer strings-xx.xml file",
 					false);
-				CommandLineOptions.StringParam spRoot = new CommandLineOptions.StringParam("r",
+				var spRoot = new CommandLineOptions.StringParam("r",
 					"root",
 					"The root directory of the FieldWorks source tree (typically C:\\FW or /home/user/FW)",
 					null);
-				CommandLineOptions.StringParam spPOTFile = new CommandLineOptions.StringParam("p",
+				var spPOTFile = new CommandLineOptions.StringParam("p",
 					"pot",
 					"Name of the output POT file",
 					"FieldWorks.pot");
-				CommandLineOptions.StringParam spTest = new CommandLineOptions.StringParam("t",
+				var spTest = new CommandLineOptions.StringParam("t",
 					"test",
 					"Generate a test PO file for the given locale",
 					"en-FOO");
-				CommandLineOptions.BoolParam bpForce = new CommandLineOptions.BoolParam("",
+				var bpForce = new CommandLineOptions.BoolParam("",
 					"force",
 					"Overwrite existing (test?) PO file",
 					false);
-				List<string> rgsDirs = new List<string>();
+				var rgsDirs = new List<string>();
 				rgsDirs.Add("Src");
-				CommandLineOptions.StringListParam slpDirs = new CommandLineOptions.StringListParam("d",
+				var slpDirs = new CommandLineOptions.StringListParam("d",
 					"dir",
 					"Add a subdirectory to those searched under the root (default = Src)",
 					rgsDirs);
-				CommandLineOptions.StringParam spMerge = new CommandLineOptions.StringParam("m",
+				var spMerge = new CommandLineOptions.StringParam("m",
 					"merge",
 					"Merge PO files together, overwriting the first one.",
 					"messages.xx.po");
-				CommandLineOptions.BoolParam bpCheck = new CommandLineOptions.BoolParam("c",
+				var bpCheck = new CommandLineOptions.BoolParam("c",
 					"check",
 					"Check translated strings for matching/valid argument markers.",
 					false);
 
-				CommandLineOptions.Param[] rgParam = new CommandLineOptions.Param[] {
+				var rgParam = new CommandLineOptions.Param[] {
 					bpExtract, bpExcludeFlex, bpExcludeTE, bpStore, spRoot, spPOTFile, spTest,
 					bpForce, slpDirs, spMerge, bpCheck
 				};
@@ -317,22 +317,20 @@ namespace LocaleStrings
 			string sMajor = "?";
 			string sMinor = "?";
 			string sRevision = "?";
-			string sFile = Path.Combine(sRoot, "Bld/GlobalInclude.xml");
+			string sFile = Path.Combine(sRoot, "Build/GlobalInclude.properties");
 			XmlDocument xdoc = new XmlDocument();
 			xdoc.Load(sFile);
 			// I would prefer to use SelectSingleNode, it it doesn't seem to work!
 			foreach (XmlNode xn in xdoc.DocumentElement.FirstChild.ChildNodes)
 			{
-				if (xn.Name == "property" && xn is XmlElement)
+				if (!(xn is XmlElement))
+					continue;
+
+				switch (xn.Name)
 				{
-					XmlElement xel = xn as XmlElement;
-					string sName = xel.GetAttribute("name");
-					switch (sName)
-					{
-						case "FWMAJOR":		sMajor = xel.GetAttribute("value");		break;
-						case "FWMINOR":		sMinor = xel.GetAttribute("value");		break;
-						case "FWREVISION":	sRevision = xel.GetAttribute("value");	break;
-					}
+					case "FWMAJOR": sMajor = xn.InnerText; break;
+					case "FWMINOR": sMinor = xn.InnerText; break;
+					case "FWREVISION": sRevision = xn.InnerText; break;
 				}
 			}
 			return String.Format("FieldWorks {0}.{1}.{2}", sMajor, sMinor, sRevision);
@@ -611,13 +609,22 @@ namespace LocaleStrings
 		/// <returns>path to the sources root (Src) in the FieldWorks source tree</returns>
 		private static string GetRootDir()
 		{
-			string defaultDir = Path.Combine(Environment.ExpandEnvironmentVariables("%FWROOT%"),
-				"DistFiles");
+			string defaultDir = Environment.GetEnvironmentVariable("FWROOT") != null
+				? Path.Combine(Environment.ExpandEnvironmentVariables("%FWROOT%"), "DistFiles")
+				: null;
 			object rootDir = null;
-			RegistryKey sRegKey = Registry.LocalMachine.OpenSubKey("Software\\SIL\\FieldWorks");
+			var sRegKey = Registry.CurrentUser.OpenSubKey("Software\\SIL\\FieldWorks") ??
+						Registry.LocalMachine.OpenSubKey("Software\\SIL\\FieldWorks");
 			if (sRegKey != null)
-				rootDir = sRegKey.GetValue("RootCodeDir", defaultDir);
-			if ((rootDir == null) || !(rootDir is string))
+			{
+				rootDir = sRegKey.GetValue("RootCodeDir");
+				if (rootDir == null)
+				{
+					sRegKey = sRegKey.OpenSubKey("7.0");
+					rootDir = sRegKey.GetValue("RootCodeDir", defaultDir);
+				}
+			}
+			if (rootDir == null || !(rootDir is string))
 			{
 				throw new ApplicationException("Cannot obtain FieldWorks root directory");
 			}
