@@ -33,7 +33,7 @@ namespace SIL.FieldWorks.Tools
 	using TextReader                      = System.IO.TextReader;
 	using Hashtable                       = System.Collections.Hashtable;
 	using Comparer                        = System.Collections.Comparer;
-
+	
 	using TokenStreamException            = antlr.TokenStreamException;
 	using TokenStreamIOException          = antlr.TokenStreamIOException;
 	using TokenStreamRecognitionException = antlr.TokenStreamRecognitionException;
@@ -54,7 +54,7 @@ namespace SIL.FieldWorks.Tools
 	using TokenStream                     = antlr.TokenStream;
 	using LexerSharedInputState           = antlr.LexerSharedInputState;
 	using BitSet                          = antlr.collections.impl.BitSet;
-
+	
 	public 	class SurveyorLexer : antlr.CharScanner	, TokenStream
 	 {
 		public const int EOF = 1;
@@ -73,8 +73,8 @@ namespace SIL.FieldWorks.Tools
 		public const int LETTER = 15;
 		public const int WS = 16;
 		public const int IGNORE = 17;
-
-
+		
+		
 		private StringBuilder m_bldr;
 
 		public SurveyorLexer(StringBuilder bldr, TextReader r) : this(r)
@@ -84,15 +84,15 @@ namespace SIL.FieldWorks.Tools
 		public SurveyorLexer(Stream ins) : this(new ByteBuffer(ins))
 		{
 		}
-
+		
 		public SurveyorLexer(TextReader r) : this(new CharBuffer(r))
 		{
 		}
-
+		
 		public SurveyorLexer(InputBuffer ib)		 : this(new LexerSharedInputState(ib))
 		{
 		}
-
+		
 		public SurveyorLexer(LexerSharedInputState state) : base(state)
 		{
 			initialize();
@@ -103,7 +103,7 @@ namespace SIL.FieldWorks.Tools
 			setCaseSensitive(true);
 			literals = new Hashtable(100, (float) 0.4, null, Comparer.Default);
 		}
-
+		
 		override public IToken nextToken()			//throws TokenStreamException
 		{
 			IToken theRetToken = null;
@@ -216,12 +216,12 @@ tryAgain:
 				}
 			}
 		}
-
+		
 	public void mTABLE(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
 		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = TABLE;
-
+		
 		match("@table{");
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
 		{
@@ -230,12 +230,12 @@ tryAgain:
 		}
 		returnToken_ = _token;
 	}
-
+	
 	public void mROW(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
 		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = ROW;
-
+		
 		match("@row{");
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
 		{
@@ -244,12 +244,12 @@ tryAgain:
 		}
 		returnToken_ = _token;
 	}
-
+	
 	public void mCELL(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
 		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = CELL;
-
+		
 		int _saveIndex = 0;
 		_saveIndex = text.Length;
 		match("@cell{");
@@ -265,7 +265,7 @@ tryAgain:
 				{
 					goto _loop17_breakloop;
 				}
-
+				
 			}
 _loop17_breakloop:			;
 		}    // ( ... )*
@@ -279,12 +279,12 @@ _loop17_breakloop:			;
 		}
 		returnToken_ = _token;
 	}
-
+	
 	public void mRBRACE(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
 		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = RBRACE;
-
+		
 		match('}');
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
 		{
@@ -293,12 +293,12 @@ _loop17_breakloop:			;
 		}
 		returnToken_ = _token;
 	}
-
+	
 	public void mHTTP(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
 		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = HTTP;
-
+		
 		int _saveIndex = 0;
 		_saveIndex = text.Length;
 		match("@HTTP{");
@@ -314,7 +314,7 @@ _loop17_breakloop:			;
 				{
 					goto _loop20_breakloop;
 				}
-
+				
 			}
 _loop20_breakloop:			;
 		}    // ( ... )*
@@ -328,12 +328,12 @@ _loop20_breakloop:			;
 		}
 		returnToken_ = _token;
 	}
-
+	
 	public void mREFERENCE(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
 		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = REFERENCE;
-
+		
 		int _saveIndex = 0;
 		_saveIndex = text.Length;
 		mDOLLAR(false);
@@ -405,12 +405,12 @@ _loop20_breakloop:			;
 		}
 		returnToken_ = _token;
 	}
-
+	
 	public void mDOLLAR(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
 		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = DOLLAR;
-
+		
 		match('$');
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
 		{
@@ -419,12 +419,12 @@ _loop20_breakloop:			;
 		}
 		returnToken_ = _token;
 	}
-
+	
 	public void mLBRACE(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
 		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = LBRACE;
-
+		
 		match('{');
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
 		{
@@ -433,12 +433,12 @@ _loop20_breakloop:			;
 		}
 		returnToken_ = _token;
 	}
-
+	
 	protected void mIDENTIFIER(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
 		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = IDENTIFIER;
-
+		
 		mLETTER(false);
 		{    // ( ... )*
 			for (;;)
@@ -485,12 +485,12 @@ _loop30_breakloop:			;
 		}
 		returnToken_ = _token;
 	}
-
+	
 	public void mPOUND(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
 		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = POUND;
-
+		
 		match('#');
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
 		{
@@ -499,12 +499,12 @@ _loop30_breakloop:			;
 		}
 		returnToken_ = _token;
 	}
-
+	
 	protected void mLETTER(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
 		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = LETTER;
-
+		
 		switch ( cached_LA1 )
 		{
 		case 'A':  case 'B':  case 'C':  case 'D':
@@ -546,12 +546,12 @@ _loop30_breakloop:			;
 		}
 		returnToken_ = _token;
 	}
-
+	
 	protected void mDIGIT(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
 		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = DIGIT;
-
+		
 		matchRange('0','9');
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
 		{
@@ -560,12 +560,12 @@ _loop30_breakloop:			;
 		}
 		returnToken_ = _token;
 	}
-
+	
 	protected void mWS(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
 		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = WS;
-
+		
 		switch ( cached_LA1 )
 		{
 		case '\n':
@@ -613,13 +613,13 @@ _loop30_breakloop:			;
 		}
 		returnToken_ = _token;
 	}
-
+	
 	protected void mIGNORE(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
 		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = IGNORE;
 		char  c = '\0';
-
+		
 		bool synPredMatched36 = false;
 		if (((cached_LA1=='\n') && (true)))
 		{
@@ -689,8 +689,8 @@ _loop30_breakloop:			;
 			}
 			returnToken_ = _token;
 		}
-
-
+		
+		
 		private static long[] mk_tokenSet_0_()
 		{
 			long[] data = new long[8];
@@ -701,6 +701,6 @@ _loop30_breakloop:			;
 			return data;
 		}
 		public static readonly BitSet tokenSet_0_ = new BitSet(mk_tokenSet_0_());
-
+		
 	}
 }

@@ -34,7 +34,7 @@ namespace SIL.FieldWorks.Tools
 {
 	// Generate the header common to all output files.
 	using System;
-
+	
 	using TokenBuffer              = antlr.TokenBuffer;
 	using TokenStreamException     = antlr.TokenStreamException;
 	using TokenStreamIOException   = antlr.TokenStreamIOException;
@@ -53,7 +53,7 @@ namespace SIL.FieldWorks.Tools
 	using ASTPair                  = antlr.ASTPair;
 	using ASTFactory               = antlr.ASTFactory;
 	using ASTArray                 = antlr.collections.impl.ASTArray;
-
+	
 /**
  *  This is a complete parser for the IDL language as defined
  *  by the CORBA 2.0 specification.  It will allow those who
@@ -247,54 +247,54 @@ namespace SIL.FieldWorks.Tools
 		public const int DIGIT = 171;
 		public const int OCTDIGIT = 172;
 		public const int HEXDIGIT = 173;
-
-
+		
+		
 	private CodeNamespace m_Namespace = null;
 	private IDLConversions m_Conv = null;
-
+		
 		protected void initialize()
 		{
 			tokenNames = tokenNames_;
 			initializeFactory();
 		}
-
-
+		
+		
 		protected IDLParser(TokenBuffer tokenBuf, int k) : base(tokenBuf, k)
 		{
 			initialize();
 		}
-
+		
 		public IDLParser(TokenBuffer tokenBuf) : this(tokenBuf,1)
 		{
 		}
-
+		
 		protected IDLParser(TokenStream lexer, int k) : base(lexer,k)
 		{
 			initialize();
 		}
-
+		
 		public IDLParser(TokenStream lexer) : this(lexer,1)
 		{
 		}
-
+		
 		public IDLParser(ParserSharedInputState state) : base(state,1)
 		{
 			initialize();
 		}
-
+		
 	public void specification(
 		CodeNamespace cnamespace, IDLConversions conv
 	) //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST specification_AST = null;
-
+		
 				m_Namespace = cnamespace;
 				m_Conv = conv;
-
-
+			
+		
 		try {      // for error handling
 			{ // ( ... )+
 				int _cnt3=0;
@@ -312,7 +312,7 @@ namespace SIL.FieldWorks.Tools
 					{
 						if (_cnt3 >= 1) { goto _loop3_breakloop; } else { throw new NoViableAltException(LT(1), getFilename());; }
 					}
-
+					
 					_cnt3++;
 				}
 _loop3_breakloop:				;
@@ -327,10 +327,10 @@ _loop3_breakloop:				;
 		{
 			if (0 == inputState.guessing)
 			{
-
+				
 						reportError(ex);
 						return;
-
+					
 			}
 			else
 			{
@@ -339,10 +339,10 @@ _loop3_breakloop:				;
 		}
 		returnAST = specification_AST;
 	}
-
+	
 	public void definition() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST definition_AST = null;
@@ -351,12 +351,12 @@ _loop3_breakloop:				;
 		AST l_AST = null;
 		AST m_AST = null;
 		AST mi_AST = null;
-
+		
 				Hashtable attributes = new Hashtable();
 				CodeTypeMember type = null;
 				CodeTypeDeclaration decl = null;
-
-
+			
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -376,7 +376,7 @@ _loop3_breakloop:				;
 					match(SEMI);
 					if (0==inputState.guessing)
 					{
-
+						
 									#if DEBUG_IDLGRAMMAR
 										System.Diagnostics.Debug.WriteLine(string.Format("\nType declaration found {0}\n\n", type != null ? type.Name : "<empty>"));
 									#endif
@@ -385,7 +385,7 @@ _loop3_breakloop:				;
 											m_Namespace.Types.Add((CodeTypeDeclaration)type);
 											m_Namespace.UserData.Add(type.Name, type);
 										}
-
+									
 					}
 					break;
 				}
@@ -400,11 +400,11 @@ _loop3_breakloop:				;
 					match(SEMI);
 					if (0==inputState.guessing)
 					{
-
+						
 									#if DEBUG_IDLGRAMMAR
 										System.Diagnostics.Debug.WriteLine(string.Format("\nConstant found {0}\n\n", c_AST != null ? c_AST.ToStringList() : "<null>"));
 									#endif
-
+									
 					}
 					break;
 				}
@@ -419,11 +419,11 @@ _loop3_breakloop:				;
 					match(SEMI);
 					if (0==inputState.guessing)
 					{
-
+						
 									#if DEBUG_IDLGRAMMAR
 										System.Diagnostics.Debug.WriteLine(string.Format("\nException declaration found {0}\n\n", e_AST != null ? e_AST.ToStringList() : "<null>"));
 									#endif
-
+									
 					}
 					break;
 				}
@@ -479,11 +479,11 @@ _loop3_breakloop:				;
 							}
 							if (0==inputState.guessing)
 							{
-
+								
 													#if DEBUG_IDLGRAMMAR
 													System.Diagnostics.Debug.WriteLine(string.Format("\nLibrary found {0}\n\n", l_AST != null ? l_AST.ToStringList() : "<null>"));
 													#endif
-
+												
 							}
 							break;
 						}
@@ -497,7 +497,7 @@ _loop3_breakloop:				;
 							}
 							if (0==inputState.guessing)
 							{
-
+								
 													if (!(bool)decl.UserData["IsPartial"])
 													{
 														#if DEBUG_IDLGRAMMAR
@@ -517,7 +517,7 @@ _loop3_breakloop:				;
 														if (m_Namespace.UserData[decl.Name] == null)
 															m_Namespace.UserData.Add(decl.Name, decl);
 													}
-
+												
 							}
 							break;
 						}
@@ -530,7 +530,7 @@ _loop3_breakloop:				;
 							}
 							if (0==inputState.guessing)
 							{
-
+								
 													if (!(bool)decl.UserData["IsPartial"])
 													{
 														#if DEBUG_IDLGRAMMAR
@@ -545,7 +545,7 @@ _loop3_breakloop:				;
 														m_Namespace.Types.Add(m_Conv.DeclareCoClassCreator(decl, m_Namespace, attributes));
 														attributes.Clear();
 													}
-
+												
 							}
 							break;
 						}
@@ -568,11 +568,11 @@ _loop3_breakloop:				;
 					match(SEMI);
 					if (0==inputState.guessing)
 					{
-
+						
 									#if DEBUG_IDLGRAMMAR
 										System.Diagnostics.Debug.WriteLine(string.Format("\nModule found {0}\n\n", m_AST != null ? m_AST.ToStringList() : "<null>"));
 									#endif
-
+									
 					}
 					break;
 				}
@@ -610,11 +610,11 @@ _loop3_breakloop:				;
 					}
 					if (0==inputState.guessing)
 					{
-
+						
 									#if DEBUG_IDLGRAMMAR
 										System.Diagnostics.Debug.WriteLine(string.Format("\nMIDL pragma found {0}\n\n", mi_AST != null ? mi_AST.ToStringList() : "<null>"));
 									#endif
-
+									
 					}
 					break;
 				}
@@ -640,20 +640,20 @@ _loop3_breakloop:				;
 		}
 		returnAST = definition_AST;
 	}
-
+	
 	public CodeTypeMember  type_dcl() //throws RecognitionException, TokenStreamException
 {
 		CodeTypeMember type;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST type_dcl_AST = null;
-
+		
 				type = null;
 				string ignored;
 				Hashtable attributes = new Hashtable();
-
-
+			
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -672,7 +672,7 @@ _loop3_breakloop:				;
 						tmp11_AST = astFactory.create(LT(1));
 						astFactory.addASTChild(ref currentAST, tmp11_AST);
 						match(LBRACKET);
-						type_attributes();
+						type_attributes(attributes);
 						if (0 == inputState.guessing)
 						{
 							astFactory.addASTChild(ref currentAST, returnAST);
@@ -797,15 +797,15 @@ _loop3_breakloop:				;
 		returnAST = type_dcl_AST;
 		return type;
 	}
-
+	
 	public void const_dcl() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST const_dcl_AST = null;
 		string ignored;
-
+		
 		try {      // for error handling
 			AST tmp14_AST = null;
 			tmp14_AST = astFactory.create(LT(1));
@@ -846,15 +846,15 @@ _loop3_breakloop:				;
 		}
 		returnAST = const_dcl_AST;
 	}
-
+	
 	public void except_dcl() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST except_dcl_AST = null;
 		CodeTypeMemberCollection ignored = new CodeTypeMemberCollection();
-
+		
 		try {      // for error handling
 			AST tmp16_AST = null;
 			tmp16_AST = astFactory.create(LT(1));
@@ -884,7 +884,7 @@ _loop3_breakloop:				;
 					{
 						goto _loop195_breakloop;
 					}
-
+					
 				}
 _loop195_breakloop:				;
 			}    // ( ... )*
@@ -908,16 +908,16 @@ _loop195_breakloop:				;
 		}
 		returnAST = except_dcl_AST;
 	}
-
+	
 	public void attribute_list(
 		IDictionary attributes
 	) //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST attribute_list_AST = null;
-
+		
 		try {      // for error handling
 			attribute(attributes);
 			if (0 == inputState.guessing)
@@ -943,7 +943,7 @@ _loop195_breakloop:				;
 					{
 						goto _loop25_breakloop;
 					}
-
+					
 				}
 _loop25_breakloop:				;
 			}    // ( ... )*
@@ -963,14 +963,14 @@ _loop25_breakloop:				;
 		}
 		returnAST = attribute_list_AST;
 	}
-
+	
 	public void library() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST library_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp20_AST = null;
 			tmp20_AST = astFactory.create(LT(1));
@@ -1001,7 +1001,7 @@ _loop25_breakloop:				;
 					{
 						if (_cnt17 >= 1) { goto _loop17_breakloop; } else { throw new NoViableAltException(LT(1), getFilename());; }
 					}
-
+					
 					_cnt17++;
 				}
 _loop17_breakloop:				;
@@ -1027,22 +1027,22 @@ _loop17_breakloop:				;
 		}
 		returnAST = library_AST;
 	}
-
+	
 	public CodeTypeDeclaration  interf() //throws RecognitionException, TokenStreamException
 {
 		CodeTypeDeclaration type;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST interf_AST = null;
 		AST name_AST = null;
-
+		
 				bool fForwardDeclaration = true;
 				StringCollection inherits;
 				type = new CodeTypeDeclaration();
 				type.IsInterface = true;
-
-
+			
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -1101,7 +1101,7 @@ _loop17_breakloop:				;
 							{
 								goto _loop44_breakloop;
 							}
-
+							
 						}
 _loop44_breakloop:						;
 					}    // ( ... )*
@@ -1139,12 +1139,12 @@ _loop44_breakloop:						;
 			}
 			if (0==inputState.guessing)
 			{
-
+				
 							/// we don't treat a forward declaration as real declaration
 							type.Name = name_AST.getText();
 							type.UserData.Add("IsPartial", fForwardDeclaration);
 							type.UserData.Add("inherits", inherits);
-
+						
 			}
 			interf_AST = currentAST.root;
 		}
@@ -1163,22 +1163,22 @@ _loop44_breakloop:						;
 		returnAST = interf_AST;
 		return type;
 	}
-
+	
 	public CodeTypeDeclaration  coclass() //throws RecognitionException, TokenStreamException
 {
 		CodeTypeDeclaration type;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST coclass_AST = null;
 		AST name_AST = null;
-
+		
 				Hashtable attributes = new Hashtable();
 				type = new CodeTypeDeclaration();
 				type.IsInterface = true;
 				type.UserData.Add("IsPartial", false); // The isPartial property is a .Net 2.0 feature
-
-
+			
+		
 		try {      // for error handling
 			AST tmp28_AST = null;
 			tmp28_AST = astFactory.create(LT(1));
@@ -1265,7 +1265,7 @@ _loop44_breakloop:						;
 					{
 						goto _loop22_breakloop;
 					}
-
+					
 				}
 _loop22_breakloop:				;
 			}    // ( ... )*
@@ -1290,15 +1290,15 @@ _loop22_breakloop:				;
 		returnAST = coclass_AST;
 		return type;
 	}
-
+	
 	public void module() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST module_AST = null;
 		AST d_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp34_AST = null;
 			tmp34_AST = astFactory.create(LT(1));
@@ -1339,14 +1339,14 @@ _loop22_breakloop:				;
 		}
 		returnAST = module_AST;
 	}
-
+	
 	public void import() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST import_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp37_AST = null;
 			tmp37_AST = astFactory.create(LT(1));
@@ -1376,18 +1376,18 @@ _loop22_breakloop:				;
 					{
 						goto _loop11_breakloop;
 					}
-
+					
 				}
 _loop11_breakloop:				;
 			}    // ( ... )*
 			if (0==inputState.guessing)
 			{
 				import_AST = (AST)currentAST.root;
-
+				
 							#if DEBUG_IDLGRAMMAR
 								System.Diagnostics.Debug.WriteLine(import_AST.ToStringList());
 							#endif
-
+							
 			}
 			import_AST = currentAST.root;
 		}
@@ -1405,15 +1405,15 @@ _loop11_breakloop:				;
 		}
 		returnAST = import_AST;
 	}
-
+	
 	public void importlib() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST importlib_AST = null;
 		AST str_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp39_AST = null;
 			tmp39_AST = astFactory.create(LT(1));
@@ -1435,11 +1435,11 @@ _loop11_breakloop:				;
 			match(RPAREN);
 			if (0==inputState.guessing)
 			{
-
+				
 							#if DEBUG_IDLGRAMMAR
 								System.Diagnostics.Debug.WriteLine("importlib " + str_AST.getText());
 							#endif
-
+							
 			}
 			importlib_AST = currentAST.root;
 		}
@@ -1457,14 +1457,14 @@ _loop11_breakloop:				;
 		}
 		returnAST = importlib_AST;
 	}
-
+	
 	public void cpp_quote() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST cpp_quote_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp42_AST = null;
 			tmp42_AST = astFactory.create(LT(1));
@@ -1499,14 +1499,14 @@ _loop11_breakloop:				;
 		}
 		returnAST = cpp_quote_AST;
 	}
-
+	
 	public void midl_pragma_warning() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST midl_pragma_warning_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp45_AST = null;
 			tmp45_AST = astFactory.create(LT(1));
@@ -1530,7 +1530,7 @@ _loop11_breakloop:				;
 					{
 						goto _loop249_breakloop;
 					}
-
+					
 				}
 _loop249_breakloop:				;
 			}    // ( ... )*
@@ -1554,14 +1554,14 @@ _loop249_breakloop:				;
 		}
 		returnAST = midl_pragma_warning_AST;
 	}
-
+	
 	public void identifier() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST identifier_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp49_AST = null;
 			tmp49_AST = astFactory.create(LT(1));
@@ -1583,14 +1583,14 @@ _loop249_breakloop:				;
 		}
 		returnAST = identifier_AST;
 	}
-
+	
 	public void definition_list() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST definition_list_AST = null;
-
+		
 		try {      // for error handling
 			{ // ( ... )+
 				int _cnt14=0;
@@ -1608,7 +1608,7 @@ _loop249_breakloop:				;
 					{
 						if (_cnt14 >= 1) { goto _loop14_breakloop; } else { throw new NoViableAltException(LT(1), getFilename());; }
 					}
-
+					
 					_cnt14++;
 				}
 _loop14_breakloop:				;
@@ -1629,14 +1629,14 @@ _loop14_breakloop:				;
 		}
 		returnAST = definition_list_AST;
 	}
-
+	
 	public void string_literal() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST string_literal_AST = null;
-
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -1674,7 +1674,7 @@ _loop14_breakloop:				;
 					{
 						if (_cnt240 >= 1) { goto _loop240_breakloop; } else { throw new NoViableAltException(LT(1), getFilename());; }
 					}
-
+					
 					_cnt240++;
 				}
 _loop240_breakloop:				;
@@ -1695,17 +1695,17 @@ _loop240_breakloop:				;
 		}
 		returnAST = string_literal_AST;
 	}
-
+	
 	public void interf_declr(
 		CodeTypeReferenceCollection baseTypes
 	) //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST interf_declr_AST = null;
 		AST name_AST = null;
-
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -1740,9 +1740,9 @@ _loop240_breakloop:				;
 			}
 			if (0==inputState.guessing)
 			{
-
+				
 						baseTypes.Add(name_AST.getText());
-
+					
 			}
 			interf_declr_AST = currentAST.root;
 		}
@@ -1760,19 +1760,19 @@ _loop240_breakloop:				;
 		}
 		returnAST = interf_declr_AST;
 	}
-
+	
 	public void attribute(
 		IDictionary attributes
 	) //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST attribute_AST = null;
 		AST uuid_AST = null;
 		AST name_AST = null;
 		AST value_AST = null;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -1820,7 +1820,7 @@ _loop240_breakloop:				;
 						{
 							if (_cnt28 >= 1) { goto _loop28_breakloop; } else { throw new NoViableAltException(LT(1), getFilename());; }
 						}
-
+						
 						_cnt28++;
 					}
 _loop28_breakloop:					;
@@ -1924,7 +1924,7 @@ _loop28_breakloop:					;
 						{
 							goto _loop30_breakloop;
 						}
-
+						
 					}
 _loop30_breakloop:					;
 				}    // ( ... )*
@@ -2043,10 +2043,10 @@ _loop30_breakloop:					;
 				match(RPAREN);
 				if (0==inputState.guessing)
 				{
-
+					
 								attributes.Add("custom", new CodeAttributeArgument(name_AST.getText(),
 									new CodePrimitiveExpression(value_AST.getText())));
-
+							
 				}
 				attribute_AST = currentAST.root;
 				break;
@@ -2156,7 +2156,7 @@ _loop30_breakloop:					;
 						{
 							if (_cnt32 >= 1) { goto _loop32_breakloop; } else { throw new NoViableAltException(LT(1), getFilename());; }
 						}
-
+						
 						_cnt32++;
 					}
 _loop32_breakloop:					;
@@ -2438,15 +2438,15 @@ _loop32_breakloop:					;
 		}
 		returnAST = attribute_AST;
 	}
-
+	
 	public void uuid_literal() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST uuid_literal_AST = null;
 		AST value_AST = null;
-
+		
 		try {      // for error handling
 			match(LPAREN);
 			non_rparen();
@@ -2472,14 +2472,14 @@ _loop32_breakloop:					;
 		}
 		returnAST = uuid_literal_AST;
 	}
-
+	
 	public void ptr_attr() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST ptr_attr_AST = null;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -2530,14 +2530,14 @@ _loop32_breakloop:					;
 		}
 		returnAST = ptr_attr_AST;
 	}
-
+	
 	public void non_rparen() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST non_rparen_AST = null;
-
+		
 		try {      // for error handling
 			{ // ( ... )+
 				int _cnt36=0;
@@ -2554,7 +2554,7 @@ _loop32_breakloop:					;
 					{
 						if (_cnt36 >= 1) { goto _loop36_breakloop; } else { throw new NoViableAltException(LT(1), getFilename());; }
 					}
-
+					
 					_cnt36++;
 				}
 _loop36_breakloop:				;
@@ -2575,14 +2575,14 @@ _loop36_breakloop:				;
 		}
 		returnAST = non_rparen_AST;
 	}
-
+	
 	public void integer_literal() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST integer_literal_AST = null;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -2633,18 +2633,18 @@ _loop36_breakloop:				;
 		}
 		returnAST = integer_literal_AST;
 	}
-
+	
 	public void lib_definition() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST lib_definition_AST = null;
-
+		
 				Hashtable attributes = new Hashtable();
 				CodeTypeMember ignored;
-
-
+			
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -2760,16 +2760,16 @@ _loop36_breakloop:				;
 		}
 		returnAST = lib_definition_AST;
 	}
-
+	
 	public StringCollection  inheritance_spec() //throws RecognitionException, TokenStreamException
 {
 		StringCollection coll;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST inheritance_spec_AST = null;
 		coll = new StringCollection();
-
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -2834,22 +2834,22 @@ _loop36_breakloop:				;
 		returnAST = inheritance_spec_AST;
 		return coll;
 	}
-
+	
 	public bool  interface_body(
 		CodeTypeDeclaration type
 	) //throws RecognitionException, TokenStreamException
 {
 		bool fForwardDeclaration;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST interface_body_AST = null;
-
+		
 				CodeTypeMember member = null;
 				CodeTypeMember ignored;
 				fForwardDeclaration = false;
-
-
+			
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -2957,10 +2957,10 @@ _loop36_breakloop:				;
 				match(SEMI);
 				if (0==inputState.guessing)
 				{
-
+					
 								if (member != null)
 									type.Members.Add(member);
-
+							
 				}
 				interface_body_AST = currentAST.root;
 				break;
@@ -2986,18 +2986,18 @@ _loop36_breakloop:				;
 		returnAST = interface_body_AST;
 		return fForwardDeclaration;
 	}
-
+	
 	public void attr_dcl() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST attr_dcl_AST = null;
-
+		
 				string ignored;
 				Hashtable attributes = new Hashtable();
-
-
+			
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -3050,25 +3050,25 @@ _loop36_breakloop:				;
 		}
 		returnAST = attr_dcl_AST;
 	}
-
+	
 	public CodeTypeMember  function_dcl(
 		CodeTypeMemberCollection types
 	) //throws RecognitionException, TokenStreamException
 {
 		CodeTypeMember memberRet;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST function_dcl_AST = null;
 		AST rt_AST = null;
 		AST name_AST = null;
-
+		
 				CodeParameterDeclarationExpressionCollection pars;
 				CodeMemberMethod member = new CodeMemberMethod();
 				Hashtable funcAttributes = new Hashtable();
 				memberRet = member;
-
-
+			
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -3175,10 +3175,10 @@ _loop36_breakloop:				;
 			}
 			if (0==inputState.guessing)
 			{
-
+				
 							member.Name = name_AST.getText();
 							member.Parameters.AddRange(pars);
-
+				
 							if (rt_AST == null)
 								memberRet = null;
 							else
@@ -3186,11 +3186,11 @@ _loop36_breakloop:				;
 								CodeParameterDeclarationExpression param = new CodeParameterDeclarationExpression();
 								Hashtable attributes = new Hashtable();
 								param.Type = m_Conv.ConvertParamType(rt_AST.ToString(), param, attributes);
-
+				
 								m_Conv.HandleSizeIs(member, funcAttributes);
 								memberRet = m_Conv.HandleFunction_dcl(member, param.Type, types, funcAttributes);
 							}
-
+						
 			}
 			function_dcl_AST = currentAST.root;
 		}
@@ -3209,18 +3209,18 @@ _loop36_breakloop:				;
 		returnAST = function_dcl_AST;
 		return memberRet;
 	}
-
+	
 	public void scoped_name_list(
 		StringCollection coll
 	) //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST scoped_name_list_AST = null;
 		AST name1_AST = null;
 		AST name2_AST = null;
-
+		
 		try {      // for error handling
 			scoped_name();
 			if (0 == inputState.guessing)
@@ -3256,7 +3256,7 @@ _loop36_breakloop:				;
 					{
 						goto _loop52_breakloop;
 					}
-
+					
 				}
 _loop52_breakloop:				;
 			}    // ( ... )*
@@ -3276,14 +3276,14 @@ _loop52_breakloop:				;
 		}
 		returnAST = scoped_name_list_AST;
 	}
-
+	
 	public void scoped_name() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST scoped_name_AST = null;
-
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -3330,7 +3330,7 @@ _loop52_breakloop:				;
 					{
 						goto _loop56_breakloop;
 					}
-
+					
 				}
 _loop56_breakloop:				;
 			}    // ( ... )*
@@ -3350,14 +3350,14 @@ _loop56_breakloop:				;
 		}
 		returnAST = scoped_name_AST;
 	}
-
+	
 	public void const_type() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST const_type_AST = null;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -3421,7 +3421,7 @@ _loop56_breakloop:				;
 						{
 							goto _loop60_breakloop;
 						}
-
+						
 					}
 _loop60_breakloop:					;
 				}    // ( ... )*
@@ -3448,16 +3448,16 @@ _loop60_breakloop:					;
 		}
 		returnAST = const_type_AST;
 	}
-
+	
 	public string  const_exp() //throws RecognitionException, TokenStreamException
 {
 		string s;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST const_exp_AST = null;
 		s = string.Empty;
-
+		
 		try {      // for error handling
 			s=or_expr();
 			if (0 == inputState.guessing)
@@ -3481,14 +3481,14 @@ _loop60_breakloop:					;
 		returnAST = const_exp_AST;
 		return s;
 	}
-
+	
 	public void base_type_spec() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST base_type_spec_AST = null;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -3675,7 +3675,7 @@ _loop60_breakloop:					;
 						{
 							goto _loop110_breakloop;
 						}
-
+						
 					}
 _loop110_breakloop:					;
 				}    // ( ... )*
@@ -3711,14 +3711,14 @@ _loop110_breakloop:					;
 		}
 		returnAST = base_type_spec_AST;
 	}
-
+	
 	public void string_type() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST string_type_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp161_AST = null;
 			tmp161_AST = astFactory.create(LT(1));
@@ -3738,7 +3738,7 @@ _loop110_breakloop:					;
 					{
 						goto _loop185_breakloop;
 					}
-
+					
 				}
 _loop185_breakloop:				;
 			}    // ( ... )*
@@ -3758,22 +3758,22 @@ _loop185_breakloop:				;
 		}
 		returnAST = string_type_AST;
 	}
-
+	
 	public string  or_expr() //throws RecognitionException, TokenStreamException
 {
 		string s;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST or_expr_AST = null;
 		IToken  op = null;
 		AST op_AST = null;
-
+		
 				StringBuilder bldr = new StringBuilder();
 				string expr = string.Empty;
 				s = string.Empty;
-
-
+			
+		
 		try {      // for error handling
 			expr=xor_expr();
 			if (0 == inputState.guessing)
@@ -3800,17 +3800,17 @@ _loop185_breakloop:				;
 						}
 						if (0==inputState.guessing)
 						{
-
+							
 											bldr.Append(op_AST.getText());
 											bldr.Append(expr);
-
+										
 						}
 					}
 					else
 					{
 						goto _loop64_breakloop;
 					}
-
+					
 				}
 _loop64_breakloop:				;
 			}    // ( ... )*
@@ -3835,22 +3835,22 @@ _loop64_breakloop:				;
 		returnAST = or_expr_AST;
 		return s;
 	}
-
+	
 	public string  xor_expr() //throws RecognitionException, TokenStreamException
 {
 		string s;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST xor_expr_AST = null;
 		IToken  op = null;
 		AST op_AST = null;
-
+		
 				StringBuilder bldr = new StringBuilder();
 				string expr = string.Empty;
 				s = string.Empty;
-
-
+			
+		
 		try {      // for error handling
 			expr=and_expr();
 			if (0 == inputState.guessing)
@@ -3877,17 +3877,17 @@ _loop64_breakloop:				;
 						}
 						if (0==inputState.guessing)
 						{
-
+							
 											bldr.Append(op_AST.getText());
 											bldr.Append(expr);
-
+										
 						}
 					}
 					else
 					{
 						goto _loop67_breakloop;
 					}
-
+					
 				}
 _loop67_breakloop:				;
 			}    // ( ... )*
@@ -3912,22 +3912,22 @@ _loop67_breakloop:				;
 		returnAST = xor_expr_AST;
 		return s;
 	}
-
+	
 	public string  and_expr() //throws RecognitionException, TokenStreamException
 {
 		string s;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST and_expr_AST = null;
 		IToken  op = null;
 		AST op_AST = null;
-
+		
 				StringBuilder bldr = new StringBuilder();
 				string expr = string.Empty;
 				s = string.Empty;
-
-
+			
+		
 		try {      // for error handling
 			expr=shift_expr();
 			if (0 == inputState.guessing)
@@ -3954,17 +3954,17 @@ _loop67_breakloop:				;
 						}
 						if (0==inputState.guessing)
 						{
-
+							
 											bldr.Append(op_AST.getText());
 											bldr.Append(expr);
-
+										
 						}
 					}
 					else
 					{
 						goto _loop70_breakloop;
 					}
-
+					
 				}
 _loop70_breakloop:				;
 			}    // ( ... )*
@@ -3989,21 +3989,21 @@ _loop70_breakloop:				;
 		returnAST = and_expr_AST;
 		return s;
 	}
-
+	
 	public string  shift_expr() //throws RecognitionException, TokenStreamException
 {
 		string s;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST shift_expr_AST = null;
 		AST op_AST = null;
-
+		
 				StringBuilder bldr = new StringBuilder();
 				string expr = string.Empty;
 				s = string.Empty;
-
-
+			
+		
 		try {      // for error handling
 			expr=add_expr();
 			if (0 == inputState.guessing)
@@ -4032,17 +4032,17 @@ _loop70_breakloop:				;
 						}
 						if (0==inputState.guessing)
 						{
-
+							
 											bldr.Append(op_AST.getText());
 											bldr.Append(expr);
-
+										
 						}
 					}
 					else
 					{
 						goto _loop73_breakloop;
 					}
-
+					
 				}
 _loop73_breakloop:				;
 			}    // ( ... )*
@@ -4067,21 +4067,21 @@ _loop73_breakloop:				;
 		returnAST = shift_expr_AST;
 		return s;
 	}
-
+	
 	public string  add_expr() //throws RecognitionException, TokenStreamException
 {
 		string s;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST add_expr_AST = null;
 		AST op_AST = null;
-
+		
 				StringBuilder bldr = new StringBuilder();
 				string expr = string.Empty;
 				s = string.Empty;
-
-
+			
+		
 		try {      // for error handling
 			expr=mult_expr();
 			if (0 == inputState.guessing)
@@ -4110,17 +4110,17 @@ _loop73_breakloop:				;
 						}
 						if (0==inputState.guessing)
 						{
-
+							
 											bldr.Append(op_AST.getText());
 											bldr.Append(expr);
-
+										
 						}
 					}
 					else
 					{
 						goto _loop77_breakloop;
 					}
-
+					
 				}
 _loop77_breakloop:				;
 			}    // ( ... )*
@@ -4145,14 +4145,14 @@ _loop77_breakloop:				;
 		returnAST = add_expr_AST;
 		return s;
 	}
-
+	
 	public void shift_op() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST shift_op_AST = null;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -4194,21 +4194,21 @@ _loop77_breakloop:				;
 		}
 		returnAST = shift_op_AST;
 	}
-
+	
 	public string  mult_expr() //throws RecognitionException, TokenStreamException
 {
 		string s;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST mult_expr_AST = null;
 		AST op_AST = null;
-
+		
 				StringBuilder bldr = new StringBuilder();
 				string expr = string.Empty;
 				s = string.Empty;
-
-
+			
+		
 		try {      // for error handling
 			expr=unary_expr();
 			if (0 == inputState.guessing)
@@ -4237,17 +4237,17 @@ _loop77_breakloop:				;
 						}
 						if (0==inputState.guessing)
 						{
-
+							
 											bldr.Append(op_AST.getText());
 											bldr.Append(expr);
-
+										
 						}
 					}
 					else
 					{
 						goto _loop81_breakloop;
 					}
-
+					
 				}
 _loop81_breakloop:				;
 			}    // ( ... )*
@@ -4272,14 +4272,14 @@ _loop81_breakloop:				;
 		returnAST = mult_expr_AST;
 		return s;
 	}
-
+	
 	public void add_op() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST add_op_AST = null;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -4321,20 +4321,20 @@ _loop81_breakloop:				;
 		}
 		returnAST = add_op_AST;
 	}
-
+	
 	public string  unary_expr() //throws RecognitionException, TokenStreamException
 {
 		string s;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST unary_expr_AST = null;
 		AST u_AST = null;
-
+		
 				string p = string.Empty;
 				s = string.Empty;
-
-
+			
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -4380,12 +4380,12 @@ _loop81_breakloop:				;
 			}
 			if (0==inputState.guessing)
 			{
-
+				
 							if (u_AST != null)
 								s = u_AST.getText() + p;
 							else
 								s = p;
-
+						
 			}
 			unary_expr_AST = currentAST.root;
 		}
@@ -4404,14 +4404,14 @@ _loop81_breakloop:				;
 		returnAST = unary_expr_AST;
 		return s;
 	}
-
+	
 	public void mult_op() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST mult_op_AST = null;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -4462,14 +4462,14 @@ _loop81_breakloop:				;
 		}
 		returnAST = mult_op_AST;
 	}
-
+	
 	public void unary_operator() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST unary_operator_AST = null;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -4520,21 +4520,21 @@ _loop81_breakloop:				;
 		}
 		returnAST = unary_operator_AST;
 	}
-
+	
 	public string  primary_expr() //throws RecognitionException, TokenStreamException
 {
 		string s;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST primary_expr_AST = null;
 		AST sn_AST = null;
 		AST l_AST = null;
-
+		
 				string c;
 				s = string.Empty;
-
-
+			
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -4621,14 +4621,14 @@ _loop81_breakloop:				;
 		returnAST = primary_expr_AST;
 		return s;
 	}
-
+	
 	public void literal() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST literal_AST = null;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -4713,14 +4713,14 @@ _loop81_breakloop:				;
 		}
 		returnAST = literal_AST;
 	}
-
+	
 	public void character_literal() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST character_literal_AST = null;
-
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -4763,14 +4763,14 @@ _loop81_breakloop:				;
 		}
 		returnAST = character_literal_AST;
 	}
-
+	
 	public void floating_pt_or_integer_literal() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST floating_pt_or_integer_literal_AST = null;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -4859,14 +4859,14 @@ _loop81_breakloop:				;
 		}
 		returnAST = floating_pt_or_integer_literal_AST;
 	}
-
+	
 	public void boolean_literal() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST boolean_literal_AST = null;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -4926,15 +4926,15 @@ _loop81_breakloop:				;
 		}
 		returnAST = boolean_literal_AST;
 	}
-
+	
 	public void positive_int_const() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST positive_int_const_AST = null;
 		string s;
-
+		
 		try {      // for error handling
 			s=const_exp();
 			if (0 == inputState.guessing)
@@ -4957,16 +4957,18 @@ _loop81_breakloop:				;
 		}
 		returnAST = positive_int_const_AST;
 	}
-
-	public void type_attributes() //throws RecognitionException, TokenStreamException
+	
+	public void type_attributes(
+		IDictionary attributes
+	) //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST type_attributes_AST = null;
-
+		
 		try {      // for error handling
-			type_attribute();
+			type_attribute(attributes);
 			if (0 == inputState.guessing)
 			{
 				astFactory.addASTChild(ref currentAST, returnAST);
@@ -4980,7 +4982,7 @@ _loop81_breakloop:				;
 						tmp185_AST = astFactory.create(LT(1));
 						astFactory.addASTChild(ref currentAST, tmp185_AST);
 						match(COMMA);
-						type_attribute();
+						type_attribute(attributes);
 						if (0 == inputState.guessing)
 						{
 							astFactory.addASTChild(ref currentAST, returnAST);
@@ -4990,7 +4992,7 @@ _loop81_breakloop:				;
 					{
 						goto _loop96_breakloop;
 					}
-
+					
 				}
 _loop96_breakloop:				;
 			}    // ( ... )*
@@ -5010,20 +5012,20 @@ _loop96_breakloop:				;
 		}
 		returnAST = type_attributes_AST;
 	}
-
+	
 	public CodeTypeMember  type_declarator() //throws RecognitionException, TokenStreamException
 {
 		CodeTypeMember type;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST type_declarator_AST = null;
-
+		
 				type = null;
 				string name;
 				Hashtable attributes = new Hashtable();
-
-
+			
+		
 		try {      // for error handling
 			type=type_spec();
 			if (0 == inputState.guessing)
@@ -5037,13 +5039,13 @@ _loop96_breakloop:				;
 			}
 			if (0==inputState.guessing)
 			{
-
+				
 						#if DEBUG_IDLGRAMMAR
 							System.Diagnostics.Debug.WriteLine(string.Format("typespec: {0}; {1}", type != null ? type.Name : "<empty>", name));
 						#endif
 							if (type.Name == string.Empty)
 								type.Name = name;
-
+						
 			}
 			type_declarator_AST = currentAST.root;
 		}
@@ -5062,24 +5064,24 @@ _loop96_breakloop:				;
 		returnAST = type_declarator_AST;
 		return type;
 	}
-
+	
 	public CodeTypeDeclaration  struct_type() //throws RecognitionException, TokenStreamException
 {
 		CodeTypeDeclaration type;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST struct_type_AST = null;
 		AST name_AST = null;
-
+		
 				type = new CodeTypeDeclaration();
 				type.IsStruct = true;
 				// Add attribute: [StructLayout(LayoutKind.Sequential, Pack=4)]
 				type.CustomAttributes.Add(new CodeAttributeDeclaration("StructLayout",
 					new CodeAttributeArgument(new CodeVariableReferenceExpression("LayoutKind.Sequential")),
 					new CodeAttributeArgument("Pack", new CodePrimitiveExpression(4))));
-
-
+			
+		
 		try {      // for error handling
 			AST tmp186_AST = null;
 			tmp186_AST = astFactory.create(LT(1));
@@ -5128,7 +5130,7 @@ _loop96_breakloop:				;
 					{
 						if (_cnt138 >= 1) { goto _loop138_breakloop; } else { throw new NoViableAltException(LT(1), getFilename());; }
 					}
-
+					
 					_cnt138++;
 				}
 _loop138_breakloop:				;
@@ -5151,13 +5153,13 @@ _loop138_breakloop:				;
 					{
 						goto _loop140_breakloop;
 					}
-
+					
 				}
 _loop140_breakloop:				;
 			}    // ( ... )*
 			if (0==inputState.guessing)
 			{
-
+				
 							if (name_AST != null)
 							{
 								#if DEBUG_IDLGRAMMAR
@@ -5165,7 +5167,7 @@ _loop140_breakloop:				;
 								#endif
 								type.Name = name_AST.getText();
 							}
-
+						
 			}
 			struct_type_AST = currentAST.root;
 		}
@@ -5184,15 +5186,15 @@ _loop140_breakloop:				;
 		returnAST = struct_type_AST;
 		return type;
 	}
-
+	
 	public void union_type() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST union_type_AST = null;
 		AST name_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp190_AST = null;
 			tmp190_AST = astFactory.create(LT(1));
@@ -5298,7 +5300,7 @@ _loop140_breakloop:				;
 			}
 			if (0==inputState.guessing)
 			{
-
+				
 							if (name_AST != null)
 							{
 								#if DEBUG_IDLGRAMMAR
@@ -5309,7 +5311,7 @@ _loop140_breakloop:				;
 								type.Name = name_AST.getText();
 								m_Namespace.UserData[type.Name] = type;
 							}
-
+						
 			}
 			union_type_AST = currentAST.root;
 		}
@@ -5327,21 +5329,21 @@ _loop140_breakloop:				;
 		}
 		returnAST = union_type_AST;
 	}
-
+	
 	public CodeTypeDeclaration  enum_type() //throws RecognitionException, TokenStreamException
 {
 		CodeTypeDeclaration type;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST enum_type_AST = null;
 		AST name_AST = null;
-
+		
 				type = new CodeTypeDeclaration();
 				type.IsEnum = true;
 				string name = string.Empty;
-
-
+			
+		
 		try {      // for error handling
 			AST tmp198_AST = null;
 			tmp198_AST = astFactory.create(LT(1));
@@ -5389,7 +5391,7 @@ _loop140_breakloop:				;
 			match(RBRACE);
 			if (0==inputState.guessing)
 			{
-
+				
 							if (name_AST != null)
 							{
 								#if DEBUG_IDLGRAMMAR
@@ -5397,7 +5399,7 @@ _loop140_breakloop:				;
 								#endif
 								type.Name = name_AST.getText();
 							}
-
+						
 			}
 			enum_type_AST = currentAST.root;
 		}
@@ -5416,23 +5418,23 @@ _loop140_breakloop:				;
 		returnAST = enum_type_AST;
 		return type;
 	}
-
+	
 	public string  declarator(
 		IDictionary attributes
 	) //throws RecognitionException, TokenStreamException
 {
 		string s;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST declarator_AST = null;
 		AST i_AST = null;
-
+		
 				s = string.Empty;
 				string f = string.Empty;
 				List<string> arraySize = new List<string>();
-
-
+			
+		
 		try {      // for error handling
 			identifier();
 			if (0 == inputState.guessing)
@@ -5459,21 +5461,21 @@ _loop140_breakloop:				;
 					{
 						goto _loop134_breakloop;
 					}
-
+					
 				}
 _loop134_breakloop:				;
 			}    // ( ... )*
 			if (0==inputState.guessing)
 			{
-
+				
 						#if DEBUG_IDLGRAMMAR
 							System.Diagnostics.Debug.WriteLine("declarator: " + i_AST.getText());
 						#endif
 							s = i_AST.getText();
-
+				
 							if (arraySize.Count > 0)
 								attributes.Add("IsArray", arraySize);
-
+						
 			}
 			declarator_AST = currentAST.root;
 		}
@@ -5492,14 +5494,16 @@ _loop134_breakloop:				;
 		returnAST = declarator_AST;
 		return s;
 	}
-
-	public void type_attribute() //throws RecognitionException, TokenStreamException
+	
+	public void type_attribute(
+		IDictionary attributes
+	) //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST type_attribute_AST = null;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -5680,6 +5684,54 @@ _loop134_breakloop:				;
 				type_attribute_AST = currentAST.root;
 				break;
 			}
+			case LITERAL_uuid:
+			case LITERAL_version:
+			case LITERAL_async_uuid:
+			case LITERAL_local:
+			case LITERAL_object:
+			case LITERAL_pointer_default:
+			case LITERAL_endpoint:
+			case LITERAL_odl:
+			case LITERAL_optimize:
+			case LITERAL_proxy:
+			case LITERAL_aggregatable:
+			case LITERAL_appobject:
+			case LITERAL_bindable:
+			case LITERAL_control:
+			case LITERAL_custom:
+			case LITERAL_default:
+			case LITERAL_defaultbind:
+			case LITERAL_defaultcollelem:
+			case LITERAL_defaultvtable:
+			case LITERAL_displaybind:
+			case LITERAL_dllname:
+			case LITERAL_dual:
+			case LITERAL_entry:
+			case LITERAL_helpcontext:
+			case LITERAL_helpfile:
+			case LITERAL_helpstring:
+			case LITERAL_helpstringdll:
+			case LITERAL_hidden:
+			case LITERAL_id:
+			case LITERAL_idempotent:
+			case LITERAL_immediatebind:
+			case LITERAL_lcid:
+			case LITERAL_licensed:
+			case LITERAL_message:
+			case LITERAL_nonbrowsable:
+			case LITERAL_noncreatable:
+			case LITERAL_nonextensible:
+			case LITERAL_oleautomation:
+			case LITERAL_restricted:
+			{
+				attribute(attributes);
+				if (0 == inputState.guessing)
+				{
+					astFactory.addASTChild(ref currentAST, returnAST);
+				}
+				type_attribute_AST = currentAST.root;
+				break;
+			}
 			default:
 			{
 				throw new NoViableAltException(LT(1), getFilename());
@@ -5700,14 +5752,14 @@ _loop134_breakloop:				;
 		}
 		returnAST = type_attribute_AST;
 	}
-
+	
 	public void simple_type_spec() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST simple_type_spec_AST = null;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -5772,7 +5824,7 @@ _loop134_breakloop:				;
 						{
 							goto _loop104_breakloop;
 						}
-
+						
 					}
 _loop104_breakloop:					;
 				}    // ( ... )*
@@ -5799,15 +5851,15 @@ _loop104_breakloop:					;
 		}
 		returnAST = simple_type_spec_AST;
 	}
-
+	
 	public void switch_type_spec() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST switch_type_spec_AST = null;
 		CodeTypeDeclaration type;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -5945,17 +5997,17 @@ _loop104_breakloop:					;
 		}
 		returnAST = switch_type_spec_AST;
 	}
-
+	
 	public CodeTypeMember  type_spec() //throws RecognitionException, TokenStreamException
 {
 		CodeTypeMember type;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST type_spec_AST = null;
 		AST s_AST = null;
 		type = null;
-
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -6038,11 +6090,11 @@ _loop104_breakloop:					;
 					}
 					if (0==inputState.guessing)
 					{
-
+						
 										type = new CodeMemberField();
 										((CodeMemberField)type).Type = m_Conv.ConvertParamType(s_AST.getText(), null, new Hashtable());
 										type.Attributes = (type.Attributes & ~MemberAttributes.AccessMask) | MemberAttributes.Public;
-
+									
 					}
 					break;
 				}
@@ -6080,21 +6132,21 @@ _loop104_breakloop:					;
 		returnAST = type_spec_AST;
 		return type;
 	}
-
+	
 	public string  declarator_list(
 		IDictionary attributes
 	) //throws RecognitionException, TokenStreamException
 {
 		string s;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST declarator_list_AST = null;
-
+		
 				string ignored;
 				s = string.Empty;
-
-
+			
+		
 		try {      // for error handling
 			s=declarator(attributes);
 			if (0 == inputState.guessing)
@@ -6124,7 +6176,7 @@ _loop104_breakloop:					;
 								{
 									goto _loop130_breakloop;
 								}
-
+								
 							}
 _loop130_breakloop:							;
 						}    // ( ... )*
@@ -6138,7 +6190,7 @@ _loop130_breakloop:							;
 					{
 						goto _loop131_breakloop;
 					}
-
+					
 				}
 _loop131_breakloop:				;
 			}    // ( ... )*
@@ -6159,16 +6211,16 @@ _loop131_breakloop:				;
 		returnAST = declarator_list_AST;
 		return s;
 	}
-
+	
 	public CodeTypeDeclaration  constr_type_spec() //throws RecognitionException, TokenStreamException
 {
 		CodeTypeDeclaration type;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST constr_type_spec_AST = null;
 		type = null;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -6223,14 +6275,14 @@ _loop131_breakloop:				;
 		returnAST = constr_type_spec_AST;
 		return type;
 	}
-
+	
 	public void template_type_spec() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST template_type_spec_AST = null;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -6274,14 +6326,14 @@ _loop131_breakloop:				;
 		}
 		returnAST = template_type_spec_AST;
 	}
-
+	
 	public void integer_type() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST integer_type_AST = null;
-
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -6391,14 +6443,14 @@ _loop131_breakloop:				;
 		}
 		returnAST = integer_type_AST;
 	}
-
+	
 	public void char_type() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST char_type_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp235_AST = null;
 			tmp235_AST = astFactory.create(LT(1));
@@ -6420,14 +6472,14 @@ _loop131_breakloop:				;
 		}
 		returnAST = char_type_AST;
 	}
-
+	
 	public void boolean_type() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST boolean_type_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp236_AST = null;
 			tmp236_AST = astFactory.create(LT(1));
@@ -6449,14 +6501,14 @@ _loop131_breakloop:				;
 		}
 		returnAST = boolean_type_AST;
 	}
-
+	
 	public void floating_pt_type() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST floating_pt_type_AST = null;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -6498,14 +6550,14 @@ _loop131_breakloop:				;
 		}
 		returnAST = floating_pt_type_AST;
 	}
-
+	
 	public void attr_vars() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST attr_vars_AST = null;
-
+		
 		try {      // for error handling
 			attr_var();
 			if (0 == inputState.guessing)
@@ -6531,7 +6583,7 @@ _loop131_breakloop:				;
 					{
 						goto _loop113_breakloop;
 					}
-
+					
 				}
 _loop113_breakloop:				;
 			}    // ( ... )*
@@ -6551,14 +6603,14 @@ _loop113_breakloop:				;
 		}
 		returnAST = attr_vars_AST;
 	}
-
+	
 	public void attr_var() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST attr_var_AST = null;
-
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -6639,14 +6691,14 @@ _loop113_breakloop:				;
 		}
 		returnAST = attr_var_AST;
 	}
-
+	
 	public void sequence_type() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST sequence_type_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp243_AST = null;
 			tmp243_AST = astFactory.create(LT(1));
@@ -6686,17 +6738,17 @@ _loop113_breakloop:				;
 		}
 		returnAST = sequence_type_AST;
 	}
-
+	
 	public string  fixed_array_size() //throws RecognitionException, TokenStreamException
 {
 		string s;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST fixed_array_size_AST = null;
 		AST bounds_AST = null;
 		s = string.Empty;
-
+		
 		try {      // for error handling
 			AST tmp246_AST = null;
 			tmp246_AST = astFactory.create(LT(1));
@@ -6747,10 +6799,10 @@ _loop113_breakloop:				;
 			match(RBRACKET);
 			if (0==inputState.guessing)
 			{
-
+				
 							if (bounds_AST != null)
 								s = bounds_AST.getText();
-
+						
 			}
 			fixed_array_size_AST = currentAST.root;
 		}
@@ -6769,21 +6821,21 @@ _loop113_breakloop:				;
 		returnAST = fixed_array_size_AST;
 		return s;
 	}
-
+	
 	public void member(
 		CodeTypeMemberCollection members
 	) //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST member_AST = null;
-
+		
 				Hashtable attributes = new Hashtable();
 				CodeTypeMember type;
 				string name;
-
-
+			
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -6849,7 +6901,7 @@ _loop113_breakloop:				;
 			match(SEMI);
 			if (0==inputState.guessing)
 			{
-
+				
 							if (type != null && name != string.Empty)
 							{
 								if (attributes["IsArray"] != null)
@@ -6860,7 +6912,7 @@ _loop113_breakloop:				;
 										Console.WriteLine(string.Format("Can't handle multi dimensional arrays: {0}",
 											name));
 									}
-
+				
 									if (arraySizes.Count == 1)
 									{
 										// Add attribute: [MarshalAs(UnmanagedType.ByValArray, SizeConst=x)]
@@ -6871,7 +6923,7 @@ _loop113_breakloop:				;
 												((CodeMemberField)type).Type.ArrayRank = 1;
 											else
 												Console.WriteLine(string.Format("Unhandled type: {0}", type.GetType()));
-
+				
 											type.CustomAttributes.Add(new CodeAttributeDeclaration("MarshalAs",
 												new CodeAttributeArgument(
 													new CodeSnippetExpression("UnmanagedType.ByValArray")),
@@ -6886,11 +6938,11 @@ _loop113_breakloop:				;
 									}
 									attributes.Remove("IsArray");
 								}
-
+				
 								type.Name = name;
 								members.Add(type);
 							}
-
+						
 			}
 			member_AST = currentAST.root;
 		}
@@ -6908,16 +6960,16 @@ _loop113_breakloop:				;
 		}
 		returnAST = member_AST;
 	}
-
+	
 	public void field_attribute_list(
 		IDictionary attributes
 	) //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST field_attribute_list_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp249_AST = null;
 			tmp249_AST = astFactory.create(LT(1));
@@ -6947,7 +6999,7 @@ _loop113_breakloop:				;
 					{
 						goto _loop222_breakloop;
 					}
-
+					
 				}
 _loop222_breakloop:				;
 			}    // ( ... )*
@@ -6971,14 +7023,14 @@ _loop222_breakloop:				;
 		}
 		returnAST = field_attribute_list_AST;
 	}
-
+	
 	public void switch_body() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST switch_body_AST = null;
-
+		
 		try {      // for error handling
 			case_stmt_list();
 			if (0 == inputState.guessing)
@@ -7001,14 +7053,14 @@ _loop222_breakloop:				;
 		}
 		returnAST = switch_body_AST;
 	}
-
+	
 	public void n_e_case_list() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST n_e_case_list_AST = null;
-
+		
 		try {      // for error handling
 			{ // ( ... )+
 				int _cnt152=0;
@@ -7026,7 +7078,7 @@ _loop222_breakloop:				;
 					{
 						if (_cnt152 >= 1) { goto _loop152_breakloop; } else { throw new NoViableAltException(LT(1), getFilename());; }
 					}
-
+					
 					_cnt152++;
 				}
 _loop152_breakloop:				;
@@ -7047,14 +7099,14 @@ _loop152_breakloop:				;
 		}
 		returnAST = n_e_case_list_AST;
 	}
-
+	
 	public void case_stmt_list() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST case_stmt_list_AST = null;
-
+		
 		try {      // for error handling
 			{ // ( ... )+
 				int _cnt159=0;
@@ -7072,7 +7124,7 @@ _loop152_breakloop:				;
 					{
 						if (_cnt159 >= 1) { goto _loop159_breakloop; } else { throw new NoViableAltException(LT(1), getFilename());; }
 					}
-
+					
 					_cnt159++;
 				}
 _loop159_breakloop:				;
@@ -7093,14 +7145,14 @@ _loop159_breakloop:				;
 		}
 		returnAST = case_stmt_list_AST;
 	}
-
+	
 	public void n_e_case_stmt() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST n_e_case_stmt_AST = null;
-
+		
 		try {      // for error handling
 			n_e_case_label();
 			if (0 == inputState.guessing)
@@ -7176,15 +7228,15 @@ _loop159_breakloop:				;
 		}
 		returnAST = n_e_case_stmt_AST;
 	}
-
+	
 	public void n_e_case_label() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST n_e_case_label_AST = null;
 		string ignored;
-
+		
 		try {      // for error handling
 			AST tmp253_AST = null;
 			tmp253_AST = astFactory.create(LT(1));
@@ -7248,19 +7300,19 @@ _loop159_breakloop:				;
 		}
 		returnAST = n_e_case_label_AST;
 	}
-
+	
 	public void unnamed_element_spec() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST unnamed_element_spec_AST = null;
-
+		
 				Hashtable attributes = new Hashtable();
 				CodeTypeMember type;
 				string ignored;
-
-
+			
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -7353,14 +7405,14 @@ _loop159_breakloop:				;
 		}
 		returnAST = unnamed_element_spec_AST;
 	}
-
+	
 	public void case_stmt() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST case_stmt_AST = null;
-
+		
 		try {      // for error handling
 			case_label_list();
 			if (0 == inputState.guessing)
@@ -7392,14 +7444,14 @@ _loop159_breakloop:				;
 		}
 		returnAST = case_stmt_AST;
 	}
-
+	
 	public void case_label_list() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST case_label_list_AST = null;
-
+		
 		try {      // for error handling
 			{ // ( ... )+
 				int _cnt163=0;
@@ -7417,7 +7469,7 @@ _loop159_breakloop:				;
 					{
 						if (_cnt163 >= 1) { goto _loop163_breakloop; } else { throw new NoViableAltException(LT(1), getFilename());; }
 					}
-
+					
 					_cnt163++;
 				}
 _loop163_breakloop:				;
@@ -7438,15 +7490,15 @@ _loop163_breakloop:				;
 		}
 		returnAST = case_label_list_AST;
 	}
-
+	
 	public void case_label() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST case_label_AST = null;
 		string ignored;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -7501,19 +7553,19 @@ _loop163_breakloop:				;
 		}
 		returnAST = case_label_AST;
 	}
-
+	
 	public void element_spec() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST element_spec_AST = null;
-
+		
 				Hashtable attributes = new Hashtable();
 				CodeTypeMember type;
 				string ignored;
-
-
+			
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -7589,22 +7641,22 @@ _loop163_breakloop:				;
 		}
 		returnAST = element_spec_AST;
 	}
-
+	
 	public void enumerator_list(
 		string enumName, CodeTypeMemberCollection members
 	) //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST enumerator_list_AST = null;
-
+		
 				string s1 = string.Empty;
 				string s2 = string.Empty;
 				string expr1 = string.Empty;
 				string expr2 = string.Empty;
-
-
+			
+		
 		try {      // for error handling
 			s1=enumerator(ref expr1);
 			if (0 == inputState.guessing)
@@ -7627,27 +7679,27 @@ _loop163_breakloop:				;
 						}
 						if (0==inputState.guessing)
 						{
-
+							
 												members.Add(IDLConversions.CreateEnumMember(enumName, s1, expr1));
 												s1 = s2;
 												expr1 = expr2;
-
+											
 						}
 					}
 					else
 					{
 						goto _loop174_breakloop;
 					}
-
+					
 				}
 _loop174_breakloop:				;
 			}    // ( ... )*
 			if (0==inputState.guessing)
 			{
-
+				
 							if (s1 != string.Empty)
 								members.Add(IDLConversions.CreateEnumMember(enumName, s1, expr1));
-
+						
 			}
 			enumerator_list_AST = currentAST.root;
 		}
@@ -7665,22 +7717,22 @@ _loop174_breakloop:				;
 		}
 		returnAST = enumerator_list_AST;
 	}
-
+	
 	public string  enumerator(
 		ref string e
 	) //throws RecognitionException, TokenStreamException
 {
 		string s;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST enumerator_AST = null;
 		AST name_AST = null;
-
+		
 				s = string.Empty;
 				e = string.Empty;
-
-
+			
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -7721,9 +7773,9 @@ _loop174_breakloop:				;
 				}
 				if (0==inputState.guessing)
 				{
-
+					
 								s = name_AST.getText();
-
+							
 				}
 				enumerator_AST = currentAST.root;
 				break;
@@ -7755,14 +7807,14 @@ _loop174_breakloop:				;
 		returnAST = enumerator_AST;
 		return s;
 	}
-
+	
 	public void enumerator_value() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST enumerator_value_AST = null;
-
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -7837,14 +7889,14 @@ _loop174_breakloop:				;
 		}
 		returnAST = enumerator_value_AST;
 	}
-
+	
 	public void opt_pos_int() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST opt_pos_int_AST = null;
-
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -7888,14 +7940,14 @@ _loop174_breakloop:				;
 		}
 		returnAST = opt_pos_int_AST;
 	}
-
+	
 	public void array_bounds() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST array_bounds_AST = null;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -7979,14 +8031,14 @@ _loop174_breakloop:				;
 		}
 		returnAST = array_bounds_AST;
 	}
-
+	
 	public void array_bound() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST array_bound_AST = null;
-
+		
 		try {      // for error handling
 			positive_int_const();
 			if (0 == inputState.guessing)
@@ -8009,14 +8061,14 @@ _loop174_breakloop:				;
 		}
 		returnAST = array_bound_AST;
 	}
-
+	
 	public void param_type_spec() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST param_type_spec_AST = null;
-
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -8079,7 +8131,7 @@ _loop174_breakloop:				;
 							{
 								goto _loop235_breakloop;
 							}
-
+							
 						}
 _loop235_breakloop:						;
 					}    // ( ... )*
@@ -8128,16 +8180,16 @@ _loop235_breakloop:						;
 		}
 		returnAST = param_type_spec_AST;
 	}
-
+	
 	public void function_attribute_list(
 		IDictionary attributes
 	) //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST function_attribute_list_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp276_AST = null;
 			tmp276_AST = astFactory.create(LT(1));
@@ -8224,7 +8276,7 @@ _loop235_breakloop:						;
 							{
 								goto _loop203_breakloop;
 							}
-
+							
 						}
 _loop203_breakloop:						;
 					}    // ( ... )*
@@ -8260,19 +8312,19 @@ _loop203_breakloop:						;
 		}
 		returnAST = function_attribute_list_AST;
 	}
-
+	
 	public CodeParameterDeclarationExpressionCollection  parameter_dcls() //throws RecognitionException, TokenStreamException
 {
 		CodeParameterDeclarationExpressionCollection paramColl;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST parameter_dcls_AST = null;
-
+		
 				paramColl = new CodeParameterDeclarationExpressionCollection();
 				CodeParameterDeclarationExpression param;
-
-
+			
+		
 		try {      // for error handling
 			match(LPAREN);
 			{
@@ -8333,7 +8385,7 @@ _loop203_breakloop:						;
 							{
 								goto _loop208_breakloop;
 							}
-
+							
 						}
 _loop208_breakloop:						;
 					}    // ( ... )*
@@ -8367,16 +8419,16 @@ _loop208_breakloop:						;
 		returnAST = parameter_dcls_AST;
 		return paramColl;
 	}
-
+	
 	public void function_attribute(
 		IDictionary attributes
 	) //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST function_attribute_AST = null;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -8446,9 +8498,9 @@ _loop208_breakloop:						;
 				match(LITERAL_propget);
 				if (0==inputState.guessing)
 				{
-
+					
 								attributes.Add("propget", new CodeAttributeArgument());
-
+							
 				}
 				function_attribute_AST = currentAST.root;
 				break;
@@ -8461,9 +8513,9 @@ _loop208_breakloop:						;
 				match(LITERAL_propput);
 				if (0==inputState.guessing)
 				{
-
+					
 								attributes.Add("propput", new CodeAttributeArgument());
-
+							
 				}
 				function_attribute_AST = currentAST.root;
 				break;
@@ -8476,9 +8528,9 @@ _loop208_breakloop:						;
 				match(LITERAL_propputref);
 				if (0==inputState.guessing)
 				{
-
+					
 								attributes.Add("propputref", new CodeAttributeArgument());
-
+							
 				}
 				function_attribute_AST = currentAST.root;
 				break;
@@ -8578,21 +8630,21 @@ _loop208_breakloop:						;
 		}
 		returnAST = function_attribute_AST;
 	}
-
+	
 	public CodeParameterDeclarationExpression  param_dcl() //throws RecognitionException, TokenStreamException
 {
 		CodeParameterDeclarationExpression param;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST param_dcl_AST = null;
 		AST strType_AST = null;
-
+		
 				param = new CodeParameterDeclarationExpression();
 				Hashtable attributes = new Hashtable();
 				string name = string.Empty;
-
-
+			
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -8744,7 +8796,7 @@ _loop208_breakloop:						;
 			}
 			if (0==inputState.guessing)
 			{
-
+				
 							string str = null;
 							if (strType_AST != null && name != string.Empty)
 							{
@@ -8752,7 +8804,7 @@ _loop208_breakloop:						;
 								param.Name = IDLConversions.ConvertParamName(name);
 								param.Type = m_Conv.ConvertParamType(str, param, attributes);
 							}
-
+						
 			}
 			param_dcl_AST = currentAST.root;
 		}
@@ -8771,16 +8823,16 @@ _loop208_breakloop:						;
 		returnAST = param_dcl_AST;
 		return param;
 	}
-
+	
 	public void param_attributes(
 		IDictionary param
 	) //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST param_attributes_AST = null;
-
+		
 		try {      // for error handling
 			param_attribute(param);
 			if (0 == inputState.guessing)
@@ -8806,7 +8858,7 @@ _loop208_breakloop:						;
 					{
 						goto _loop216_breakloop;
 					}
-
+					
 				}
 _loop216_breakloop:				;
 			}    // ( ... )*
@@ -8826,16 +8878,16 @@ _loop216_breakloop:				;
 		}
 		returnAST = param_attributes_AST;
 	}
-
+	
 	public void param_attribute(
 		IDictionary attributes
 	) //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST param_attribute_AST = null;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -8903,7 +8955,7 @@ _loop216_breakloop:				;
 						{
 							if (_cnt219 >= 1) { goto _loop219_breakloop; } else { throw new NoViableAltException(LT(1), getFilename());; }
 						}
-
+						
 						_cnt219++;
 					}
 _loop219_breakloop:					;
@@ -9075,17 +9127,17 @@ _loop219_breakloop:					;
 		}
 		returnAST = param_attribute_AST;
 	}
-
+	
 	public void field_attribute(
 		IDictionary attributes
 	) //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST field_attribute_AST = null;
 		string val;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -9122,7 +9174,7 @@ _loop219_breakloop:					;
 						{
 							goto _loop225_breakloop;
 						}
-
+						
 					}
 _loop225_breakloop:					;
 				}    // ( ... )*
@@ -9355,15 +9407,15 @@ _loop225_breakloop:					;
 		}
 		returnAST = field_attribute_AST;
 	}
-
+	
 	public void raises_expr() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST raises_expr_AST = null;
 		StringCollection ignored = new StringCollection();
-
+		
 		try {      // for error handling
 			AST tmp335_AST = null;
 			tmp335_AST = astFactory.create(LT(1));
@@ -9398,14 +9450,14 @@ _loop225_breakloop:					;
 		}
 		returnAST = raises_expr_AST;
 	}
-
+	
 	public void context_expr() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST context_expr_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp338_AST = null;
 			tmp338_AST = astFactory.create(LT(1));
@@ -9440,14 +9492,14 @@ _loop225_breakloop:					;
 		}
 		returnAST = context_expr_AST;
 	}
-
+	
 	public void string_literal_list() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST string_literal_list_AST = null;
-
+		
 		try {      // for error handling
 			string_literal();
 			if (0 == inputState.guessing)
@@ -9470,7 +9522,7 @@ _loop225_breakloop:					;
 					{
 						goto _loop230_breakloop;
 					}
-
+					
 				}
 _loop230_breakloop:				;
 			}    // ( ... )*
@@ -9490,7 +9542,7 @@ _loop230_breakloop:				;
 		}
 		returnAST = string_literal_list_AST;
 	}
-
+	
 	private void initializeFactory()
 	{
 		if (astFactory == null)
@@ -9503,7 +9555,7 @@ _loop230_breakloop:				;
 	{
 		factory.setMaxNodeType(173);
 	}
-
+	
 	public static readonly string[] tokenNames_ = new string[] {
 		@"""<0>""",
 		@"""EOF""",
@@ -9680,7 +9732,7 @@ _loop230_breakloop:				;
 		@"""an octal digit""",
 		@"""a hexadecimal digit"""
 	};
-
+	
 	private static long[] mk_tokenSet_0_()
 	{
 		long[] data = { -7205759403792685696L, 2316539058328895488L, 6442450944L, 0L, 0L, 0L};
@@ -9993,6 +10045,6 @@ _loop230_breakloop:				;
 		return data;
 	}
 	public static readonly BitSet tokenSet_51_ = new BitSet(mk_tokenSet_51_());
-
+	
 }
 }

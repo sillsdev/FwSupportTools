@@ -71,6 +71,6 @@ namespace SIL.FieldWorks.Tools
 		public const int LETTER = 40;
 		public const int WS = 41;
 		public const int IGNORE = 42;
-
+		
 	}
 }

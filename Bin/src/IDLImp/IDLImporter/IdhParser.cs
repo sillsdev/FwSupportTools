@@ -30,7 +30,7 @@ namespace SIL.FieldWorks.Tools
 {
 	// Generate the header common to all output files.
 	using System;
-
+	
 	using TokenBuffer              = antlr.TokenBuffer;
 	using TokenStreamException     = antlr.TokenStreamException;
 	using TokenStreamIOException   = antlr.TokenStreamIOException;
@@ -49,7 +49,7 @@ namespace SIL.FieldWorks.Tools
 	using ASTPair                  = antlr.ASTPair;
 	using ASTFactory               = antlr.ASTFactory;
 	using ASTArray                 = antlr.collections.impl.ASTArray;
-
+	
 	public 	class IdhParser : antlr.LLkParser
 	{
 		public const int EOF = 1;
@@ -93,42 +93,42 @@ namespace SIL.FieldWorks.Tools
 		public const int LETTER = 40;
 		public const int WS = 41;
 		public const int IGNORE = 42;
-
-
+		
+		
 		protected void initialize()
 		{
 			tokenNames = tokenNames_;
 			initializeFactory();
 		}
-
-
+		
+		
 		protected IdhParser(TokenBuffer tokenBuf, int k) : base(tokenBuf, k)
 		{
 			initialize();
 		}
-
+		
 		public IdhParser(TokenBuffer tokenBuf) : this(tokenBuf,2)
 		{
 		}
-
+		
 		protected IdhParser(TokenStream lexer, int k) : base(lexer,k)
 		{
 			initialize();
 		}
-
+		
 		public IdhParser(TokenStream lexer) : this(lexer,2)
 		{
 		}
-
+		
 		public IdhParser(ParserSharedInputState state) : base(state,2)
 		{
 			initialize();
 		}
-
+		
 	public IdhCommentProcessor.CommentInfo  idhfile() //throws RecognitionException, TokenStreamException
 {
 		IdhCommentProcessor.CommentInfo info;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST idhfile_AST = null;
@@ -136,11 +136,11 @@ namespace SIL.FieldWorks.Tools
 		AST comment_AST = null;
 		IToken  id = null;
 		AST id_AST = null;
-
+		
 				Dictionary<string, IdhCommentProcessor.CommentInfo> toplevel = new Dictionary<string, IdhCommentProcessor.CommentInfo>();
 				info = new IdhCommentProcessor.CommentInfo(string.Empty, toplevel, 0);
-
-
+			
+		
 		try {      // for error handling
 			{ // ( ... )+
 				int _cnt7=0;
@@ -175,11 +175,11 @@ namespace SIL.FieldWorks.Tools
 						}
 						if (0==inputState.guessing)
 						{
-
+							
 											#if DEBUG_IDHGRAMMAR
 											System.Diagnostics.Debug.WriteLine("***import");
 											#endif
-
+										
 						}
 						break;
 					}
@@ -191,11 +191,11 @@ namespace SIL.FieldWorks.Tools
 						match(IDENTIFIER);
 						if (0==inputState.guessing)
 						{
-
+							
 											#if DEBUG_IDHGRAMMAR
 											System.Diagnostics.Debug.WriteLine("***IDENTIFIER: " + id_AST.getText());
 											#endif
-
+										
 						}
 						break;
 					}
@@ -208,11 +208,11 @@ namespace SIL.FieldWorks.Tools
 						}
 						if (0==inputState.guessing)
 						{
-
+							
 											#if DEBUG_IDHGRAMMAR
 											System.Diagnostics.Debug.WriteLine("***const");
 											#endif
-
+										
 						}
 						break;
 					}
@@ -236,7 +236,7 @@ namespace SIL.FieldWorks.Tools
 											{
 												goto _loop5_breakloop;
 											}
-
+											
 										}
 _loop5_breakloop:										;
 									}    // ( ... )*
@@ -265,10 +265,10 @@ _loop5_breakloop:										;
 							match(COMMENT);
 							if (0==inputState.guessing)
 							{
-
+								
 												info.Comment = comment.getText();
 												info.LineNumber = comment.getLine();
-
+											
 							}
 						}
 						else if ((LA(1)==COMMENT) && (LA(2)==LITERAL_DeclareInterface)) {
@@ -317,12 +317,12 @@ _loop7_breakloop:				;
 		returnAST = idhfile_AST;
 		return info;
 	}
-
+	
 	public void typedef(
 		Dictionary<string, IdhCommentProcessor.CommentInfo> typedefs
 	) //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST typedef_AST = null;
@@ -336,12 +336,12 @@ _loop7_breakloop:				;
 		AST structname2_AST = null;
 		IToken  typename = null;
 		AST typename_AST = null;
-
+		
 				string mainComment, firstComment;
 				Dictionary<string, IdhCommentProcessor.CommentInfo> children = new Dictionary<string, IdhCommentProcessor.CommentInfo>();
 				bool fCheckInline = true;
-
-
+			
+		
 		try {      // for error handling
 			mainComment=comment();
 			if (0 == inputState.guessing)
@@ -419,7 +419,7 @@ _loop7_breakloop:				;
 							{
 								goto _loop37_breakloop;
 							}
-
+							
 						}
 _loop37_breakloop:						;
 					}    // ( ... )*
@@ -448,7 +448,7 @@ _loop37_breakloop:						;
 							{
 								if (_cnt39 >= 1) { goto _loop39_breakloop; } else { throw new NoViableAltException(LT(1), getFilename());; }
 							}
-
+							
 							_cnt39++;
 						}
 _loop39_breakloop:						;
@@ -484,7 +484,7 @@ _loop39_breakloop:						;
 					match(SEMICOLON);
 					if (0==inputState.guessing)
 					{
-
+						
 										string tmpName = string.Empty;
 										int lineNo = 0;
 										if (name != null)
@@ -501,7 +501,7 @@ _loop39_breakloop:						;
 										#if DEBUG_IDHGRAMMAR
 										System.Diagnostics.Debug.WriteLine("***typedef enum: " + tmpName);
 										#endif
-
+									
 					}
 					break;
 				}
@@ -547,7 +547,7 @@ _loop39_breakloop:						;
 							{
 								goto _loop43_breakloop;
 							}
-
+							
 						}
 _loop43_breakloop:						;
 					}    // ( ... )*
@@ -576,7 +576,7 @@ _loop43_breakloop:						;
 							{
 								if (_cnt45 >= 1) { goto _loop45_breakloop; } else { throw new NoViableAltException(LT(1), getFilename());; }
 							}
-
+							
 							_cnt45++;
 						}
 _loop45_breakloop:						;
@@ -612,11 +612,11 @@ _loop45_breakloop:						;
 					match(SEMICOLON);
 					if (0==inputState.guessing)
 					{
-
+						
 										// NOTE: the ATTRIBUTE above is really LBRACKET number RBRACKET, but it's easier to
 										// treat it the same as the attribute, and since we don't do anything with it I guess it's ok.
 										// Makes at least things easier in the parser/lexer.
-
+						
 										string tmpName = string.Empty;
 										int lineNo = 0;
 										if (structname != null)
@@ -633,7 +633,7 @@ _loop45_breakloop:						;
 										#if DEBUG_IDHGRAMMAR
 										System.Diagnostics.Debug.WriteLine("***typedef struct: " + tmpName);
 										#endif
-
+									
 					}
 					break;
 				}
@@ -653,10 +653,10 @@ _loop45_breakloop:						;
 					match(SEMICOLON);
 					if (0==inputState.guessing)
 					{
-
+						
 										// TODO: deal with line comment for typename
 										typedefs[typename_AST.getText()] = new IdhCommentProcessor.CommentInfo(string.Empty, null, typename.getLine());
-
+									
 					}
 					break;
 				}
@@ -682,14 +682,14 @@ _loop45_breakloop:						;
 		}
 		returnAST = typedef_AST;
 	}
-
+	
 	public void forwardDeclaration() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST forwardDeclaration_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp16_AST = null;
 			tmp16_AST = astFactory.create(LT(1));
@@ -719,12 +719,12 @@ _loop45_breakloop:						;
 		}
 		returnAST = forwardDeclaration_AST;
 	}
-
+	
 	public void interfaceDeclaration(
 		Dictionary<string, IdhCommentProcessor.CommentInfo> classes
 	) //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST interfaceDeclaration_AST = null;
@@ -733,7 +733,7 @@ _loop45_breakloop:						;
 		IToken  name = null;
 		AST name_AST = null;
 		Dictionary<string, IdhCommentProcessor.CommentInfo> methods = new Dictionary<string, IdhCommentProcessor.CommentInfo>();
-
+		
 		try {      // for error handling
 			comment = LT(1);
 			comment_AST = astFactory.create(comment);
@@ -799,7 +799,7 @@ _loop45_breakloop:						;
 										{
 											goto _loop12_breakloop;
 										}
-
+										
 									}
 _loop12_breakloop:									;
 								}    // ( ... )*
@@ -855,7 +855,7 @@ _loop12_breakloop:									;
 					{
 						if (_cnt15 >= 1) { goto _loop15_breakloop; } else { throw new NoViableAltException(LT(1), getFilename());; }
 					}
-
+					
 					_cnt15++;
 				}
 _loop15_breakloop:				;
@@ -895,12 +895,12 @@ _loop15_breakloop:				;
 			}
 			if (0==inputState.guessing)
 			{
-
+				
 							classes[name.getText()] = new IdhCommentProcessor.CommentInfo(comment.getText(), methods, comment.getLine());
 							#if DEBUG_IDHGRAMMAR
 							System.Diagnostics.Debug.WriteLine("***DeclareInterface: " + name.getText());
 							#endif
-
+						
 			}
 			interfaceDeclaration_AST = currentAST.root;
 		}
@@ -918,12 +918,12 @@ _loop15_breakloop:				;
 		}
 		returnAST = interfaceDeclaration_AST;
 	}
-
+	
 	public void dualInterface(
 		Dictionary<string, IdhCommentProcessor.CommentInfo> classes
 	) //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST dualInterface_AST = null;
@@ -932,7 +932,7 @@ _loop15_breakloop:				;
 		IToken  name = null;
 		AST name_AST = null;
 		Dictionary<string, IdhCommentProcessor.CommentInfo> methods = new Dictionary<string, IdhCommentProcessor.CommentInfo>();
-
+		
 		try {      // for error handling
 			comment = LT(1);
 			comment_AST = astFactory.create(comment);
@@ -1011,7 +1011,7 @@ _loop15_breakloop:				;
 										{
 											goto _loop26_breakloop;
 										}
-
+										
 									}
 _loop26_breakloop:									;
 								}    // ( ... )*
@@ -1067,7 +1067,7 @@ _loop26_breakloop:									;
 					{
 						if (_cnt29 >= 1) { goto _loop29_breakloop; } else { throw new NoViableAltException(LT(1), getFilename());; }
 					}
-
+					
 					_cnt29++;
 				}
 _loop29_breakloop:				;
@@ -1107,12 +1107,12 @@ _loop29_breakloop:				;
 			}
 			if (0==inputState.guessing)
 			{
-
+				
 							classes[name.getText()] = new IdhCommentProcessor.CommentInfo(comment.getText(), methods, comment.getLine());
 							#if DEBUG_IDHGRAMMAR
 							System.Diagnostics.Debug.WriteLine("***DeclareDualInterface: " + name.getText());
 							#endif
-
+						
 			}
 			dualInterface_AST = currentAST.root;
 		}
@@ -1130,14 +1130,14 @@ _loop29_breakloop:				;
 		}
 		returnAST = dualInterface_AST;
 	}
-
+	
 	public void coclassDeclaration() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST coclassDeclaration_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp40_AST = null;
 			tmp40_AST = astFactory.create(LT(1));
@@ -1184,7 +1184,7 @@ _loop29_breakloop:				;
 					{
 						if (_cnt19 >= 1) { goto _loop19_breakloop; } else { throw new NoViableAltException(LT(1), getFilename());; }
 					}
-
+					
 					_cnt19++;
 				}
 _loop19_breakloop:				;
@@ -1238,14 +1238,14 @@ _loop19_breakloop:				;
 		}
 		returnAST = coclassDeclaration_AST;
 	}
-
+	
 	public void import() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST import_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp48_AST = null;
 			tmp48_AST = astFactory.create(LT(1));
@@ -1273,7 +1273,7 @@ _loop19_breakloop:				;
 					{
 						goto _loop90_breakloop;
 					}
-
+					
 				}
 _loop90_breakloop:				;
 			}    // ( ... )*
@@ -1322,14 +1322,14 @@ _loop90_breakloop:				;
 		}
 		returnAST = import_AST;
 	}
-
+	
 	public void constDeclaration() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST constDeclaration_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp53_AST = null;
 			tmp53_AST = astFactory.create(LT(1));
@@ -1372,14 +1372,14 @@ _loop90_breakloop:				;
 		}
 		returnAST = constDeclaration_AST;
 	}
-
+	
 	public void guid() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST guid_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp58_AST = null;
 			tmp58_AST = astFactory.create(LT(1));
@@ -1433,12 +1433,12 @@ _loop90_breakloop:				;
 		}
 		returnAST = guid_AST;
 	}
-
+	
 	public void methodDeclaration(
 		Dictionary<string, IdhCommentProcessor.CommentInfo> methods
 	) //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST methodDeclaration_AST = null;
@@ -1448,13 +1448,13 @@ _loop90_breakloop:				;
 		AST name_AST = null;
 		IToken  paramComment = null;
 		AST paramComment_AST = null;
-
+		
 				StringBuilder bldr = new StringBuilder();
 				Dictionary<string, IdhCommentProcessor.CommentInfo> parameters = new Dictionary<string, IdhCommentProcessor.CommentInfo>();
 				string lastParamName = null;
 				int lastParamLine = 0;
-
-
+			
+		
 		try {      // for error handling
 			{    // ( ... )*
 				for (;;)
@@ -1474,7 +1474,7 @@ _loop90_breakloop:				;
 					{
 						goto _loop64_breakloop;
 					}
-
+					
 				}
 _loop64_breakloop:				;
 			}    // ( ... )*
@@ -1554,7 +1554,7 @@ _loop64_breakloop:				;
 					{
 						goto _loop68_breakloop;
 					}
-
+					
 				}
 _loop68_breakloop:				;
 			}    // ( ... )*
@@ -1580,11 +1580,11 @@ _loop68_breakloop:				;
 				{
 					throw new NoViableAltException(LT(1), getFilename());
 				}
-
+				
 			}
 			if (0==inputState.guessing)
 			{
-
+				
 							// This is tricky. We might get a comment after the semicolon - which really belongs to
 							// the last parameter before the end of the method declaration. So we remember the
 							// name of the last method so that we can assign the comment correctly.
@@ -1593,7 +1593,7 @@ _loop68_breakloop:				;
 								IdhCommentProcessor.CommentInfo lastParam = parameters[lastParamName];
 								lastParam.Comment = paramComment.getText();
 							}
-
+				
 							string key = name.getText();
 							IdhCommentProcessor.CommentInfo info;
 							if (methods.ContainsKey(key))
@@ -1604,7 +1604,7 @@ _loop68_breakloop:				;
 							info.Children = parameters;
 							info.LineNumber = name.getLine();
 							methods[key] = info;
-
+				
 							foreach (IdhCommentProcessor.CommentInfo paramInfo in parameters.Values)
 							{
 								if (paramInfo.Attributes.ContainsKey("retval"))
@@ -1613,11 +1613,11 @@ _loop68_breakloop:				;
 									break;
 								}
 							}
-
+				
 							//#if DEBUG_IDHGRAMMAR
 							//System.Diagnostics.Debug.WriteLine("		method declaration: " + key + ", next: " + LT(1).getText());
 							//#endif
-
+						
 			}
 			methodDeclaration_AST = currentAST.root;
 		}
@@ -1635,21 +1635,21 @@ _loop68_breakloop:				;
 		}
 		returnAST = methodDeclaration_AST;
 	}
-
+	
 	public string  comment() //throws RecognitionException, TokenStreamException
 {
 		string s;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST comment_AST = null;
 		IToken  text = null;
 		AST text_AST = null;
-
+		
 				s = string.Empty;
 				StringBuilder bldr = new StringBuilder();
-
-
+			
+		
 		try {      // for error handling
 			{    // ( ... )*
 				for (;;)
@@ -1686,9 +1686,9 @@ _loop87_breakloop:				;
 			}    // ( ... )*
 			if (0==inputState.guessing)
 			{
-
+				
 							s = bldr.ToString();
-
+						
 			}
 			comment_AST = currentAST.root;
 		}
@@ -1707,12 +1707,12 @@ _loop87_breakloop:				;
 		returnAST = comment_AST;
 		return s;
 	}
-
+	
 	public void enumMemberDeclaration(
 		Dictionary<string, IdhCommentProcessor.CommentInfo> members, ref string addComment
 	) //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST enumMemberDeclaration_AST = null;
@@ -1720,12 +1720,12 @@ _loop87_breakloop:				;
 		AST name_AST = null;
 		IToken  lineComment = null;
 		AST lineComment_AST = null;
-
+		
 				StringBuilder bldr = new StringBuilder(addComment);
 				addComment = string.Empty;
 				bool fCheckInline = true;
-
-
+			
+		
 		try {      // for error handling
 			name = LT(1);
 			name_AST = astFactory.create(name);
@@ -1794,7 +1794,7 @@ _loop87_breakloop:				;
 						match(COMMENT);
 						if (0==inputState.guessing)
 						{
-
+							
 											if (fCheckInline && name.getLine() == lineComment.getLine())
 											{	// inline comment belongs to current member
 												bldr.Append(lineComment_AST.getText());
@@ -1809,27 +1809,27 @@ _loop87_breakloop:				;
 												}
 												bldr.Append(lineComment_AST.getText());
 											}
-
+										
 						}
 					}
 					else
 					{
 						goto _loop51_breakloop;
 					}
-
+					
 				}
 _loop51_breakloop:				;
 			}    // ( ... )*
 			if (0==inputState.guessing)
 			{
-
+				
 							if (fCheckInline)
 							{	// append all comments left if there was none
 								members[name_AST.getText()] = new IdhCommentProcessor.CommentInfo(bldr.ToString(), null, name.getLine());
 							}
 							else
 								addComment = bldr.ToString();
-
+						
 			}
 			enumMemberDeclaration_AST = currentAST.root;
 		}
@@ -1847,12 +1847,12 @@ _loop51_breakloop:				;
 		}
 		returnAST = enumMemberDeclaration_AST;
 	}
-
+	
 	public void structMemberDeclaration(
 		Dictionary<string, IdhCommentProcessor.CommentInfo> members, ref string addComment
 	) //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST structMemberDeclaration_AST = null;
@@ -1860,13 +1860,13 @@ _loop51_breakloop:				;
 		AST name_AST = null;
 		IToken  lineComment = null;
 		AST lineComment_AST = null;
-
+		
 				StringBuilder bldr = new StringBuilder(addComment);
 				addComment = string.Empty;
 				IdhCommentProcessor.CommentInfo info = new IdhCommentProcessor.CommentInfo(string.Empty, null, 0);
 				bool fCheckInline = true;
-
-
+			
+		
 		try {      // for error handling
 			AST tmp76_AST = null;
 			tmp76_AST = astFactory.create(LT(1));
@@ -1912,7 +1912,7 @@ _loop51_breakloop:				;
 						match(COMMENT);
 						if (0==inputState.guessing)
 						{
-
+							
 											if (fCheckInline && name.getLine() == lineComment.getLine())
 											{	// inline comment belongs to current member
 												bldr.Append(lineComment_AST.getText());
@@ -1927,27 +1927,27 @@ _loop51_breakloop:				;
 												}
 												bldr.Append(lineComment_AST.getText());
 											}
-
+										
 						}
 					}
 					else
 					{
 						goto _loop61_breakloop;
 					}
-
+					
 				}
 _loop61_breakloop:				;
 			}    // ( ... )*
 			if (0==inputState.guessing)
 			{
-
+				
 							if (fCheckInline)
 							{	// append all comments left if there was none
 								members[name_AST.getText()] = new IdhCommentProcessor.CommentInfo(bldr.ToString(), null, name.getLine());
 							}
 							else
 								addComment = bldr.ToString();
-
+						
 			}
 			structMemberDeclaration_AST = currentAST.root;
 		}
@@ -1965,14 +1965,14 @@ _loop61_breakloop:				;
 		}
 		returnAST = structMemberDeclaration_AST;
 	}
-
+	
 	public void enumVal() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST enumVal_AST = null;
-
+		
 		try {      // for error handling
 			if ((LA(1)==IDENTIFIER||LA(1)==MINUS) && (tokenSet_9_.member(LA(2))))
 			{
@@ -2046,7 +2046,7 @@ _loop54_breakloop:					;
 						{
 							goto _loop57_breakloop;
 						}
-
+						
 					}
 _loop57_breakloop:					;
 				}    // ( ... )*
@@ -2060,7 +2060,7 @@ _loop57_breakloop:					;
 			{
 				throw new NoViableAltException(LT(1), getFilename());
 			}
-
+			
 		}
 		catch (RecognitionException ex)
 		{
@@ -2076,14 +2076,14 @@ _loop57_breakloop:					;
 		}
 		returnAST = enumVal_AST;
 	}
-
+	
 	public void number() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST number_AST = null;
-
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -2126,13 +2126,13 @@ _loop57_breakloop:					;
 		}
 		returnAST = number_AST;
 	}
-
+	
 	public string  parameterDeclaration(
 		Dictionary<string, IdhCommentProcessor.CommentInfo> parameters
 	) //throws RecognitionException, TokenStreamException
 {
 		string paramName;
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST parameterDeclaration_AST = null;
@@ -2142,11 +2142,11 @@ _loop57_breakloop:					;
 		AST name_AST = null;
 		IToken  comment = null;
 		AST comment_AST = null;
-
+		
 				StringBuilder bldr = new StringBuilder();
 				paramName = null;
-
-
+			
+		
 		try {      // for error handling
 			{
 				switch ( LA(1) )
@@ -2209,7 +2209,7 @@ _loop57_breakloop:					;
 					{
 						goto _loop74_breakloop;
 					}
-
+					
 				}
 _loop74_breakloop:				;
 			}    // ( ... )*
@@ -2258,7 +2258,7 @@ _loop74_breakloop:				;
 					{
 						goto _loop77_breakloop;
 					}
-
+					
 				}
 _loop77_breakloop:				;
 			}    // ( ... )*
@@ -2286,7 +2286,7 @@ _loop77_breakloop:				;
 				{
 					throw new NoViableAltException(LT(1), getFilename());
 				}
-
+				
 			}
 			{    // ( ... )*
 				for (;;)
@@ -2306,18 +2306,18 @@ _loop77_breakloop:				;
 					{
 						goto _loop80_breakloop;
 					}
-
+					
 				}
 _loop80_breakloop:				;
 			}    // ( ... )*
 			if (0==inputState.guessing)
 			{
-
+				
 							paramName = IDLConversions.ConvertParamName(name.getText());
 							parameters[paramName] = new IdhCommentProcessor.CommentInfo(bldr.ToString(), null, name.getLine());
 							if (attribute != null && attribute.getText().Contains("retval"))
 								parameters[paramName].Attributes.Add("retval", paramName);
-
+						
 			}
 			parameterDeclaration_AST = currentAST.root;
 		}
@@ -2336,7 +2336,7 @@ _loop80_breakloop:				;
 		returnAST = parameterDeclaration_AST;
 		return paramName;
 	}
-
+	
 	private void initializeFactory()
 	{
 		if (astFactory == null)
@@ -2349,7 +2349,7 @@ _loop80_breakloop:				;
 	{
 		factory.setMaxNodeType(42);
 	}
-
+	
 	public static readonly string[] tokenNames_ = new string[] {
 		@"""<0>""",
 		@"""EOF""",
@@ -2395,7 +2395,7 @@ _loop80_breakloop:				;
 		@"""WS""",
 		@"""IGNORE"""
 	};
-
+	
 	private static long[] mk_tokenSet_0_()
 	{
 		long[] data = { 3154160L, 0L};
@@ -2486,6 +2486,6 @@ _loop80_breakloop:				;
 		return data;
 	}
 	public static readonly BitSet tokenSet_14_ = new BitSet(mk_tokenSet_14_());
-
+	
 }
 }

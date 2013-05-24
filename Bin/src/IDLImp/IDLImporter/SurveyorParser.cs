@@ -29,7 +29,7 @@ namespace SIL.FieldWorks.Tools
 {
 	// Generate the header common to all output files.
 	using System;
-
+	
 	using TokenBuffer              = antlr.TokenBuffer;
 	using TokenStreamException     = antlr.TokenStreamException;
 	using TokenStreamIOException   = antlr.TokenStreamIOException;
@@ -48,7 +48,7 @@ namespace SIL.FieldWorks.Tools
 	using ASTPair                  = antlr.ASTPair;
 	using ASTFactory               = antlr.ASTFactory;
 	using ASTArray                 = antlr.collections.impl.ASTArray;
-
+	
 	public 	class SurveyorParser : antlr.LLkParser
 	{
 		public const int EOF = 1;
@@ -67,53 +67,53 @@ namespace SIL.FieldWorks.Tools
 		public const int LETTER = 15;
 		public const int WS = 16;
 		public const int IGNORE = 17;
-
-
+		
+		
 		private StringBuilder m_bldr;
 
 		public SurveyorParser(StringBuilder bldr, TokenStream lexer) : this(lexer,2)
 		{
 			m_bldr = bldr;
 		}
-
+		
 		protected void initialize()
 		{
 			tokenNames = tokenNames_;
 			initializeFactory();
 		}
-
-
+		
+		
 		protected SurveyorParser(TokenBuffer tokenBuf, int k) : base(tokenBuf, k)
 		{
 			initialize();
 		}
-
+		
 		public SurveyorParser(TokenBuffer tokenBuf) : this(tokenBuf,2)
 		{
 		}
-
+		
 		protected SurveyorParser(TokenStream lexer, int k) : base(lexer,k)
 		{
 			initialize();
 		}
-
+		
 		public SurveyorParser(TokenStream lexer) : this(lexer,2)
 		{
 		}
-
+		
 		public SurveyorParser(ParserSharedInputState state) : base(state,2)
 		{
 			initialize();
 		}
-
+		
 	public void surveyorTags() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST surveyorTags_AST = null;
 		AST o_AST = null;
-
+		
 		try {      // for error handling
 			{    // ( ... )*
 				for (;;)
@@ -186,15 +186,15 @@ _loop5_breakloop:				;
 		}
 		returnAST = surveyorTags_AST;
 	}
-
+	
 	public void table() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST table_AST = null;
 		AST r_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp1_AST = null;
 			tmp1_AST = astFactory.create(LT(1));
@@ -225,7 +225,7 @@ _loop5_breakloop:				;
 					{
 						if (_cnt9 >= 1) { goto _loop9_breakloop; } else { throw new NoViableAltException(LT(1), getFilename());; }
 					}
-
+					
 					_cnt9++;
 				}
 _loop9_breakloop:				;
@@ -254,16 +254,16 @@ _loop9_breakloop:				;
 		}
 		returnAST = table_AST;
 	}
-
+	
 	public void reference() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST reference_AST = null;
 		IToken  r = null;
 		AST r_AST = null;
-
+		
 		try {      // for error handling
 			r = LT(1);
 			r_AST = astFactory.create(r);
@@ -289,14 +289,14 @@ _loop9_breakloop:				;
 		}
 		returnAST = reference_AST;
 	}
-
+	
 	public void other() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST other_AST = null;
-
+		
 		try {      // for error handling
 			switch ( LA(1) )
 			{
@@ -338,16 +338,16 @@ _loop9_breakloop:				;
 		}
 		returnAST = other_AST;
 	}
-
+	
 	public void http() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST http_AST = null;
 		IToken  h = null;
 		AST h_AST = null;
-
+		
 		try {      // for error handling
 			h = LT(1);
 			h_AST = astFactory.create(h);
@@ -373,10 +373,10 @@ _loop9_breakloop:				;
 		}
 		returnAST = http_AST;
 	}
-
+	
 	public void row() //throws RecognitionException, TokenStreamException
 {
-
+		
 		returnAST = null;
 		ASTPair currentAST = new ASTPair();
 		AST row_AST = null;
@@ -384,7 +384,7 @@ _loop9_breakloop:				;
 		AST f_AST = null;
 		IToken  s = null;
 		AST s_AST = null;
-
+		
 		try {      // for error handling
 			AST tmp5_AST = null;
 			tmp5_AST = astFactory.create(LT(1));
@@ -404,10 +404,10 @@ _loop9_breakloop:				;
 			match(RBRACE);
 			if (0==inputState.guessing)
 			{
-
+				
 							currentAST.root.setText(string.Format("<item><term>{0}</term>{2} <description>{2} {1}{2} </description>{2} </item>",
 								f_AST.getText(), s_AST.getText(), Environment.NewLine));
-
+						
 			}
 			row_AST = currentAST.root;
 		}
@@ -425,7 +425,7 @@ _loop9_breakloop:				;
 		}
 		returnAST = row_AST;
 	}
-
+	
 	private void initializeFactory()
 	{
 		if (astFactory == null)
@@ -438,7 +438,7 @@ _loop9_breakloop:				;
 	{
 		factory.setMaxNodeType(17);
 	}
-
+	
 	public static readonly string[] tokenNames_ = new string[] {
 		@"""<0>""",
 		@"""EOF""",
@@ -459,7 +459,7 @@ _loop9_breakloop:				;
 		@"""WS""",
 		@"""IGNORE"""
 	};
-
+	
 	private static long[] mk_tokenSet_0_()
 	{
 		long[] data = { 2L, 0L};
@@ -478,6 +478,6 @@ _loop9_breakloop:				;
 		return data;
 	}
 	public static readonly BitSet tokenSet_2_ = new BitSet(mk_tokenSet_2_());
-
+	
 }
 }

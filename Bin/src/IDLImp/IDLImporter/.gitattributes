@@ -1,0 +1,4 @@
+# Ignore whitespace for generated files
+*Lexer.cs -whitespace
+*Parser.cs -whitespace
+*TokenTypes.cs -whitespace

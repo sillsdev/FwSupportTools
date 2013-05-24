@@ -556,7 +556,7 @@ type_dcl returns [CodeTypeMember type]
 		string ignored;
 		Hashtable attributes = new Hashtable();
 	}
-	: "typedef" (LBRACKET type_attributes RBRACKET)? type=type_declarator
+	: "typedef" (LBRACKET type_attributes[attributes] RBRACKET)? type=type_declarator
 	| type=struct_type
 	| union_type
 	| type=enum_type
@@ -564,11 +564,11 @@ type_dcl returns [CodeTypeMember type]
 	| "native" ignored=declarator[attributes]
 	;
 
-type_attributes
-	: type_attribute (COMMA type_attribute)*
+type_attributes [IDictionary attributes]
+	: type_attribute[attributes] (COMMA type_attribute[attributes])*
 	;
 
-type_attribute
+type_attribute [IDictionary attributes]
 	: "context_handle"
 	| "handle"
 	| "pipe" /* TODO: element_type pipe_declarator */
@@ -582,6 +582,7 @@ type_attribute
 	| string_type
 	| "switch_type" LPAREN switch_type_spec RPAREN
 	| ptr_attr
+	| attribute[attributes]
 	;
 
 type_declarator returns [CodeTypeMember type]

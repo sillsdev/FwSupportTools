@@ -1,100 +1,104 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
-	<ProjectType>Local</ProjectType>
-	<ProductVersion>8.0.50727</ProductVersion>
-	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{B5904870-00F3-4833-A981-E22B79A16106}</ProjectGuid>
-	<SccProjectName>Perforce Project</SccProjectName>
-	<SccLocalPath>..\..\..</SccLocalPath>
-	<SccProvider>MSSCCI:Perforce SCM</SccProvider>
-	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-	<ApplicationIcon>App.ico</ApplicationIcon>
-	<AssemblyKeyContainerName>
-	</AssemblyKeyContainerName>
-	<AssemblyName>IDLImp</AssemblyName>
-	<AssemblyOriginatorKeyFile>
-	</AssemblyOriginatorKeyFile>
-	<DefaultClientScript>JScript</DefaultClientScript>
-	<DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
-	<DefaultTargetSchema>IE50</DefaultTargetSchema>
-	<DelaySign>false</DelaySign>
-	<OutputType>Exe</OutputType>
-	<RootNamespace>SIL.FieldWorks.Tools</RootNamespace>
-	<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-	<FileUpgradeFlags>
-	</FileUpgradeFlags>
-	<UpgradeBackupLocation>
-	</UpgradeBackupLocation>
-	<SccAuxPath>
-	</SccAuxPath>
-	<OldToolsVersion>3.5</OldToolsVersion>
-	<TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B5904870-00F3-4833-A981-E22B79A16106}</ProjectGuid>
+    <SccProjectName>Perforce Project</SccProjectName>
+    <SccLocalPath>..\..\..</SccLocalPath>
+    <SccProvider>MSSCCI:Perforce SCM</SccProvider>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>App.ico</ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>IDLImp</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>SIL.FieldWorks.Tools</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <SccAuxPath>
+    </SccAuxPath>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-	<OutputPath>bin\Debug\</OutputPath>
-	<BaseAddress>285212672</BaseAddress>
-	<ConfigurationOverrideFile>
-	</ConfigurationOverrideFile>
-	<DefineConstants>DEBUG;TRACE</DefineConstants>
-	<DocumentationFile>
-	</DocumentationFile>
-	<DebugSymbols>true</DebugSymbols>
-	<FileAlignment>4096</FileAlignment>
-	<Optimize>false</Optimize>
-	<RegisterForComInterop>false</RegisterForComInterop>
-	<RemoveIntegerChecks>false</RemoveIntegerChecks>
-	<WarningLevel>4</WarningLevel>
-	<DebugType>full</DebugType>
-	<ErrorReport>prompt</ErrorReport>
-	<Externalconsole>true</Externalconsole>
-	<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <OutputPath>bin\Debug\</OutputPath>
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <Externalconsole>true</Externalconsole>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-	<OutputPath>bin\Release\</OutputPath>
-	<BaseAddress>285212672</BaseAddress>
-	<ConfigurationOverrideFile>
-	</ConfigurationOverrideFile>
-	<DefineConstants>TRACE</DefineConstants>
-	<DocumentationFile>
-	</DocumentationFile>
-	<DebugSymbols>true</DebugSymbols>
-	<FileAlignment>4096</FileAlignment>
-	<Optimize>true</Optimize>
-	<RegisterForComInterop>false</RegisterForComInterop>
-	<RemoveIntegerChecks>false</RemoveIntegerChecks>
-	<WarningLevel>4</WarningLevel>
-	<DebugType>full</DebugType>
-	<ErrorReport>prompt</ErrorReport>
-	<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <OutputPath>bin\Release\</OutputPath>
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-	<Reference Include="System" />
-	<Reference Include="System.Data" />
-	<Reference Include="System.Windows.Forms" />
-	<Reference Include="System.Xml" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-	<Content Include="App.ico" />
-	<Compile Include="AssemblyInfo.cs">
-	  <SubType>Code</SubType>
-	</Compile>
-	<Compile Include="IDLImp.cs">
-	  <SubType>Code</SubType>
-	</Compile>
+    <Content Include="App.ico" />
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IDLImp.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-	<ProjectReference Include="IDLImporter\IDLImporter.csproj">
-	  <Project>{E14AA497-B901-4626-AE11-321F21431BAC}</Project>
-	  <Name>IDLImporter</Name>
-	</ProjectReference>
+    <ProjectReference Include="IDLImporter\IDLImporter.csproj">
+      <Project>{E14AA497-B901-4626-AE11-321F21431BAC}</Project>
+      <Name>IDLImporter</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-	<PreBuildEvent>
-	</PreBuildEvent>
-	<PostBuildEvent>
-	</PostBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -206,6 +206,6 @@ namespace SIL.FieldWorks.Tools
 		public const int DIGIT = 171;
 		public const int OCTDIGIT = 172;
 		public const int HEXDIGIT = 173;
-
+		
 	}
 }
