@@ -17,9 +17,11 @@
 *.vshost.exe*
 *.sdf
 *.opensdf
+UpgradeLog*
+
 
 .dotest/
 .depend
 
-bin/
 obj/
+_UpgradeReport_Files/
