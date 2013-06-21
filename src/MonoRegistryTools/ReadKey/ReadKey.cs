@@ -1,18 +1,17 @@
-// ReadKey.cs created with MonoDevelop
-// User: hindlet at 1:43 P 19/08/2008
+// Copyright (c) 2013, SIL International. All Rights Reserved.
 //
-// To change standard headers go to Edit->Preferences->Coding->Standard Headers
+// Distributable under the terms of either the Common Public License or the
+// GNU Lesser General Public License, as specified in the LICENSING.txt file.
 //
+// Original author: TomH 2008-08-19 ReadKey.cs
 
 using System;
 using Microsoft.Win32;
 
 namespace MonoRegistryTools
 {
-
 	public class ReadKey
 	{
-
 		public ReadKey()
 		{
 		}
@@ -25,7 +24,7 @@ namespace MonoRegistryTools
 			if (args == null || args.Length != 3)
 			{
 					PrintUsage();
-					return 0;
+					return 2;
 			}
 
 			if (args[0] == "CU")
@@ -52,14 +51,16 @@ namespace MonoRegistryTools
 			else
 			{
 				PrintUsage();
-				return 0;
+				return 2;
 			}
 
 			if (!success)
-				Console.WriteLine("Error: Could not read key");
-			else
-				Console.WriteLine(val);
+			{
+				Console.Error.WriteLine("Error: Could not read key");
+				return 1;
+			}
 
+			Console.WriteLine(val);
 			return 0;
 		}
 
@@ -80,25 +81,19 @@ namespace MonoRegistryTools
 			return rv != null;
 		}
 
-
-
 		public static void PrintUsage()
 		{
-			Console.WriteLine("ReadKey Usage:\n");
-			Console.WriteLine("ReadKey Mode Location Key\n");
-			Console.WriteLine("Mode One of:");
-			Console.WriteLine("CU - CurrentUser");
-			Console.WriteLine("LM - LocalMachine");
-			Console.WriteLine("CR - ClassesRoot");
-			Console.WriteLine("U - Users");
-			Console.WriteLine("PD - PerformanceData");
-			Console.WriteLine("CC - CurrentConfig");
-			Console.WriteLine("DD - DynData\n");
-			Console.WriteLine("For Example: ReadKey LM \"Software\\SIL\" \"Icu36Dir\" ");
+			Console.Error.WriteLine("ReadKey Usage:\n");
+			Console.Error.WriteLine("ReadKey Mode Location Key\n");
+			Console.Error.WriteLine("Mode One of:");
+			Console.Error.WriteLine("CU - CurrentUser");
+			Console.Error.WriteLine("LM - LocalMachine");
+			Console.Error.WriteLine("CR - ClassesRoot");
+			Console.Error.WriteLine("U - Users");
+			Console.Error.WriteLine("PD - PerformanceData");
+			Console.Error.WriteLine("CC - CurrentConfig");
+			Console.Error.WriteLine("DD - DynData\n");
+			Console.Error.WriteLine("For Example: ReadKey LM \"Software\\SIL\" \"Icu36Dir\" ");
 		}
-
-
 	}
-
-
 }
