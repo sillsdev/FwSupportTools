@@ -1,0 +1,290 @@
+#!/bin/bash
+
+#
+# fieldworks-nightly-packager script
+#
+# Build fieldworks .deb packages.
+# Example ./fieldworks-nightly-packager --dists "precise raring" \
+#           --arches "i386 amd64" \
+#           --repobranches fw=feature/Keyboarding,fw/Localizations=develop,fw/DistFiles/Helps=release/8.0 \
+#           --simulate-dput --package-version-extension ".keyboarding" \
+#           --fw-apps-package-name-suffix "-keyboarding"
+#
+# Original author: Brent Mc - 2013
+#
+
+set -e
+
+PROGRAM_NAME="$(basename "$0")"
+
+stderr ()
+{
+	echo >&2 "$PROGRAM_NAME: $1"
+}
+
+# Process arguments.
+while (( $# )); do
+	case $1 in
+		# Process individual arguments here. Use shift and $1 to get an argument value.
+		# Example: -d) DEBUG=true ;;
+		# Example: --outfile) shift; OUTFILE=$1 ;;
+		# Example: *) echo "Unexpected argument: $1"; exit 1 ;;
+		--debkeyid) shift; debkeyid=$1 ;;
+		--dists) shift; dists_arg=$1 ;;
+		--arches) shift; arches_arg=$1 ;;
+		--repobranches) shift; repobranches_arg=$1 ;;
+		--simulate-dput) dput_simulate="-s" ;;
+		--package-version-extension) shift; package_version_extension=$1 ;;
+		--fw-apps-package-name-suffix) shift; fw_apps_package_name_suffix=$1 ;;
+		*) stderr "Error: Unexpected argument \"$1\". Exiting." ; exit 1 ;;
+	esac
+	shift
+done
+
+DISTRIBUTIONS_TO_PACKAGE="${dists_arg:-precise}"
+ARCHES_TO_PACKAGE="${arches_arg:-i386 amd64}"
+DISTS_TO_PROCESS="precise quantal raring"
+ARCHES_TO_PROCESS="amd64 i386"
+
+# set Debian/changelog environment
+DEBFULLNAME='FieldWorks Packages Signing Key'
+
+writedefault ()
+{
+	echo "${_bold}Set gitconfig fullname:${_normal} $1"
+	echo -e "$1" >&2
+	echo "${_bold}Set gitconfig email:${_normal} $2"
+		echo -e "$2" >&2
+	echo "${_bold}Set gitconfig gerrituser:${_normal} $3"
+		echo -e "$3" >&2
+	echo "${_bold}Set Default repos:${_normal} $4"
+		echo -e "$4" >&2
+	echo "${_bold}Set Default branches:${_normal} $5"
+	echo -e "$5" >&2
+}
+
+update_branch ()
+{
+	stderr "Updating branch '$2' in repo '$1'"
+	cd "$1"
+	git fetch
+	git reset --hard HEAD
+	git checkout $2
+	# Reset instead of pull since there may be a local commit to throw away
+	git reset --hard origin/$2
+}
+
+stderr "Updating sources"
+
+pkgdir="$HOME"/FWPackager
+mkdir -p "$pkgdir"
+cd "$pkgdir"
+
+if [ ! -d "$pkgdir"/fwrepo ]; then
+	stderr "Initial clone of fwrepo"
+	git clone http://github.com/sillsdev/fwmeta.git fwrepo
+fi
+
+fwrepodir="$pkgdir"/fwrepo
+
+if [ ! -d "$fwrepodir"/fw ]; then
+	stderr "Initial clone of some repositories"
+
+	tmpdir=$(mktemp -d)
+	fifo="$tmpdir"/out
+	mkfifo "$fifo"
+
+	fullname="FieldWorks Packages Signing Key"
+	email=""
+	gerrituser=""
+	repos="FieldWorks FwSampleProjects mono mono-basic gtk-sharp libgdiplus libcom FwLocalizations FwHelps"
+	branches="master develop"
+	cd "$fwrepodir"
+	fwmeta/initrepo <"$fifo" &
+	pid=$!
+	writedefault "$fullname" "$email" "$gerrituser" "$repos" "$branches" >"$fifo" 2>&1
+	ret=$?
+	wait $pid
+	echo $ret
+	git clone http://github.com/sillsdev/FwDebian.git debian
+
+	rm -f "$fifo"
+	rmdir "$tmpdir"
+fi
+
+# Use repository branches requested in commandline, if available.
+
+for repo_branch_setting in ${repobranches_arg//,/ }; do
+	repo_branch_setting=${repo_branch_setting//\//_slash}
+	repo_branch_setting=${repo_branch_setting//-/_hyphen}
+	eval $repo_branch_setting
+done
+
+for dir in fw fw/Localizations fw/DistFiles/ReleaseData fw/DistFiles/Helps libcom mono/mono mono/mono-basic mono/gtk-sharp mono/libgdiplus debian; do
+	escaped_dir=${dir//\//_slash}
+	escaped_dir=${escaped_dir//-/_hyphen}
+	dir_branch_requested=$(eval echo \$${escaped_dir})
+	dir_branch_requested=${dir_branch_requested//_slash/\/}
+	dir_branch_requested=${dir_branch_requested//_hyphen/-}
+	update_branch "$fwrepodir"/$dir ${dir_branch_requested:-develop}
+done
+
+cd "$fwrepodir"
+ln -sf libcom/* .
+
+stderr "Installing FW build dependencies"
+
+"$fwrepodir"/fw/Build/Agent/install-deps
+
+stderr "Preparing"
+
+cd "$fwrepodir"/fw
+currentdate=$(date +"%Y%m%d")
+nightlyname="nightly"
+nightlydate="${nightlyname}$currentdate"
+fw_describe=$(git describe)
+# cut last "-" matched from left leaving "ghashcode"
+fw_ghash="${fw_describe##*-}"
+# cut first "g" matched from left leaving "hashcode"
+fw_hash="${fw_ghash#*g}"
+fw_describe=$(git describe --abbrev=0)
+# cut first "s" matched from left leaving "MajorVersion.N.MinorVersion-SubVersionN"
+cut_describe="${fw_describe#*s}"
+# cut first "-" matched from right leaving "MajorVersion.N.MinorVersion"
+fw_version="${cut_describe%-*}"
+# cut first "-" matched from left leaving "SubversionN"
+fw_beta="${cut_describe#*-}"
+nightlyversion="$fw_version~$fw_beta.$nightlydate$package_version_extension"
+stderr "Using FieldWorks package version: $nightlyversion"
+
+# Increment and fix version in debian changelog
+
+cd "$fwrepodir"/debian
+
+# Clean out any junk
+git reset --hard HEAD
+git clean -fdx
+
+deb_describe=$(git describe --abbrev=0)
+# cut first "s" matched from left giving "MajorVersion.N.MinorVersion-SubVersionN"
+cut_describe="${deb_describe#*s}"
+# "##*[!0-9]" means cut last "non numeric" matched from left giving only "N"
+count="${cut_describe##*[!0-9]}"
+# cut first "count" matched from right giving "MajorVersion.N.MinorVersion-SubVersion"
+base_version="${cut_describe%$count}"
+# add count+1 giving "MajorVersion.N.MinorVersion-SubVersionN+1"
+increment_version="$base_version$((count+1))"
+# cut first "-" matched from right leaving "MajorVersion.N.MinorVersion"
+deb_version="${increment_version%-*}"
+# cut first "-" matched from left leaving "SubVersionN+1"
+deb_beta="${increment_version#*-}"
+old_changelog="$deb_version~$deb_beta"
+
+cd "$fwrepodir"/debian
+git branch -D nightly || true
+git checkout -b nightly
+cd "$fwrepodir"
+$(dch -iU "")
+
+changelog_file=debian/changelog
+sed -i "1s/$old_changelog/$nightlyversion/" "$changelog_file"
+sed -i "1s/precise/testing/" "$changelog_file"
+sed -i "3i\  * See git log $fw_describe..$fw_hash" "$changelog_file"
+sed -i '4d' "$changelog_file"
+
+cd "$fwrepodir"/debian
+git commit -a -m "Update to $nightlyversion"
+cd "$fwrepodir"
+
+if [ -e "$pkgdir"/fieldworks*.build ]; then
+	rm "$pkgdir"/fieldworks*.*
+fi
+
+# If applicable, modify fieldworks-applications package to be named with a
+# custom suffix, such as for a branch it is built from.
+if [ -n "$fw_apps_package_name_suffix" ]; then
+	stderr "Appending suffix $fw_apps_package_name_suffix to package names"
+	SUFFIX="$fw_apps_package_name_suffix"
+	cd "$fwrepodir"/debian
+	sed -e "/^Package/s/fieldworks-applications/fieldworks-applications$SUFFIX/" -i control
+	# Find "Package: fieldworks-applications". Then find the first "Conflicts", and add a conflict.
+	sed  -e '/^Package: fieldworks-applications/,$ {/^Conflicts/ {N;s/$/, fieldworks-applications/}}' -i control
+	sed -e "s/fieldworks-applications/fieldworks-applications$SUFFIX/" -i po/POTFILES.in po/templates.pot
+	for file in *fieldworks-applications*; do
+		new_filename=${file/fieldworks-applications/fieldworks-applications$SUFFIX}
+		mv "$file" "$new_filename"
+	done
+
+	sed -e "/^Package/s/fieldworks-examples/fieldworks-examples$SUFFIX/" -i control
+	sed   -e '/^Package: fieldworks-examples/ {s/$/\nConflicts:\n fieldworks-examples/} ' -i control
+	for file in *fieldworks-examples*; do
+		new_filename=${file/fieldworks-examples/fieldworks-examples$SUFFIX}
+		mv "$file" "$new_filename"
+	done
+
+	git commit -am'Update package name'
+fi
+
+stderr "Building source package(s) using sources from the following repository commits:"
+
+for repo in "$fwrepodir"/{,debian,fw,fw/Localizations,fw/DistFiles/ReleaseData,fw/DistFiles/Helps,libcom,mono/mono,mono/mono-basic,mono/gtk-sharp,mono/libgdiplus}; do
+	(cd "$repo"
+	name=$(git remote -v |grep fetch|head -n1 |awk '{print $2}'|sed 's/.*\///')
+	commit=$(git rev-parse --short HEAD)
+	echo "$name $commit"
+	)
+done
+
+cd "$fwrepodir"
+debuild -uc -us -S -nc
+
+cd "$fwrepodir"/debian
+git checkout develop
+git branch -D nightly
+
+stderr "Building binary package(s)"
+
+# Clear out previously built binary packages, as well as any cancelled builds left on disk
+
+cd $HOME/pbuilder
+for dist in $DISTS_TO_PROCESS; do
+	for arch in $ARCHES_TO_PROCESS; do
+		if [ -e $dist/$arch/result/*.build ]; then
+			rm -f $dist/$arch/result/*
+		fi
+		sudo umount $dist/$arch/build/*/proc 2>/dev/null || true
+		sudo umount $dist/$arch/build/*/dev/pts 2>/dev/null || true
+		sudo umount $dist/$arch/build/*/dev 2>/dev/null || true
+		sudo rm -rf $dist/$arch/build/*
+	done
+done
+
+cd $pkgdir
+packagedsc="fieldworks_$nightlyversion.dsc"
+sudo HOME=~ http_proxy="$http_proxy" no_proxy="$no_proxy" DISTRIBUTIONS="$DISTRIBUTIONS_TO_PACKAGE" ARCHES="$ARCHES_TO_PACKAGE" ~/pbuilder/build-multi.sh "$packagedsc"
+
+stderr "Signing and uploading package(s)"
+
+cd $HOME/pbuilder
+for dist in $DISTS_TO_PROCESS; do
+	for arch in $ARCHES_TO_PROCESS; do
+		cd $HOME/pbuilder/$dist/$arch/result
+		if [ -e fieldworks*.changes ]; then
+			sed -i '10d' fieldworks*.changes
+			[ -z "$debkeyid" ] && stderr "Warning: debkeyid not set."
+			debsign -k$debkeyid --no-re-sign fieldworks*.changes
+			dput $dput_simulate -U llso fieldworks*.changes
+		fi
+	done
+done
+
+stderr "Results:"
+
+RESULTS_PATTERN="$HOME/pbuilder/*/*/result/fieldworks*.status"
+for result in $RESULTS_PATTERN; do
+	echo $result:
+	cat "$result"
+done
+
+# Return failure if any dist/arch build failed
+! grep -q -v '^0$' $RESULTS_PATTERN

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# pbuilder hook for adding distro name to package version
+#
+# Neil Mayhew - 2010-12-08
+
+TYPE=$(lsb_release -si)
+DIST=$(lsb_release -sc)
+USER=$(id -un)
+HOST=$(uname -n)
+
+export DEBFULLNAME="pbuilder"
+export DEBEMAIL="$USER@$HOST"
+
+if [ "$TYPE" = Ubuntu ]
+then
+	cd /tmp/buildd/*/
+	debchange --local=+$DIST "Build for $DIST"
+fi

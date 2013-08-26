@@ -1,0 +1,6 @@
+#!/bin/sh
+echo "Scanning packages in $BUILDRESULT"
+cd $BUILDRESULT
+apt-ftparchive --db=cache.db -o "APT::FTPArchive::AlwaysStat=true" packages . >Packages
+gzip <Packages >Packages.gz
+apt-get update
