@@ -8,6 +8,8 @@ then
 	shift
 fi
 
+PBUILDERDIR=${PBUILDERDIR:-$HOME/pbuilder}
+
 cpuarch()
 {
 	case $1 in
@@ -54,7 +56,7 @@ do
 		for ARCH in ${ARCHES-amd64 i386}
 		do
 			PACKAGE=${SRC%.dsc}
-			RESULT="$HOME/pbuilder/$DIST/$ARCH/result"
+			RESULT="$PBUILDERDIR/$DIST/$ARCH/result"
 			DEB1="$RESULT/${PACKAGE}_${ARCH}.deb"
 			DEB2="$RESULT/${PACKAGE}+${DIST}1_${ARCH}.deb"
 

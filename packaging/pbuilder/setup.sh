@@ -15,7 +15,7 @@ while (( $# )); do
 	shift
 done
 
-cd "$(dirname "$0")"
+cd "${PBUILDERDIR:-$(dirname "$0")}"
 
 HERE=$(/bin/pwd)
 

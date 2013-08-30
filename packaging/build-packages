@@ -1,0 +1,275 @@
+#!/bin/bash
+
+# build-packages
+#
+# Example ./build-packages --main-package-name fieldworks \
+#           --package-name-suffix "-keyboarding" \
+#           --repobranches fwrepo/fw=feature/Keyboarding,fwrepo/fw/DistFiles/Helps=release/8.0 \
+#           --dists "precise raring" \
+#           --simulate-dput
+#
+# Original author: MarkS 2013-08-30 build-packages
+
+set -e
+
+PROGRAM_NAME="$(basename "$0")"
+
+stderr ()
+{
+	echo >&2 "$PROGRAM_NAME: $1"
+}
+
+# Process arguments.
+while (( $# )); do
+	case $1 in
+		# Process individual arguments here. Use shift and $1 to get an argument value.
+		# Example: -d) DEBUG=true ;;
+		# Example: --outfile) shift; OUTFILE=$1 ;;
+		# Example: *) echo "Unexpected argument: $1"; exit 1 ;;
+		--debkeyid) shift; debkeyid=$1 ;;
+		--dists) shift; dists_arg=$1 ;;
+		--arches) shift; arches_arg=$1 ;;
+		--repobranches) shift; repobranches_arg=$1 ;;
+		--simulate-dput) dput_simulate="-s" ;;
+		--package-version-extension) shift; package_version_extension=$1 ;;
+		--package-name-suffix) shift; package_name_suffix=$1 ;;
+		--main-package-name) shift; main_package_name_arg=$1 ;;
+		*) stderr "Error: Unexpected argument \"$1\". Exiting." ; exit 1 ;;
+	esac
+	shift
+done
+
+DISTRIBUTIONS_TO_PACKAGE="${dists_arg:-precise}"
+ARCHES_TO_PACKAGE="${arches_arg:-i386 amd64}"
+DISTS_TO_PROCESS="precise quantal raring"
+ARCHES_TO_PROCESS="amd64 i386"
+PACKAGING_ROOT="$HOME/packages"
+MAIN_PACKAGE_NAME=$main_package_name_arg
+
+[ -z $MAIN_PACKAGE_NAME ] && stderr "Error: --main-package-name not set." && exit 2
+
+switch_to_and_clean_out_and_update_branch ()
+{
+	cd "$1"
+	stderr "Cleaning and updating branch '$2' in repo '$1'"
+	if [ $VCS = "hg" ]; then
+		hg revert -a
+		hg pull
+		hg update -C $2
+		hg purge --all
+	else
+		git reset --hard HEAD
+		git fetch
+		git checkout $2
+		# Reset instead of pull since there may be a local commit to throw away
+		git reset --hard origin/$2
+		git clean -fdx
+	fi
+}
+
+stderr "Updating sources"
+
+repo_base_dir=$PACKAGING_ROOT/$MAIN_PACKAGE_NAME
+pbuilder_path="$HOME/pbuilder"
+
+mkdir -p $repo_base_dir
+cd $repo_base_dir
+
+if [ $MAIN_PACKAGE_NAME = "flexbridge" ]; then
+	if [ ! -d fwbridge ]; then
+		hg clone http://hg.palaso.org/fwbridge
+	fi
+
+	debian_path=$repo_base_dir/fwbridge/debian
+	repository_directory_list="fwbridge"
+	VCS="hg"
+elif [ $MAIN_PACKAGE_NAME = "fieldworks" ]; then
+	if [ ! -d fwrepo ]; then
+		stderr "Initial clone of fwrepo"
+		git clone http://github.com/sillsdev/fwmeta.git fwrepo
+	fi
+
+	fwrepodir="$repo_base_dir"/fwrepo
+
+	if [ ! -d "$fwrepodir"/fw ]; then
+		stderr "Initial clone of some repositories"
+		repos="FieldWorks FwSampleProjects mono mono-basic gtk-sharp libgdiplus libcom FwLocalizations FwHelps"
+		branches="master develop"
+		cd "$fwrepodir"
+		echo -e "$repos\n$branches\n" | fwmeta/initrepo
+
+		git clone http://github.com/sillsdev/FwDebian.git debian
+	fi
+
+	cd "$fwrepodir"
+	ln -sf libcom/* .
+
+	debian_path=$fwrepodir/debian
+	repository_directory_list="fwrepo/fw fwrepo/fw/Localizations fwrepo/fw/DistFiles/ReleaseData fwrepo/fw/DistFiles/Helps fwrepo/libcom fwrepo/mono/mono fwrepo/mono/mono-basic fwrepo/mono/gtk-sharp fwrepo/mono/libgdiplus fwrepo/debian"
+	VCS="git"
+else
+	stderr "Unsupported package name specified: $MAIN_PACKAGE_NAME"
+	exit 3
+fi
+
+# Use repository branches requested in commandline, if available.
+
+for repo_branch_setting in ${repobranches_arg//,/ }; do
+	repo_branch_setting=${repo_branch_setting//\//_slash}
+	repo_branch_setting=${repo_branch_setting//-/_hyphen}
+	eval $repo_branch_setting
+done
+
+if [ $VCS = "hg" ]; then
+	default_repository_branch=default
+else
+	default_repository_branch=develop
+fi
+
+for dir in $repository_directory_list; do
+	escaped_dir=${dir//\//_slash}
+	escaped_dir=${escaped_dir//-/_hyphen}
+	dir_branch_requested=$(eval echo \$${escaped_dir})
+	dir_branch_requested=${dir_branch_requested//_slash/\/}
+	dir_branch_requested=${dir_branch_requested//_hyphen/-}
+	switch_to_and_clean_out_and_update_branch "$repo_base_dir"/$dir ${dir_branch_requested:-$default_repository_branch}
+done
+
+stderr "Preparing"
+
+# Clean out old source packages
+cd "$debian_path"/..
+source_package_name=$(dpkg-parsechangelog |grep ^Source:|cut -d' ' -f2)
+rm -f "$repo_base_dir"/$source_package_name*.{dsc,build,changes,tar.gz}
+
+# Clean out previously built binary packages, as well as any cancelled builds left on disk
+mkdir -p "$pbuilder_path"
+cd "$pbuilder_path"
+for dist in $DISTS_TO_PROCESS; do
+	for arch in $ARCHES_TO_PROCESS; do
+		if [ -e $dist/$arch/result/$source_package_name*.build ]; then
+			rm -f $dist/$arch/result/*
+		fi
+		sudo umount $dist/$arch/build/*/proc 2>/dev/null || true
+		sudo umount $dist/$arch/build/*/dev/pts 2>/dev/null || true
+		sudo umount $dist/$arch/build/*/dev 2>/dev/null || true
+		sudo rm -rf $dist/$arch/build/*
+	done
+done
+
+# Only package name changing for fieldworks is supported presently
+if [ $MAIN_PACKAGE_NAME = "fieldworks" ]; then
+	# If applicable, modify fieldworks-applications package to be named with a
+	# custom suffix, such as for a branch it is built from.
+	if [ -n "$package_name_suffix" ]; then
+		stderr "Appending suffix $package_name_suffix to package names"
+		SUFFIX="$package_name_suffix"
+		cd "$debian_path"
+		sed -e "/^Package/s/fieldworks-applications/fieldworks-applications$SUFFIX/" -i control
+		# Find "Package: fieldworks-applications". Then find the first "Conflicts", and add a conflict.
+		sed  -e '/^Package: fieldworks-applications/,$ {/^Conflicts/ {N;s/$/, fieldworks-applications/}}' -i control
+		sed -e "s/fieldworks-applications/fieldworks-applications$SUFFIX/" -i po/POTFILES.in po/templates.pot
+		for file in *fieldworks-applications*; do
+			new_filename=${file/fieldworks-applications/fieldworks-applications$SUFFIX}
+			mv "$file" "$new_filename"
+		done
+
+		sed -e "/^Package/s/fieldworks-examples/fieldworks-examples$SUFFIX/" -i control
+		sed   -e '/^Package: fieldworks-examples/ {s/$/\nConflicts:\n fieldworks-examples/} ' -i control
+		for file in *fieldworks-examples*; do
+			new_filename=${file/fieldworks-examples/fieldworks-examples$SUFFIX}
+			mv "$file" "$new_filename"
+		done
+	fi
+fi
+
+# Add entry to debian/changelog
+
+if [ $MAIN_PACKAGE_NAME = "fieldworks" ]; then
+	cd "$repo_base_dir/fwrepo/fw"
+	most_recent_tag=$(git describe --tags --abbrev=0)
+	latest_version_from_most_recent_tag=$(echo $most_recent_tag| sed -e 's/[A-Za-z]*//' -e 's/-alpha/~alpha/' -e 's/-beta/~beta/')
+fi
+
+# Set Debian/changelog environment
+DEBFULLNAME='FieldWorks Packages Signing Key'
+
+cd "$debian_path"/..
+
+timestamp=$(date +"%Y%m%d.%H%M%S")
+latest_version_in_debian_changelog=$(dpkg-parsechangelog |grep ^Version:|cut -d' ' -f2)
+base_version=${latest_version_from_most_recent_tag:-$latest_version_in_debian_changelog}
+nightlyversion="$base_version.nightly$timestamp$package_version_extension"
+if [ $VCS = "hg" ]; then
+	hash_of_current_commit=$(hg id -i 2>/dev/null |cut -c -12)
+else
+	hash_of_current_commit=$(git rev-parse --short HEAD)
+fi
+distribution_of_last_change=$(dpkg-parsechangelog |grep ^Distribution:|cut -d' ' -f2)
+stderr "Using package version: $nightlyversion"
+changelog_message="Built from commit $hash_of_current_commit"
+if [ -n "$most_recent_tag" ]; then
+	changelog_message="See git log $most_recent_tag..$hash_of_current_commit"
+fi
+dch --distribution $distribution_of_last_change --force-distribution --upstream --newversion "$nightlyversion" "$changelog_message"
+
+stderr "Building source package(s) using sources from the following repository commits (possibly with local modifications):"
+
+for repo in $repository_directory_list; do
+	(cd "$repo_base_dir/$repo"
+	if [ $VCS = "hg" ]; then
+		name=$(hg paths|head -n1|sed -e 's#.*/##')
+		commit=$(hg id -i 2>/dev/null |cut -c -12)
+	else
+		name=$(git remote -v |grep fetch|head -n1 |awk '{print $2}'|sed 's#.*/##')
+		commit=$(git rev-parse --short HEAD)
+	fi
+	echo "    $name $commit"
+	)
+done
+
+cd "$debian_path"/..
+debuild -uc -us -S -nc
+
+stderr "Building binary package(s)"
+
+mkdir -p "$pbuilder_path"
+
+# Make sure base.tgz is in place for any distributions being used.
+for distribution in $DISTRIBUTIONS_TO_PACKAGE; do
+	for arch in $ARCHES_TO_PACKAGE; do
+		if [ ! -e "$pbuilder_path"/$distribution/$arch/base.tgz ]; then
+			PBUILDERDIR="$pbuilder_path" DISTRIBUTIONS="$distribution" ARCHES="$arch" $HOME/FwSupportTools/packaging/pbuilder/setup.sh
+		fi
+	done
+done
+
+cd "$repo_base_dir"
+packagedsc="$source_package_name*.dsc"
+sudo HOME=~ PBUILDERDIR="$pbuilder_path" HOOKDIR="$HOME/FwSupportTools/packaging/pbuilder/hooks" http_proxy="$http_proxy" no_proxy="$no_proxy" DISTRIBUTIONS="$DISTRIBUTIONS_TO_PACKAGE" ARCHES="$ARCHES_TO_PACKAGE" $HOME/FwSupportTools/packaging/pbuilder/build-multi.sh "$packagedsc"
+
+stderr "Signing and uploading package(s)"
+
+cd "$pbuilder_path"
+for dist in $DISTS_TO_PROCESS; do
+	for arch in $ARCHES_TO_PROCESS; do
+		cd $pbuilder_path/$dist/$arch/result
+		if [ -e $source_package_name*.changes ]; then
+			sed -i '10d' $source_package_name*.changes
+			[ -z "$debkeyid" ] && stderr "Warning: debkeyid not set."
+			debsign -k$debkeyid --no-re-sign $source_package_name*.changes
+			dput $dput_simulate -U llso $source_package_name*.changes
+		fi
+	done
+done
+
+stderr "Results:"
+
+RESULTS_PATTERN="$pbuilder_path/*/*/result/$source_package_name*.status"
+for result in $RESULTS_PATTERN; do
+	echo $result:
+	cat "$result"
+done
+
+# Return failure if any dist/arch build failed
+! grep -q -v '^0$' $RESULTS_PATTERN
