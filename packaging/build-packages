@@ -36,7 +36,7 @@ while (( $# )); do
 		--main-package-name) shift; main_package_name_arg=$1 ;;
 		*) stderr "Error: Unexpected argument \"$1\". Exiting." ; exit 1 ;;
 	esac
-	shift
+	shift || (stderr "Error: The last argument is missing a value. Exiting."; false) || exit 2
 done
 
 DISTRIBUTIONS_TO_PACKAGE="${dists_arg:-precise}"
@@ -46,7 +46,7 @@ ARCHES_TO_PROCESS="amd64 i386"
 PACKAGING_ROOT="$HOME/packages"
 MAIN_PACKAGE_NAME=$main_package_name_arg
 
-[ -z $MAIN_PACKAGE_NAME ] && stderr "Error: --main-package-name not set." && exit 2
+[ -z $MAIN_PACKAGE_NAME ] && stderr "Error: --main-package-name not set." && exit 3
 
 switch_to_and_clean_out_and_update_branch ()
 {
