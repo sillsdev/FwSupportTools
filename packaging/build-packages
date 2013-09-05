@@ -34,6 +34,8 @@ while (( $# )); do
 		--package-version-extension) shift; package_version_extension=$1 ;;
 		--package-name-suffix) shift; package_name_suffix=$1 ;;
 		--main-package-name) shift; main_package_name_arg=$1 ;;
+		# Skip cleaning and updating local repository
+		--preserve-repository) preserve_repository_arg=true ;;
 		*) stderr "Error: Unexpected argument \"$1\". Exiting." ; exit 1 ;;
 	esac
 	shift || (stderr "Error: The last argument is missing a value. Exiting."; false) || exit 2
@@ -45,11 +47,17 @@ DISTS_TO_PROCESS="precise quantal raring"
 ARCHES_TO_PROCESS="amd64 i386"
 PACKAGING_ROOT="$HOME/packages"
 MAIN_PACKAGE_NAME=$main_package_name_arg
+PRESERVE_REPOSITORY=$preserve_repository_arg
 
-[ -z $MAIN_PACKAGE_NAME ] && stderr "Error: --main-package-name not set." && exit 3
+[ -z "$MAIN_PACKAGE_NAME" ] && stderr "Error: --main-package-name not set." && exit 3
 
 switch_to_and_clean_out_and_update_branch ()
 {
+	if [ -n "$PRESERVE_REPOSITORY" ]; then
+		stderr "Not cleaning, updating, or changing branches for repo '$1'"
+		return
+	fi
+
 	cd "$1"
 	stderr "Cleaning and updating branch '$2' in repo '$1'"
 	if [ $VCS = "hg" ]; then
