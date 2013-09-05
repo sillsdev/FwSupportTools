@@ -42,7 +42,7 @@ do
 				OTHERMIRROR+="|deb $MIRROR $D-$S $COMPONENTS"
 			done
 			LLSO="http://linux.lsdev.sil.org/ubuntu/"
-			KEYRING2="$HOME/pbuilder/sil.gpg"
+			KEYRING2="$HOME/pbuilder/sil-testing.gpg"
 			for S in "" "-experimental"; do
 				OTHERMIRROR+="|deb $LLSO $D$S $COMPONENTS"
 			done
