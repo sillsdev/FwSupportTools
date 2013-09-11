@@ -27,9 +27,13 @@ while (( $# )); do
 		# Example: --outfile) shift; OUTFILE=$1 ;;
 		# Example: *) echo "Unexpected argument: $1"; exit 1 ;;
 		--debkeyid) shift; debkeyid=$1 ;;
+		# Space-delimited list of releases. eg "precise raring"
 		--dists) shift; dists_arg=$1 ;;
+		# Space-delimited list of architectures. eg "amd64 i386"
 		--arches) shift; arches_arg=$1 ;;
+		# Comma-delimited list of non-default branch-to-repository mapping. eg "fwrepo/fw=feature/Keyboarding,fwrepo/fw/DistFiles/Helps=release/8.0"
 		--repobranches) shift; repobranches_arg=$1 ;;
+		# Don't upload packages at the end
 		--simulate-dput) dput_simulate="-s" ;;
 		--package-version-extension) shift; package_version_extension=$1 ;;
 		--package-name-suffix) shift; package_name_suffix=$1 ;;
