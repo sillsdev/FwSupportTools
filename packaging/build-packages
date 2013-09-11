@@ -40,6 +40,8 @@ while (( $# )); do
 		--main-package-name) shift; main_package_name_arg=$1 ;;
 		# Skip cleaning and updating local repository
 		--preserve-repository) preserve_repository_arg=true ;;
+		# Space-delimited list of binary packages to remove from debian/control file before creating source package
+		--omit-binary-packages) shift; omit_binary_packages_arg=$1 ;;
 		*) stderr "Error: Unexpected argument \"$1\". Exiting." ; exit 1 ;;
 	esac
 	shift || (stderr "Error: The last argument is missing a value. Exiting."; false) || exit 2
@@ -52,6 +54,7 @@ ARCHES_TO_PROCESS="amd64 i386"
 PACKAGING_ROOT="$HOME/packages"
 MAIN_PACKAGE_NAME=$main_package_name_arg
 PRESERVE_REPOSITORY=$preserve_repository_arg
+OMIT_BINARY_PACKAGES_LIST="$omit_binary_packages_arg"
 
 [ -z "$MAIN_PACKAGE_NAME" ] && stderr "Error: --main-package-name not set." && exit 3
 
@@ -194,6 +197,14 @@ if [ $MAIN_PACKAGE_NAME = "fieldworks" ]; then
 		done
 	fi
 fi
+
+# Optionally omit binary packages from build
+for package in $OMIT_BINARY_PACKAGES_LIST; do
+	stderr "Omitting binary package: $package"
+	cd "$debian_path"
+	# Remove binary package section from control file
+	sed -i control -e "/^Package: $package$/,/^$/d"
+done
 
 # Add entry to debian/changelog
 
