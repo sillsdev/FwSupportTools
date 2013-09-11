@@ -96,7 +96,7 @@ if [ $MAIN_PACKAGE_NAME = "flexbridge" ]; then
 	fi
 
 	debian_path=$repo_base_dir/fwbridge/debian
-	repository_directory_list="fwbridge"
+	repository_directory_list=(fwbridge)
 	VCS="hg"
 elif [ $MAIN_PACKAGE_NAME = "fieldworks" ]; then
 	if [ ! -d fwrepo ]; then
@@ -108,7 +108,7 @@ elif [ $MAIN_PACKAGE_NAME = "fieldworks" ]; then
 
 	if [ ! -d "$fwrepodir"/fw ]; then
 		stderr "Initial clone of some repositories"
-		repos="FieldWorks FwSampleProjects mono mono-basic gtk-sharp libgdiplus libcom FwLocalizations FwHelps"
+		repos="FieldWorks FwSampleProjects mono mono-basic gtk-sharp libgdiplus libcom FwLocalizations FwHelps FwMovies"
 		branches="master develop"
 		cd "$fwrepodir"
 		echo -e "$repos\n$branches\n" | fwmeta/initrepo
@@ -120,7 +120,7 @@ elif [ $MAIN_PACKAGE_NAME = "fieldworks" ]; then
 	ln -sf libcom/* .
 
 	debian_path=$fwrepodir/debian
-	repository_directory_list="fwrepo/fw fwrepo/fw/Localizations fwrepo/fw/DistFiles/ReleaseData fwrepo/fw/DistFiles/Helps fwrepo/libcom fwrepo/mono/mono fwrepo/mono/mono-basic fwrepo/mono/gtk-sharp fwrepo/mono/libgdiplus fwrepo/debian"
+	repository_directory_list=(fwrepo/fw fwrepo/fw/Localizations fwrepo/fw/DistFiles/ReleaseData fwrepo/fw/DistFiles/Helps fwrepo/libcom fwrepo/mono/mono fwrepo/mono/mono-basic fwrepo/mono/gtk-sharp fwrepo/mono/libgdiplus fwrepo/debian fwrepo/fw/DistFiles/Language\ Explorer/Movies)
 	VCS="git"
 else
 	stderr "Unsupported package name specified: $MAIN_PACKAGE_NAME"
@@ -129,11 +129,13 @@ fi
 
 # Use repository branches requested in commandline, if available.
 
-for repo_branch_setting in ${repobranches_arg//,/ }; do
-	repo_branch_setting=${repo_branch_setting//\//_slash}
-	repo_branch_setting=${repo_branch_setting//-/_hyphen}
+IFS=,; for repo_branch_setting in ${repobranches_arg}; do
+	repo_branch_setting="${repo_branch_setting//\//_slash}"
+	repo_branch_setting="${repo_branch_setting//-/_hyphen}"
+	repo_branch_setting="${repo_branch_setting// /_space}"
 	eval $repo_branch_setting
 done
+IFS=' '
 
 if [ $VCS = "hg" ]; then
 	default_repository_branch=default
@@ -141,13 +143,14 @@ else
 	default_repository_branch=develop
 fi
 
-for dir in $repository_directory_list; do
-	escaped_dir=${dir//\//_slash}
-	escaped_dir=${escaped_dir//-/_hyphen}
-	dir_branch_requested=$(eval echo \$${escaped_dir})
-	dir_branch_requested=${dir_branch_requested//_slash/\/}
-	dir_branch_requested=${dir_branch_requested//_hyphen/-}
-	switch_to_and_clean_out_and_update_branch "$repo_base_dir"/$dir ${dir_branch_requested:-$default_repository_branch}
+for dir in "${repository_directory_list[@]}"; do
+	escaped_dir="${dir//\//_slash}"
+	escaped_dir="${escaped_dir//-/_hyphen}"
+	escaped_dir="${escaped_dir// /_space}"
+	dir_branch_requested="$(eval echo \$${escaped_dir})"
+	dir_branch_requested="${dir_branch_requested//_slash//}"
+	dir_branch_requested="${dir_branch_requested//_hyphen/-}"
+	switch_to_and_clean_out_and_update_branch "$repo_base_dir/$dir" ${dir_branch_requested:-$default_repository_branch}
 done
 
 stderr "Preparing"
@@ -238,7 +241,7 @@ dch --distribution $distribution_of_last_change --force-distribution --upstream 
 
 stderr "Building source package(s) using sources from the following repository commits (possibly with local modifications):"
 
-for repo in $repository_directory_list; do
+for repo in "${repository_directory_list[@]}"; do
 	(cd "$repo_base_dir/$repo"
 	if [ $VCS = "hg" ]; then
 		name=$(hg paths|head -n1|sed -e 's#.*/##')
