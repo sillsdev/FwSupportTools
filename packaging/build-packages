@@ -42,6 +42,8 @@ while (( $# )); do
 		--preserve-repository) preserve_repository_arg=true ;;
 		# Space-delimited list of binary packages to remove from debian/control file before creating source package
 		--omit-binary-packages) shift; omit_binary_packages_arg=$1 ;;
+		# For making release packages. Do not add a new entry to the changelog. Package versions will be as specified in the last changelog entry, without a nightly timestamp appended.
+		--preserve-changelog) preserve_changelog_arg=true ;;
 		*) stderr "Error: Unexpected argument \"$1\". Exiting." ; exit 1 ;;
 	esac
 	shift || (stderr "Error: The last argument is missing a value. Exiting."; false) || exit 2
@@ -55,6 +57,7 @@ PACKAGING_ROOT="$HOME/packages"
 MAIN_PACKAGE_NAME=$main_package_name_arg
 PRESERVE_REPOSITORY=$preserve_repository_arg
 OMIT_BINARY_PACKAGES_LIST="$omit_binary_packages_arg"
+PRESERVE_CHANGELOG="$preserve_changelog_arg"
 
 [ -z "$MAIN_PACKAGE_NAME" ] && stderr "Error: --main-package-name not set." && exit 3
 
@@ -232,12 +235,16 @@ else
 	hash_of_current_commit=$(git rev-parse --short HEAD)
 fi
 distribution_of_last_change=$(dpkg-parsechangelog |grep ^Distribution:|cut -d' ' -f2)
-stderr "Using package version: $nightlyversion"
 changelog_message="Built from commit $hash_of_current_commit"
 if [ -n "$most_recent_tag" ]; then
 	changelog_message="See git log $most_recent_tag..$hash_of_current_commit"
 fi
-dch --distribution $distribution_of_last_change --force-distribution --upstream --newversion "$nightlyversion" "$changelog_message"
+if [ -z "$PRESERVE_CHANGELOG" ]; then
+	stderr "Using package version: $nightlyversion"
+	dch --distribution $distribution_of_last_change --force-distribution --upstream --newversion "$nightlyversion" "$changelog_message"
+else
+	stderr "Using package version: $latest_version_in_debian_changelog"
+fi
 
 stderr "Building source package(s) using sources from the following repository commits (possibly with local modifications):"
 
