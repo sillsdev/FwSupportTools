@@ -4,7 +4,7 @@
 #
 # Example ./build-packages --main-package-name fieldworks \
 #           --package-name-suffix "-keyboarding" \
-#           --repobranches fwrepo/fw=feature/Keyboarding,fwrepo/fw/DistFiles/Helps=release/8.0 \
+#           --repository-committishes fwrepo/fw=origin/feature/Keyboarding,fwrepo/fw/DistFiles/Helps=origin/release/8.0 \
 #           --dists "precise raring" \
 #           --simulate-dput
 #
@@ -31,8 +31,8 @@ while (( $# )); do
 		--dists) shift; dists_arg=$1 ;;
 		# Space-delimited list of architectures. eg "amd64 i386"
 		--arches) shift; arches_arg=$1 ;;
-		# Comma-delimited list of non-default branch-to-repository mapping. eg "fwrepo/fw=feature/Keyboarding,fwrepo/fw/DistFiles/Helps=release/8.0"
-		--repobranches) shift; repobranches_arg=$1 ;;
+		# Comma-delimited list of non-default repositorydir=committish mapping (hash, tag, branch). eg "fwrepo/fw=2568e4f,fwrepo/fw/Localizations=linux/FieldWorks8.0.3-beta4,fwrepo/fw/DistFiles/Helps=origin/master"
+		--repository-committishes) shift; repository_committishes_arg=$1 ;;
 		# Don't upload packages at the end
 		--simulate-dput) dput_simulate="-s" ;;
 		--package-version-extension) shift; package_version_extension=$1 ;;
@@ -61,7 +61,9 @@ PRESERVE_CHANGELOG="$preserve_changelog_arg"
 
 [ -z "$MAIN_PACKAGE_NAME" ] && stderr "Error: --main-package-name not set." && exit 3
 
-switch_to_and_clean_out_and_update_branch ()
+# Where $1 is the repository directory, and $2 is a committish to set the repository to.
+# Non-branch committishes are not supported yet for hg projects.
+clean_update_and_set_repository_to_committish ()
 {
 	if [ -n "$PRESERVE_REPOSITORY" ]; then
 		stderr "Not cleaning, updating, or changing branches for repo '$1'"
@@ -69,19 +71,16 @@ switch_to_and_clean_out_and_update_branch ()
 	fi
 
 	cd "$1"
-	stderr "Cleaning and updating branch '$2' in repo '$1'"
+	stderr "Cleaning and updating repo '$1', using committish '$2'"
 	if [ $VCS = "hg" ]; then
 		hg revert -a
 		hg pull
 		hg update -C $2
 		hg purge --all
 	else
-		git reset --hard HEAD
-		git fetch
-		git checkout $2
-		# Reset instead of pull since there may be a local commit to throw away
-		git reset --hard origin/$2
 		git clean -fdx
+		git fetch
+		git reset --hard $2
 	fi
 }
 
@@ -130,9 +129,10 @@ else
 	exit 3
 fi
 
-# Use repository branches requested in commandline, if available.
+# Use repository committishes requested in commandline, if available.
 
-IFS=,; for repo_branch_setting in ${repobranches_arg}; do
+# Set repositorydir=committish mappings.
+IFS=,; for repo_branch_setting in ${repository_committishes_arg}; do
 	repo_branch_setting="${repo_branch_setting//\//_slash}"
 	repo_branch_setting="${repo_branch_setting//-/_hyphen}"
 	repo_branch_setting="${repo_branch_setting// /_space}"
@@ -143,7 +143,7 @@ IFS=' '
 if [ $VCS = "hg" ]; then
 	default_repository_branch=default
 else
-	default_repository_branch=develop
+	default_repository_branch=origin/develop
 fi
 
 for dir in "${repository_directory_list[@]}"; do
@@ -153,7 +153,7 @@ for dir in "${repository_directory_list[@]}"; do
 	dir_branch_requested="$(eval echo \$${escaped_dir})"
 	dir_branch_requested="${dir_branch_requested//_slash//}"
 	dir_branch_requested="${dir_branch_requested//_hyphen/-}"
-	switch_to_and_clean_out_and_update_branch "$repo_base_dir/$dir" ${dir_branch_requested:-$default_repository_branch}
+	clean_update_and_set_repository_to_committish "$repo_base_dir/$dir" ${dir_branch_requested:-$default_repository_branch}
 done
 
 stderr "Preparing"
