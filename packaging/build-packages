@@ -79,8 +79,9 @@ clean_update_and_set_repository_to_committish ()
 		hg purge --all
 	else
 		git clean -fdx
+		git reset --hard HEAD
 		git fetch
-		git reset --hard $2
+		git checkout $2
 	fi
 }
 
