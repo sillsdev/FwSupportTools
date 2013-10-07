@@ -244,7 +244,7 @@ if [ -n "$most_recent_tag" ]; then
 fi
 if [ -z "$PRESERVE_CHANGELOG" ]; then
 	stderr "Using package version: $nightlyversion"
-	dch --distribution $distribution_of_last_change --force-distribution --upstream --newversion "$nightlyversion" "$changelog_message"
+	dch --distribution $distribution_of_last_change --force-distribution --upstream --newversion "$nightlyversion" --force-bad-version "$changelog_message"
 else
 	stderr "Using package version: $latest_version_in_debian_changelog"
 fi
