@@ -72,7 +72,7 @@ clean_update_and_set_repository_to_committish ()
 
 	cd "$1"
 	stderr "Cleaning and updating repo '$1', using committish '$2'"
-	if [ $VCS = "hg" ]; then
+	if [ "$VCS" = "hg" ]; then
 		hg revert -a
 		hg pull
 		hg update -C $2
@@ -93,7 +93,7 @@ pbuilder_path="$HOME/pbuilder"
 mkdir -p $repo_base_dir
 cd $repo_base_dir
 
-if [ $MAIN_PACKAGE_NAME = "flexbridge" ]; then
+if [ "$MAIN_PACKAGE_NAME" = "flexbridge" ]; then
 	if [ ! -d fwbridge ]; then
 		hg clone http://hg.palaso.org/fwbridge
 	fi
@@ -101,7 +101,7 @@ if [ $MAIN_PACKAGE_NAME = "flexbridge" ]; then
 	debian_path=$repo_base_dir/fwbridge/debian
 	repository_directory_list=(fwbridge)
 	VCS="hg"
-elif [ $MAIN_PACKAGE_NAME = "fieldworks" ]; then
+elif [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 	if [ ! -d fwrepo ]; then
 		stderr "Initial clone of fwrepo"
 		git clone http://github.com/sillsdev/fwmeta.git fwrepo
@@ -125,6 +125,27 @@ elif [ $MAIN_PACKAGE_NAME = "fieldworks" ]; then
 	debian_path=$fwrepodir/debian
 	repository_directory_list=(fwrepo/fw fwrepo/fw/Localizations fwrepo/fw/DistFiles/ReleaseData fwrepo/fw/DistFiles/Helps fwrepo/libcom fwrepo/mono/mono fwrepo/mono/mono-basic fwrepo/mono/gtk-sharp fwrepo/mono/libgdiplus fwrepo/debian fwrepo/fw/DistFiles/Language\ Explorer/Movies)
 	VCS="git"
+elif [ "$MAIN_PACKAGE_NAME" = "fieldworks-mono" -o \
+	"$MAIN_PACKAGE_NAME" = "fieldworks-libgdiplus" -o \
+	"$MAIN_PACKAGE_NAME" = "fieldworks-gtk-sharp" -o \
+	"$MAIN_PACKAGE_NAME" = "fieldworks-mono-basic" ]; then
+	short_mono_package_name=${MAIN_PACKAGE_NAME#fieldworks-}
+	if [ ! -d mono-calgary ]; then
+		git clone https://github.com/sillsdev/mono-calgary
+	fi
+	if [ ! -d $short_mono_package_name ]; then
+		git clone https://github.com/sillsdev/$short_mono_package_name
+	fi
+
+	# Note that the mono source package will be created from $repo_base_dir/mono-calgary/$short_mono_package_name/source.git, not from $repo_base_dir/$short_mono_package_name. However, the $repo_base_dir/$short_mono_package_name serves the following purposes:
+	#  * It is used as the reference repo when cloning source.git.
+	#  * It is used to determine the hash of the requested committish for debian/changelog, before the source.git repository is even first cloned.
+	#  * Having it in the repository_directory_list is a convenient way to:
+	#     * receive and process the requested committish from commandline, and
+	#     * print the hash to output of the committish requested.
+
+	debian_path=$repo_base_dir/mono-calgary/$short_mono_package_name/debian
+	repository_directory_list=(mono-calgary $short_mono_package_name)
 else
 	stderr "Unsupported package name specified: $MAIN_PACKAGE_NAME"
 	exit 3
@@ -133,15 +154,16 @@ fi
 # Use repository committishes requested in commandline, if available.
 
 # Set repositorydir=committish mappings.
+OLDIFS="$IFS"
 IFS=,; for repo_branch_setting in ${repository_committishes_arg}; do
 	repo_branch_setting="${repo_branch_setting//\//_slash}"
 	repo_branch_setting="${repo_branch_setting//-/_hyphen}"
 	repo_branch_setting="${repo_branch_setting// /_space}"
 	eval $repo_branch_setting
 done
-IFS=' '
+IFS="$OLDIFS"
 
-if [ $VCS = "hg" ]; then
+if [ "$VCS" = "hg" ]; then
 	default_repository_branch=default
 else
 	default_repository_branch=origin/develop
@@ -157,19 +179,23 @@ for dir in "${repository_directory_list[@]}"; do
 	clean_update_and_set_repository_to_committish "$repo_base_dir/$dir" ${dir_branch_requested:-$default_repository_branch}
 done
 
+if [ -n "$short_mono_package_name" ]; then
+	MONO_COMMITTISH_TO_USE=${!short_mono_package_name:-origin/develop}
+fi
+
 stderr "Preparing"
 
 # Clean out old source packages
 cd "$debian_path"/..
 source_package_name=$(dpkg-parsechangelog |grep ^Source:|cut -d' ' -f2)
-rm -f "$repo_base_dir"/$source_package_name*.{dsc,build,changes,tar.gz}
+rm -f "$repo_base_dir"/${source_package_name}_*.{dsc,build,changes,tar.gz}
 
 # Clean out previously built binary packages, as well as any cancelled builds left on disk
 mkdir -p "$pbuilder_path"
 cd "$pbuilder_path"
 for dist in $DISTS_TO_PROCESS; do
 	for arch in $ARCHES_TO_PROCESS; do
-		if [ -e $dist/$arch/result/$source_package_name*.build ]; then
+		if [ -e $dist/$arch/result/${source_package_name}_*.build ]; then
 			rm -f $dist/$arch/result/*
 		fi
 		sudo umount $dist/$arch/build/*/proc 2>/dev/null || true
@@ -180,7 +206,7 @@ for dist in $DISTS_TO_PROCESS; do
 done
 
 # Only package name changing for fieldworks is supported presently
-if [ $MAIN_PACKAGE_NAME = "fieldworks" ]; then
+if [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 	# If applicable, modify fieldworks-applications package to be named with a
 	# custom suffix, such as for a branch it is built from.
 	if [ -n "$package_name_suffix" ]; then
@@ -215,7 +241,7 @@ done
 
 # Add entry to debian/changelog
 
-if [ $MAIN_PACKAGE_NAME = "fieldworks" ]; then
+if [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 	cd "$repo_base_dir/fwrepo/fw"
 	most_recent_tag=$(git describe --tags --abbrev=0)
 	# Translate tags of the form "linux/FieldWorks8.0.5-beta6" and
@@ -232,10 +258,16 @@ timestamp=$(date +"%Y%m%d.%H%M%S")
 latest_version_in_debian_changelog=$(dpkg-parsechangelog |grep ^Version:|cut -d' ' -f2)
 base_version=${latest_version_from_most_recent_tag:-$latest_version_in_debian_changelog}
 nightlyversion="$base_version.nightly$timestamp$package_version_extension"
-if [ $VCS = "hg" ]; then
+if [ "$VCS" = "hg" ]; then
 	hash_of_current_commit=$(hg id -i 2>/dev/null |cut -c -12)
 else
 	hash_of_current_commit=$(git rev-parse --short HEAD)
+fi
+if [ -n "$short_mono_package_name" ]; then
+	# The mono source repository is not only in a special place, and with its HEAD not necessarily pointing to the right thing to build, but it isn't necessarily even downloaded yet at this point. Use the $repo_base_dir/$short_mono_package_name repo to derive the hash.
+	cd "$repo_base_dir/$short_mono_package_name"
+	hash_of_current_commit=$(git rev-parse --short $MONO_COMMITTISH_TO_USE)
+	cd -
 fi
 distribution_of_last_change=$(dpkg-parsechangelog |grep ^Distribution:|cut -d' ' -f2)
 changelog_message="Built from commit $hash_of_current_commit"
@@ -253,7 +285,7 @@ stderr "Building source package(s) using sources from the following repository c
 
 for repo in "${repository_directory_list[@]}"; do
 	(cd "$repo_base_dir/$repo"
-	if [ $VCS = "hg" ]; then
+	if [ "$VCS" = "hg" ]; then
 		name=$(hg paths|head -n1|sed -e 's#.*/##')
 		commit=$(hg id -i 2>/dev/null |cut -c -12)
 	else
@@ -264,8 +296,16 @@ for repo in "${repository_directory_list[@]}"; do
 	)
 done
 
-cd "$debian_path"/..
-debuild -uc -us -S -nc
+if [ -n "$short_mono_package_name" ]; then
+	# Build using its own source preparation script, and put the results in the right place.
+	# Remove any "origin/" prefix of a branch name since source.git is cloned as a bare mirror.
+	cd "$repo_base_dir/mono-calgary"
+	DEBUILD_ADDITIONAL_OPTS="-uc -us" REFREPODIR="$repo_base_dir" ./make-source-package $MAIN_PACKAGE_NAME ${MONO_COMMITTISH_TO_USE#origin/}
+	mv ${MAIN_PACKAGE_NAME}*.{dsc,build,changes,tar.gz} "$repo_base_dir/"
+else
+	cd "$debian_path"/..
+	debuild -uc -us -S -nc
+fi
 
 stderr "Building binary package(s)"
 
@@ -281,7 +321,7 @@ for distribution in $DISTRIBUTIONS_TO_PACKAGE; do
 done
 
 cd "$repo_base_dir"
-packagedsc="$source_package_name*.dsc"
+packagedsc="${source_package_name}_*.dsc"
 sudo HOME=~ PBUILDERDIR="$pbuilder_path" HOOKDIR="$HOME/FwSupportTools/packaging/pbuilder/hooks" http_proxy="$http_proxy" no_proxy="$no_proxy" DISTRIBUTIONS="$DISTRIBUTIONS_TO_PACKAGE" ARCHES="$ARCHES_TO_PACKAGE" $HOME/FwSupportTools/packaging/pbuilder/build-multi.sh "$packagedsc"
 
 stderr "Signing and uploading package(s)"
@@ -290,18 +330,18 @@ cd "$pbuilder_path"
 for dist in $DISTS_TO_PROCESS; do
 	for arch in $ARCHES_TO_PROCESS; do
 		cd $pbuilder_path/$dist/$arch/result
-		if [ -e $source_package_name*.changes ]; then
-			sed -i '10d' $source_package_name*.changes
+		if [ -e ${source_package_name}_*.changes ]; then
+			sed -i '10d' ${source_package_name}_*.changes
 			[ -z "$debkeyid" ] && stderr "Warning: debkeyid not set."
-			debsign -k$debkeyid --no-re-sign $source_package_name*.changes
-			dput $dput_simulate -U llso $source_package_name*.changes
+			debsign -k$debkeyid --no-re-sign ${source_package_name}_*.changes
+			dput $dput_simulate -U llso ${source_package_name}_*.changes
 		fi
 	done
 done
 
 stderr "Results:"
 
-RESULTS_PATTERN="$pbuilder_path/*/*/result/$source_package_name*.status"
+RESULTS_PATTERN="$pbuilder_path/*/*/result/${source_package_name}_*.status"
 for result in $RESULTS_PATTERN; do
 	echo $result:
 	cat "$result"
