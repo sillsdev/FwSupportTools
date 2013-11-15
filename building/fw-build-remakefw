@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# fw-build-remakefw
+#
+# Usage: fwrepo/fw$ fw-build-remakefw
+#
+# Original author: MarkS 2013-08-22
+
+program_name=$(basename "$0")
+
+/usr/bin/time -f "$program_name: Total time elapsed %E." cat <(. environ && cd Build && xbuild /t:refreshTargets && xbuild /t:remakefw)
+
+echo $program_name: Finished at $(date +"%F %T").
