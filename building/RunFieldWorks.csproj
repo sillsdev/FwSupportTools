@@ -90,7 +90,7 @@
     <MonoDevelop>
       <Properties>
         <Policies>
-          <StandardHeader Text="Copyright (c) ${Year}, SIL International.&#xA;Distributable under the terms of the MIT License (http://opensource.org/licenses/MIT)." IncludeInNewFiles="True" />
+          <StandardHeader Text="Copyright (c) ${Year} SIL International&#xA;This software is licensed under the LGPL, version 2.1 or later&#xA;(http://www.gnu.org/licenses/lgpl-2.1.html)" IncludeInNewFiles="True" />
         </Policies>
       </Properties>
     </MonoDevelop>
