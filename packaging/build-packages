@@ -242,11 +242,21 @@ done
 # Add entry to debian/changelog
 
 if [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
-	cd "$repo_base_dir/fwrepo/fw"
-	most_recent_tag=$(git describe --tags --abbrev=0)
-	# Translate tags of the form "linux/FieldWorks8.0.5-beta6" and
-	# "FieldWorks8.0.5-beta6" to "8.0.5~beta6".
-	latest_version_from_most_recent_tag=$(echo $most_recent_tag| sed -e 's/[^0-9]*//' -e 's/-\([^0-9]\)/~\1/')
+	masterversioninfo="$repo_base_dir/fwrepo/fw/Src/MasterVersionInfo.txt"
+	major=$(sed -n 's/FWMAJOR=//p' $masterversioninfo)
+	code_version="${major:-0}"
+	minor=$(sed -n 's/FWMINOR=//p' $masterversioninfo)
+	code_version+=".${minor:-0}"
+	revision=$(sed -n 's/FWREVISION=//p' $masterversioninfo)
+	code_version+=".${revision:-0}"
+	beta_version=$(sed -n 's/FWBETAVERSION=//p' $masterversioninfo)
+	if [ -n "$beta_version" ]; then
+		code_version+="~${beta_version}"
+	fi
+	# Change code_version to lowercase and strip any spaces
+	code_version="${code_version,,}"
+	code_version=${code_version// /}
+	nightlydelimeter="~"
 fi
 
 # Set Debian/changelog environment
@@ -256,8 +266,9 @@ cd "$debian_path"/..
 
 timestamp=$(date +"%Y%m%d.%H%M%S")
 latest_version_in_debian_changelog=$(dpkg-parsechangelog |grep ^Version:|cut -d' ' -f2)
-base_version=${latest_version_from_most_recent_tag:-$latest_version_in_debian_changelog}
-nightlyversion="$base_version.nightly$timestamp$package_version_extension"
+base_version=${code_version:-$latest_version_in_debian_changelog}
+nightlydelimeter=${nightlydelimeter:-"."}
+nightlyversion="$base_version${nightlydelimeter}nightly$timestamp$package_version_extension"
 if [ "$VCS" = "hg" ]; then
 	hash_of_current_commit=$(hg id -i 2>/dev/null |cut -c -12)
 else
