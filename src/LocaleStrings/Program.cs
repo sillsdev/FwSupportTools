@@ -512,10 +512,11 @@ namespace LocaleStrings
 			string sTime = DateTime.Now.ToLocalTime().ToString("o");
 			string s = String.Format("Created from FieldWorks sources", sTime);
 			POString.WriteComment(s, ' ', swOut);
-			s = String.Format("Copyright (c) {0} SIL International.", DateTime.Now.Year);
+			s = String.Format("Copyright (c) {0} SIL International", DateTime.Now.Year);
 			POString.WriteComment(s, ' ', swOut);
-			POString.WriteComment("This file is distributed under the same license as the FieldWorks programs.",
+			POString.WriteComment("This software is licensed under the LGPL, version 2.1 or later",
 				' ', swOut);
+			POString.WriteComment("(http://www.gnu.org/licenses/lgpl-2.1.html)", ' ', swOut);
 			POString.WriteComment("", ' ', swOut);
 			//POString.WriteComment("fuzzy", ',', swOut);	the on-line translation site doesn't like this.
 			swOut.Write("msgid ");
