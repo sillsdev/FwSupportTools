@@ -34,7 +34,7 @@ do
 		OTHERMIRROR="deb file:$HERE/$D/$A/result/ ./"
 
 		case $D in precise|quantal|raring)
-			MIRROR="http://ubuntu.mirror.rafal.ca/ubuntu/"
+			MIRROR="http://archive.ubuntu.com/ubuntu/"
 			COMPONENTS="main universe multiverse"
 			KEYRING1="/usr/share/keyrings/ubuntu-archive-keyring.gpg"
 			PROXY="$http_proxy"
