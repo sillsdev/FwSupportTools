@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. "${0%.sh}.config" # Settings for PBUILDERDIR, DISTRIBUTIONS, etc.
+
 NOOP=
 
 if [ "$1" = "-n" ]
@@ -7,8 +9,6 @@ then
 	NOOP=:
 	shift
 fi
-
-PBUILDERDIR=${PBUILDERDIR:-$HOME/pbuilder}
 
 cpuarch()
 {
@@ -51,9 +51,9 @@ export DIST ARCH
 
 for SRC
 do
-	for DIST in ${DISTRIBUTIONS-precise quantal raring} # jessie}
+	for DIST in $DISTRIBUTIONS
 	do
-		for ARCH in ${ARCHES-amd64 i386}
+		for ARCH in $ARCHES
 		do
 			PACKAGE=${SRC%.dsc}
 			RESULT="$PBUILDERDIR/$DIST/$ARCH/result"

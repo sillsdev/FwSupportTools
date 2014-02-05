@@ -1,0 +1,3 @@
+PBUILDERDIR=${PBUILDERDIR:-$HOME/pbuilder}
+DISTRIBUTIONS=${DISTRIBUTIONS:-precise quantal raring saucy trusty wheezy jessie}
+ARCHES=${ARCHES:-amd64 i386}
