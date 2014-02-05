@@ -57,6 +57,12 @@ do
 		do
 			PACKAGE=${SRC%.dsc}
 			RESULT="$PBUILDERDIR/$DIST/$ARCH/result"
+
+			if [ ! -d "$RESULT" ]
+			then
+				continue
+			fi
+
 			CH1="$RESULT/${PACKAGE}_${ARCH}.changes"
 			CH2="$RESULT/${PACKAGE}+${DIST}1_${ARCH}.changes"
 
