@@ -51,11 +51,12 @@ export DIST ARCH
 
 for SRC
 do
+	PACKAGE=$(basename "$SRC" .dsc)
+
 	for DIST in $DISTRIBUTIONS
 	do
 		for ARCH in $ARCHES
 		do
-			PACKAGE=${SRC%.dsc}
 			RESULT="$PBUILDERDIR/$DIST/$ARCH/result"
 
 			if [ ! -d "$RESULT" ]
