@@ -213,21 +213,20 @@ if [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 		stderr "Appending suffix $package_name_suffix to package names"
 		SUFFIX="$package_name_suffix"
 		cd "$debian_path"
-		sed -e "/^Package/s/fieldworks-applications/fieldworks-applications$SUFFIX/" -i control
+		sed -e "/^Package/s/fieldworks-applications/&$SUFFIX/" -i control
 		# Find "Package: fieldworks-applications". Then find the first "Conflicts", and add a conflict.
-		sed  -e '/^Package: fieldworks-applications/,$ {/^Conflicts/ {N;s/$/, fieldworks-applications/}}' -i control
-		sed -e "s/fieldworks-applications/fieldworks-applications$SUFFIX/" -i po/POTFILES.in po/templates.pot
-		for file in *fieldworks-applications*; do
-			new_filename=${file/fieldworks-applications/fieldworks-applications$SUFFIX}
-			mv "$file" "$new_filename"
-		done
+		sed -e '/^Package: fieldworks-applications/,$ {/^Conflicts/ {N;s/$/, fieldworks-applications/}}' -i control
+		sed -e "s/fieldworks-applications/&$SUFFIX/" -i po/POTFILES.in po/templates.pot
 
-		sed -e "/^Package/s/fieldworks-examples/fieldworks-examples$SUFFIX/" -i control
-		sed   -e '/^Package: fieldworks-examples/ {s/$/\nConflicts:\n fieldworks-examples/} ' -i control
-		for file in *fieldworks-examples*; do
-			new_filename=${file/fieldworks-examples/fieldworks-examples$SUFFIX}
-			mv "$file" "$new_filename"
-		done
+		# Add suffix to f-a package name in f-l10n Depends
+		sed -e "/^Package: fieldworks-l10n/,$ {/^Depends/ {s/fieldworks-applications/&$SUFFIX/}}" -i control
+		# Prevent main and branch-specific l10n packages from being installed at the same time.
+		sed -e "s/^Package: \(fieldworks-l10n-.*\)/&\nConflicts:\n \1/" -i control
+		# Modify l10n package names
+		sed -e "s/^Package: fieldworks-l10n-.*/&$SUFFIX/" -i control
+
+		# Insert suffix in filenames
+		prename "s/\./$SUFFIX\./" fieldworks-l10n-*.install fieldworks-applications*
 	fi
 fi
 
