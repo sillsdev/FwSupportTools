@@ -33,7 +33,7 @@ do
 
 		OTHERMIRROR="deb file:$HERE/$D/$A/result/ ./"
 
-		case $D in precise|quantal|raring)
+		case $D in precise|quantal|raring|saucy|trusty)
 			MIRROR="http://archive.ubuntu.com/ubuntu/"
 			COMPONENTS="main universe multiverse"
 			KEYRING1="/usr/share/keyrings/ubuntu-archive-keyring.gpg"
