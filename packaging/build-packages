@@ -391,6 +391,23 @@ for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 done
 [ -n "$preserve_products_arg" ] && stderr "Preserved binary package files."
 
+stderr "Results:"
+
+any_failures=false
+for dist in $DISTRIBUTIONS_TO_PACKAGE; do
+	for arch in $ARCHES_TO_PACKAGE; do
+		RESULT="$pbuilder_path/$dist/$arch/result/${source_package_name}_*.status"
+		echo $RESULT:
+		cat $RESULT
+		grep -q '^0$' $RESULT || any_failures=true
+	done
+done
+
+if [ "$any_failures" = "true" ]; then
+	stderr "One or more failures detected. Not uploading any packages."
+	exit 100
+fi
+
 stderr "Uploading package(s)"
 
 cd "$pbuilder_path"
@@ -407,19 +424,4 @@ for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 	done
 done
 
-
-stderr "Results:"
-
-any_failures=false
-for dist in $DISTRIBUTIONS_TO_PACKAGE; do
-	for arch in $ARCHES_TO_PACKAGE; do
-		RESULT="$pbuilder_path/$dist/$arch/result/${source_package_name}_*.status"
-		echo $RESULT:
-		cat "$RESULT"
-		grep -q '^0$' "$RESULT" || any_failures=true
-	done
-done
-
-# Return failure if any dist/arch build failed
-[ "$any_failures" = "false" ] && exit 0 || exit 100
-#TODO if there were any failures, don't do any dput operations
+exit 0
