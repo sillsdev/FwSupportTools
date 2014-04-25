@@ -44,6 +44,10 @@ while (( $# )); do
 		--omit-binary-packages) shift; omit_binary_packages_arg=$1 ;;
 		# For making release packages. Do not add a new entry to the changelog. Package versions will be as specified in the last changelog entry, without a nightly timestamp appended.
 		--preserve-changelog) preserve_changelog_arg=true ;;
+		# Normally source and binary packages end up getting deleted during future runs of this script. If the source and binary packages from this run are to be kept around so they can be manually processed (eg to sign or upload to a different location), then this argument can be used.
+		--preserve-products) preserve_products_arg=true ;;
+		# Package repository to upload the resulting binary packages to. "llso-main" or "llso-experimental".
+		--destination-repository) shift; destination_repository_arg=$1 ;;
 		*) stderr "Error: Unexpected argument \"$1\". Exiting." ; exit 1 ;;
 	esac
 	shift || (stderr "Error: The last argument is missing a value. Exiting."; false) || exit 2
@@ -51,15 +55,16 @@ done
 
 DISTRIBUTIONS_TO_PACKAGE="${dists_arg:-precise}"
 ARCHES_TO_PACKAGE="${arches_arg:-i386 amd64}"
-DISTS_TO_PROCESS="precise quantal raring"
-ARCHES_TO_PROCESS="amd64 i386"
 PACKAGING_ROOT="$HOME/packages"
 MAIN_PACKAGE_NAME=$main_package_name_arg
 PRESERVE_REPOSITORY=$preserve_repository_arg
 OMIT_BINARY_PACKAGES_LIST="$omit_binary_packages_arg"
 PRESERVE_CHANGELOG="$preserve_changelog_arg"
+PRODUCTS_PRESERVATION_ROOT="$PACKAGING_ROOT/preserved-products"
+PRODUCTS_PRESERVATION_PATH="$PRODUCTS_PRESERVATION_ROOT/$MAIN_PACKAGE_NAME"
 
 [ -z "$MAIN_PACKAGE_NAME" ] && stderr "Error: --main-package-name not set." && exit 3
+[ -n "$package_version_extension" -a -n "$preserve_changelog_arg" ] && stderr "Error: --package-version-extension and --preserve-changelog are incompatible." && exit 4
 
 # Where $1 is the repository directory, and $2 is a committish to set the repository to.
 # Non-branch committishes are not supported yet for hg projects.
@@ -94,6 +99,15 @@ mkdir -p $repo_base_dir
 cd $repo_base_dir
 
 if [ "$MAIN_PACKAGE_NAME" = "flexbridge" ]; then
+	if [ ! -d flexbridge ]; then
+		git clone https://github.com/sillsdev/flexbridge.git
+	fi
+
+	debian_path=$repo_base_dir/flexbridge/debian
+	repository_directory_list=(flexbridge)
+	VCS="git"
+elif [ "$MAIN_PACKAGE_NAME" = "flexbridgehg" ]; then
+	# Older (2013) repository.
 	if [ ! -d fwbridge ]; then
 		hg clone http://hg.palaso.org/fwbridge
 	fi
@@ -111,7 +125,7 @@ elif [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 
 	if [ ! -d "$fwrepodir"/fw ]; then
 		stderr "Initial clone of some repositories"
-		repos="FieldWorks FwSampleProjects mono mono-basic gtk-sharp libgdiplus libcom FwLocalizations FwHelps FwMovies"
+		repos="FieldWorks libcom FwLocalizations FwHelps"
 		branches="master develop"
 		cd "$fwrepodir"
 		echo -e "$repos\n$branches\n" | fwmeta/initrepo
@@ -120,10 +134,9 @@ elif [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 	fi
 
 	cd "$fwrepodir"
-	ln -sf libcom/* .
 
 	debian_path=$fwrepodir/debian
-	repository_directory_list=(fwrepo/fw fwrepo/fw/Localizations fwrepo/fw/DistFiles/ReleaseData fwrepo/fw/DistFiles/Helps fwrepo/libcom fwrepo/mono/mono fwrepo/mono/mono-basic fwrepo/mono/gtk-sharp fwrepo/mono/libgdiplus fwrepo/debian fwrepo/fw/DistFiles/Language\ Explorer/Movies)
+	repository_directory_list=(fwrepo/fw fwrepo/fw/Localizations fwrepo/fw/DistFiles/Helps fwrepo/libcom fwrepo/debian)
 	VCS="git"
 elif [ "$MAIN_PACKAGE_NAME" = "fieldworks-mono" -o \
 	"$MAIN_PACKAGE_NAME" = "fieldworks-libgdiplus" -o \
@@ -148,7 +161,7 @@ elif [ "$MAIN_PACKAGE_NAME" = "fieldworks-mono" -o \
 	repository_directory_list=(mono-calgary $short_mono_package_name)
 else
 	stderr "Unsupported package name specified: $MAIN_PACKAGE_NAME"
-	exit 3
+	exit 5
 fi
 
 # Use repository committishes requested in commandline, if available.
@@ -190,11 +203,11 @@ cd "$debian_path"/..
 source_package_name=$(dpkg-parsechangelog |grep ^Source:|cut -d' ' -f2)
 rm -f "$repo_base_dir"/${source_package_name}_*.{dsc,build,changes,tar.gz}
 
-# Clean out previously built binary packages, as well as any cancelled builds left on disk
+# Clean out previously built binary packages, or any cancelled builds left on disk, that may be in the way.
 mkdir -p "$pbuilder_path"
 cd "$pbuilder_path"
-for dist in $DISTS_TO_PROCESS; do
-	for arch in $ARCHES_TO_PROCESS; do
+for dist in $DISTRIBUTIONS_TO_PACKAGE; do
+	for arch in $ARCHES_TO_PACKAGE; do
 		if [ -e $dist/$arch/result/${source_package_name}_*.build ]; then
 			rm -f $dist/$arch/result/*
 		fi
@@ -298,11 +311,13 @@ for repo in "${repository_directory_list[@]}"; do
 	if [ "$VCS" = "hg" ]; then
 		name=$(hg paths|head -n1|sed -e 's#.*/##')
 		commit=$(hg id -i 2>/dev/null |cut -c -12)
+		echo "    $name $commit"
 	else
 		name=$(git remote -v |grep fetch|head -n1 |awk '{print $2}'|sed 's#.*/##')
 		commit=$(git rev-parse --short HEAD)
+		echo "    $name $commit"
+		git diff --quiet && echo "        Clean repository. No uncommitted changes." || { echo "        Dirty repository with the following uncommitted changes:"; git diff ; }
 	fi
-	echo "    $name $commit"
 	)
 done
 
@@ -315,6 +330,16 @@ if [ -n "$short_mono_package_name" ]; then
 else
 	cd "$debian_path"/..
 	debuild -uc -us -S -nc
+fi
+
+stderr "Source package files exist with the following sha256sums:"
+cd "$repo_base_dir"
+sha256sum ${source_package_name}_*.{dsc,build,changes,tar.gz}
+
+if [ -n "$preserve_products_arg" ]; then
+	stderr "Preserving source package files."
+	mkdir -p "$PRODUCTS_PRESERVATION_PATH"
+	cp -a "$repo_base_dir"/${source_package_name}_*.{dsc,build,changes,tar.gz} "$PRODUCTS_PRESERVATION_PATH"/
 fi
 
 stderr "Building binary package(s)"
@@ -334,28 +359,67 @@ cd "$repo_base_dir"
 packagedsc="${source_package_name}_*.dsc"
 sudo HOME=~ PBUILDERDIR="$pbuilder_path" HOOKDIR="$HOME/FwSupportTools/packaging/pbuilder/hooks" http_proxy="$http_proxy" no_proxy="$no_proxy" DISTRIBUTIONS="$DISTRIBUTIONS_TO_PACKAGE" ARCHES="$ARCHES_TO_PACKAGE" $HOME/FwSupportTools/packaging/pbuilder/build-multi.sh "$packagedsc"
 
-stderr "Signing and uploading package(s)"
+stderr "Signing package(s)"
 
 cd "$pbuilder_path"
-for dist in $DISTS_TO_PROCESS; do
-	for arch in $ARCHES_TO_PROCESS; do
+for dist in $DISTRIBUTIONS_TO_PACKAGE; do
+	for arch in $ARCHES_TO_PACKAGE; do
 		cd $pbuilder_path/$dist/$arch/result
 		if [ -e ${source_package_name}_*.changes ]; then
 			sed -i '10d' ${source_package_name}_*.changes
+
+			# .changes files can have their Distribution set to UNRELEASED sometimes. Fix it.
+			perl -pi -e "s/UNRELEASED/$dist/" ${source_package_name}_*.changes
+
 			[ -z "$debkeyid" ] && stderr "Warning: debkeyid not set."
 			debsign -k$debkeyid --no-re-sign ${source_package_name}_*.changes
-			dput $dput_simulate -U llso ${source_package_name}_*.changes
 		fi
 	done
 done
 
+stderr "Binary package files exist with the following sha256sums:"
+
+for dist in $DISTRIBUTIONS_TO_PACKAGE; do
+	for arch in $ARCHES_TO_PACKAGE; do
+		cd $pbuilder_path/$dist/$arch/result
+		sha256sum *.changes *.deb
+		if [ -n "$preserve_products_arg" ]; then
+			mkdir -p "$PRODUCTS_PRESERVATION_PATH"
+			cp -a *.changes *.deb "$PRODUCTS_PRESERVATION_PATH"/
+		fi
+	done
+done
+[ -n "$preserve_products_arg" ] && stderr "Preserved binary package files."
+
+stderr "Uploading package(s)"
+
+cd "$pbuilder_path"
+for dist in $DISTRIBUTIONS_TO_PACKAGE; do
+	for arch in $ARCHES_TO_PACKAGE; do
+		cd $pbuilder_path/$dist/$arch/result
+		if [ -e ${source_package_name}_*.changes ]; then
+			destination_repository="ubuntu/$dist-experimental"
+			if [ "$destination_repository_arg" = "llso-main" ]; then
+				destination_repository="ubuntu/$dist"
+			fi
+			dput $dput_simulate -U llso:$destination_repository ${source_package_name}_*.changes
+		fi
+	done
+done
+
+
 stderr "Results:"
 
-RESULTS_PATTERN="$pbuilder_path/*/*/result/${source_package_name}_*.status"
-for result in $RESULTS_PATTERN; do
-	echo $result:
-	cat "$result"
+any_failures=false
+for dist in $DISTRIBUTIONS_TO_PACKAGE; do
+	for arch in $ARCHES_TO_PACKAGE; do
+		RESULT="$pbuilder_path/$dist/$arch/result/${source_package_name}_*.status"
+		echo $RESULT:
+		cat "$RESULT"
+		grep -q '^0$' "$RESULT" || any_failures=true
+	done
 done
 
 # Return failure if any dist/arch build failed
-! grep -q -v '^0$' $RESULTS_PATTERN
+[ "$any_failures" = "false" ] && exit 0 || exit 100
+#TODO if there were any failures, don't do any dput operations
