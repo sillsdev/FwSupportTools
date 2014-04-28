@@ -208,9 +208,7 @@ mkdir -p "$pbuilder_path"
 cd "$pbuilder_path"
 for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 	for arch in $ARCHES_TO_PACKAGE; do
-		if [ -e $dist/$arch/result/${source_package_name}_*.build ]; then
-			rm -f $dist/$arch/result/*
-		fi
+		rm -f $dist/$arch/result/*
 		sudo umount $dist/$arch/build/*/proc 2>/dev/null || true
 		sudo umount $dist/$arch/build/*/dev/pts 2>/dev/null || true
 		sudo umount $dist/$arch/build/*/dev 2>/dev/null || true
@@ -382,7 +380,7 @@ stderr "Binary package files exist with the following sha256sums:"
 for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 	for arch in $ARCHES_TO_PACKAGE; do
 		cd $pbuilder_path/$dist/$arch/result
-		sha256sum *.changes *.deb
+		sha256sum *.changes *.deb || true
 		if [ -n "$preserve_products_arg" ]; then
 			mkdir -p "$PRODUCTS_PRESERVATION_PATH"
 			cp -a *.changes *.deb "$PRODUCTS_PRESERVATION_PATH"/
