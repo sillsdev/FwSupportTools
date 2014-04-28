@@ -138,11 +138,11 @@ elif [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 	debian_path=$fwrepodir/debian
 	repository_directory_list=(fwrepo/fw fwrepo/fw/Localizations fwrepo/fw/DistFiles/Helps fwrepo/libcom fwrepo/debian)
 	VCS="git"
-elif [ "$MAIN_PACKAGE_NAME" = "fieldworks-mono" -o \
-	"$MAIN_PACKAGE_NAME" = "fieldworks-libgdiplus" -o \
-	"$MAIN_PACKAGE_NAME" = "fieldworks-gtk-sharp" -o \
-	"$MAIN_PACKAGE_NAME" = "fieldworks-mono-basic" ]; then
-	short_mono_package_name=${MAIN_PACKAGE_NAME#fieldworks-}
+elif [ "$MAIN_PACKAGE_NAME" = "mono-sil" -o \
+	"$MAIN_PACKAGE_NAME" = "libgdiplus-sil" -o \
+	"$MAIN_PACKAGE_NAME" = "gtk-sharp-sil" -o \
+	"$MAIN_PACKAGE_NAME" = "mono-basic-sil" ]; then
+	short_mono_package_name=${MAIN_PACKAGE_NAME%-sil}
 	if [ ! -d mono-calgary ]; then
 		git clone https://github.com/sillsdev/mono-calgary
 	fi
@@ -323,7 +323,7 @@ if [ -n "$short_mono_package_name" ]; then
 	# Build using its own source preparation script, and put the results in the right place.
 	# Remove any "origin/" prefix of a branch name since source.git is cloned as a bare mirror.
 	cd "$repo_base_dir/mono-calgary"
-	DEBUILD_ADDITIONAL_OPTS="-uc -us" REFREPODIR="$repo_base_dir" ./make-source-package $MAIN_PACKAGE_NAME ${MONO_COMMITTISH_TO_USE#origin/}
+	DEBUILD_ADDITIONAL_OPTS="-uc -us" REFREPODIR="$repo_base_dir" ./make-source-package ${short_mono_package_name} ${MONO_COMMITTISH_TO_USE#origin/}
 	mv ${MAIN_PACKAGE_NAME}*.{dsc,build,changes,tar.gz} "$repo_base_dir/"
 else
 	cd "$debian_path"/..
