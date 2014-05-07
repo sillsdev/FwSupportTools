@@ -249,6 +249,12 @@ for package in $OMIT_BINARY_PACKAGES_LIST; do
 	sed -i control -e "/^Package: $package$/,/^$/d"
 done
 
+# Don't try to process 32-bit package products if they are all architectureless.
+grep "^Architecture: " "$debian_path"/control|grep -q -v "Architecture: all$" || {
+	stderr "All binary packages are listed as 'all' architecture. Resetting --arches to 'amd64'."
+	ARCHES_TO_PACKAGE="amd64"
+}
+
 # Add entry to debian/changelog
 
 if [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
