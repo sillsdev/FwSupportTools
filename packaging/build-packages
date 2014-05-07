@@ -140,9 +140,11 @@ elif [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 	VCS="git"
 elif [ "$MAIN_PACKAGE_NAME" = "mono-sil" -o \
 	"$MAIN_PACKAGE_NAME" = "libgdiplus-sil" -o \
-	"$MAIN_PACKAGE_NAME" = "gtk-sharp-sil" -o \
+	"$MAIN_PACKAGE_NAME" = "gtk-sharp2-sil" -o \
 	"$MAIN_PACKAGE_NAME" = "mono-basic-sil" ]; then
 	short_mono_package_name=${MAIN_PACKAGE_NAME%-sil}
+	# And without the '2' at the end of 'gtk-sharp2'
+	short_mono_package_name=${short_mono_package_name%2}
 	if [ ! -d mono-calgary ]; then
 		git clone https://github.com/sillsdev/mono-calgary
 	fi
