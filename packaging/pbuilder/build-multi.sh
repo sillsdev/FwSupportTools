@@ -1,6 +1,7 @@
 #!/bin/bash
 
-. "${0%.sh}.config" # Settings for PBUILDERDIR, DISTRIBUTIONS, etc.
+. $(dirname $0)/common.sh
+init
 
 NOOP=
 

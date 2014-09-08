@@ -5,8 +5,8 @@
 
 set -e
 
-CONFIGFILE="build-multi.config"
-[ -e $CONFIGFILE ] && . $CONFIGFILE # Settings for PBUILDERDIR, DISTRIBUTIONS, etc.
+. $(dirname $0)/common.sh
+init
 
 # Process arguments.
 while (( $# )); do
