@@ -5,6 +5,9 @@
 
 set -e
 
+CONFIGFILE="build-multi.config"
+[ -e $CONFIGFILE ] && . $CONFIGFILE # Settings for PBUILDERDIR, DISTRIBUTIONS, etc.
+
 # Process arguments.
 while (( $# )); do
 	case $1 in
@@ -15,11 +18,12 @@ while (( $# )); do
 	shift
 done
 
-cd "${PBUILDERDIR:-$(dirname "$0")}"
+PBUILDERDIR="${PBUILDERDIR:-$(dirname "$0")}"
+cd "$PBUILDERDIR"
 
 HERE=$(/bin/pwd)
 
-for D in ${DISTRIBUTIONS-precise quantal raring} # jessie}
+for D in ${DISTRIBUTIONS-precise saucy trusty} # jessie}
 do
 	for A in ${ARCHES-amd64 i386}
 	do
@@ -34,7 +38,7 @@ do
 		OTHERMIRROR="deb file:$HERE/$D/$A/result/ ./"
 
 		case $D in precise|quantal|raring|saucy|trusty)
-			MIRROR="http://archive.ubuntu.com/ubuntu/"
+			MIRROR="${UBUNTU_MIRROR:-http://archive.ubuntu.com/ubuntu/}"
 			COMPONENTS="main universe multiverse"
 			KEYRING1="/usr/share/keyrings/ubuntu-archive-keyring.gpg"
 			PROXY="$http_proxy"
@@ -42,7 +46,7 @@ do
 				OTHERMIRROR+="|deb $MIRROR $D-$S $COMPONENTS"
 			done
 			LLSO="http://linux.lsdev.sil.org/ubuntu/"
-			KEYRING2="$HOME/pbuilder/sil-testing.gpg"
+			KEYRING2="$PBUILDERDIR/sil-testing.gpg"
 			for S in "" "-experimental"; do
 				OTHERMIRROR+="|deb $LLSO $D$S $COMPONENTS"
 			done

@@ -1,3 +1,4 @@
 PBUILDERDIR=${PBUILDERDIR:-$HOME/pbuilder}
 DISTRIBUTIONS=${DISTRIBUTIONS:-precise quantal raring saucy trusty wheezy jessie}
 ARCHES=${ARCHES:-amd64 i386}
+UBUNTU_MIRROR=${UBUNTU_MIRROR:-http://archive.ubuntu.com/ubuntu/}
