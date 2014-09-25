@@ -426,6 +426,12 @@ for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 				destination_repository="ubuntu/$dist"
 			fi
 			dput $dput_simulate -U llso:$destination_repository ${source_package_name}_*.changes
+			# FW builds on Saucy but not Trusty yet. Publish Saucy packages to Trusty.
+			if [ "$MAIN_PACKAGE_NAME" = "fieldworks" -a "$dist" = "saucy" ]; then
+				destination_repository="${destination_repository/saucy/trusty}"
+				stderr "Sending saucy packages to trusty section."
+				dput $dput_simulate -U llso:$destination_repository ${source_package_name}_*.changes
+			fi
 		fi
 	done
 done
