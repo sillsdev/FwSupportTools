@@ -42,7 +42,7 @@ do
 			COMPONENTS="main universe multiverse"
 			KEYRING1="/usr/share/keyrings/ubuntu-archive-keyring.gpg"
 			PROXY="$http_proxy"
-			for S in proposed backports updates; do
+			for S in backports updates; do
 				OTHERMIRROR+="|deb $MIRROR $D-$S $COMPONENTS"
 			done
 			LLSO="http://linux.lsdev.sil.org/ubuntu/"
