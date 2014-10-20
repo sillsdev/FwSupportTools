@@ -77,10 +77,13 @@ do
 
 			OPTS=()
 
-			# Build arch-independent packages only once
-			if [ $ARCH != amd64 ]
+			if [ $ARCH = amd64 ]
 			then
-				OPTS+="--binary-arch"
+				# Don't build a source package - we already have one
+				OPTS+=(--debbuildopts -b)
+			else
+				# Don't build arch-independent packages - that's done with amd64
+				OPTS+=(--binary-arch)
 
 				# Don't build if not for this arch
 				if ! has_arch $ARCH $SRC
