@@ -80,8 +80,8 @@ do
 
 		sudo HOME=~ DIST=$D ARCH=$A pbuilder $options \
 			${KEYRING1:+--debootstrapopts --keyring=}$KEYRING1 \
-			${KEYRING2:+--keyring=}$KEYRING2 \
-			${KEYRING3:+--keyring=}$KEYRING3 \
+			${KEYRING2:+--keyring }$KEYRING2 \
+			${KEYRING3:+--keyring }$KEYRING3 \
 			--extrapackages "apt-utils devscripts lsb-release" \
 			--othermirror "$OTHERMIRROR" \
 			--mirror "$MIRROR" \
