@@ -19,9 +19,9 @@ while (( $# )); do
 done
 
 PBUILDERDIR="${PBUILDERDIR:-$(dirname "$0")}"
-cd "$PBUILDERDIR"
+LOCALMIRROR=${LOCALMIRROR:-$PBUILDERDIR}
 
-HERE=$(/bin/pwd)
+cd "$PBUILDERDIR"
 
 KEYRINGLLSO="$PBUILDERDIR/sil-testing.gpg"
 KEYRINGPSO="$PBUILDERDIR/sil.gpg"
@@ -42,7 +42,7 @@ do
 		mkdir -p $D/$A/{aptcache,build,result}
 		[ ! -e $D/$A/result/Packages ] && touch $D/$A/result/Packages
 
-		OTHERMIRROR="deb file:$HERE/$D/$A/result/ ./"
+		OTHERMIRROR="deb file://$LOCALMIRROR/$D/$A/result/ ./"
 
 		case $D in precise|quantal|raring|saucy|trusty|utopic)
 			MIRROR="${UBUNTU_MIRROR:-http://archive.ubuntu.com/ubuntu/}"
