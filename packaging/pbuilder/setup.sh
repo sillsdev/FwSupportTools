@@ -23,6 +23,13 @@ cd "$PBUILDERDIR"
 
 HERE=$(/bin/pwd)
 
+KEYRINGLLSO="$PBUILDERDIR/sil-testing.gpg"
+KEYRINGPSO="$PBUILDERDIR/sil.gpg"
+
+if [ ! -f $KEYRINGPSO ]; then
+	wget --output-document=$KEYRINGPSO http://packages.sil.org/sil.gpg
+fi
+
 for D in ${DISTRIBUTIONS-precise saucy trusty} # jessie}
 do
 	for A in ${ARCHES-amd64 i386}
@@ -46,18 +53,22 @@ do
 				OTHERMIRROR+="|deb $MIRROR $D-$S $COMPONENTS"
 			done
 			LLSO="http://linux.lsdev.sil.org/ubuntu/"
-			KEYRING2="$PBUILDERDIR/sil-testing.gpg"
+			KEYRING2=$KEYRINGLLSO
+			PSO="http://packages.sil.org/ubuntu/"
+			KEYRING3=$KEYRINGPSO
 			for S in "" "-experimental"; do
-				OTHERMIRROR+="|deb $LLSO $D$S $COMPONENTS"
+				OTHERMIRROR+="|deb $LLSO $D$S $COMPONENTS|deb $PSO $D$S $COMPONENTS"
 			done
 			;;
 		*)
 			MIRROR="$local_debian_mirror"
 			COMPONENTS="main"
 			LLSO="http://linux.lsdev.sil.org/debian/"
-			KEYRING1=$KEYRING2
-			KEYRING2=""
-			OTHERMIRROR+="|deb $LLSO $D $COMPONENTS"
+			PSO="http://packages.sil.org/debian/"
+			KEYRING1=$KEYRINGLLSO
+			KEYRING2=$KEYRINGPSO
+			KEYRING3=""
+			OTHERMIRROR+="|deb $LLSO $D $COMPONENTS|deb $PSO $D $COMPONENTS"
 			PROXY=""
 		esac
 
@@ -69,7 +80,8 @@ do
 
 		sudo HOME=~ DIST=$D ARCH=$A pbuilder $options \
 			${KEYRING1:+--debootstrapopts --keyring=}$KEYRING1 \
-			${KEYRING2:+--keyring }$KEYRING2 \
+			${KEYRING2:+--keyring=}$KEYRING2 \
+			${KEYRING3:+--keyring=}$KEYRING3 \
 			--extrapackages "apt-utils devscripts lsb-release" \
 			--othermirror "$OTHERMIRROR" \
 			--mirror "$MIRROR" \
