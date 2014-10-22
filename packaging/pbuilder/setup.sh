@@ -30,7 +30,7 @@ if [ ! -f $KEYRINGPSO ]; then
 	wget --output-document=$KEYRINGPSO http://packages.sil.org/sil.gpg
 fi
 
-for D in ${DISTRIBUTIONS-precise saucy trusty} # jessie}
+for D in ${DISTRIBUTIONS-precise saucy trusty utopic} # jessie}
 do
 	for A in ${ARCHES-amd64 i386}
 	do
@@ -44,7 +44,7 @@ do
 
 		OTHERMIRROR="deb file:$HERE/$D/$A/result/ ./"
 
-		case $D in precise|quantal|raring|saucy|trusty)
+		case $D in precise|quantal|raring|saucy|trusty|utopic)
 			MIRROR="${UBUNTU_MIRROR:-http://archive.ubuntu.com/ubuntu/}"
 			COMPONENTS="main universe multiverse"
 			KEYRING1="/usr/share/keyrings/ubuntu-archive-keyring.gpg"
