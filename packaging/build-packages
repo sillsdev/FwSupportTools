@@ -14,6 +14,8 @@ set -e
 
 PROGRAM_NAME="$(basename "$0")"
 
+SCRIPTDIR="$(dirname "$0")"
+
 stderr ()
 {
 	echo >&2 "$PROGRAM_NAME: $1"
@@ -330,10 +332,12 @@ done
 if [ -n "$short_mono_package_name" ]; then
 	# Build using its own source preparation script, and put the results in the right place.
 	# Remove any "origin/" prefix of a branch name since source.git is cloned as a bare mirror.
+	stderr "Building source package for $short_mono_package_name with own source preparation script"
 	cd "$repo_base_dir/mono-calgary"
 	DEBUILD_ADDITIONAL_OPTS="-uc -us" REFREPODIR="$repo_base_dir" ./make-source-package ${short_mono_package_name} ${MONO_COMMITTISH_TO_USE#origin/}
 	mv ${MAIN_PACKAGE_NAME}*.{dsc,build,changes,tar.gz} "$repo_base_dir/"
 else
+	stderr "Building source package with debuild"
 	cd "$debian_path"/..
 	debuild -uc -us -S -nc
 fi
@@ -356,14 +360,14 @@ mkdir -p "$pbuilder_path"
 for distribution in $DISTRIBUTIONS_TO_PACKAGE; do
 	for arch in $ARCHES_TO_PACKAGE; do
 		if [ ! -e "$pbuilder_path"/$distribution/$arch/base.tgz ]; then
-			PBUILDERDIR="$pbuilder_path" DISTRIBUTIONS="$distribution" ARCHES="$arch" $HOME/FwSupportTools/packaging/pbuilder/setup.sh
+			PBUILDERDIR="$pbuilder_path" DISTRIBUTIONS="$distribution" ARCHES="$arch" $SCRIPTDIR/pbuilder/setup.sh
 		fi
 	done
 done
 
 cd "$repo_base_dir"
 packagedsc="${source_package_name}_*.dsc"
-sudo HOME=~ PBUILDERDIR="$pbuilder_path" HOOKDIR="$HOME/FwSupportTools/packaging/pbuilder/hooks" http_proxy="$http_proxy" no_proxy="$no_proxy" DISTRIBUTIONS="$DISTRIBUTIONS_TO_PACKAGE" ARCHES="$ARCHES_TO_PACKAGE" $HOME/FwSupportTools/packaging/pbuilder/build-multi.sh "$packagedsc"
+sudo HOME=~ PBUILDERDIR="$pbuilder_path" HOOKDIR="$SCRIPTDIR/pbuilder/hooks" http_proxy="$http_proxy" no_proxy="$no_proxy" DISTRIBUTIONS="$DISTRIBUTIONS_TO_PACKAGE" ARCHES="$ARCHES_TO_PACKAGE" $SCRIPTDIR/pbuilder/build-multi.sh "$packagedsc"
 
 stderr "Signing package(s)"
 
