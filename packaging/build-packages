@@ -207,19 +207,6 @@ cd "$debian_path"/..
 source_package_name=$(dpkg-parsechangelog |grep ^Source:|cut -d' ' -f2)
 rm -f "$repo_base_dir"/${source_package_name}_*.{dsc,build,changes,tar.gz}
 
-# Clean out previously built binary packages, or any cancelled builds left on disk, that may be in the way.
-mkdir -p "$pbuilder_path"
-cd "$pbuilder_path"
-for dist in $DISTRIBUTIONS_TO_PACKAGE; do
-	for arch in $ARCHES_TO_PACKAGE; do
-		rm -f $dist/$arch/result/*
-		sudo umount $dist/$arch/build/*/proc 2>/dev/null || true
-		sudo umount $dist/$arch/build/*/dev/pts 2>/dev/null || true
-		sudo umount $dist/$arch/build/*/dev 2>/dev/null || true
-		sudo rm -rf $dist/$arch/build/*
-	done
-done
-
 # Only package name changing for fieldworks is supported presently
 if [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 	# If applicable, modify fieldworks-applications package to be named with a
