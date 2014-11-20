@@ -1,0 +1,317 @@
+#!/bin/bash
+
+# provision-fw-dev-machine
+# Set up a FieldWorks development environment on a vagrant machine. Don't require user interaction.
+# Script created in part from http://linux.lsdev.sil.org/wiki/index.php/Set_up_new_FieldWorks_development_workstation
+
+set -e -o pipefail
+
+BASEDIR="$HOME"
+SCRIPTNAME="provisioner"
+
+# Setup
+
+wget -qO - http://packages.sil.org/sil.gpg | sudo apt-key add -
+wget -qO - http://linux.lsdev.sil.org/downloads/sil-testing.gpg | sudo apt-key add -
+sudo add-apt-repository "deb http://packages.sil.org/ubuntu $(lsb_release -sc) main"
+sudo add-apt-repository "deb http://packages.sil.org/ubuntu $(lsb_release -sc)-experimental main"
+sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $(lsb_release -sc) main"
+sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $(lsb_release -sc)-experimental main"
+
+# Enable multiverse repository
+sudo perl -pi -e '/multiverse/ and !/backports/ and s/^# //' /etc/apt/sources.list
+# Enable partner repository for skype
+sudo perl -pi -e '/partner/ and s/^# //' /etc/apt/sources.list
+sudo apt-get update
+sudo apt-get dist-upgrade -y
+sudo apt-get install -y git-gui terminator meld kdiff3-qt vim links2 gdb wget synaptic ack-grep geany xchat chromium-browser skype byobu indicator-multiload dconf-tools git-cola mercurial
+
+git config --global diff.tool meld
+git config --global merge.conflictstyle diff3
+git config --global merge.tool kdiff3
+git config --global color.ui true
+git config --global rerere.enabled true
+git config --global gui.editor gedit
+git config --global rebase.autosquash true
+
+perl -pi -e s/^#force_color_prompt/force_color_prompt/ ~/.bashrc
+grep __git_ps1 ~/.bashrc || echo 'export PS1="\$(__git_ps1) $PS1"' |tee -a ~/.bashrc
+
+mkdir -p ~/.config/terminator
+echo '[profiles]
+  [[default]]
+	scroll_on_output = False
+	scrollback_infinite = True'|tee ~/.config/terminator/config
+
+OUTPUTFILE="$HOME/.cola"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+{
+	"py/object": "cola.settings.SettingsModel",
+	"bookmarks": [],
+	"gui_state": {
+		"mainview": {
+			"y": 24,
+			"width": 954,
+			"windowstate": "AAAA/wAAAAH9AAAAAQAAAAIAAAO6AAACx/wBAAAAAvwAAAAAAAABhAAAAYQA/////AIAAAAE+wAAACIAUgBlAHAAbwBzAGkAdABvAHIAeQAgAFMAdABhAHQAdQBzAQAAAAAAAAFxAAAAZwD////7AAAADgBBAGMAdABpAG8AbgBzAQAAAXcAAAA4AAAAGgD////7AAAAKgBDAG8AbQBtAGkAdAAgAE0AZQBzAHMAYQBnAGUAIABFAGQAaQB0AG8AcgEAAAG1AAAAjgAAADsA////+wAAABwAQwBvAG0AbQBhAG4AZAAgAE8AdQB0AHAAdQB0AQAAAkkAAAB+AAAAZwD////7AAAAFgBEAGkAZgBmACAAVgBpAGUAdwBlAHIBAAABigAAAjAAAABPAP///wAAA7oAAAAAAAAABAAAAAQAAAAIAAAACPwAAAAA",
+			"height": 711,
+			"x": 65
+		}
+	}
+}
+ENDOFOUTPUTFILE
+
+OUTPUTFILE="$HOME/initial-config.sh"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+#!/bin/bash
+
+echo 'Applying initial configuration settings ...'
+
+if [ -e ~/.config/initial-config/has-run ]; then
+  echo 'Settings have already been applied.'
+  exit 0
+fi
+
+mkdir -p ~/.config/initial-config
+touch ~/.config/initial-config/has-run
+
+dconf write  /org/gnome/desktop/screensaver/lock-enabled false
+dconf write  /org/gnome/desktop/session/idle-delay 'uint32 0'
+dconf write  /org/gnome/settings-daemon-plugins/power/sleep-display-ac 'uint32 0'
+dconf write  /org/gnome/settings-daemon-plugins/power/sleep-display-battery 'uint32 0'
+
+dconf write  /apps/update-manager/check-new-release-ignore "'trusty'"
+
+mkdir -p $HOME/.config/autostart
+dconf write  /apps/indicators/multiload/autostart true
+dconf write  /apps/indicators/multiload/size 'uint16 10'
+dconf write  /apps/indicators/multiload/speed 'uint16 10000'
+dconf write  /apps/indicators/multiload/view-diskload true
+dconf write  /apps/indicators/multiload/view-loadavg true
+dconf write  /apps/indicators/multiload/view-memload true
+dconf write  /apps/indicators/multiload/view-netload true
+indicator-multiload &
+
+zenity --warning --no-wrap --title='Rebooting' --text='Your computer will now be rebooted to finish applying initial configuration.'
+
+# Let the launcher bar get populated with the desktop launchers before it's overwritten.
+sleep 20s
+dconf write  /desktop/unity/launcher/favorites "['nautilus-home.desktop', 'firefox.desktop', 'chromium-browser.desktop', 'terminator.desktop', '$HOME/launchers/monodevelop.desktop', 'geany.desktop', 'gedit.desktop', '$HOME/launchers/fw-git-cola.desktop', '$HOME/launchers/xephyr.desktop', 'skype.desktop', 'xchat.desktop']"
+
+sudo reboot now
+
+ENDOFOUTPUTFILE
+chmod +x "$OUTPUTFILE"
+
+# FieldWorks
+
+if [ -z "$(git config --get fwinit.gerrituser)" ]; then
+  echo $SCRIPTNAME: Error: Cannot provision without gerrit username in git config fwinit.gerrituser.
+  exit 1
+fi
+
+[ ! -d "$BASEDIR/fwrepo" ] && git clone git://github.com/sillsdev/fwmeta.git $BASEDIR/fwrepo
+cd $BASEDIR/fwrepo
+repos="FieldWorks FwSampleProjects mono mono-basic gtk-sharp libgdiplus libcom FwDebian FwSupportTools FwLocalizations FwHelps"
+branches="master develop feature/* release/* hotfix/*"
+echo $SCRIPTNAME: Note that cloning may not report its progress during provisioning.
+echo -e "$repos\n$branches\n" | fwmeta/initrepo
+
+echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
+echo ttf-mscorefonts-installer msttcorefonts/present-mscorefonts-eula note | sudo debconf-set-selections
+$BASEDIR/fwrepo/fw/Build/Agent/install-deps
+
+mkdir -p $BASEDIR/fwrepo/fw/DistFiles/Projects
+
+# Monodevelop
+
+sudo add-apt-repository -y ppa:ermshiperete/monodevelop
+sudo apt-get update
+sudo apt-get install -y monodevelop-current
+
+cp -a $BASEDIR/fwrepo/FwSupportTools/building/RunFieldWorks.csproj $BASEDIR/fwrepo/fw/
+sed -i $BASEDIR/fwrepo/fw/RunFieldWorks.csproj -e "s/USERNAME/$USER/"
+
+mkdir -p "$HOME/.config/MonoDevelop-5.0"
+OUTPUTFILE="$HOME/.config/MonoDevelop-5.0/MonoDevelop-tools.xml"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+<?xml version="1.0" encoding="utf-8"?>
+<Tools version="2.0">
+  <ExternalTool menuCommand="fw build recent (_t)" command="/home/USERNAME/fwrepo/FwSupportTools/building/fw-build-recent" arguments="" initialDirectory="/home/USERNAME/fwrepo/fw" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
+  <ExternalTool menuCommand="fw build all" command="/home/USERNAME/fwrepo/FwSupportTools/building/fw-build-all" arguments="" initialDirectory="/home/USERNAME/fwrepo/fw" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
+  <ExternalTool menuCommand="fw build remakefw" command="/home/USERNAME/fwrepo/FwSupportTools/building/fw-build-remakefw" arguments="" initialDirectory="/home/USERNAME/fwrepo/fw" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
+  <ExternalTool menuCommand="fw build remakefw with tests" command="/home/USERNAME/fwrepo/fw/agent-build-fw.sh" arguments="" initialDirectory="/home/USERNAME/fwrepo/fw" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
+</Tools>
+ENDOFOUTPUTFILE
+sed -i "$OUTPUTFILE" -e "s/USERNAME/$USER/g"
+
+OUTPUTFILE="$HOME/.config/MonoDevelop-5.0/MonoDevelopProperties.xml"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+<MonoDevelopProperties version="2.0">
+  <Property key="BuildBeforeRunningTests" value="False" />
+  <Property key="MonoDevelop.Ide.DefaultTargetRuntime" value="Mono 2.10.9.1 (4d6396a)" />
+  <Property key="MonoDevelop.Ide.BuildBeforeExecuting" value="False" />
+</MonoDevelopProperties>
+ENDOFOUTPUTFILE
+
+# Launchers
+
+mkdir -p "$HOME/Desktop"
+mkdir -p "$HOME/launchers"
+
+OUTPUTFILE="$HOME/launchers/monodevelop.desktop"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=bash -c 'export FIELDWORKS_ENVIRON="\$HOME/fwrepo/fw/environ"; /opt/monodevelop/bin/monodevelop-launcher.sh'
+Name=Monodevelop FW
+Icon=/opt/monodevelop/share/icons/hicolor/scalable/apps/monodevelop.svg
+ENDOFOUTPUTFILE
+chmod +x "$OUTPUTFILE"
+
+OUTPUTFILE="$HOME/Desktop/fw-git-gui.desktop"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=bash -c 'cd \$HOME/fwrepo/fw && git gui'
+Name=FW Git Gui Commit Tool
+Icon=/usr/share/git-gui/lib/git-gui.ico
+ENDOFOUTPUTFILE
+chmod +x "$OUTPUTFILE"
+
+OUTPUTFILE="$HOME/launchers/fw-git-cola.desktop"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=bash -c 'cd \$HOME/fwrepo/fw && git cola'
+Name=FW Git Cola Commit Tool
+Icon=/usr/share/git-cola/icons/git.svg
+ENDOFOUTPUTFILE
+chmod +x "$OUTPUTFILE"
+
+OUTPUTFILE="$HOME/Desktop/fw-gitk.desktop"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=bash -c 'cd \$HOME/fwrepo/fw && gitk --branches --remotes --tags'
+Name=FW Git History Viewer
+Icon=/usr/share/git-gui/lib/git-gui.ico
+ENDOFOUTPUTFILE
+chmod +x "$OUTPUTFILE"
+
+OUTPUTFILE="$HOME/launchers/xephyr.desktop"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=bash -c 'Xephyr :2 -screen 1000x700& sleep 2s; DISPLAY=:2 metacity& DISPLAY=:2 xclock& DISPLAY=:2 xterm& DISPLAY=:2 ibus-daemon &'
+Name=Xephyr
+ENDOFOUTPUTFILE
+chmod +x "$OUTPUTFILE"
+
+mkdir -p "$HOME/.config/autostart"
+OUTPUTFILE="$HOME/.config/autostart/initial-config.desktop"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=bash -c '$HOME/initial-config.sh'
+Name=Initial Machine Configuration
+ENDOFOUTPUTFILE
+chmod +x "$OUTPUTFILE"
+
+# Mono
+
+sudo apt-get install -y bison mono-devel libgif-dev libjpeg-dev libtiff4-dev libexif-dev git quilt
+
+OUTPUTFILE="$HOME/initial-mono-install.sh"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+#!/bin/bash
+
+set -e -o pipefail
+
+for repo in libgdiplus mono mono-basic gtk-sharp; do
+  cd $BASEDIR/fwrepo/mono/\$repo
+
+  # use ccache
+  export PATH=/usr/lib/ccache:/usr/local/bin:\$PATH
+  MONO_PREFIX=/usr/local
+
+  AUTOGEN_CMD="./autogen.sh"
+  if [ \$repo = "gtk-sharp" ]; then
+	AUTOGEN_CMD="./bootstrap-2.12"
+  fi
+
+  # FieldWorks isn't ready for mono 3 yet.
+  if [ \$repo = "mono" ]; then
+	git checkout sil/2.10.9-7
+  fi
+
+  [ -e configure ] || NOCONFIGURE=1 \$AUTOGEN_CMD
+  ./configure --prefix=\$MONO_PREFIX
+  make && sudo make install
+done
+
+cd \$(mktemp -d)
+wget http://linux.lsdev.sil.org/downloads/fieldworks-dev/mono-fw
+sudo cp mono-fw /usr/local/bin
+sudo chmod +x /usr/local/bin/mono-fw
+TRASH=\$(mktemp --tmpdir mono-real-trashed-XXXXX)
+echo If present, existing /usr/local/bin/mono-real file being preserved as \$TRASH
+sudo mv /usr/local/bin/mono-real \$TRASH >&/dev/null || true
+sudo mv /usr/local/bin/mono{,-real}
+sudo cp -a /usr/local/bin/mono-fw /usr/local/bin/mono
+
+mozroots --import --ask-remove
+ENDOFOUTPUTFILE
+chmod +x "$OUTPUTFILE"
+
+# FieldWorks sample data
+
+mkdir -p ~/Desktop
+cd ~/Desktop
+[ -e Sena*.fwbackup ] || wget 'http://downloads.sil.org/FieldWorks/8.1.1/Sena%203%202013-11-27%200947.fwbackup'
+
+# Compile mono, but handle any problems gracefully.
+
+[ -e /usr/local/bin/mono-real ] || if $HOME/initial-mono-install.sh; then
+  echo $SCRIPTNAME: Mono finished compiling and installing successfully.
+else
+  echo $SCRIPTNAME: Mono failed to compile and install.  You can try again by running $HOME/initial-mono-install.sh
+fi
+
+# Compile FieldWorks
+
+if [ -e /usr/local/bin/mono-real ]; then
+  cd $BASEDIR/fwrepo/fw/Build && ./build /t:refreshTargets && ./build /t:remakefw &&
+	echo $SCRIPTNAME: FieldWorks compiled successfully. ||
+	echo $SCRIPTNAME: FieldWorks failed to compile.
+fi
+
+mkdir -p $BASEDIR/fwrepo/fw/Output_x86_64/registry/LocalMachine/software/sil/fieldworks/8
+
+# Wrapup
+
+echo $SCRIPTNAME: Reboot the vagrant guest to bring up the GUI. Open RunFieldWorks.csproj in MonoDevelop to debug FieldWorks, and set the default runtime to Mono 2.10.9.1.
+echo $SCRIPTNAME: Done.

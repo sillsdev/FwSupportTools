@@ -12,3 +12,5 @@
 *.ReSharper -whitespace
 *.vcxproj -whitespace
 *.vcxproj.filters -whitespace
+provision-fw-dev-machine -whitespace
+Vagrantfile -whitespace
