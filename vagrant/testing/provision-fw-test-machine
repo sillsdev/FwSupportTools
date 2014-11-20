@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# provision-fw-test-machine
+
+set -e -o pipefail
+
+# Set up
+
+RELEASE=$(lsb_release -sc)
+# Use codename of wasta Linux's Ubuntu base
+if [ -f /etc/wasta-release ]; then
+  source /etc/wasta-release
+  RELEASE=$CODENAME
+fi
+
+wget -qO - http://packages.sil.org/sil.gpg | sudo apt-key add -
+wget -qO - http://linux.lsdev.sil.org/downloads/sil-testing.gpg | sudo apt-key add -
+sudo add-apt-repository "deb http://packages.sil.org/ubuntu $RELEASE main"
+sudo add-apt-repository "deb http://packages.sil.org/ubuntu $RELEASE-experimental main"
+sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE main"
+sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE-experimental main"
+
+sudo apt-get update
+if ! sudo apt-get -y upgrade; then
+  echo provisioner: There were errors while updating system packages. Ignoring.
+fi
+sudo apt-get -y install wget curl vim meld ack-grep
+
+# FieldWorks
+
+# Download but don't install FieldWorks and its dependencies
+sudo apt-get -dy install fieldworks-applications
+
+# Sample data
+
+mkdir -p ~/Desktop
+cd ~/Desktop
+wget 'http://downloads.sil.org/FieldWorks/8.1.1/Sena%203%202013-11-27%200947.fwbackup'
+
+echo provisioner: Done.
