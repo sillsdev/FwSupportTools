@@ -74,21 +74,21 @@ fi
 mkdir -p ~/.config/initial-config
 touch ~/.config/initial-config/has-run
 
-dconf write  /org/gnome/desktop/screensaver/lock-enabled false
-dconf write  /org/gnome/desktop/session/idle-delay 'uint32 0'
-dconf write  /org/gnome/settings-daemon-plugins/power/sleep-display-ac 'uint32 0'
-dconf write  /org/gnome/settings-daemon-plugins/power/sleep-display-battery 'uint32 0'
+dconf write /org/gnome/desktop/screensaver/lock-enabled false
+dconf write /org/gnome/desktop/session/idle-delay 'uint32 0'
+dconf write /org/gnome/settings-daemon/plugins/power/sleep-display-ac 0
+dconf write /org/gnome/settings-daemon/plugins/power/sleep-display-battery 0
 
 dconf write  /apps/update-manager/check-new-release-ignore "'trusty'"
 
 mkdir -p $HOME/.config/autostart
-dconf write  /apps/indicators/multiload/autostart true
-dconf write  /apps/indicators/multiload/size 'uint16 10'
-dconf write  /apps/indicators/multiload/speed 'uint16 10000'
-dconf write  /apps/indicators/multiload/view-diskload true
-dconf write  /apps/indicators/multiload/view-loadavg true
-dconf write  /apps/indicators/multiload/view-memload true
-dconf write  /apps/indicators/multiload/view-netload true
+dconf write /apps/indicators/multiload/autostart true
+dconf write /apps/indicators/multiload/size 'uint16 10'
+dconf write /apps/indicators/multiload/speed 'uint16 10000'
+dconf write /apps/indicators/multiload/view-diskload true
+dconf write /apps/indicators/multiload/view-loadavg true
+dconf write /apps/indicators/multiload/view-memload true
+dconf write /apps/indicators/multiload/view-netload true
 indicator-multiload &
 
 zenity --warning --no-wrap --title='Rebooting' --text='Your computer will now be rebooted to finish applying initial configuration.'
@@ -289,8 +289,7 @@ chmod +x "$OUTPUTFILE"
 
 # FieldWorks sample data
 
-mkdir -p ~/Desktop
-cd ~/Desktop
+cd ~
 [ -e Sena*.fwbackup ] || wget 'http://downloads.sil.org/FieldWorks/8.1.1/Sena%203%202013-11-27%200947.fwbackup'
 
 # Compile mono, but handle any problems gracefully.
