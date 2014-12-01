@@ -25,3 +25,5 @@ UpgradeLog*
 
 obj/
 _UpgradeReport_Files/
+
+.vagrant
