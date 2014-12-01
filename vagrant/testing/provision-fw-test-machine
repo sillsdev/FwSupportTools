@@ -24,7 +24,7 @@ sudo apt-get update
 if ! sudo apt-get -y upgrade; then
   echo provisioner: There were errors while updating system packages. Ignoring.
 fi
-sudo apt-get -y install wget curl vim meld ack-grep
+sudo apt-get -y install wget curl vim meld ack-grep dconf-tools
 
 # FieldWorks
 
