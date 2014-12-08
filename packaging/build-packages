@@ -330,7 +330,7 @@ fi
 
 stderr "Source package files exist with the following sha256sums:"
 cd "$repo_base_dir"
-sha256sum ${source_package_name}_*.{dsc,build,changes,tar.gz}
+sha256sum ${source_package_name}_${nightlyversion}*.{dsc,build,changes,tar.gz}
 
 if [ -n "$preserve_products_arg" ]; then
 	stderr "Preserving source package files."
@@ -352,7 +352,7 @@ for distribution in $DISTRIBUTIONS_TO_PACKAGE; do
 done
 
 cd "$repo_base_dir"
-packagedsc="${source_package_name}_*.dsc"
+packagedsc="${source_package_name}_${nightlyversion}*.dsc"
 sudo HOME=~ PBUILDERDIR="$pbuilder_path" HOOKDIR="$SCRIPTDIR/pbuilder/hooks" http_proxy="$http_proxy" no_proxy="$no_proxy" DISTRIBUTIONS="$DISTRIBUTIONS_TO_PACKAGE" ARCHES="$ARCHES_TO_PACKAGE" $SCRIPTDIR/pbuilder/build-multi.sh "$packagedsc"
 
 stderr "Signing package(s)"
