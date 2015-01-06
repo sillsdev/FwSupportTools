@@ -18,7 +18,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.vm.box_check_update = false
 
   config.vm.provider "virtualbox" do |v|
-	v.memory = 2048
+	v.memory = 3072
 	v.cpus = 2
 	# Uncomment the v.gui line to gain access to this box through VirtualBox
 	v.gui = true
