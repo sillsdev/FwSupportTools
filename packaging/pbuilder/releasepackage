@@ -1,0 +1,134 @@
+#!/bin/bash
+# Download a pre-built package from Jenkins, sign it and upload to pso
+set -e
+
+PROGRAM_NAME="$(basename "$0")"
+WHERE=$(pwd)
+
+. $(dirname "$0")/${PROGRAM_NAME}.config
+
+if [ -z "$JENKINS_USER" -o -z "$JENKINS_APITOKEN" ]; then
+	echo "Please set JENKINS_USER and JENKINS_APITOKEN variables in $PROGRAM_NAME.config"
+	exit 1
+fi
+
+if [ -z "$DEBSIGNKEY" ]; then
+	echo "DEBSIGNKEY not set. Exiting."
+	exit 1
+fi
+
+NOOP=
+DESTINATION=-experimental
+REPO=llso
+BUILD=lastSuccessfulBuild
+
+help()
+{
+	echo "Usage:"
+	echo "$(basename $0) [-n|-nn] [--component <experimental|main>] [--repo <llso|pso>] [--build <buildno>] <project>"
+	echo ""
+	echo "-n "
+	echo "	Run script without doing anything"
+	echo "-nn "
+	echo "	Run script without doing anything and print commands"
+	echo ""
+	echo "--component <experimental|main>"
+	echo "	Where the package should go: experimental or main section."
+	echo "	Default: experimental"
+	echo ""
+	echo "--repo <llso|pso>"
+	echo "	Repo to upload to. Default: llso"
+	echo ""
+	echo "--build <buildno>"
+	echo "	Build number/string where the archifacts can be found"
+	echo ""
+	echo "<project>"
+	echo "  One of bloom or geckofx29"
+	echo ""
+	echo ""
+	echo "Example:"
+	echo "$0 --repo pso --build 324 bloom"
+	exit 0
+}
+
+# Process arguments.
+while (( $# )); do
+	case $1 in
+		# Process individual arguments here. Use shift and $1 to get an argument value.
+		-n)  NOOP=: ;;
+		-nn) NOOP=echo ;;
+		--component)
+			if [ "$2" == "experimental" ]; then
+				DESTINATION=-experimental
+			elif [ "$2" == "main" ]; then
+				DESTINATION=
+			else
+				echo "Error: Unknown component \"$2\". Exiting"
+				help
+				exit 2
+			fi
+			shift
+			;;
+		--repo) REPO=$2; shift;;
+		--help) help;;
+		--build) BUILD=$2; shift;;
+		*)
+			if [ $# -eq 1 ]; then
+				break
+			else
+				echo "Error: Unexpected argument \"$1\". Exiting."
+				help
+				exit 1
+			fi
+			;;
+	esac
+	shift
+done
+
+if [ $# -eq 0 ]; then
+	echo "Error: No project specified. Exiting."
+	help
+	exit 3
+fi
+
+PROJECT=$1
+
+case $PROJECT in
+	Bloom|bloom)
+		JENKINS_JOB=Bloom_Packaging-Linux-all-3.0-release
+		;;
+	geckofx29)
+		JENKINS_JOB=Geckofx29_NightlyPackaging-Linux-all-master-debug
+		;;
+	*)
+		echo "Unknown project $PROJECT. Exiting."
+		exit 4
+esac
+
+TMPDIR=/tmp/$PROJECT-package
+rm -rf $TMPDIR
+mkdir -p $TMPDIR
+cd $TMPDIR
+
+wget --auth-no-challenge --http-user=${JENKINS_USER} --http-password=${JENKINS_APITOKEN} --secure-protocol=TLSv1 \
+	https://jenkins.lsdev.sil.org:45192/view/Packaging/job/${JENKINS_JOB}/${BUILD}/artifact/*zip*/archive.zip
+
+unzip archive.zip
+
+cd archive
+# Source package
+echo "Signing and uploading source package"
+$NOOP debsign --re-sign $DEBSIGNKEY *_source.changes
+$NOOP dput -U $REPO:ubuntu/trusty-experimental *_source.changes
+
+# binary packages
+echo "Signing and uploading binary packages"
+cd results
+for changesfile in *.changes; do
+	distro=$(sed 's/^[^+]*+\([a-z]*\).*/\1/' <<< $changesfile)
+	$NOOP debsign --re-sign $DEBSIGNKEY $changesfile
+	$NOOP dput $REPO:ubuntu/$distro$DESTINATION $changesfile
+done
+
+cd $WHERE
+rm -rf $TMPDIR
