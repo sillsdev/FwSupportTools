@@ -332,8 +332,10 @@ stderr "Source package files exist with the following sha256sums:"
 cd "$repo_base_dir"
 if [ -n "$PRESERVE_CHANGELOG" ]; then
 	full_package_name=${source_package_name}_${base_version}
+	package_debs=${source_package_name}*_${base_version}
 else
 	full_package_name=${source_package_name}_${nightlyversion}
+	package_debs=${source_package_name}*_${nightlyversion}
 fi
 sha256sum ${full_package_name}*.{dsc,build,changes,tar.gz}
 
@@ -383,10 +385,10 @@ stderr "Binary package files exist with the following sha256sums:"
 for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 	for arch in $ARCHES_TO_PACKAGE; do
 		cd $pbuilder_path/$dist/$arch/result
-		sha256sum ${full_package_name}+*.changes ${full_package_name}+*.deb || true
+		sha256sum ${full_package_name}+*.changes ${package_debs}+*.deb || true
 		if [ -n "$preserve_products_arg" ]; then
 			mkdir -p "$PRODUCTS_PRESERVATION_PATH"
-			cp -a ${full_package_name}+*.changes ${full_package_name}+*.deb "$PRODUCTS_PRESERVATION_PATH"/
+			cp -a ${full_package_name}+*.changes ${package_debs}+*.deb "$PRODUCTS_PRESERVATION_PATH"/
 		fi
 	done
 done
