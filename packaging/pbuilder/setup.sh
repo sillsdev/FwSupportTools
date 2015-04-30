@@ -44,32 +44,48 @@ do
 
 		OTHERMIRROR="deb file://$LOCALMIRROR/$D/$A/result/ ./"
 
-		case $D in precise|quantal|raring|saucy|trusty|utopic)
-			MIRROR="${UBUNTU_MIRROR:-http://archive.ubuntu.com/ubuntu/}"
-			COMPONENTS="main universe multiverse"
-			KEYRING1="/usr/share/keyrings/ubuntu-archive-keyring.gpg"
-			PROXY="$http_proxy"
-			for S in backports updates; do
-				OTHERMIRROR+="|deb $MIRROR $D-$S $COMPONENTS"
-			done
-			LLSO="http://linux.lsdev.sil.org/ubuntu/"
-			KEYRING2=$KEYRINGLLSO
-			PSO="http://packages.sil.org/ubuntu/"
-			KEYRING3=$KEYRINGPSO
-			for S in "" "-experimental"; do
-				OTHERMIRROR+="|deb $LLSO $D$S $COMPONENTS|deb $PSO $D$S $COMPONENTS"
-			done
-			;;
-		*)
-			MIRROR="$local_debian_mirror"
-			COMPONENTS="main"
-			LLSO="http://linux.lsdev.sil.org/debian/"
-			PSO="http://packages.sil.org/debian/"
-			KEYRING1=$KEYRINGLLSO
-			KEYRING2=$KEYRINGPSO
-			KEYRING3=""
-			OTHERMIRROR+="|deb $LLSO $D $COMPONENTS|deb $PSO $D $COMPONENTS"
-			PROXY=""
+		case $D in precise|trusty|utopic)
+				MIRROR="${UBUNTU_MIRROR:-http://archive.ubuntu.com/ubuntu/}"
+				COMPONENTS="main universe multiverse"
+				KEYRING1="/usr/share/keyrings/ubuntu-archive-keyring.gpg"
+				PROXY="$http_proxy"
+				for S in backports updates; do
+					OTHERMIRROR+="|deb $MIRROR $D-$S $COMPONENTS"
+				done
+				LLSO="http://linux.lsdev.sil.org/ubuntu/"
+				KEYRING2=$KEYRINGLLSO
+				PSO="http://packages.sil.org/ubuntu/"
+				KEYRING3=$KEYRINGPSO
+				for S in "" "-experimental"; do
+					OTHERMIRROR+="|deb $LLSO $D$S $COMPONENTS|deb $PSO $D$S $COMPONENTS"
+				done
+				;;
+			quantal|raring|saucy)
+				MIRROR="${UBUNTU_OLDMIRROR:-http://old-releases.ubuntu.com/ubuntu/}"
+				COMPONENTS="main universe multiverse"
+				KEYRING1="/usr/share/keyrings/ubuntu-archive-keyring.gpg"
+				PROXY="$http_proxy"
+				for S in backports updates; do
+					OTHERMIRROR+="|deb $MIRROR $D-$S $COMPONENTS"
+				done
+				LLSO="http://linux.lsdev.sil.org/ubuntu/"
+				KEYRING2=$KEYRINGLLSO
+				PSO="http://packages.sil.org/ubuntu/"
+				KEYRING3=$KEYRINGPSO
+				for S in "" "-experimental"; do
+					OTHERMIRROR+="|deb $LLSO $D$S $COMPONENTS|deb $PSO $D$S $COMPONENTS"
+				done
+				;;
+			*)
+				MIRROR="$local_debian_mirror"
+				COMPONENTS="main"
+				LLSO="http://linux.lsdev.sil.org/debian/"
+				PSO="http://packages.sil.org/debian/"
+				KEYRING1=$KEYRINGLLSO
+				KEYRING2=$KEYRINGPSO
+				KEYRING3=""
+				OTHERMIRROR+="|deb $LLSO $D $COMPONENTS|deb $PSO $D $COMPONENTS"
+				PROXY=""
 		esac
 
 		if [ -z "$update" ]; then

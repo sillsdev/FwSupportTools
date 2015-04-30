@@ -11,4 +11,5 @@ init()
 	DISTRIBUTIONS=${DISTRIBUTIONS:-precise saucy trusty utopic wheezy jessie}
 	ARCHES=${ARCHES:-amd64 i386}
 	UBUNTU_MIRROR=${UBUNTU_MIRROR:-http://archive.ubuntu.com/ubuntu/}
+	UBUNTU_OLDMIRROR=${UBUNTU_OLDMIRROR:-http://old-releases.ubuntu.com/ubuntu/}
 }
