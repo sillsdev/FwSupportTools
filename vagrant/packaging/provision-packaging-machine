@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# provision-packaging-machine
+
+set -e -o pipefail
+
+# Set up
+
+RELEASE=$(lsb_release -sc)
+# Use codename of wasta Linux's Ubuntu base
+if [ -f /etc/wasta-release ]; then
+  source /etc/wasta-release
+  RELEASE=$CODENAME
+fi
+
+wget -qO - http://packages.sil.org/sil.gpg | sudo apt-key add -
+wget -qO - http://linux.lsdev.sil.org/downloads/sil-testing.gpg | sudo apt-key add -
+sudo add-apt-repository "deb http://packages.sil.org/ubuntu $RELEASE main"
+sudo add-apt-repository "deb http://packages.sil.org/ubuntu $RELEASE-experimental main"
+sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE main"
+sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE-experimental main"
+
+sudo apt-get update
+if ! sudo apt-get -y upgrade; then
+  echo provisioner: There were errors while updating system packages. Ignoring.
+fi
+sudo apt-get -y install wget curl vim meld ack-grep dconf-tools
+
+# pbuilder
+sudo apt-get -y install pbuilder
+sudo apt-get -y install git
+
+# clone support tools repo
+cd ~
+git clone https://github.com/sillsdev/FwSupportTools SupportTools
+cp -r SupportTools/packaging/pbuilder .
+cp pbuilder/pbuilderrc .pbuilderrc
+
+echo provisioner: Done.
