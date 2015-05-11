@@ -20,7 +20,7 @@ done
 
 function CheckOrLinkDebootstrapScript()
 {
-	if [ ! -f /usr/share/debootstrap/scripts/$1 ];
+	if [ ! -f /usr/share/debootstrap/scripts/$1 ]; then
 		if [[ $UBUNTU_DISTROS == *$1* ]]; then
 			basedistro=gutsy
 		elif [[ $UBUNTU_OLDDISTROS == *$1* ]]; then
