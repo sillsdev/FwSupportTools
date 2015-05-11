@@ -18,6 +18,20 @@ while (( $# )); do
 	shift
 done
 
+function CheckOrLinkDebootstrapScript()
+{
+	if [ ! -f /usr/share/debootstrap/scripts/$1 ];
+		if [[ $UBUNTU_DISTROS == *$1* ]]; then
+			basedistro=gutsy
+		elif [[ $UBUNTU_OLDDISTROS == *$1* ]]; then
+			basedistro=gutsy
+		else
+			basedistro=sid
+		fi
+		sudo ln -s /usr/share/debootstrap/scripts/$basedistro /usr/share/debootstrap/scripts/$1
+	fi
+}
+
 PBUILDERDIR="${PBUILDERDIR:-$(dirname "$0")}"
 LOCALMIRROR=${LOCALMIRROR:-$PBUILDERDIR}
 
@@ -43,6 +57,8 @@ do
 		[ ! -e $D/$A/result/Packages ] && touch $D/$A/result/Packages
 
 		OTHERMIRROR="deb file://$LOCALMIRROR/$D/$A/result/ ./"
+
+		CheckOrLinkDebootstrapScript $1
 
 		if [[ $UBUNTU_DISTROS == *$D* ]]; then
 			MIRROR="${UBUNTU_MIRROR:-http://archive.ubuntu.com/ubuntu/}"
