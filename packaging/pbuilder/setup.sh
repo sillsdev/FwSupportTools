@@ -58,7 +58,7 @@ do
 
 		OTHERMIRROR="deb file://$LOCALMIRROR/$D/$A/result/ ./"
 
-		CheckOrLinkDebootstrapScript $1
+		CheckOrLinkDebootstrapScript $D
 
 		if [[ $UBUNTU_DISTROS == *$D* ]]; then
 			MIRROR="${UBUNTU_MIRROR:-http://archive.ubuntu.com/ubuntu/}"
