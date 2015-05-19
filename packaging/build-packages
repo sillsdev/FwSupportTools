@@ -89,6 +89,7 @@ clean_update_and_set_repository_to_committish ()
 		git reset --hard HEAD
 		git fetch
 		git checkout $2
+		git submodule update
 	fi
 }
 
