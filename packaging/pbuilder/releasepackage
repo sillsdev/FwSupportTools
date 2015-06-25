@@ -43,7 +43,7 @@ help()
 	echo "	Build number/string where the archifacts can be found"
 	echo ""
 	echo "<project>"
-	echo "  One of bloom or geckofx29"
+	echo "  One of bloom, bloom-unstable or geckofx29"
 	echo ""
 	echo ""
 	echo "Example:"
@@ -97,6 +97,9 @@ case $PROJECT in
 	Bloom|bloom)
 		JENKINS_JOB=Bloom_Packaging-Linux-all-3.0-release
 		;;
+	Bloom-unstable|bloom-unstable)
+		JENKINS_JOB=Bloom_Packaging-Linux-all-master-release
+		;;
 	geckofx29)
 		JENKINS_JOB=Geckofx29_NightlyPackaging-Linux-all-master-debug
 		;;
@@ -119,7 +122,7 @@ cd archive
 # Source package
 echo "Signing and uploading source package"
 $NOOP debsign --re-sign $DEBSIGNKEY *_source.changes
-$NOOP dput -U $REPO:ubuntu/trusty-experimental *_source.changes
+$NOOP dput -U $REPO:ubuntu/trusty$DESTINATION *_source.changes
 
 # binary packages
 echo "Signing and uploading binary packages"
