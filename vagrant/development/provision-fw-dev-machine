@@ -150,7 +150,6 @@ cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
   <Property key="BuildBeforeRunningTests" value="False" />
   <Property key="MonoDevelop.Ide.DefaultTargetRuntime" value="Mono 3.4.0.1 (23d8e3b)" />
   <Property key="MonoDevelop.Ide.BuildBeforeExecuting" value="False" />
-  <Property key="MonoDevelop.Core.LastRunRevision" value="5" />
 </MonoDevelopProperties>
 ENDOFOUTPUTFILE
 
@@ -291,5 +290,5 @@ mkdir -p $BASEDIR/fwrepo/fw/Output_x86_64/registry/LocalMachine/software/sil/fie
 
 # Wrapup
 
-echo $SCRIPTNAME: Reboot the vagrant guest to bring up the GUI. Open RunFieldWorks.csproj in MonoDevelop to debug FieldWorks.
+echo $SCRIPTNAME: Reboot the vagrant guest to bring up the GUI. Open fwrepo/fw/RunFieldWorks.csproj in MonoDevelop to debug FieldWorks, and in Preferences set the .NET Runtimes default runtime to Mono 3.4.
 echo $SCRIPTNAME: Done.
