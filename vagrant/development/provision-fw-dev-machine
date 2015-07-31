@@ -23,7 +23,7 @@ sudo perl -pi -e '/multiverse/ and !/backports/ and s/^# //' /etc/apt/sources.li
 # Enable partner repository for skype
 sudo perl -pi -e '/partner/ and s/^# //' /etc/apt/sources.list
 sudo apt-get update
-sudo apt-get dist-upgrade -y
+sudo DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y
 sudo apt-get install -y git-gui terminator meld kdiff3-qt vim links2 gdb wget synaptic ack-grep geany xchat chromium-browser skype byobu indicator-multiload dconf-tools git-cola mercurial
 
 git config --global diff.tool meld
@@ -148,9 +148,17 @@ OUTPUTFILE="$HOME/.config/MonoDevelop-5.0/MonoDevelopProperties.xml"
 cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
 <MonoDevelopProperties version="2.0">
   <Property key="BuildBeforeRunningTests" value="False" />
-  <Property key="MonoDevelop.Ide.DefaultTargetRuntime" value="Mono 2.10.9.1 (4d6396a)" />
+  <Property key="MonoDevelop.Ide.DefaultTargetRuntime" value="Mono 3.4.0.1 (23d8e3b)" />
   <Property key="MonoDevelop.Ide.BuildBeforeExecuting" value="False" />
+  <Property key="MonoDevelop.Core.LastRunRevision" value="5" />
 </MonoDevelopProperties>
+ENDOFOUTPUTFILE
+
+OUTPUTFILE="$HOME/.config/MonoDevelop-5.0/mono-runtimes.xml"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+<RuntimeCollection>
+  <MonoRuntimeInfo prefix="/opt/mono-sil" />
+</RuntimeCollection>
 ENDOFOUTPUTFILE
 
 # Launchers
@@ -166,7 +174,7 @@ cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
 Version=1.0
 Type=Application
 Terminal=false
-Exec=bash -c 'export FIELDWORKS_ENVIRON="\$HOME/fwrepo/fw/environ"; /opt/monodevelop/bin/monodevelop-launcher.sh'
+Exec=bash -c 'export MONO_ENVIRON="\$HOME/fwrepo/fw/environ"; /opt/monodevelop/bin/monodevelop-launcher.sh'
 Name=Monodevelop FW
 Icon=/opt/monodevelop/share/icons/hicolor/scalable/apps/monodevelop.svg
 ENDOFOUTPUTFILE
@@ -243,7 +251,7 @@ chmod +x "$OUTPUTFILE"
 
 # Mono
 
-sudo apt-get install -y bison mono-devel libgif-dev libjpeg-dev libtiff4-dev libexif-dev git quilt
+sudo apt-get install -y bison mono-devel libgif-dev libjpeg-dev libtiff4-dev libexif-dev git quilt mono-mcs
 
 OUTPUTFILE="$HOME/initial-mono-install.sh"
 cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
@@ -251,37 +259,8 @@ cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
 
 set -e -o pipefail
 
-for repo in libgdiplus mono mono-basic gtk-sharp; do
-  cd $BASEDIR/fwrepo/mono/\$repo
-
-  # use ccache
-  export PATH=/usr/lib/ccache:/usr/local/bin:\$PATH
-  MONO_PREFIX=/usr/local
-
-  AUTOGEN_CMD="./autogen.sh"
-  if [ \$repo = "gtk-sharp" ]; then
-	AUTOGEN_CMD="./bootstrap-2.12"
-  fi
-
-  # FieldWorks isn't ready for mono 3 yet.
-  if [ \$repo = "mono" ]; then
-	git checkout sil/2.10.9-7
-  fi
-
-  [ -e configure ] || NOCONFIGURE=1 \$AUTOGEN_CMD
-  ./configure --prefix=\$MONO_PREFIX
-  make && sudo make install
-done
-
-cd \$(mktemp -d)
-wget http://linux.lsdev.sil.org/downloads/fieldworks-dev/mono-fw
-sudo cp mono-fw /usr/local/bin
-sudo chmod +x /usr/local/bin/mono-fw
-TRASH=\$(mktemp --tmpdir mono-real-trashed-XXXXX)
-echo If present, existing /usr/local/bin/mono-real file being preserved as \$TRASH
-sudo mv /usr/local/bin/mono-real \$TRASH >&/dev/null || true
-sudo mv /usr/local/bin/mono{,-real}
-sudo cp -a /usr/local/bin/mono-fw /usr/local/bin/mono
+[ ! -d "$BASEDIR/fwrepo/mono/mono-calgary" ] && git clone git://github.com/sillsdev/mono-calgary.git "$BASEDIR/fwrepo/mono/mono-calgary"
+cd "$BASEDIR/fwrepo/mono" && mono-calgary/BuildOptMono.sh
 
 mozroots --import --ask-remove
 ENDOFOUTPUTFILE
@@ -302,7 +281,7 @@ fi
 
 # Compile FieldWorks
 
-if [ -e /usr/local/bin/mono-real ]; then
+if [ -e /opt/mono-sil/bin/mono-real ]; then
   cd $BASEDIR/fwrepo/fw/Build && ./build /t:refreshTargets && ./build /t:remakefw &&
 	echo $SCRIPTNAME: FieldWorks compiled successfully. ||
 	echo $SCRIPTNAME: FieldWorks failed to compile.
@@ -312,5 +291,5 @@ mkdir -p $BASEDIR/fwrepo/fw/Output_x86_64/registry/LocalMachine/software/sil/fie
 
 # Wrapup
 
-echo $SCRIPTNAME: Reboot the vagrant guest to bring up the GUI. Open RunFieldWorks.csproj in MonoDevelop to debug FieldWorks, and set the default runtime to Mono 2.10.9.1.
+echo $SCRIPTNAME: Reboot the vagrant guest to bring up the GUI. Open RunFieldWorks.csproj in MonoDevelop to debug FieldWorks.
 echo $SCRIPTNAME: Done.
