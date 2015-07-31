@@ -49,11 +49,10 @@
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <PlatformTarget>x86</PlatformTarget>
-    <Commandlineparameters>-app Flex    -proj "/home/USERNAME/fwrepo/fw/DistFiles/ReleaseData/Sena 3/Sena 3.fwdata"</Commandlineparameters>
+    <Commandlineparameters>-app Flex</Commandlineparameters>
     <EnvironmentVariables>
       <EnvironmentVariables>
         <Variable name="DISPLAY" value=":0" />
-        <Variable name="MONO_GAC_PREFIX" value="/usr/local/lib/mono/gac" />
       </EnvironmentVariables>
     </EnvironmentVariables>
   </PropertyGroup>
