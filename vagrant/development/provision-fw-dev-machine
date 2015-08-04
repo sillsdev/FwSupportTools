@@ -23,8 +23,11 @@ sudo perl -pi -e '/multiverse/ and !/backports/ and s/^# //' /etc/apt/sources.li
 # Enable partner repository for skype
 sudo perl -pi -e '/partner/ and s/^# //' /etc/apt/sources.list
 sudo apt-get update
+# If this vagrant box already has a GUI running, then report in the GUI.
+(DISPLAY=:0 zenity --warning --no-wrap --title='Provisioning' --text="$(date '+%F %T')\nPlease wait for your vagrant to finish provisioning." ||true) &
 sudo DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y
-sudo apt-get install -y git-gui terminator meld kdiff3-qt vim links2 gdb wget synaptic ack-grep geany xchat chromium-browser skype byobu indicator-multiload dconf-tools git-cola mercurial
+# (For Ubuntu 14.04: python-pyinotify.)
+sudo apt-get install -y git-gui terminator meld kdiff3-qt vim links2 gdb wget synaptic ack-grep geany xchat chromium-browser skype byobu indicator-multiload dconf-tools git-cola mercurial python-pyinotify
 
 git config --global diff.tool meld
 git config --global merge.conflictstyle diff3
@@ -43,6 +46,7 @@ echo '[profiles]
 	scroll_on_output = False
 	scrollback_infinite = True'|tee ~/.config/terminator/config
 
+# git-cola settings for Ubuntu 12.04
 OUTPUTFILE="$HOME/.cola"
 cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
 {
@@ -93,9 +97,12 @@ indicator-multiload &
 
 zenity --warning --no-wrap --title='Rebooting' --text='Your computer will now be rebooted to finish applying initial configuration.'
 
-# Let the launcher bar get populated with the desktop launchers before it's overwritten.
+# Delay to let the launcher bar get populated with the desktop launchers before it's overwritten.
 sleep 20s
+# Ubuntu 12.04
 dconf write  /desktop/unity/launcher/favorites "['nautilus-home.desktop', 'firefox.desktop', 'chromium-browser.desktop', 'terminator.desktop', '$HOME/launchers/monodevelop.desktop', 'geany.desktop', 'gedit.desktop', '$HOME/launchers/fw-git-cola.desktop', '$HOME/launchers/xephyr.desktop', 'skype.desktop', 'xchat.desktop']"
+# Ubuntu 14.04
+dconf write /com/canonical/unity/launcher/favorites "['application://nautilus.desktop', 'application://firefox.desktop', 'application://chromium-browser.desktop', 'application://terminator.desktop', 'application://$HOME/launchers/monodevelop.desktop', 'application://geany.desktop', 'application://gedit.desktop', 'application://$HOME/launchers/fw-git-cola.desktop', 'application://skype.desktop', 'application://xchat.desktop', 'unity://running-apps', 'unity://expo-icon', 'unity://devices']"
 
 sudo reboot now
 
@@ -289,6 +296,8 @@ fi
 mkdir -p $BASEDIR/fwrepo/fw/Output_x86_64/registry/LocalMachine/software/sil/fieldworks/8
 
 # Wrapup
+# If this vagrant box already has a GUI running, then report in the GUI.
+(DISPLAY=:0 zenity --warning --no-wrap --title='Provisioning' --text="$(date '+%F %T')\nProvisioning is almost finished.  See the vagrant output in the host terminal\nfor any errors or further instructions. You must reboot this vagrant box\nto finish the provisioning process." ||true) &
 
 echo $SCRIPTNAME: Reboot the vagrant guest to bring up the GUI. Open fwrepo/fw/RunFieldWorks.csproj in MonoDevelop to debug FieldWorks, and in Preferences set the .NET Runtimes default runtime to Mono 3.4.
 echo $SCRIPTNAME: Done.
