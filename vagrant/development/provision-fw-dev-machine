@@ -11,12 +11,21 @@ SCRIPTNAME="provisioner"
 
 # Setup
 
+RELEASE=$(lsb_release -sc)
+# Use codename of wasta Linux's Ubuntu base
+if [ -f /etc/wasta-release ]; then
+  source /etc/wasta-release
+  RELEASE=$CODENAME
+fi
+
+# Remove existing SIL repositories
+sudo perl -ni -e 'print unless /sil\.org/' /etc/apt/sources.list
 wget -qO - http://packages.sil.org/sil.gpg | sudo apt-key add -
 wget -qO - http://linux.lsdev.sil.org/downloads/sil-testing.gpg | sudo apt-key add -
-sudo add-apt-repository "deb http://packages.sil.org/ubuntu $(lsb_release -sc) main"
-sudo add-apt-repository "deb http://packages.sil.org/ubuntu $(lsb_release -sc)-experimental main"
-sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $(lsb_release -sc) main"
-sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $(lsb_release -sc)-experimental main"
+sudo add-apt-repository "deb http://packages.sil.org/ubuntu $RELEASE main"
+sudo add-apt-repository "deb http://packages.sil.org/ubuntu $RELEASE-experimental main"
+sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE main"
+sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE-experimental main"
 
 # Enable multiverse repository
 sudo perl -pi -e '/multiverse/ and !/backports/ and s/^# //' /etc/apt/sources.list
@@ -26,8 +35,8 @@ sudo apt-get update
 # If this vagrant box already has a GUI running, then report in the GUI.
 (DISPLAY=:0 zenity --warning --no-wrap --title='Provisioning' --text="$(date '+%F %T')\nPlease wait for your vagrant to finish provisioning." ||true) &
 sudo DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y
-# (For Ubuntu 14.04: python-pyinotify.)
-sudo apt-get install -y git-gui terminator meld kdiff3-qt vim links2 gdb wget synaptic ack-grep geany xchat chromium-browser skype byobu indicator-multiload dconf-tools git-cola mercurial python-pyinotify
+# (For Ubuntu 14.04: python-pyinotify. For Wasta-Linux: xterm.)
+sudo apt-get install -y git-gui terminator meld kdiff3-qt vim links2 gdb wget synaptic ack-grep geany xchat chromium-browser skype byobu indicator-multiload dconf-tools git-cola mercurial python-pyinotify xterm
 
 git config --global diff.tool meld
 git config --global merge.conflictstyle diff3
@@ -103,6 +112,15 @@ sleep 20s
 dconf write  /desktop/unity/launcher/favorites "['nautilus-home.desktop', 'firefox.desktop', 'chromium-browser.desktop', 'terminator.desktop', '$HOME/launchers/monodevelop.desktop', 'geany.desktop', 'gedit.desktop', '$HOME/launchers/fw-git-cola.desktop', '$HOME/launchers/xephyr.desktop', 'skype.desktop', 'xchat.desktop']"
 # Ubuntu 14.04
 dconf write /com/canonical/unity/launcher/favorites "['application://nautilus.desktop', 'application://firefox.desktop', 'application://chromium-browser.desktop', 'application://terminator.desktop', 'application://$HOME/launchers/monodevelop.desktop', 'application://geany.desktop', 'application://gedit.desktop', 'application://$HOME/launchers/fw-git-cola.desktop', 'application://skype.desktop', 'application://xchat.desktop', 'unity://running-apps', 'unity://expo-icon', 'unity://devices']"
+# Wasta 14.04
+if [ -f /etc/wasta-release ]; then
+  TOOLSDIR=$HOME/Desktop/development-tools
+  mkdir -p "$TOOLSDIR"
+  mv $HOME/launchers/* "$TOOLSDIR"
+  mv $HOME/Desktop/{fw-git-gui.desktop,fw-gitk.desktop} "$TOOLSDIR"
+  cp -a /usr/share/applications/{nautilus,firefox,chromium-browser,terminator,geany,gedit,skype,xchat}.desktop "$TOOLSDIR"
+  chmod +x "$TOOLSDIR/{nautilus,firefox,chromium-browser,terminator,geany,gedit,skype,xchat}.desktop"
+fi
 
 sudo reboot now
 
