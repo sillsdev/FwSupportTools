@@ -6,6 +6,8 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "ubuntu/precise64"
+  config.vm.define :"development"
+  config.vm.hostname = "vagrant-ubuntu-1204-development"
 
   config.vm.provider "virtualbox" do |v|
     v.memory = 3072
@@ -43,5 +45,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell", inline: "sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y ubuntu-desktop"
   # Enable automatic login
   config.vm.provision "shell", inline: "echo -e 'autologin-user=vagrant\nautologin-user-timeout=0' |sudo tee -a /etc/lightdm/lightdm.conf"
-  config.vm.provision "shell", path: "provision-fw-dev-machine", privileged: false
+  config.vm.provision "shell", path: "../provision-fw-dev-machine", privileged: false
 end
