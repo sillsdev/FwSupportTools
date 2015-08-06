@@ -20,6 +20,7 @@ fi
 
 # Remove existing SIL repositories
 sudo perl -ni -e 'print unless /sil\.org/' /etc/apt/sources.list
+
 wget -qO - http://packages.sil.org/sil.gpg | sudo apt-key add -
 wget -qO - http://linux.lsdev.sil.org/downloads/sil-testing.gpg | sudo apt-key add -
 sudo add-apt-repository "deb http://packages.sil.org/ubuntu $RELEASE main"
@@ -45,6 +46,8 @@ git config --global color.ui true
 git config --global rerere.enabled true
 git config --global gui.editor gedit
 git config --global rebase.autosquash true
+# Don't absorb Windows line ending settings from host.
+git config --global --unset core.autocrlf
 
 perl -pi -e s/^#force_color_prompt/force_color_prompt/ ~/.bashrc
 grep __git_ps1 ~/.bashrc || echo 'export PS1="\$(__git_ps1) $PS1"' |tee -a ~/.bashrc
