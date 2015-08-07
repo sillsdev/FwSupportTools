@@ -75,7 +75,7 @@ do
 			KEYRING2=$KEYRINGLLSO
 			PSO="http://packages.sil.org/ubuntu/"
 			KEYRING3=$KEYRINGPSO
-			for S in "" "-experimental"; do
+			for S in "" "-proposed" "-updates" "-experimental"; do
 				addmirror "deb $LLSO $D$S $COMPONENTS"
 				addmirror "deb $PSO $D$S $COMPONENTS"
 			done
@@ -91,7 +91,7 @@ do
 			KEYRING2=$KEYRINGLLSO
 			PSO="http://packages.sil.org/ubuntu/"
 			KEYRING3=$KEYRINGPSO
-			for S in "" "-experimental"; do
+			for S in "" "-proposed" "-updates" "-experimental"; do
 				addmirror "deb $LLSO $D$S $COMPONENTS"
 				addmirror "deb $PSO $D$S $COMPONENTS"
 			done
