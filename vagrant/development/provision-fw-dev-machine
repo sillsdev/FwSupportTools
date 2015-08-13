@@ -201,9 +201,24 @@ cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
 Version=1.0
 Type=Application
 Terminal=false
-Exec=bash -c 'export MONO_ENVIRON="\$HOME/fwrepo/fw/environ"; /opt/monodevelop/bin/monodevelop-launcher.sh'
+Exec=bash -c '$HOME/check-mono; export MONO_ENVIRON="\$HOME/fwrepo/fw/environ"; /opt/monodevelop/bin/monodevelop-launcher.sh'
 Name=Monodevelop FW
 Icon=/opt/monodevelop/share/icons/hicolor/scalable/apps/monodevelop.svg
+ENDOFOUTPUTFILE
+chmod +x "$OUTPUTFILE"
+
+OUTPUTFILE="$HOME/check-mono"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+#!/bin/bash
+
+if [ ! -e /opt/mono-sil/bin/mono-sil ]; then
+    zenity --warning --no-wrap --text="There is no mono-sil wrapper script available in /opt/mono-sil/bin."
+    exit 0
+fi
+
+if [ "$(readlink /opt/mono-sil/bin/mono)" != mono-sil ]; then
+    zenity --warning --no-wrap --text="Your mono wrapper script needs re-activated. Please run\nsudo ln -sf mono-sil /opt/mono-sil/bin/mono"
+fi
 ENDOFOUTPUTFILE
 chmod +x "$OUTPUTFILE"
 
