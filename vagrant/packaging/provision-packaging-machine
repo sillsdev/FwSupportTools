@@ -13,18 +13,22 @@ if [ -f /etc/wasta-release ]; then
   RELEASE=$CODENAME
 fi
 
+# Remove existing SIL repositories
+sudo perl -ni -e 'print unless /sil\.org/' /etc/apt/sources.list
+
 wget -qO - http://packages.sil.org/sil.gpg | sudo apt-key add -
 wget -qO - http://linux.lsdev.sil.org/downloads/sil-testing.gpg | sudo apt-key add -
 sudo add-apt-repository "deb http://packages.sil.org/ubuntu $RELEASE main"
 sudo add-apt-repository "deb http://packages.sil.org/ubuntu $RELEASE-experimental main"
 sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE main"
+sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE-proposed main"
 sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE-experimental main"
 
 sudo apt-get update
-if ! sudo apt-get -y upgrade; then
+if ! sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade; then
   echo provisioner: There were errors while updating system packages. Ignoring.
 fi
-sudo apt-get -y install wget curl vim meld ack-grep dconf-tools
+sudo apt-get -y install wget curl vim meld ack-grep dconf-tools mercurial debhelper dh-autoreconf git-cola geany quilt
 
 # pbuilder
 sudo apt-get -y install pbuilder
@@ -36,4 +40,15 @@ git clone https://github.com/sillsdev/FwSupportTools SupportTools
 cp -r SupportTools/packaging/pbuilder .
 cp pbuilder/pbuilderrc .pbuilderrc
 
+cd ~/pbuilder
+wget http://linux.lsdev.sil.org/downloads/sil-testing.gpg
+# Using a smaller set of platforms to be able to package for to begin with.
+DISTRIBUTIONS="precise trusty" ./setup.sh
+
 echo provisioner: Done.
+
+# You can then build a package managed by build-packages by running a command such as:
+# cd; ~/SupportTools/packaging/build-packages --main-package-name flexbridge --dists "trusty" --arches "amd64"  --repository-committishes flexbridge=origin/master  |&tee /tmp/log
+# Or you can build a package by running commands such as:
+# debuild -uc -us -S -nc   to make a source package, then
+# cd; sudo DISTRIBUTIONS=trusty ARCHES=amd64 pbuilder/build-multi.sh source-package-name.dsc |&tee /tmp/log
