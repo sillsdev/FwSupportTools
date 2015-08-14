@@ -32,8 +32,12 @@ function CheckOrLinkDebootstrapScript()
 	fi
 }
 
+function addmirror()
+{
+	OTHERMIRROR="$OTHERMIRROR${OTHERMIRROR:+|}$1"
+}
+
 PBUILDERDIR="${PBUILDERDIR:-$(dirname "$0")}"
-LOCALMIRROR=${LOCALMIRROR:-$PBUILDERDIR}
 
 cd "$PBUILDERDIR"
 
@@ -54,9 +58,8 @@ do
 		echo "Processing $D/$A"
 
 		mkdir -p $D/$A/{aptcache,build,result}
-		[ ! -e $D/$A/result/Packages ] && touch $D/$A/result/Packages
 
-		OTHERMIRROR="deb file://$LOCALMIRROR/$D/$A/result/ ./"
+		OTHERMIRROR=""
 
 		CheckOrLinkDebootstrapScript $D
 
@@ -66,14 +69,15 @@ do
 			KEYRING1="/usr/share/keyrings/ubuntu-archive-keyring.gpg"
 			PROXY="$http_proxy"
 			for S in backports updates; do
-				OTHERMIRROR+="|deb $MIRROR $D-$S $COMPONENTS"
+				addmirror "deb $MIRROR $D-$S $COMPONENTS"
 			done
 			LLSO="http://linux.lsdev.sil.org/ubuntu/"
 			KEYRING2=$KEYRINGLLSO
 			PSO="http://packages.sil.org/ubuntu/"
 			KEYRING3=$KEYRINGPSO
 			for S in "" "-experimental"; do
-				OTHERMIRROR+="|deb $LLSO $D$S $COMPONENTS|deb $PSO $D$S $COMPONENTS"
+				addmirror "deb $LLSO $D$S $COMPONENTS"
+				addmirror "deb $PSO $D$S $COMPONENTS"
 			done
 		elif [[ $UBUNTU_OLDDISTROS == *$D* ]]; then
 			MIRROR="${UBUNTU_OLDMIRROR:-http://old-releases.ubuntu.com/ubuntu/}"
@@ -81,14 +85,15 @@ do
 			KEYRING1="/usr/share/keyrings/ubuntu-archive-keyring.gpg"
 			PROXY="$http_proxy"
 			for S in backports updates; do
-				OTHERMIRROR+="|deb $MIRROR $D-$S $COMPONENTS"
+				addmirror "deb $MIRROR $D-$S $COMPONENTS"
 			done
 			LLSO="http://linux.lsdev.sil.org/ubuntu/"
 			KEYRING2=$KEYRINGLLSO
 			PSO="http://packages.sil.org/ubuntu/"
 			KEYRING3=$KEYRINGPSO
 			for S in "" "-experimental"; do
-				OTHERMIRROR+="|deb $LLSO $D$S $COMPONENTS|deb $PSO $D$S $COMPONENTS"
+				addmirror "deb $LLSO $D$S $COMPONENTS"
+				addmirror "deb $PSO $D$S $COMPONENTS"
 			done
 		else
 			MIRROR="$local_debian_mirror"
@@ -98,7 +103,8 @@ do
 			KEYRING1=$KEYRINGLLSO
 			KEYRING2=$KEYRINGPSO
 			KEYRING3=""
-			OTHERMIRROR+="|deb $LLSO $D $COMPONENTS|deb $PSO $D $COMPONENTS"
+			addmirror "deb $LLSO $D $COMPONENTS"
+			addmirror "deb $PSO $D $COMPONENTS"
 			PROXY=""
 		fi
 
