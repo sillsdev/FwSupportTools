@@ -47,7 +47,7 @@ git config --global rerere.enabled true
 git config --global gui.editor gedit
 git config --global rebase.autosquash true
 # Don't absorb Windows line ending settings from host.
-git config --global --unset core.autocrlf
+git config --global --unset core.autocrlf ||true
 
 perl -pi -e s/^#force_color_prompt/force_color_prompt/ ~/.bashrc
 grep __git_ps1 ~/.bashrc || echo 'export PS1="\$(__git_ps1) $PS1"' |tee -a ~/.bashrc
