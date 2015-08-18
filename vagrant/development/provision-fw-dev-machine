@@ -217,7 +217,7 @@ if [ ! -e /opt/mono-sil/bin/mono-sil ]; then
 fi
 
 if [ "$(readlink /opt/mono-sil/bin/mono)" != mono-sil ]; then
-    zenity --warning --no-wrap --text="Your mono wrapper script needs re-activated. Please run\nsudo ln -sf mono-sil /opt/mono-sil/bin/mono"
+    zenity --warning --no-wrap --text="Your mono wrapper script needs to be re-activated. Please run\nsudo ln -sf mono-sil /opt/mono-sil/bin/mono"
 fi
 ENDOFOUTPUTFILE
 chmod +x "$OUTPUTFILE"
