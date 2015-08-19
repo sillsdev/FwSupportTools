@@ -118,6 +118,14 @@ elif [ "$MAIN_PACKAGE_NAME" = "flexbridgehg" ]; then
 	debian_path=$repo_base_dir/fwbridge/debian
 	repository_directory_list=(fwbridge)
 	VCS="hg"
+elif [ "$MAIN_PACKAGE_NAME" = "fieldworks-enc-converters" ]; then
+	if [ ! -d ec-main ]; then
+		hg clone http://hg.palaso.org/ec-main
+	fi
+
+	debian_path=$repo_base_dir/ec-main/debian
+	repository_directory_list=(ec-main)
+	VCS="hg"
 elif [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 	if [ ! -d fwrepo ]; then
 		stderr "Initial clone of fwrepo"
@@ -203,6 +211,11 @@ fi
 
 stderr "Preparing"
 
+if [ "$MAIN_PACKAGE_NAME" = "fieldworks-enc-converters" ]; then
+	mv $repo_base_dir/ec-main/debian $repo_base_dir/ec-main/debian-aside
+	mv $repo_base_dir/ec-main/debian-fieldworks $repo_base_dir/ec-main/debian
+fi
+
 # Clean out old source packages
 cd "$debian_path"/..
 source_package_name=$(dpkg-parsechangelog |grep ^Source:|cut -d' ' -f2)
@@ -275,6 +288,11 @@ else
 	stderr "Using package version: $latest_version_in_debian_changelog"
 fi
 
+if [ "$MAIN_PACKAGE_NAME" = "fieldworks-enc-converters" ]; then
+	mv $repo_base_dir/ec-main/debian $repo_base_dir/ec-main/debian-fieldworks
+	mv $repo_base_dir/ec-main/debian-aside $repo_base_dir/ec-main/debian
+fi
+
 stderr "Building source package(s) using sources from the following repository commits (possibly with local modifications):"
 
 for repo in "${repository_directory_list[@]}"; do
@@ -298,6 +316,10 @@ if [ -n "$short_mono_package_name" ]; then
 	cd "$repo_base_dir/mono-calgary"
 	DEBUILD_ADDITIONAL_OPTS="-uc -us" REFREPODIR="$repo_base_dir" ./make-source-package ${short_mono_package_name} ${MONO_COMMITTISH_TO_USE}
 	mv ${MAIN_PACKAGE_NAME}*.{dsc,build,changes,tar.gz} "$repo_base_dir/"
+elif [ "$MAIN_PACKAGE_NAME" = "fieldworks-enc-converters" ]; then
+	stderr "Building source package for $MAIN_PACKAGE_NAME with own source preparation script"
+	cd "$debian_path"/..
+	./BuildFWSourcePackage.sh
 else
 	stderr "Building source package with debuild"
 	cd "$debian_path"/..
