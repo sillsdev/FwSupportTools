@@ -34,11 +34,19 @@ sudo apt-get -y install wget curl vim meld ack-grep dconf-tools mercurial debhel
 sudo apt-get -y install pbuilder
 sudo apt-get -y install git
 
-# clone support tools repo
+cat > ~/.hgrc <<EOF
+[extensions]
+purge =
+EOF
+
 cd ~
-git clone https://github.com/sillsdev/FwSupportTools SupportTools
-cp -r SupportTools/packaging/pbuilder .
-cp pbuilder/pbuilderrc .pbuilderrc
+if [ ! -d FwSupportTools ]; then
+  git clone https://github.com/sillsdev/FwSupportTools
+else
+  cd FwSupportTools && git pull --rebase && cd -
+fi
+ln -sf ~/FwSupportTools/packaging/pbuilder
+ln -sf ~/FwSupportTools/packaging/pbuilder/pbuilderrc .pbuilderrc
 
 cd ~/pbuilder
 wget http://linux.lsdev.sil.org/downloads/sil-testing.gpg
@@ -48,7 +56,7 @@ DISTRIBUTIONS="precise trusty" ./setup.sh
 echo provisioner: Done.
 
 # You can then build a package managed by build-packages by running a command such as:
-# cd; ~/SupportTools/packaging/build-packages --main-package-name flexbridge --dists "trusty" --arches "amd64"  --repository-committishes flexbridge=origin/master  |&tee /tmp/log
-# Or you can build a package by running commands such as:
-# debuild -uc -us -S -nc   to make a source package, then
-# cd; sudo DISTRIBUTIONS=trusty ARCHES=amd64 pbuilder/build-multi.sh source-package-name.dsc |&tee /tmp/log
+# cd; ~/FwSupportTools/packaging/build-packages --main-package-name flexbridge --dists "trusty" --arches "amd64"  --repository-committishes flexbridge=origin/master  |&tee /tmp/log
+# Or you can build a source and binary package by running commands such as:
+# cd someproject && debuild -uc -us -S -nc
+# cd someproject/.. && sudo DISTRIBUTIONS=trusty ARCHES=amd64 ~/pbuilder/build-multi.sh source-package-name.dsc |&tee /tmp/log
