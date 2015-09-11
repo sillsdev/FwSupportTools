@@ -252,6 +252,7 @@ if [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 	# Change code_version to lowercase and strip any spaces
 	code_version="${code_version,,}"
 	code_version=${code_version// /}
+	fw_repo_version=$code_version
 	nightlydelimeter="~"
 fi
 
@@ -262,7 +263,7 @@ cd "$debian_path"/..
 
 timestamp=$(date +"%Y%m%d.%H%M%S")
 latest_version_in_debian_changelog=$(dpkg-parsechangelog |grep ^Version:|cut -d' ' -f2)
-base_version=${code_version:-$latest_version_in_debian_changelog}
+base_version=${fw_repo_version:-$latest_version_in_debian_changelog}
 nightlydelimeter=${nightlydelimeter:-"."}
 nightlyversion="$base_version${nightlydelimeter}nightly$timestamp$package_version_extension"
 if [ "$VCS" = "hg" ]; then
@@ -329,8 +330,8 @@ fi
 stderr "Source package files exist with the following sha256sums:"
 cd "$repo_base_dir"
 if [ -n "$PRESERVE_CHANGELOG" ]; then
-	full_package_name=${source_package_name}_${base_version}
-	package_debs=${source_package_name}*_${base_version}
+	full_package_name=${source_package_name}_${latest_version_in_debian_changelog}
+	package_debs=${source_package_name}*_${latest_version_in_debian_changelog}
 else
 	full_package_name=${source_package_name}_${nightlyversion}
 	package_debs=${source_package_name}*_${nightlyversion}
