@@ -270,7 +270,6 @@ timestamp=$(date +"%Y%m%d.%H%M%S")
 latest_version_in_debian_changelog=$(dpkg-parsechangelog |grep ^Version:|cut -d' ' -f2)
 base_version=${fw_repo_version:-$latest_version_in_debian_changelog}
 nightlydelimeter=${nightlydelimeter:-"."}
-nightlyversion="$base_version${nightlydelimeter}nightly$timestamp$package_version_extension"
 if [ "$VCS" = "hg" ]; then
 	hash_of_current_commit=$(hg id -i 2>/dev/null |cut -c -12)
 else
@@ -282,6 +281,8 @@ if [ -n "$short_mono_package_name" ]; then
 	hash_of_current_commit=$(git rev-parse --short $MONO_COMMITTISH_TO_USE)
 	cd -
 fi
+ci_build_number=${BUILD_NUMBER:-0}
+nightlyversion="$base_version${nightlydelimeter}nightly$timestamp.$ci_build_number.$hash_of_current_commit.$package_version_extension"
 distribution_of_last_change=$(dpkg-parsechangelog |grep ^Distribution:|cut -d' ' -f2)
 changelog_message="Built from commit $hash_of_current_commit"
 if [ -n "$most_recent_tag" ]; then
