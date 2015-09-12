@@ -68,6 +68,11 @@ PRODUCTS_PRESERVATION_PATH="$PRODUCTS_PRESERVATION_ROOT/$MAIN_PACKAGE_NAME"
 [ -z "$MAIN_PACKAGE_NAME" ] && stderr "Error: --main-package-name not set." && exit 3
 [ -n "$package_version_extension" -a -n "$preserve_changelog_arg" ] && stderr "Error: --package-version-extension and --preserve-changelog are incompatible." && exit 4
 
+# If running as a jenkins job, clear out and later populate a results directory so artifacts can be kept if desired.
+[ -n "$WORKSPACE" ] && ARTIFACT_RESULTS_PATH="$WORKSPACE/results"
+[ -n "$ARTIFACT_RESULTS_PATH" ] && mkdir -p "$ARTIFACT_RESULTS_PATH"
+[ -n "$ARTIFACT_RESULTS_PATH" ] && rm -f "$ARTIFACT_RESULTS_PATH"/*
+
 # Where $1 is the repository directory, and $2 is a committish to set the repository to.
 # Non-branch committishes are not supported yet for hg projects.
 clean_update_and_set_repository_to_committish ()
@@ -344,6 +349,8 @@ if [ -n "$preserve_products_arg" ]; then
 	cp -a "$repo_base_dir"/${full_package_name}*.{dsc,build,changes,tar.gz} "$PRODUCTS_PRESERVATION_PATH"/
 fi
 
+[ -n "$ARTIFACT_RESULTS_PATH" ] && cp -a "$repo_base_dir"/${full_package_name}*.{dsc,build,changes,tar.gz} "$ARTIFACT_RESULTS_PATH"/
+
 stderr "Building binary package(s)"
 
 mkdir -p "$pbuilder_path"
@@ -389,6 +396,7 @@ for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 			mkdir -p "$PRODUCTS_PRESERVATION_PATH"
 			cp -a ${full_package_name}+*.changes ${package_debs}+*.deb "$PRODUCTS_PRESERVATION_PATH"/
 		fi
+		[ -n "$ARTIFACT_RESULTS_PATH" ] && cp -a ${full_package_name}+*.changes ${package_debs}+*.deb "$ARTIFACT_RESULTS_PATH"/
 	done
 done
 [ -n "$preserve_products_arg" ] && stderr "Preserved binary package files."
