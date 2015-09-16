@@ -37,7 +37,7 @@ while (( $# )); do
 		--repository-committishes) shift; repository_committishes_arg=$1 ;;
 		# Don't upload packages at the end
 		--simulate-dput) dput_simulate="-s" ;;
-		--package-version-extension) shift; package_version_extension=$1 ;;
+		--package-version-extension) shift; package_version_extension=".$1" ;;
 		--suite-name) shift; suite_name=$1 ;;
 		--main-package-name) shift; main_package_name_arg=$1 ;;
 		# Skip cleaning and updating local repository
@@ -282,7 +282,7 @@ if [ -n "$short_mono_package_name" ]; then
 	cd -
 fi
 ci_build_number=${BUILD_NUMBER:-0}
-nightlyversion="$base_version${nightlydelimeter}nightly$timestamp.$ci_build_number.$hash_of_current_commit.$package_version_extension"
+nightlyversion="$base_version${nightlydelimeter}nightly$timestamp.$ci_build_number.$hash_of_current_commit$package_version_extension"
 distribution_of_last_change=$(dpkg-parsechangelog |grep ^Distribution:|cut -d' ' -f2)
 changelog_message="Built from commit $hash_of_current_commit"
 if [ -n "$most_recent_tag" ]; then
