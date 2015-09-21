@@ -1,0 +1,108 @@
+#!/bin/bash
+
+# Edit a debian package to modify its version.
+
+set -e
+
+PROGRAM_NAME="$(basename "$0")"
+
+if (( $# < 3 )); then
+	echo "$PROGRAM_NAME: Error: Not enough arguments specified."
+	echo "Usage: $PROGRAM_NAME old_version_regex new_version_regex input_changes_files"
+	echo "       where input_changes_files are _source.changes and binary .changes files, and old_version_regex and new_version_regex are perl regular expressions."
+	echo "Example: $PROGRAM_NAME 1.2.3.nightly 1.2.3 foo-1.2.3.nightly_source.changes foo-1.2.3.nightly_amd64.changes"
+	exit 1
+fi
+
+# Replace this part of the old/current version string. These are perl regex's.
+old_version_substring="$1"
+new_version_substring="$2"
+shift; shift
+changesfiles="$@"
+original_path="$(pwd)"
+
+# $1 is the file to rename.
+update_version_in_filename ()
+{
+	rename -v "s/$old_version_substring/$new_version_substring/" "$1"
+}
+
+# $1 is the file to modify.
+replace_version_strings_in_file ()
+{
+	perl -pi -e "s/$old_version_substring/$new_version_substring/" "$1"
+}
+
+for file in $changesfiles ; do
+	case $file in
+
+	*_source.changes )
+		dsc_file=$(dcmd --dsc "$file")
+		echo Processing $dsc_file source dsc file
+		old_dsc_file_size=$(stat -c '%s' "$dsc_file" )
+		old_dsc_file_md5sum=$(md5sum "$dsc_file"|cut -f 1 -d ' ')
+		old_dsc_file_sha1sum=$(sha1sum "$dsc_file"|cut -f 1 -d ' ')
+		old_dsc_file_sha256sum=$(sha256sum "$dsc_file"|cut -f 1 -d ' ')
+		replace_version_strings_in_file "$dsc_file"
+		new_dsc_file_size=$(stat -c '%s' "$dsc_file" )
+		new_dsc_file_md5sum=$(md5sum "$dsc_file"|cut -f 1 -d ' ')
+		new_dsc_file_sha1sum=$(sha1sum "$dsc_file"|cut -f 1 -d ' ')
+		new_dsc_file_sha256sum=$(sha256sum "$dsc_file"|cut -f 1 -d ' ')
+		update_version_in_filename "$dsc_file"
+
+		tar_file=$(dcmd --tar "$file")
+		echo Processing $tar_file tar file
+		update_version_in_filename "$tar_file"
+
+		echo Processing $file source changes file
+		replace_version_strings_in_file "$file"
+		perl -pi -e "s/$old_dsc_file_sha1sum $old_dsc_file_size/$new_dsc_file_sha1sum $new_dsc_file_size/" "$file"
+		perl -pi -e "s/$old_dsc_file_sha256sum $old_dsc_file_size/$new_dsc_file_sha256sum $new_dsc_file_size/" "$file"
+		perl -pi -e "s/$old_dsc_file_md5sum $old_dsc_file_size/$new_dsc_file_md5sum $new_dsc_file_size/" "$file"
+		update_version_in_filename "$file"
+		;;
+
+	*_i386.changes | *_amd64.changes )
+		for deb in $(dcmd --no-changes $file); do
+			echo Processing $deb binary package file
+
+			old_file_size=$(stat -c '%s' "$deb" )
+			old_file_md5sum=$(md5sum "$deb"|cut -f 1 -d ' ')
+			old_file_sha1sum=$(sha1sum "$deb"|cut -f 1 -d ' ')
+			old_file_sha256sum=$(sha256sum "$deb"|cut -f 1 -d ' ')
+
+			tmpdir=$(mktemp -d)
+			cp -a $deb $tmpdir/
+			pushd $tmpdir
+			ar x $deb
+			mkdir -p control && tar xf control.tar.gz -C control
+			replace_version_strings_in_file control/control
+			(cd control && tar cfz ../control.tar.gz ./ )
+			rm "$deb"
+			ar rcs "$deb" debian-binary control.tar.gz data.tar*
+			update_version_in_filename "$deb"
+			renamed_deb="$(echo *.deb)"
+			mv "$renamed_deb" "$original_path"/
+			rm "$original_path"/"$deb"
+			popd
+			rm -rf "$tmpdir"
+
+			new_file_size=$(stat -c '%s' "$renamed_deb" )
+			new_file_md5sum=$(md5sum "$renamed_deb"|cut -f 1 -d ' ')
+			new_file_sha1sum=$(sha1sum "$renamed_deb"|cut -f 1 -d ' ')
+			new_file_sha256sum=$(sha256sum "$renamed_deb"|cut -f 1 -d ' ')
+
+			perl -pi -e "s/$old_file_sha1sum $old_file_size/$new_file_sha1sum $new_file_size/" "$file"
+			perl -pi -e "s/$old_file_sha256sum $old_file_size/$new_file_sha256sum $new_file_size/" "$file"
+			perl -pi -e "s/$old_file_md5sum $old_file_size/$new_file_md5sum $new_file_size/" "$file"
+		done
+		echo Processing $file binary changes file
+		replace_version_strings_in_file "$file"
+		update_version_in_filename "$file"
+		;;
+	*)
+		echo WARNING: Unknown file: $file
+	esac
+done
+
+echo Finished successfully.
