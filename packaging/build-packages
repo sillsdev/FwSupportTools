@@ -333,6 +333,10 @@ elif [ "$MAIN_PACKAGE_NAME" = "fieldworks-enc-converters" ]; then
 	stderr "Building source package for $MAIN_PACKAGE_NAME with own source preparation script"
 	cd "$debian_path"/..
 	./BuildFWSourcePackage.sh
+elif [ "$MAIN_PACKAGE_NAME" = "flexbridge" ]; then
+	stderr "Building source package for $MAIN_PACKAGE_NAME with own source preparation script"
+	cd "$debian_path"/..
+	./make-source-package.sh
 else
 	stderr "Building source package with debuild"
 	cd "$debian_path"/..
