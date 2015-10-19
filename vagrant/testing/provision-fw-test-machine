@@ -21,6 +21,7 @@ wget -qO - http://linux.lsdev.sil.org/downloads/sil-testing.gpg | sudo apt-key a
 sudo add-apt-repository "deb http://packages.sil.org/ubuntu $RELEASE main"
 #sudo add-apt-repository "deb http://packages.sil.org/ubuntu $RELEASE-experimental main"
 #sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE main"
+#sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE-updates main"
 #sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE-proposed main"
 #sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE-experimental main"
 
