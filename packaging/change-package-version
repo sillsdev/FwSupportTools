@@ -77,7 +77,7 @@ for file in $changesfiles ; do
 			ar x $deb
 			mkdir -p control && tar xf control.tar.gz -C control
 			replace_version_strings_in_file control/control
-			(cd control && tar cfz ../control.tar.gz ./ )
+			(cd control && GZIP=-n tar cfz ../control.tar.gz ./ )
 			rm "$deb"
 			ar rcs "$deb" debian-binary control.tar.gz data.tar*
 			update_version_in_filename "$deb"
