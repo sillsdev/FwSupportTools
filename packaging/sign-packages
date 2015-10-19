@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Sign source and binary packages.
+# Usage: ./sign-packages CHANGES_FILES...
+
+set -e
+
+. $(dirname "$0")/pbuilder/releasepackage.config
+
+for changesfile; do
+	debsign --re-sign $DEBSIGNKEY $changesfile
+done

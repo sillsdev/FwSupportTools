@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Upload packages to a package repository.
+# Usage: ./upload-packages [--repo REPO] [--suite SUITE] CHANGESFILES...
+# Where REPO is llso or pso and SUITE is main or experimental or proposed.
+
+set -e
+
+REPO="llso"
+DESTINATION="-experimental"
+
+# Process arguments.
+while (( $# )); do
+	case $1 in
+		--repo) REPO=$2; shift;;
+		--suite)
+			if [ "$2" == "main" ]; then
+				DESTINATION=
+			else
+				DESTINATION="-$2"
+			fi
+			shift
+			;;
+		*)
+			break;;
+	esac
+	shift
+done
+
+# Process the remaining arguments, which should be changes files.
+for changesfile; do
+echo Processing $changesfile
+	distro=$(sed 's/^[^+]*+\([a-z]*\).*/\1/' <<< $changesfile)
+	if [[ $changesfile = *_source.changes ]]; then
+		# Use trusty for source packages
+		distro=trusty
+	fi
+	dput -U $REPO:ubuntu/$distro$DESTINATION $changesfile
+done

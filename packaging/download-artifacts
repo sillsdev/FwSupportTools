@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Download Jenkins artifacts.
+# Usage: ./download-artifacts JENKINS_JOB_NAME [JOB_BUILD_NUMBER]
+
+set -e
+
+WHENCE=$(pwd)
+. $(dirname "$0")/pbuilder/releasepackage.config
+
+JENKINS_JOB="$1"
+BUILD="${2:-lastSuccessfulBuild}"
+
+if [[ -z $JENKINS_USER || -z $JENKINS_APITOKEN || -z $JENKINS_JOB || -z $BUILD ]]; then
+	echo Error, unspecified arguments or missing config file.
+	exit 1
+fi
+
+TMPDIR="$(mktemp -d)"
+pushd "$TMPDIR"
+
+wget --auth-no-challenge --http-user=${JENKINS_USER} --http-password=${JENKINS_APITOKEN} --secure-protocol=TLSv1 \
+	https://jenkins.lsdev.sil.org:45192/view/Packaging/job/${JENKINS_JOB}/${BUILD}/artifact/*zip*/archive.zip
+
+unzip archive.zip
+mv archive/* "$WHENCE"/
+
+rm -rf "$TMPDIR"
+
+popd
