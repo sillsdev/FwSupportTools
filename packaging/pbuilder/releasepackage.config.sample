@@ -2,5 +2,6 @@ JENKINS_USER=john_doe
 # You can find your API token on the Jenkins web site: The API token is available in your
 # personal configuration page. Click your name on the top right corner on every page, then
 # click "Configure" to see your API token. You can also change your API token from there.
+# DEBSIGNKEY should include -k before the gpg fingerprint
 JENKINS_APITOKEN=abc1234556
 DEBSIGNKEY=-k123456
