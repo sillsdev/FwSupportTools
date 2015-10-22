@@ -2,3 +2,6 @@ PBUILDERDIR=${PBUILDERDIR:-$HOME/pbuilder}
 DISTRIBUTIONS=${DISTRIBUTIONS:-precise quantal raring saucy trusty wheezy jessie}
 ARCHES=${ARCHES:-amd64 i386}
 UBUNTU_MIRROR=${UBUNTU_MIRROR:-http://archive.ubuntu.com/ubuntu/}
+
+# Set this to "sudo" if $PBUILDERDIR is in /var/cache/pbuilder instead of your home directory
+PBUILDERSUDO=
