@@ -6,7 +6,7 @@ init()
 	[ -e $CONFIGFILE ] && . $CONFIGFILE # Settings for PBUILDERDIR, DISTRIBUTIONS, etc.
 
 	# currently supported and future Ubuntu versions
-	UBUNTU_DISTROS="precise trusty vivid wily"
+	UBUNTU_DISTROS="precise trusty vivid wily xenial"
 	# no longer supported Ubuntu versions that live in old-releases.ubuntu.com
 	UBUNTU_OLDDISTROS="quantal raring saucy utopic"
 	# Debian versions
