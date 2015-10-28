@@ -10,8 +10,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.hostname = "vagrant-ubuntu-1404-development"
 
   config.vm.provider "virtualbox" do |v|
-    v.memory = 3072
-    v.cpus = 2
+    v.memory = 3584
+    v.cpus = 4
     # Uncomment the v.gui line to gain access to this box through VirtualBox
     v.gui = true
   end
