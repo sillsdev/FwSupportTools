@@ -37,7 +37,7 @@ sudo apt-get update
 (DISPLAY=:0 zenity --warning --no-wrap --title='Provisioning' --text="$(date '+%F %T')\nPlease wait for your vagrant to finish provisioning." ||true) &
 sudo DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y
 # (For Ubuntu 14.04: python-pyinotify. For Wasta-Linux: xterm.)
-sudo apt-get install -y git-gui terminator meld kdiff3-qt vim links2 gdb wget synaptic ack-grep geany xchat chromium-browser skype byobu indicator-multiload dconf-tools git-cola mercurial python-pyinotify xterm
+sudo apt-get install -y git-gui terminator meld kdiff3-qt vim links2 gdb wget synaptic ack-grep geany xchat chromium-browser skype byobu indicator-multiload dconf-tools git-cola mercurial python-pyinotify xterm devscripts tortoisehg
 
 git config --global diff.tool meld
 git config --global merge.conflictstyle diff3
@@ -48,6 +48,11 @@ git config --global gui.editor gedit
 git config --global rebase.autosquash true
 # Don't absorb Windows line ending settings from host.
 git config --global --unset core.autocrlf ||true
+
+cat > ~/.hgrc <<EOF
+[extensions]
+purge =
+EOF
 
 perl -pi -e s/^#force_color_prompt/force_color_prompt/ ~/.bashrc
 grep __git_ps1 ~/.bashrc || echo 'export PS1="\$(__git_ps1) $PS1"' |tee -a ~/.bashrc
@@ -94,6 +99,8 @@ dconf write /org/gnome/desktop/screensaver/lock-enabled false
 dconf write /org/gnome/desktop/session/idle-delay 'uint32 0'
 dconf write /org/gnome/settings-daemon/plugins/power/sleep-display-ac 0
 dconf write /org/gnome/settings-daemon/plugins/power/sleep-display-battery 0
+# Make HUD less easy to accidentally open.
+gsettings set org.compiz.integrated show-hud "['<Alt><Super>']"
 
 dconf write  /apps/update-manager/check-new-release-ignore "'trusty'"
 
@@ -120,7 +127,7 @@ if [ -f /etc/wasta-release ]; then
   TOOLSDIR=$HOME/Desktop/development-tools
   mkdir -p "$TOOLSDIR"
   mv $HOME/launchers/* "$TOOLSDIR"
-  mv $HOME/Desktop/{fw-git-gui.desktop,fw-gitk.desktop} "$TOOLSDIR"
+  mv $HOME/Desktop/{fw-git-gui.desktop,fw-gitk.desktop,monowinformsspy.desktop} "$TOOLSDIR"
   cp -a /usr/share/applications/{nautilus,firefox,chromium-browser,terminator,geany,gedit,skype,xchat}.desktop "$TOOLSDIR"
   chmod +x "$TOOLSDIR/{nautilus,firefox,chromium-browser,terminator,geany,gedit,skype,xchat}.desktop"
 fi
@@ -151,6 +158,13 @@ sudo apt-get install -y fieldworks-enc-converters
 
 mkdir -p $BASEDIR/fwrepo/fw/DistFiles/Projects
 
+# Libraries
+
+git clone https://github.com/sillsdev/flexbridge.git ~/fwrepo/flexbridge
+git clone https://github.com/sillsdev/libpalaso.git ~/projects/libpalaso
+git clone --branch develop https://bitbucket.org/smcconnel/ipcframework ~/projects/ipcframework
+
+
 # Monodevelop
 
 sudo add-apt-repository -y ppa:ermshiperete/monodevelop
@@ -169,6 +183,9 @@ cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
   <ExternalTool menuCommand="fw build all" command="/home/USERNAME/fwrepo/FwSupportTools/building/fw-build-all" arguments="" initialDirectory="/home/USERNAME/fwrepo/fw" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
   <ExternalTool menuCommand="fw build remakefw" command="/home/USERNAME/fwrepo/FwSupportTools/building/fw-build-remakefw" arguments="" initialDirectory="/home/USERNAME/fwrepo/fw" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
   <ExternalTool menuCommand="fw build remakefw with tests" command="/home/USERNAME/fwrepo/fw/agent-build-fw.sh" arguments="" initialDirectory="/home/USERNAME/fwrepo/fw" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
+  <ExternalTool menuCommand="Build FLExBridge" command="bash" arguments="-c 'cd ~/fwrepo/flexbridge &amp;&amp; time make debug;date'" initialDirectory="" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
+  <ExternalTool menuCommand="Build and install IPCFramework" command="bash" arguments=" -c 'cd ~/projects/ipcframework &amp;&amp; (cd ~/fwrepo/fw &amp;&amp; . environ &amp;&amp; cd - &amp;&amp; time xbuild &amp;&amp;  mkdir -p ~/fwrepo/flexbridge/output/DebugMono &amp;&amp; sudo mkdir -p  /usr/lib/flexbridge &amp;&amp; for target in ~/fwrepo/fw/Output/Debug/ ~/fwrepo/flexbridge/output/*Mono; do cp -a output/Debug/IPCFramework.dll* $target  &amp;&amp; sudo cp -a output/Debug/IPCFramework.dll* /usr/lib/flexbridge/;done &amp;&amp;echo SUCCESS ||echo FAILURE );date'" initialDirectory="" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
+  <ExternalTool menuCommand="Build and install libpalaso" command="bash" arguments="-c 'cd ~/fwrepo/fw &amp;&amp; . environ &amp;&amp; cd ~/projects/libpalaso/build &amp;&amp; time ./buildupdate.mono.sh &amp;&amp; time ./TestBuild.sh &amp;&amp; for DEST in ~/fwrepo/fw/Downloads ~/fwrepo/fw/Output/Debug; do cp -a ~/projects/libpalaso/output/DebugMono/Palaso*WindowsForms*dll* $DEST/;done;date'" initialDirectory="" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
 </Tools>
 ENDOFOUTPUTFILE
 sed -i "$OUTPUTFILE" -e "s/USERNAME/$USER/g"
@@ -278,6 +295,21 @@ Name=Xephyr
 ENDOFOUTPUTFILE
 chmod +x "$OUTPUTFILE"
 
+OUTPUTFILE="$HOME/Desktop/monowinformsspy.desktop"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=MonoWinFormsSpy/bin/Debug/MonoWinFormsSpy.exe
+Exec=bash -c "$HOME/winformsspy/MonoWinFormsSpy/bin/Debug/MonoWinFormsSpy.exe"
+Name=MonoWinFormsSpy
+Icon=/usr/share/icons/hicolor/scalable/apps/usd-xrandr.svg
+ENDOFOUTPUTFILE
+chmod +x "$OUTPUTFILE"
+
 mkdir -p "$HOME/.config/autostart"
 OUTPUTFILE="$HOME/.config/autostart/initial-config.desktop"
 cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
@@ -331,6 +363,18 @@ if [ -e /opt/mono-sil/bin/mono-real ]; then
 fi
 
 mkdir -p $BASEDIR/fwrepo/fw/Output_x86_64/registry/LocalMachine/software/sil/fieldworks/8
+
+# Compile FLExBridge
+
+cd ~/fwrepo/flexbridge
+make debug
+
+# WinFormsSpy tool
+
+cd ~
+hg clone https://bitbucket.org/hindlemail/winformsspy
+cd winformsspy
+xbuild
 
 # Wrapup
 # If this vagrant box already has a GUI running, then report in the GUI.
