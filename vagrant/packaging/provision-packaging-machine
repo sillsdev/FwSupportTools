@@ -28,15 +28,26 @@ sudo apt-get update
 if ! sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade; then
   echo provisioner: There were errors while updating system packages. Ignoring.
 fi
-sudo apt-get -y install wget curl vim meld ack-grep dconf-tools mercurial debhelper dh-autoreconf git-cola geany quilt
+sudo apt-get -y install wget curl vim meld ack-grep dconf-tools mercurial debhelper dh-autoreconf git-cola geany quilt git-buildpackage
 
 # pbuilder
 sudo apt-get -y install pbuilder
 sudo apt-get -y install git
 
+# Fix ssh usedns error
+sudo perl -ni -e 'print unless /UseDNS/' ssh_config
+
 cat > ~/.hgrc <<EOF
 [extensions]
 purge =
+EOF
+
+cat > ~/.dput.cf <<EOF
+[pso]
+method = rsync
+fqdn = packager.lsdev.sil.org
+login = upload
+incoming = %(pso)s
 EOF
 
 cd ~
@@ -51,7 +62,7 @@ ln -sf ~/FwSupportTools/packaging/pbuilder/pbuilderrc .pbuilderrc
 cd ~/pbuilder
 wget http://linux.lsdev.sil.org/downloads/sil-testing.gpg
 # Using a smaller set of platforms to be able to package for to begin with.
-DISTRIBUTIONS="precise trusty" ./setup.sh
+DISTRIBUTIONS="precise trusty xenial" ./setup.sh
 
 echo provisioner: Done.
 
