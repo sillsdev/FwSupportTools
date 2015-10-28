@@ -100,9 +100,9 @@ do
 			COMPONENTS="main"
 			LLSO="http://linux.lsdev.sil.org/debian/"
 			PSO="http://packages.sil.org/debian/"
-			KEYRING1=$KEYRINGLLSO
-			KEYRING2=$KEYRINGPSO
-			KEYRING3=""
+			KEYRING1="/usr/share/keyrings/debian-archive-keyring.gpg"
+			KEYRING2=$KEYRINGLLSO
+			KEYRING3=$KEYRINGPSO
 			addmirror "deb $LLSO $D $COMPONENTS"
 			addmirror "deb $PSO $D $COMPONENTS"
 			PROXY=""
