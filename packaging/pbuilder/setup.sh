@@ -18,12 +18,12 @@ while (( $# )); do
 	shift
 done
 
+[ -f $HOME/.pbuilderrc ] && . $HOME/.pbuilderrc
+
 function CheckOrLinkDebootstrapScript()
 {
 	if [ ! -f /usr/share/debootstrap/scripts/$1 ]; then
-		if [[ $UBUNTU_DISTROS == *$1* ]]; then
-			basedistro=gutsy
-		elif [[ $UBUNTU_OLDDISTROS == *$1* ]]; then
+		if [[ "$UBUNTU_DISTROS $UBUNTU_OLDDISTROS" == "*$1*" ]]; then
 			basedistro=gutsy
 		else
 			basedistro=sid
@@ -39,7 +39,8 @@ function addmirror()
 
 PBUILDERDIR="${PBUILDERDIR:-$(dirname "$0")}"
 
-cd "$PBUILDERDIR"
+
+cd "${PBUILDERDIR:-$(dirname "$0")}"
 
 KEYRINGLLSO="$PBUILDERDIR/sil-testing.gpg"
 KEYRINGPSO="$PBUILDERDIR/sil.gpg"
@@ -63,49 +64,37 @@ do
 
 		CheckOrLinkDebootstrapScript $D
 
-		if [[ $UBUNTU_DISTROS == *$D* ]]; then
-			MIRROR="${UBUNTU_MIRROR:-http://archive.ubuntu.com/ubuntu/}"
+		if [[ "$UBUNTU_DISTROS $UBUNTU_OLDDISTROS" == "*$D*" ]]; then
+			if [[ $UBUNTU_DISTROS == *$D* ]]; then
+				MIRROR="${UBUNTU_MIRROR:-http://archive.ubuntu.com/ubuntu/}"
+			else
+				MIRROR="${UBUNTU_OLDMIRROR:-http://old-releases.ubuntu.com/ubuntu/}"
+			fi
 			COMPONENTS="main universe multiverse"
-			KEYRING1="/usr/share/keyrings/ubuntu-archive-keyring.gpg"
+			KEYRINGMAIN="/usr/share/keyrings/ubuntu-archive-keyring.gpg"
 			PROXY="$http_proxy"
 			for S in backports updates; do
 				addmirror "deb $MIRROR $D-$S $COMPONENTS"
 			done
 			LLSO="http://linux.lsdev.sil.org/ubuntu/"
-			KEYRING2=$KEYRINGLLSO
 			PSO="http://packages.sil.org/ubuntu/"
-			KEYRING3=$KEYRINGPSO
 			for S in "" "-proposed" "-updates" "-experimental"; do
 				addmirror "deb $LLSO $D$S $COMPONENTS"
 				addmirror "deb $PSO $D$S $COMPONENTS"
 			done
-		elif [[ $UBUNTU_OLDDISTROS == *$D* ]]; then
-			MIRROR="${UBUNTU_OLDMIRROR:-http://old-releases.ubuntu.com/ubuntu/}"
-			COMPONENTS="main universe multiverse"
-			KEYRING1="/usr/share/keyrings/ubuntu-archive-keyring.gpg"
+		elif [[ $DEBIAN_DISTROS == *$D* ]]; then
+			MIRROR="${DEBIAN_MIRROR:-http://ftp.ca.debian.org/debian/}"
+			COMPONENTS="main contrib non-free"
+			KEYRINGMAIN="/usr/share/keyrings/debian-archive-keyring.gpg"
 			PROXY="$http_proxy"
-			for S in backports updates; do
-				addmirror "deb $MIRROR $D-$S $COMPONENTS"
-			done
-			LLSO="http://linux.lsdev.sil.org/ubuntu/"
-			KEYRING2=$KEYRINGLLSO
-			PSO="http://packages.sil.org/ubuntu/"
-			KEYRING3=$KEYRINGPSO
-			for S in "" "-proposed" "-updates" "-experimental"; do
-				addmirror "deb $LLSO $D$S $COMPONENTS"
-				addmirror "deb $PSO $D$S $COMPONENTS"
-			done
-		else
-			MIRROR="$local_debian_mirror"
-			COMPONENTS="main"
 			LLSO="http://linux.lsdev.sil.org/debian/"
 			PSO="http://packages.sil.org/debian/"
-			KEYRING1="/usr/share/keyrings/debian-archive-keyring.gpg"
-			KEYRING2=$KEYRINGLLSO
-			KEYRING3=$KEYRINGPSO
 			addmirror "deb $LLSO $D $COMPONENTS"
 			addmirror "deb $PSO $D $COMPONENTS"
-			PROXY=""
+			;;
+		else
+			echo "Unknown distribution $D. Please update the script $0"
+			exit 1
 		fi
 
 		if [ -z "$update" ]; then
@@ -115,9 +104,9 @@ do
 		fi
 
 		sudo HOME=~ DIST=$D ARCH=$A pbuilder $options \
-			${KEYRING1:+--debootstrapopts --keyring=}$KEYRING1 \
-			${KEYRING2:+--keyring }$KEYRING2 \
-			${KEYRING3:+--keyring }$KEYRING3 \
+			${KEYRINGMAIN:+--debootstrapopts --keyring=}$KEYRINGMAIN \
+			${KEYRINGLLSO:+--keyring }$KEYRINGLLSO \
+			${KEYRINGPSO:+--keyring }$KEYRINGPSO \
 			--extrapackages "apt-utils devscripts lsb-release" \
 			--othermirror "$OTHERMIRROR" \
 			--mirror "$MIRROR" \

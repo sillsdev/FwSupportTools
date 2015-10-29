@@ -1,7 +1,8 @@
 PBUILDERDIR=${PBUILDERDIR:-$HOME/pbuilder}
-DISTRIBUTIONS=${DISTRIBUTIONS:-precise quantal raring saucy trusty wheezy jessie}
+DISTRIBUTIONS=${DISTRIBUTIONS:-precise trusty wily jessie}
 ARCHES=${ARCHES:-amd64 i386}
 UBUNTU_MIRROR=${UBUNTU_MIRROR:-http://archive.ubuntu.com/ubuntu/}
+DEBIAN_MIRROR=${DEBIAN_MIRROR:-http://ftp.ca.debian.org/debian/}
 
 # Set this to "sudo" if $PBUILDERDIR is in /var/cache/pbuilder instead of your home directory
 PBUILDERSUDO=
