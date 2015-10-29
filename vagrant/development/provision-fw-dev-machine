@@ -147,6 +147,7 @@ echo -e "$repos\n$branches\n" | fwmeta/initrepo
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
 echo ttf-mscorefonts-installer msttcorefonts/present-mscorefonts-eula note | sudo debconf-set-selections
 $BASEDIR/fwrepo/fw/Build/Agent/install-deps
+sudo apt-get install -y fieldworks-enc-converters
 
 mkdir -p $BASEDIR/fwrepo/fw/DistFiles/Projects
 
