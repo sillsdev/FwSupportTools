@@ -18,8 +18,6 @@ while (( $# )); do
 	shift
 done
 
-[ -f $HOME/.pbuilderrc ] && . $HOME/.pbuilderrc
-
 function CheckOrLinkDebootstrapScript()
 {
 	if [ ! -f /usr/share/debootstrap/scripts/$1 ]; then
