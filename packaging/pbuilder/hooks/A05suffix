@@ -14,3 +14,4 @@ export DEBEMAIL="$USER@$HOST"
 
 cd /tmp/buildd/*/
 debchange --local=+$DIST "Build for $DIST"
+debchange --release --distribution=$DIST ""
