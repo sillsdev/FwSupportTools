@@ -12,8 +12,5 @@ HOST=$(uname -n)
 export DEBFULLNAME="pbuilder"
 export DEBEMAIL="$USER@$HOST"
 
-if [ "$TYPE" = Ubuntu ]
-then
-	cd /tmp/buildd/*/
-	debchange --local=+$DIST "Build for $DIST"
-fi
+cd /tmp/buildd/*/
+debchange --local=+$DIST "Build for $DIST"
