@@ -89,7 +89,6 @@ do
 			PSO="http://packages.sil.org/debian/"
 			addmirror "deb $LLSO $D $COMPONENTS"
 			addmirror "deb $PSO $D $COMPONENTS"
-			;;
 		else
 			echo "Unknown distribution $D. Please update the script $0"
 			exit 1
