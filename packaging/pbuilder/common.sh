@@ -10,7 +10,7 @@ init()
 	# no longer supported Ubuntu versions that live in old-releases.ubuntu.com
 	UBUNTU_OLDDISTROS="quantal raring saucy utopic"
 	# Debian versions
-	DEBIAN_DISTROS="wheezy jessie"
+	DEBIAN_DISTROS="wheezy jessie stretch"
 
 	# set default values in case we don't have a config file or the config file
 	# doesn't set all variables
