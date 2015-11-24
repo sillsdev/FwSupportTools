@@ -18,8 +18,8 @@ help()
 	echo "-nn "
 	echo "	Run script without doing the actual upload and print commands"
 	echo ""
-	echo "--component <experimental|main>"
-	echo "	Where the package should go: experimental or main section."
+	echo "--component <experimental|main|proposed|updates>"
+	echo "	Where the package should go: experimental, proposed, updates, or main section."
 	echo "	Default: experimental"
 	echo ""
 	echo "--repo <llso|pso>"
@@ -36,6 +36,10 @@ while (( $# )); do
 		--component)
 			if [ "$2" == "experimental" ]; then
 				DISTROCOMPONENT=-experimental
+			elif [ "$2" == "proposed" ]; then
+				DISTROCOMPONENT=-proposed
+			elif [ "$2" == "updates" ]; then
+				DISTROCOMPONENT=-updates
 			elif [ "$2" == "main" ]; then
 				DISTROCOMPONENT=
 			else
