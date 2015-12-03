@@ -450,6 +450,7 @@ for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 				# for debian we don't have different repos
 				destination_repository="$DISTFAMILY/$dist"
 			fi
+			stderr "Uploading to llso:$destination_repository $arch"
 			dput $dput_simulate -U llso:$destination_repository ${full_package_name}+*.changes
 		fi
 	done
