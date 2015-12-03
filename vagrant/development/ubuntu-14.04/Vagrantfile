@@ -37,6 +37,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.vm.synced_folder "../data", "/vagrant_data"
 
   # Provision
+
+  # Fix ssh usedns error in this image
+  config.vm.provision "shell", inline: "sudo perl -ni -e 'print unless /UseDNS/' /etc/ssh/ssh_config"
+
   config.vm.provision "file", source: "~/.gitconfig", destination: ".gitconfig"
   config.vm.provision "shell", inline: 'sudo apt-get -y install git; [ -n "$(git config --get fwinit.gerrituser)" ] || { echo ERROR Cannot provision without gerrit username. To fix, on your host machine execute the following command and then re-provision: git config --global fwinit.gerrituser YOUR_GERRIT_USERNAME && exit 1; }', privileged: false
   # Key file for uploading to gerrit

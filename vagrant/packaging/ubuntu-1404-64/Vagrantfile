@@ -38,5 +38,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 
   # Provision
+
+  # Fix ssh usedns error in this image
+  config.vm.provision "shell", inline: "sudo perl -ni -e 'print unless /UseDNS/' /etc/ssh/ssh_config"
+
   config.vm.provision "shell", path: "../provision-packaging-machine", privileged: false
 end

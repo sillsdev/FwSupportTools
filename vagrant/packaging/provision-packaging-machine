@@ -34,9 +34,6 @@ sudo apt-get -y install wget curl vim meld ack-grep dconf-tools mercurial debhel
 sudo apt-get -y install pbuilder
 sudo apt-get -y install git
 
-# Fix ssh usedns error
-sudo perl -ni -e 'print unless /UseDNS/' ssh_config
-
 cat > ~/.hgrc <<EOF
 [extensions]
 purge =
