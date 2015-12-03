@@ -53,6 +53,7 @@
     <EnvironmentVariables>
       <EnvironmentVariables>
         <Variable name="DISPLAY" value=":0" />
+        <Variable name="FLEXBRIDGEDIR" value="/home/USERNAME/fwrepo/flexbridge/output/DebugMono" />
       </EnvironmentVariables>
     </EnvironmentVariables>
   </PropertyGroup>
