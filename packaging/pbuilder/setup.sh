@@ -62,7 +62,7 @@ do
 
 		CheckOrLinkDebootstrapScript $D
 
-		if [[ "$UBUNTU_DISTROS $UBUNTU_OLDDISTROS" == "*$D*" ]]; then
+		if [[ "$UBUNTU_DISTROS $UBUNTU_OLDDISTROS" == *$D* ]]; then
 			if [[ $UBUNTU_DISTROS == *$D* ]]; then
 				MIRROR="${UBUNTU_MIRROR:-http://archive.ubuntu.com/ubuntu/}"
 			else
