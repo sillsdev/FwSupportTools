@@ -436,19 +436,18 @@ for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 	for arch in $ARCHES_TO_PACKAGE; do
 		cd $pbuilder_path/$dist/$arch/result
 		if [ $(find . -name ${full_package_name}+\*.changes | wc -l) -gt 0 ]; then
+			if [[ "wheezy jessie stretch" == *$dist* ]]; then
+				DISTFAMILY=debian
+			else
+				DISTFAMILY=ubuntu
+			fi
 			# Send the experimental packages to a suite to simplify simultaneous development of packages
-			destination_repository="ubuntu/$dist-${suite_name:-experimental}"
+			destination_repository="$DISTFAMILY/$dist-${suite_name:-experimental}"
 			# Send the no-longer experimental packages to llso-main (no suite needed)
 			if [ "$destination_repository_arg" = "llso-main" ]; then
-				destination_repository="ubuntu/$dist"
+				destination_repository="$DISTFAMILY/$dist"
 			fi
 			dput $dput_simulate -U llso:$destination_repository ${full_package_name}+*.changes
-			# FW builds on Saucy but not Trusty yet. Publish Saucy packages to Trusty.
-			if [ "$MAIN_PACKAGE_NAME" = "fieldworks" -a "$dist" = "saucy" ]; then
-				destination_repository="${destination_repository/saucy/trusty}"
-				stderr "Sending saucy packages to trusty section."
-				dput $dput_simulate -U llso:$destination_repository ${full_package_name}+*.changes
-			fi
 		fi
 	done
 done
