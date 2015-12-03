@@ -13,6 +13,9 @@ if [ -f /etc/wasta-release ]; then
   RELEASE=$CODENAME
 fi
 
+# Enable multiverse repository, if not already
+sudo perl -pi -e '/multiverse/ and !/backports/ and s/^# //' /etc/apt/sources.list
+
 # Remove existing SIL repositories
 sudo perl -ni -e 'print unless /sil\.org/' /etc/apt/sources.list
 
