@@ -37,7 +37,7 @@ sudo apt-get update
 (DISPLAY=:0 zenity --warning --no-wrap --title='Provisioning' --text="$(date '+%F %T')\nPlease wait for your vagrant to finish provisioning." ||true) &
 sudo DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y
 # (For Ubuntu 14.04: python-pyinotify. For Wasta-Linux: xterm.)
-sudo apt-get install -y git-gui terminator meld kdiff3-qt vim links2 gdb wget synaptic ack-grep geany xchat chromium-browser skype byobu indicator-multiload dconf-tools git-cola mercurial python-pyinotify xterm devscripts tortoisehg
+sudo apt-get install -y git-gui terminator meld kdiff3-qt vim links2 gdb wget synaptic ack-grep geany xchat chromium-browser skype byobu indicator-multiload dconf-tools git-cola mercurial python-pyinotify xterm devscripts tortoisehg nunit
 
 git config --global diff.tool meld
 git config --global merge.conflictstyle diff3
@@ -99,6 +99,11 @@ dconf write /org/gnome/desktop/screensaver/lock-enabled false
 dconf write /org/gnome/desktop/session/idle-delay 'uint32 0'
 dconf write /org/gnome/settings-daemon/plugins/power/sleep-display-ac 0
 dconf write /org/gnome/settings-daemon/plugins/power/sleep-display-battery 0
+
+# Make desktop a bit friendlier
+gsettings set com.canonical.desktop.interface scrollbar-mode normal
+dconf write /com/canonical/unity/integrated-menus false
+gsettings set com.canonical.Unity always-show-menus true
 # Make HUD less easy to accidentally open.
 gsettings set org.compiz.integrated show-hud "['<Alt><Super>']"
 
@@ -149,6 +154,7 @@ cd $BASEDIR/fwrepo
 repos="FieldWorks FwSampleProjects mono mono-basic gtk-sharp libgdiplus libcom FwDebian FwSupportTools FwLocalizations FwHelps"
 branches="master develop feature/* release/* hotfix/*"
 echo $SCRIPTNAME: Note that cloning may not report its progress during provisioning.
+#perl -pi -e 's/git fetch -p origin/git fetch --depth=1 -p origin/' fwmeta/initrepo  # Uncomment to speed up by not downloading repository history
 echo -e "$repos\n$branches\n" | fwmeta/initrepo
 
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
@@ -204,6 +210,48 @@ cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
 <RuntimeCollection>
   <MonoRuntimeInfo prefix="/opt/mono-sil" />
 </RuntimeCollection>
+ENDOFOUTPUTFILE
+
+# C# code formatting style
+mkdir -p "$HOME/.local/share/MonoDevelop-5.0/Policies"
+OUTPUTFILE="$HOME/.local/share/MonoDevelop-5.0/Policies/Default.mdpolicy.xml"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+<?xml version="1.0" encoding="utf-8"?>
+<Policies>
+  <PolicySet name="Default" id="Default">
+    <TextStylePolicy inheritsSet="null" scope="text/x-csharp" />
+    <CSharpFormattingPolicy inheritsSet="Mono" inheritsScope="text/x-csharp" scope="text/x-csharp">
+      <IndentSwitchBody>True</IndentSwitchBody>
+      <IndentBlocksInsideExpressions>True</IndentBlocksInsideExpressions>
+      <AnonymousMethodBraceStyle>NextLine</AnonymousMethodBraceStyle>
+      <PropertyBraceStyle>NextLine</PropertyBraceStyle>
+      <PropertyGetBraceStyle>NextLine</PropertyGetBraceStyle>
+      <PropertySetBraceStyle>NextLine</PropertySetBraceStyle>
+      <EventBraceStyle>NextLine</EventBraceStyle>
+      <EventAddBraceStyle>NextLine</EventAddBraceStyle>
+      <EventRemoveBraceStyle>NextLine</EventRemoveBraceStyle>
+      <StatementBraceStyle>NextLine</StatementBraceStyle>
+      <ElseNewLinePlacement>NewLine</ElseNewLinePlacement>
+      <CatchNewLinePlacement>NewLine</CatchNewLinePlacement>
+      <FinallyNewLinePlacement>NewLine</FinallyNewLinePlacement>
+      <WhileNewLinePlacement>DoNotCare</WhileNewLinePlacement>
+      <ArrayInitializerWrapping>DoNotChange</ArrayInitializerWrapping>
+      <ArrayInitializerBraceStyle>NextLine</ArrayInitializerBraceStyle>
+      <BeforeMethodDeclarationParentheses>False</BeforeMethodDeclarationParentheses>
+      <BeforeMethodCallParentheses>False</BeforeMethodCallParentheses>
+      <BeforeConstructorDeclarationParentheses>False</BeforeConstructorDeclarationParentheses>
+      <NewLineBeforeConstructorInitializerColon>NewLine</NewLineBeforeConstructorInitializerColon>
+      <NewLineAfterConstructorInitializerColon>SameLine</NewLineAfterConstructorInitializerColon>
+      <BeforeDelegateDeclarationParentheses>False</BeforeDelegateDeclarationParentheses>
+      <NewParentheses>False</NewParentheses>
+      <SpacesBeforeBrackets>False</SpacesBeforeBrackets>
+    </CSharpFormattingPolicy>
+    <TextStylePolicy inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/plain">
+      <FileWidth>120</FileWidth>
+      <TabsToSpaces>False</TabsToSpaces>
+    </TextStylePolicy>
+  </PolicySet>
+</Policies>
 ENDOFOUTPUTFILE
 
 # Launchers
