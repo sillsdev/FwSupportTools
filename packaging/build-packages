@@ -446,6 +446,9 @@ for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 			# Send the no-longer experimental packages to llso-main (no suite needed)
 			if [ "$destination_repository_arg" = "llso-main" ]; then
 				destination_repository="$DISTFAMILY/$dist"
+			elif [ "$DISTFAMILY" = "debian" ]; then
+				# for debian we don't have different repos
+				destination_repository="$DISTFAMILY/$dist"
 			fi
 			dput $dput_simulate -U llso:$destination_repository ${full_package_name}+*.changes
 		fi
