@@ -1,3 +1,7 @@
+// Copyright (c) 2002-2015 SIL International
+// This software is licensed under the LGPL, version 2.1 or later
+// (http://www.gnu.org/licenses/lgpl-2.1.html)
+
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -12,7 +16,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SIL International")]
 [assembly: AssemblyProduct("IDLImporter")]
-[assembly: AssemblyCopyright("(C) 2002-2003 SIL International")]
+[assembly: AssemblyCopyright("(C) 2002-2015 SIL International")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

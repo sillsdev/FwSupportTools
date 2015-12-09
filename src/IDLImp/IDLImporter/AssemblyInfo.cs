@@ -1,20 +1,7 @@
-// --------------------------------------------------------------------------------------------
-#region // Copyright (c) 2003, SIL International. All Rights Reserved.
-// <copyright from='2003' to='2003' company='SIL International'>
-//		Copyright (c) 2003, SIL International. All Rights Reserved.
-//
-//		Distributable under the terms of either the Common Public License or the
-//		GNU Lesser General Public License, as specified in the LICENSING.txt file.
-// </copyright>
-#endregion
-//
-// File: AssemblyInfo.cs
-// Responsibility: Eberhard Beilharz
-// Last reviewed:
-//
-// <remarks>
-// </remarks>
-// --------------------------------------------------------------------------------------------
+// Copyright (c) 2003-2015 SIL International
+// This software is licensed under the LGPL, version 2.1 or later
+// (http://www.gnu.org/licenses/lgpl-2.1.html)
+
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -29,7 +16,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SIL International")]
 [assembly: AssemblyProduct("IDLImporter")]
-[assembly: AssemblyCopyright("© 2002-2003 SIL International")]
+[assembly: AssemblyCopyright("© 2002-2015 SIL International")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
