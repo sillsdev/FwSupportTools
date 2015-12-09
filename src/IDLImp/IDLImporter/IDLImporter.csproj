@@ -5,9 +5,6 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E14AA497-B901-4626-AE11-321F21431BAC}</ProjectGuid>
-    <SccProjectName>Perforce Project</SccProjectName>
-    <SccLocalPath>..\..\..\..</SccLocalPath>
-    <SccProvider>MSSCCI:Perforce SCM</SccProvider>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <AssemblyKeyContainerName>
@@ -24,8 +21,6 @@
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <SccAuxPath>
-    </SccAuxPath>
     <OldToolsVersion>3.5</OldToolsVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -94,37 +89,64 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="IdhCommentProcessor.cs" />
-    <Compile Include="IdhLexer.cs" />
-    <Compile Include="IdhParser.cs" />
-    <Compile Include="IdhParserTokenTypes.cs" />
+    <Antlrv2 Include="idh.g" />
+    <Compile Include="IdhLexer.cs">
+      <DependentUpon>idh.g</DependentUpon>
+    </Compile>
+    <Compile Include="IdhParser.cs">
+      <DependentUpon>idh.g</DependentUpon>
+    </Compile>
+    <Compile Include="IdhParserTokenTypes.cs">
+      <DependentUpon>idh.g</DependentUpon>
+    </Compile>
     <Compile Include="IDLConversions.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IDLImporter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Antlrv2 Include="idl.g" />
     <Compile Include="IDLLexer.cs">
+      <DependentUpon>idl.g</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IDLParser.cs">
+      <DependentUpon>idl.g</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IDLTokenTypes.cs">
+      <DependentUpon>idl.g</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CSharpCodeGenerator.cs" />
-    <Compile Include="SurveyorLexer.cs" />
-    <Compile Include="SurveyorParser.cs" />
-    <Compile Include="SurveyorParserTokenTypes.cs" />
+    <Antlrv2 Include="SurveyorTags.g" />
+    <Compile Include="SurveyorLexer.cs">
+      <DependentUpon>SurveyorTags.g</DependentUpon>
+    </Compile>
+    <Compile Include="SurveyorParser.cs">
+      <DependentUpon>SurveyorTags.g</DependentUpon>
+    </Compile>
+    <Compile Include="SurveyorParserTokenTypes.cs">
+      <DependentUpon>SurveyorTags.g</DependentUpon>
+    </Compile>
     <Content Include="IDLConversions.xsd">
       <SubType>
       </SubType>
     </Content>
     <Content Include="IDLImp.xml" />
-    <Content Include="SurveyorParserTokenTypes.txt" />
+    <Content Include="SurveyorParserTokenTypes.txt">
+      <DependentUpon>SurveyorTags.g</DependentUpon>
+    </Content>
+    <None Include="IDLTokenTypes.txt">
+      <DependentUpon>idl.g</DependentUpon>
+    </None>
+    <None Include="IdhParserTokenTypes.txt">
+      <DependentUpon>idh.g</DependentUpon>
+    </None>
     <None Include="IDLConversions.xsx">
       <DependentUpon>IDLConversions.xsd</DependentUpon>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -160,4 +182,13 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
+  <Import Project="..\packages\Antlr2.Tools.2.7.6.4\build\Antlr2.Tools.targets" Condition="Exists('..\packages\Antlr2.Tools.2.7.6.4\build\Antlr2.Tools.targets')" />
+  <!-- The original Antlr2.Tools.targets file doesn't work correctly if we have multiple files to process. -->
+  <Import Project="FixedAntlr2.targets" Condition="Exists('FixedAntlr2.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Antlr2.Tools.2.7.6.4\build\Antlr2.Tools.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Antlr2.Tools.2.7.6.4\build\Antlr2.Tools.targets'))" />
+  </Target>
 </Project>
