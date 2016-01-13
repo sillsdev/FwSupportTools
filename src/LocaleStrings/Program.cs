@@ -1170,6 +1170,16 @@ namespace LocaleStrings
 				ProcessXmlConfigFile(lssConfigFiles[i], rgsPOStrings);
 			ProcessXmlStringsFile(sRoot, rgsPOStrings);
 
+			sRootDir = Path.Combine(sBase, "Language Explorer/DefaultConfigurations");
+			if (Directory.Exists(sRootDir))
+			{
+				lssConfigFiles.Clear();
+				rgsConfigFiles = FindAllFiles(sRootDir, "*.fwdictconfig");
+				if (rgsConfigFiles != null && rgsConfigFiles.Length > 0)
+					lssConfigFiles.AddRange(rgsConfigFiles);
+				for (int i = 0; i < lssConfigFiles.Count; ++i)
+					ProcessFwDictConfigFile(lssConfigFiles[i], rgsPOStrings);
+			}
 		}
 
 		/// <summary>
@@ -1358,6 +1368,79 @@ namespace LocaleStrings
 		}
 
 		/// <summary>
+		/// Process a FieldWorks .fwdictconfig file.
+		/// </summary>
+		private static void ProcessFwDictConfigFile(string sConfigFile, List<POString> rgsPOStrings)
+		{
+			XmlDocument xdoc = new XmlDocument();
+			xdoc.Load(sConfigFile);
+			ProcessFwDictConfigElement(xdoc.DocumentElement, rgsPOStrings);
+		}
+
+		/// <summary>
+		/// Process one element from a FieldWorks .fwdictconfig file.  Recursively process any children.
+		/// </summary>
+		private static void ProcessFwDictConfigElement(XmlElement xel, List<POString> rgsPOStrings)
+		{
+			string sName = xel.GetAttribute("name");
+			if (!String.IsNullOrEmpty(sName.Trim()))
+				StoreFwDictAttributeString(xel, "name", sName, rgsPOStrings);
+			string sNameSuffix = xel.GetAttribute("nameSuffix");
+			if (!String.IsNullOrEmpty(sNameSuffix.Trim()))
+				StoreFwDictAttributeString(xel, "nameSuffix", sNameSuffix, rgsPOStrings);
+			string sAfter = xel.GetAttribute("after");
+			if (!String.IsNullOrEmpty(sAfter.Trim()))
+				StoreFwDictAttributeString(xel, "after", sAfter, rgsPOStrings);
+			string sBefore = xel.GetAttribute("before");
+			if (!String.IsNullOrEmpty(sBefore.Trim()))
+				StoreFwDictAttributeString(xel, "before", sBefore, rgsPOStrings);
+			string sBetween = xel.GetAttribute("between");
+			if (!String.IsNullOrEmpty(sBetween.Trim()))
+				StoreFwDictAttributeString(xel, "between", sBetween, rgsPOStrings);
+			foreach (XmlNode xn in xel.ChildNodes)
+			{
+				if (xn is XmlElement)
+					ProcessFwDictConfigElement(xn as XmlElement, rgsPOStrings);
+			}
+		}
+
+		/// <summary>
+		/// Store one attribute value from a FieldWorks .fwdictconfig file as a POString, adding it to the list.
+		/// </summary>
+		private static void StoreFwDictAttributeString(XmlElement xel, string sName, string sValue, List<POString> rgsPOStrings)
+		{
+			POString pos = new POString(
+				new string[1] { ComputeFwDictConfigPathComment(xel, sName) },
+				new string[1] { FixStringForEmbeddedQuotes(sValue) },
+				new string[1] { String.Empty });
+			rgsPOStrings.Add(pos);
+		}
+
+		/// <summary>
+		/// Compute a reduced path comment for one attribute from a FieldWorks .fwdictconfig file.
+		/// </summary>
+		private static string ComputeFwDictConfigPathComment(XmlElement xel, string sName)
+		{
+			StringBuilder bldr = new StringBuilder();
+			bldr.AppendFormat("//{0}/@{1}", xel.Name, sName);
+			while (xel != null)
+			{
+				XmlDocument xdoc = xel.ParentNode as XmlDocument;
+				if (xdoc != null)
+				{
+					bldr.Insert(0, "::");
+					string s = xdoc.BaseURI;
+					int idx = s.ToLower().IndexOf("/language explorer/");
+					if (idx >= 0)
+						s = s.Substring(idx);
+					bldr.Insert(0, s);
+				}
+				xel = xel.ParentNode as XmlElement;
+			}
+			return bldr.ToString();
+		}
+
+		/// <summary>
 		/// Process the strings-en.xml file.
 		/// </summary>
 		/// <param name="sRoot"></param>
@@ -1425,10 +1508,8 @@ namespace LocaleStrings
 
 		/// <summary>
 		/// Find all files in the given directory tree that match the given filename pattern.
-		/// </summary>
-		/// <param name="sRootDir"></param>
-		/// <param name="sPattern"></param>
-		/// <returns></returns>
+		/// Note that this searches all subdirectories, ie, the whole tree under the root directory.
+		/// </remarks>
 		private static string[] FindAllFiles(string sRootDir, string sPattern)
 		{
 			return Directory.GetFiles(sRootDir, sPattern, SearchOption.AllDirectories);
