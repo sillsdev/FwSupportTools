@@ -1159,6 +1159,9 @@ namespace LocaleStrings
 				if (!lssLocConfigFiles.Contains(rgsConfigFiles[i].ToLower()))
 					lssConfigFiles.Add(rgsConfigFiles[i]);
 			}
+			rgsConfigFiles = FindAllFiles(sRootDir, "*.fwlayout");
+			for (int i = 0; i < rgsConfigFiles.Length; ++i)
+				lssConfigFiles.Add(rgsConfigFiles[i]);
 			sRootDir = Path.Combine(sBase, "Parts");
 			// Let's not include the auto-generated parts and layouts for now.
 			//rgsConfigFiles = FindAllFiles(sRootDir, "*.xml");
@@ -1222,6 +1225,9 @@ namespace LocaleStrings
 			sLabel = xel.GetAttribute("headerlabel");
 			if (!String.IsNullOrEmpty(sLabel.Trim()))
 				StoreAttributeString(xel, "headerlabel", sLabel, rgsPOStrings);
+			sLabel = xel.GetAttribute("ghostLabel");
+			if (!String.IsNullOrEmpty(sLabel.Trim()))
+				StoreAttributeString(xel, "ghostLabel", sLabel, rgsPOStrings);
 			string sAfter = xel.GetAttribute("after");
 			if (!String.IsNullOrEmpty(sAfter.Trim()))
 				StoreAttributeString(xel, "after", sAfter, rgsPOStrings);
