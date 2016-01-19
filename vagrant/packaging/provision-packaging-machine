@@ -64,7 +64,7 @@ DISTRIBUTIONS="precise trusty xenial" ./setup.sh
 echo provisioner: Done.
 
 # You can then build a package managed by build-packages by running a command such as:
-# cd; ~/FwSupportTools/packaging/build-packages --main-package-name flexbridge --dists "trusty" --arches "amd64"  --repository-committishes flexbridge=origin/master  |&tee /tmp/log
+# cd; ~/FwSupportTools/packaging/build-packages --main-package-name flexbridge --dists "trusty" --arches "amd64"  --repository-committishes flexbridge=origin/master  --simulate-dput |&tee /var/tmp/log
 # Or you can build a source and binary package by running commands such as:
 # cd someproject && debuild -uc -us -S -nc
-# cd someproject/.. && sudo DISTRIBUTIONS=trusty ARCHES=amd64 ~/pbuilder/build-multi.sh source-package-name.dsc |&tee /tmp/log
+# cd someproject/.. && sudo DISTRIBUTIONS=trusty ARCHES=amd64 ~/pbuilder/build-multi.sh source-package-name.dsc |&tee /var/tmp/log
