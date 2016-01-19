@@ -50,6 +50,8 @@ while (( $# )); do
 		--preserve-products) preserve_products_arg=true ;;
 		# Package repository to upload the resulting binary packages to. "llso-main" or "llso-experimental".
 		--destination-repository) shift; destination_repository_arg=$1 ;;
+		# Use this string as the automated package version extension. This will be appended to whatever the source tree's version number is determined to be. {BUILD_NUMBER} will be replaced with the Jenkins job number, or 0 if not running under Jenkins. {COMMIT_HASH} will be replaced with the number/hash of the most appropriate commit being used for building the package. Example: --automated-version-extension .{BUILD_NUMBER}.{COMMIT_HASH}
+		--automated-version-extension) shift; automated_version_extension_arg=$1 ;;
 		*) stderr "Error: Unexpected argument \"$1\". Exiting." ; exit 1 ;;
 	esac
 	shift || (stderr "Error: The last argument is missing a value. Exiting."; false) || exit 2
@@ -289,6 +291,11 @@ if [ -n "$short_mono_package_name" ]; then
 fi
 ci_build_number=${BUILD_NUMBER:-0}
 nightlyversion="$base_version${nightlydelimeter}nightly$timestamp.$ci_build_number.$hash_of_current_commit$package_version_extension"
+if [[ -n $automated_version_extension_arg ]]; then
+	automated_version_extension_arg=$(perl -p -e "s/{BUILD_NUMBER}/${ci_build_number}/g" <(echo $automated_version_extension_arg))
+	automated_version_extension_arg=$(perl -p -e "s/{COMMIT_HASH}/${hash_of_current_commit}/g" <(echo $automated_version_extension_arg))
+	nightlyversion="$base_version$automated_version_extension_arg$package_version_extension"
+fi
 distribution_of_last_change=$(dpkg-parsechangelog |grep ^Distribution:|cut -d' ' -f2)
 changelog_message="Built from commit $hash_of_current_commit"
 if [ -n "$most_recent_tag" ]; then
