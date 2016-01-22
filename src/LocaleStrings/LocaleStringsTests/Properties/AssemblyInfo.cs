@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("LocaleStrings")]
+[assembly: AssemblyTitle("LocaleStringsTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("SIL International")]
-[assembly: AssemblyProduct("LocaleStrings")]
-[assembly: AssemblyCopyright("Copyright © SIL International 2007")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("LocaleStringsTests")]
+[assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("d5576fe6-06e9-442d-86c0-f5233ed23ba1")]
+[assembly: Guid("5939a022-fafb-4f69-a5c9-00bf9cc74101")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -29,6 +29,8 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
+// You can specify all the values or you can default the Build and Revision Numbers
+// by using the '*' as shown below:
+// [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: InternalsVisibleTo("LocaleStringsTests")]

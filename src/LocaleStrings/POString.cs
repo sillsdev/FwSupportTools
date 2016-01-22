@@ -5,7 +5,7 @@ using System.IO;
 
 namespace LocaleStrings
 {
-	class POString
+	public class POString
 	{
 		static int s_cLines = 0;
 		List<string> m_rgsUserComments = null;
@@ -39,23 +39,26 @@ namespace LocaleStrings
 			m_cDup = 1;
 		}
 
-		static public POString ReadFromFile(StreamReader srIn)
+		public override string ToString()
+		{
+			return String.Format("POString msgid=\"{0}\"", MsgIdAsString());
+		}
+
+		public static POString ReadFromFile(TextReader srIn)
 		{
 			// Move past any blank lines, checking for the end of file.
-			if (srIn.EndOfStream)
-				return null;
 			string s = srIn.ReadLine();
+			if (s == null)
+				return null;
 			++s_cLines;
-			if (s != null)
-				s = s.Trim();
+			s = s.Trim();
 			while (String.IsNullOrEmpty(s))
 			{
-				if (srIn.EndOfStream)
-					return null;
 				s = srIn.ReadLine();
+				if (s == null)
+					return null;
 				++s_cLines;
-				if (s != null)
-					s = s.Trim();
+				s = s.Trim();
 			}
 			POString pos = new POString();
 			bool fMsgId = false;
@@ -69,19 +72,31 @@ namespace LocaleStrings
 				}
 				else if (s.StartsWith("# "))
 				{
-					pos.AddUserComment(s.Substring(2).TrimStart());
+					if (pos.IsObsolete)
+						pos.UserComments.Add(s.Substring(1));
+					else
+						pos.AddUserComment(s.Substring(2));
 				}
 				else if (s.StartsWith("#."))
 				{
-					pos.AddAutoComment(s.Substring(2).TrimStart());
+					if (pos.IsObsolete)
+						pos.UserComments.Add(s.Substring(1));
+					else
+						pos.AddAutoComment(s.Substring(2).TrimStart());
 				}
 				else if (s.StartsWith("#:"))
 				{
-					pos.AddReference(s.Substring(2).TrimStart());
+					if (pos.IsObsolete)
+						pos.UserComments.Add(s.Substring(1));
+					else
+						pos.AddReference(s.Substring(2).TrimStart());
 				}
 				else if (s.StartsWith("#,"))
 				{
-					pos.AddFlags(s.Substring(2).TrimStart());
+					if (pos.IsObsolete)
+						pos.UserComments.Add(s.Substring(1));
+					else
+						pos.AddFlags(s.Substring(2).TrimStart());
 				}
 				else if (s.ToLower().StartsWith("msgid"))
 				{
@@ -109,19 +124,29 @@ namespace LocaleStrings
 				}
 				else if (s.StartsWith("#~"))
 				{
-					pos.IsObsolete = true;
-					if (pos.UserComments != null)
-						pos.UserComments.Clear();
-					if (pos.AutoComments != null)
-						pos.AutoComments.Clear();
-					if (pos.Reference != null)
-						pos.Reference.Clear();
-					if (pos.Flags != null)
-					   pos.Flags.Clear();
-				   if (pos.MsgId != null)
-						pos.MsgId.Clear();
-					if (pos.MsgStr != null)
-						pos.MsgStr.Clear();
+					if (!pos.IsObsolete)
+					{
+						if (pos.UserComments != null)
+						{
+							for (int i = 0; i < pos.UserComments.Count; ++i)
+							{
+								if (pos.UserComments[i] != null)
+									pos.UserComments[i] = " " + pos.UserComments[i];
+							}
+						}
+						if (pos.AutoComments != null)
+							pos.AutoComments.Clear();
+						if (pos.Reference != null)
+							pos.Reference.Clear();
+						if (pos.Flags != null)
+							pos.Flags.Clear();
+						if (pos.MsgId != null)
+							pos.MsgId.Clear();
+						if (pos.MsgStr != null)
+							pos.MsgStr.Clear();
+						pos.IsObsolete = true;
+					}
+					pos.UserComments.Add(s.Substring(1));
 				}
 				else
 				{
@@ -132,14 +157,18 @@ namespace LocaleStrings
 					Console.WriteLine("INVALID PO FILE: ERROR ON LINE " + s_cLines);
 					throw new Exception("BAD PO FILE");
 				}
-				if (srIn.EndOfStream)
-					break;
 				s = srIn.ReadLine();
+				if (s == null)
+					break;
 				++s_cLines;
-				if (s != null)
-					s = s.Trim();
+				s = s.Trim();
 			} while (!String.IsNullOrEmpty(s));
-
+			// Multiline messages start with an empty line in PO files.  Remove it from our data.
+			// (Otherwise we add an extra "\n" line on output.)
+			if (pos.MsgId != null && pos.MsgId.Count > 1 && String.IsNullOrEmpty(pos.MsgId[0]))
+				pos.MsgId.RemoveAt(0);
+			if (pos.MsgStr != null && pos.MsgStr.Count > 1 && String.IsNullOrEmpty(pos.MsgStr[0]))
+				pos.MsgStr.RemoveAt(0);
 			return pos;
 		}
 
@@ -157,7 +186,7 @@ namespace LocaleStrings
 				m_rgsAutoComments = new List<string>();
 			if (!m_rgsAutoComments.Contains(s))
 			{
-				if (s.StartsWith("/"))
+				if (s.StartsWith("/") || s.StartsWith("(String used "))
 				{
 					m_rgsAutoComments.Add(s);
 				}
@@ -357,11 +386,22 @@ namespace LocaleStrings
 		}
 
 		/// <summary>
-		/// Write the contents of this object to the given StreamWriter.
+		/// Write the contents of this object to the given TextWriter.
 		/// </summary>
 		/// <param name="swOut"></param>
-		internal void Write(StreamWriter swOut)
+		internal void Write(TextWriter swOut)
 		{
+			if (m_rgsUserComments != null)
+			{
+				if (IsObsolete)
+				{
+					for (int i = 0; i < m_rgsUserComments.Count; ++i)
+						swOut.WriteLine("#" + m_rgsUserComments[i]);
+					return;
+				}
+				for (int i = 0; i < m_rgsUserComments.Count; ++i)
+					WriteComment(m_rgsUserComments[i], ' ', swOut);
+			}
 			if (m_rgsReference != null)
 			{
 				for (int i = 0; i < m_rgsReference.Count; ++i)
@@ -373,7 +413,11 @@ namespace LocaleStrings
 				int idx = m_rgsAutoComments.FindIndex(0, IsPathComment);
 				if (idx >= 0)
 				{
-					m_rgsAutoComments.Sort(idx, m_rgsAutoComments.Count - idx, null);
+					int cPath = m_rgsAutoComments.Count - idx;
+					var lastComment = m_rgsAutoComments[m_rgsAutoComments.Count - 1];
+					if (m_cDup == 1 && lastComment.StartsWith("(String used "))
+						--cPath;
+					m_rgsAutoComments.Sort(idx, cPath, null);
 				}
 				for (int i = 0; i < m_rgsAutoComments.Count; ++i)
 					WriteComment(m_rgsAutoComments[i], '.', swOut);
@@ -384,11 +428,6 @@ namespace LocaleStrings
 			{
 				for (int i = 0; i < m_rgsFlags.Count; ++i)
 					WriteComment(m_rgsFlags[i], ',', swOut);
-			}
-			if (m_rgsUserComments != null)
-			{
-				for (int i = 0; i < m_rgsUserComments.Count; ++i)
-					WriteComment(m_rgsUserComments[i], ' ', swOut);
 			}
 			WriteMsgBundle("msgid", m_rgsMsgId, swOut);
 			WriteMsgBundle("msgstr", m_rgsMsgStr, swOut);
@@ -401,20 +440,20 @@ namespace LocaleStrings
 		/// <param name="sType"></param>
 		/// <param name="rgs"></param>
 		/// <param name="swOut"></param>
-		private void WriteMsgBundle(string sType, List<string> rgs, StreamWriter swOut)
+		private void WriteMsgBundle(string sType, List<string> rgs, TextWriter swOut)
 		{
 			swOut.Write(string.Format("{0} ", sType));
-			if (rgs.Count != 1 && !(rgs.Count == 2 && String.IsNullOrEmpty(rgs[1])))
-				WriteQuotedLine("", false, swOut);
+			if (rgs.Count > 1 && !(rgs.Count == 2 && String.IsNullOrEmpty(rgs[1])))
+				WriteQuotedLine("", swOut);
 			for (int i = 0; i < rgs.Count; ++i)
 			{
-				bool fLast = i + 1 == rgs.Count;
-				if (!fLast || !String.IsNullOrEmpty(rgs[i]) || rgs.Count == 1)
+				bool fFinalLine = i + 1 == rgs.Count;
+				if (rgs.Count == 1 || !String.IsNullOrEmpty(rgs[i]) || !fFinalLine)
 				{
 					if (sType == "msgstr")
-						WriteQuotedLine(ReQuote(rgs[i]), !fLast, swOut);
+						WriteQuotedLine(ReQuote(rgs[i]), swOut);
 					else
-						WriteQuotedLine(rgs[i], !fLast, swOut);
+						WriteQuotedLine(rgs[i], swOut);
 				}
 			}
 		}
@@ -424,28 +463,23 @@ namespace LocaleStrings
 		/// </summary>
 		/// <param name="sComment">comment string</param>
 		/// <param name="chFlag">flag character indicating type of comment</param>
-		/// <param name="swOut">output StreamWriter</param>
-		public static void WriteComment(string sComment, char chFlag, StreamWriter swOut)
+		/// <param name="swOut">output TextWriter</param>
+		public static void WriteComment(string sComment, char chFlag, TextWriter swOut)
 		{
-			swOut.WriteLine("#{0} {1}", chFlag, sComment);
+			if (chFlag == ' ')
+				swOut.WriteLine("# {0}", sComment);
+			else
+				swOut.WriteLine("#{0} {1}", chFlag, sComment);
 		}
 
 		/// <summary>
-		/// write a quoted line to the output PO file, optionally appending "\\n" to the end.
+		/// write a quoted line to the output PO file.
 		/// </summary>
 		/// <param name="sVal">string value</param>
-		/// <param name="fAppendNewline">true if "\\n" should be added to the end of the string</param>
-		/// <param name="swOut">output StreamWriter</param>
-		public static void WriteQuotedLine(string sVal, bool fAppendNewline, StreamWriter swOut)
+		/// <param name="swOut">output TextWriter</param>
+		public static void WriteQuotedLine(string sVal, TextWriter swOut)
 		{
-			if (fAppendNewline && !sVal.EndsWith("\\n"))
-			{
-				swOut.WriteLine("\"{0}\\n\"", sVal);
-			}
-			else
-			{
 				swOut.WriteLine("\"{0}\"", sVal);
-			}
 		}
 
 		private static string ReQuote(string sValue)
