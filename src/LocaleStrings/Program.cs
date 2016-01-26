@@ -1778,12 +1778,17 @@ namespace LocaleStrings
 		/// <returns></returns>
 		private static string MungeForTest(string sInput, string sLocale)
 		{
+			// Regex for RGB codes at the end of color strings
+			Regex s_regexArgRGB = new Regex(",[0-9]+,[0-9]+,[0-9]+$",
+				RegexOptions.Compiled|RegexOptions.CultureInvariant);
 			if (sInput == "en")
 				return sLocale;
 			// First, convert string to all uppercase.
 			string s1 = sInput.ToUpper();
 			if (s1.EndsWith(".CHM"))
 				return s1;	// don't munge helpfile pathnames beyond uppercasing.
+			if (s_regexArgRGB.IsMatch(s1))
+				return s1;	// don't munge color strings beyond uppercasing.  If they don't end with a valid RGB code, FW will crash.
 			StringBuilder bldr = new StringBuilder(s1);
 			//// Second, double all vowels.
 			//for (int i = bldr.Length - 1; i >= 0; --i)
