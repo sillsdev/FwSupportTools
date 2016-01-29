@@ -1,0 +1,1974 @@
+#. used to indicate no value in ksQueueXYZ
+#. does not need to be localized
+#. /Src/Common/Controls/SideBar/SideBarTab.resx::mnuSeparator2.Text
+#. /Src/Common/Controls/SideBar/SideBarTab.resx::mnuSepr.Text
+#. /Src/LexText/GAFAWS/Apps/AffixPositionAnalyzer/ANAConverter/ANAConverterDlg.resx::tbAffixSep.Text
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksDash
+#. (String used 4 times.)
+msgid "-"
+msgstr ""
+
+#. Marker for missing items.
+#. /Src/LexText/Discourse/DiscourseStrings.resx::ksMissingMarker
+msgid "---"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmAnthroItem-jtview-publishAnthroForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmAnthroItem-jtview-publishSubAnthroForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmLocation-jtview-publishLocationForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmLocation-jtview-publishSenseVariantLocationForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmLocation-jtview-publishVariantLocationForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmSemanticDomain-jtview-publishSemDomForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmSemanticDomain-jtview-publishSubSemDomForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. (String used 7 times.)
+msgid " -"
+msgstr ""
+
+#. separate name and abbreviation (space dash space)
+#. /Language Explorer/Configuration/Parts/CmPossibilityParts.xml::/PartInventory/bin/part[@id="CmAnthroItem-Jt-PossibilityName"]/para/lit
+#. /Language Explorer/Configuration/Parts/CmPossibilityParts.xml::/PartInventory/bin/part[@id="CmPossibility-Jt-AbbrAndName"]/lit
+#. /Language Explorer/Configuration/Parts/CmPossibilityParts.xml::/PartInventory/bin/part[@id="CmSemanticDomain-Jt-PossibilityName"]/para/lit
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmAnthroItem-jtview-publishRootAnthro"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmAnthroItem-jtview-publishRootMinorAnthro"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmAnthroItem-jtview-publishRootSubAnthro"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmAnthroItem-jtview-publishStemAnthro"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmAnthroItem-jtview-publishStemMinorAnthro"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmSemanticDomain-jtview-publishRootMinorSemDom"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmSemanticDomain-jtview-publishRootSemDom"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmSemanticDomain-jtview-publishRootSubSemDom"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmSemanticDomain-jtview-publishStemMinorSemDom"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmSemanticDomain-jtview-publishStemSemDom"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmAnthroItem-jtview-publishAnthroForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmAnthroItem-jtview-publishSubAnthroForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmLocation-jtview-publishLocationForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmLocation-jtview-publishSenseVariantLocationForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmLocation-jtview-publishVariantLocationForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmSemanticDomain-jtview-publishSemDomForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmSemanticDomain-jtview-publishSubSemDomForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Src/FDO/Strings.resx::ksNameAbbrSep
+#. (String used 21 times.)
+msgid " - "
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/CellarParts.xml::/PartInventory/bin/part[@id="CmPossibility-Jt-SpaceParenAbbr"]/ifnot/lit
+#. /Language Explorer/Configuration/Parts/CmPossibilityParts.xml::/PartInventory/bin/part[@id="LexEntryType-Jt-SpaceParenRevAbbr"]/ifnot/lit
+#. (String used 2 times.)
+msgid "  ("
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/CellarLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-bestAnalysisNameAbbr"]/part[@ref="ConfigureAbbr"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootDomainType"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootMinorDomainType"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootSubDomainType"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemDomainType"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemMinorDomainType"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-publishDomainTypeForReversal"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-publishSubDomainTypeForReversal"]/part[@ref="NamePub"]/@before
+#. (String used 8 times.)
+msgid " ("
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRoot"]/part[@ref="EncyclopedicInfoPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootMinor"]/part[@ref="EncyclopedicInfoPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootSub"]/part[@ref="EncyclopedicInfoPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStemMinor"]/part[@ref="EncyclopedicInfoPub"]/@before
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="EncyclopedicInfoPub"]/@before
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="EncyclopedicInfoPub"]/@before
+#. (String used 6 times.)
+msgid " ["
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="UsageTypesConfig"]/@before
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="UsageTypesConfig"]/@before
+#. (String used 2 times.)
+msgid " {"
+msgstr ""
+
+#. this is used to build a list (for a log file message) by appending 1 or more items together.
+#. /Src/Utilities/SfmToXml/Sfm2XmlStrings.resx::ksQuotedItem
+msgid " '{0}'"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexSenseParts.XML::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-basic"]/choice/otherwise/lit
+#. /Language Explorer/Configuration/Parts/LexSenseParts.XML::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-basic"]/choice/where/choice/otherwise/lit
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-Browse"]/choice/otherwise/para/lit
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-Browse"]/choice/where/choice/otherwise/para/lit
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-BrowseAbbr"]/choice/otherwise/para/lit
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-BrowseAbbr"]/choice/where/choice/otherwise/para/lit
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-PartsOfSpeech"]/para/span/choice/otherwise/lit
+#. (String used 7 times.)
+msgid " > "
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoInflAffixSlot-Jt-PrefixSlotNameRTL"]/cell/para/lit
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoInflAffixSlot-Jt-SuffixSlotNameRTL"]/cell/para/lit
+#. (String used 2 times.)
+msgid "‏  "
+msgstr ""
+
+#. leading tab character, {1} is a newline character; is the 'Bullet" character culturally sensitive?
+#. /Src/LexText/LexTextControls/LexTextControls.resx::ksBullettedItem
+#. /Src/LexText/Morphology/MGA/MGAStrings.resx::ksBullettedItem
+#. (String used 2 times.)
+msgid "	• {0}{1}"
+msgstr ""
+
+#. /Src/Common/Controls/FwControls/ProgressDialogImpl.resx::lblStatusMessage.Text
+#. /Src/Common/Controls/FwControls/WizardDialog.resx::lblSteps.Text
+#. /Src/Common/Controls/ScrControls/ConfirmOverlappingFileReplaceDialog.resx::lblFilePath1.Text
+#. /Src/Common/Controls/ScrControls/ConfirmOverlappingFileReplaceDialog.resx::lblFilePath2.Text
+#. /Src/Common/Controls/ScrControls/ConfirmOverlappingFileReplaceDialog.resx::lblReferenceRange1.Text
+#. /Src/Common/Controls/ScrControls/ConfirmOverlappingFileReplaceDialog.resx::lblReferenceRange2.Text
+#. /Src/Common/Controls/ScrControls/ConfirmOverlappingFileReplaceDialog.resx::optUse1.Text
+#. /Src/Common/Controls/ScrControls/ConfirmOverlappingFileReplaceDialog.resx::optUse2.Text
+#. /Src/Common/Utils/FindFileStatusDialog.resx::lblCurrentFolder.Text
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwGeneralTab.resx::m_lblStyleDescription.Text
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwGeneralTab.resx::m_lblStyleType.Text
+#. /Src/FwCoreDlgs/FwProjPropertiesDlg.resx::m_lblProjCreatedDate.Text
+#. /Src/FwCoreDlgs/FwProjPropertiesDlg.resx::m_lblProjModifiedDate.Text
+#. /Src/FwCoreDlgs/FwProjPropertiesDlg.resx::m_lblProjName.Text
+#. /Src/FwCoreDlgs/FwProjPropertiesDlg.resx::m_lblServerName.Text
+#. /Src/FwCoreDlgs/PicturePropertiesDialog.resx::lblFilename.Text
+#. /Src/FwCoreDlgs/PUACharacterDlg.resx::$this.Text
+#. /Src/FwCoreDlgs/RealSplashScreen.resx::lblMessage.Text
+#. /Src/ScrImportComponents/ImportWizard.resx::lblFinish.Text
+#. /Src/ScrImportComponents/ImportWizard.resx::lblOverview.Text
+#. /Src/ScrImportComponents/ImportWizard.resx::lblSteps.Text
+#. /Src/ScrImportComponents/ModifyMapping.resx::endMarkerLabel.Text
+#. /Src/ScrImportComponents/ModifyMapping.resx::markerLabel.Text
+#. /Src/TE/TeDialogs/DraftPropertiesDialog.resx::lblCreatedDate.Text
+#. /Src/TE/TeDialogs/SymbolChooserDialog.resx::lblFontName.Text
+#. (String used 25 times.)
+msgid "#"
+msgstr ""
+
+#. /Src/FwCoreDlgs/WritingSystemPropertiesDialog.resx::m_LanguageCode.Text
+msgid "###"
+msgstr ""
+
+#. /Src/LexText/GAFAWS/Apps/AffixPositionAnalyzer/ANAConverter/ANAConverterDlg.resx::tbAmbigMarker.Text
+msgid "%"
+msgstr ""
+
+#. /Src/FwCoreDlgs/WritingSystemPropertiesDialog.resx::m_ampersandButton.Text
+msgid "&"
+msgstr ""
+
+#. /Src/FwCoreDlgs/WritingSystemPropertiesDialog.resx::m_ampersandButton.Text
+msgid "&&"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/CellarParts.xml::/PartInventory/bin/part[@id="CmPossibility-Jt-ItalicNameList"]/span/lit
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntry-jtview-publishRootMinorPara"]/part[@ref="VariantFormsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntry-jtview-publishRootPara"]/part[@ref="VariantFormsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntry-jtview-publishRootSubentry"]/part[@ref="VariantFormsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntry-jtview-publishStemMinorPara"]/part[@ref="VariantFormsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntry-jtview-publishStemPara"]/part[@ref="StemMainEntryConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntry-jtview-publishStemPara"]/part[@ref="VariantFormsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntryType-jtview-publishRootSubEntryType"]/part[@ref="ReverseAbbrPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRoot"]/part[@ref="SenseTypeConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRoot"]/part[@ref="VariantFormsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootMinor"]/part[@ref="SenseTypeConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootMinor"]/part[@ref="VariantFormsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootSub"]/part[@ref="SenseTypeConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootSub"]/part[@ref="VariantFormsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStem"]/part[@ref="SenseTypeConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStem"]/part[@ref="VariantFormsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStemMinor"]/part[@ref="SenseTypeConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStemMinor"]/part[@ref="VariantFormsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexEntry-jtview-publishRIELexEntry1"]/part[@ref="VariantFormsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexEntry-jtview-publishRIELexEntry2"]/part[@ref="StemMainEntryConfig"]/@before
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="SenseTypeConfig"]/@before
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="VariantFormsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="SenseTypeConfig"]/@before
+#. (String used 23 times.)
+msgid "("
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/CellarLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-bestAnalysisNameAbbr"]/part[@ref="ConfigureAbbr"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntryType-jtview-publishRootSubEntryType"]/part[@ref="ReverseAbbrPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootDomainType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootMinorDomainType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootSubDomainType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemDomainType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemMinorDomainType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-publishDomainTypeForReversal"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-publishSubDomainTypeForReversal"]/part[@ref="NamePub"]/@after
+#. (String used 9 times.)
+msgid ")"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/CellarParts.xml::/PartInventory/bin/part[@id="CmPossibility-Jt-ItalicNameList"]/span/lit
+#. /Language Explorer/Configuration/Parts/CellarParts.xml::/PartInventory/bin/part[@id="CmPossibility-Jt-SpaceParenAbbr"]/ifnot/lit
+#. /Language Explorer/Configuration/Parts/CmPossibilityParts.xml::/PartInventory/bin/part[@id="LexEntryType-Jt-SpaceParenRevAbbr"]/ifnot/lit
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntry-jtview-publishRootMinorPara"]/part[@ref="VariantFormsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntry-jtview-publishRootPara"]/part[@ref="VariantFormsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntry-jtview-publishRootSubentry"]/part[@ref="VariantFormsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntry-jtview-publishStemMinorPara"]/part[@ref="VariantFormsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntry-jtview-publishStemPara"]/part[@ref="StemMainEntryConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntry-jtview-publishStemPara"]/part[@ref="VariantFormsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntryRef-jtview-publishRootMinorComplexFormRef"]/part[@ref="PrimaryHeadwordsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntryRef-jtview-publishRootMinorSenseComplexFormRef"]/part[@ref="PrimaryHeadwordsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntryRef-jtview-publishRootSenseComplexFormRef"]/part[@ref="PrimaryHeadwordsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntryRef-jtview-publishRootSubSenseComplexFormRef"]/part[@ref="PrimaryHeadwordsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRoot"]/part[@ref="SenseTypeConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRoot"]/part[@ref="VariantFormsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootMinor"]/part[@ref="SenseTypeConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootMinor"]/part[@ref="VariantFormsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootSub"]/part[@ref="SenseTypeConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootSub"]/part[@ref="VariantFormsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStem"]/part[@ref="SenseTypeConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStem"]/part[@ref="VariantFormsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStemMinor"]/part[@ref="SenseTypeConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStemMinor"]/part[@ref="VariantFormsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexEntry-jtview-publishRIELexEntry1"]/part[@ref="VariantFormsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexEntry-jtview-publishRIELexEntry2"]/part[@ref="StemMainEntryConfig"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="SenseTypeConfig"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="VariantFormsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="SenseTypeConfig"]/@after
+#. (String used 28 times.)
+msgid ") "
+msgstr ""
+
+#. /Src/TE/TeDialogs/FootnotePropertiesSelector.resx::txtMarker.Text
+msgid "*"
+msgstr ""
+
+#. indicates a missing value
+#. signals missing value
+#. signals missing/unknown value
+#. marks unknown/missing information
+#. /Src/FDO/Strings.resx::ksStars
+#. /Src/LexText/Interlinear/ITextStrings.resx::ksStars
+#. /Src/LexText/Lexicon/LexEdStrings.resx::ksStars
+#. /Src/LexText/LexTextControls/LexTextControls.resx::ksStars
+#. (String used 4 times.)
+msgid "***"
+msgstr ""
+
+#. Used in Description on the General tab of the Style dialog box to separate detail items
+#. separate items in a list (comma space)
+#. /Src/FDO/Strings.resx::ksListSep
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwCoreDlgControls.resx::kstidItemSeparator
+#. (String used 2 times.)
+msgid ", "
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexSenseParts.XML::/PartInventory/bin/part[@id="CmPossibility-Jt-BoldItalicAbbr"]/span/lit
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="CmPossibility-Jt-AffixCategory"]/if/ifnot/lit
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="CmPossibility-Jt-AffixCategory"]/ifnot/lit
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="PartOfSpeech-Jt-ShowPartOfSpeech"]/ifnot/lit
+#. /Language Explorer/Configuration/Parts/ReversalParts.xml::/PartInventory/bin/part[@id="CmPossibility-Jt-RevIdxEntryPOSItalicAbbr"]/span/lit
+#. (String used 5 times.)
+msgid "."
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/CellarParts.xml::/PartInventory/bin/part[@id="CmPossibility-Jt-AbbreviationDot"]/lit
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntry-jtview-publishRootMinorPara"]/part[@ref="LexReferencesConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntry-jtview-publishRootPara"]/part[@ref="LexReferencesConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntry-jtview-publishRootSubentry"]/part[@ref="LexReferencesConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntry-jtview-publishStemMinorPara"]/part[@ref="LexReferencesConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntry-jtview-publishStemPara"]/part[@ref="LexReferencesConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRoot"]/part[@ref="LexReferencesConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootMinor"]/part[@ref="LexReferencesConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootSub"]/part[@ref="LexReferencesConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStem"]/part[@ref="LexReferencesConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStemMinor"]/part[@ref="LexReferencesConfig"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexEntry-jtview-publishRIELexEntry2"]/part[@ref="LexReferencesConfig"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="LexReferencesConfig"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="LexReferencesConfig"]/@after
+#. (String used 14 times.)
+msgid ". "
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="SemanticDomainsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="SemanticDomainsConfig"]/@after
+#. (String used 2 times.)
+msgid ".)"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRoot"]/part[@ref="SemanticDomainsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootMinor"]/part[@ref="SemanticDomainsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootSub"]/part[@ref="SemanticDomainsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStem"]/part[@ref="SemanticDomainsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStemMinor"]/part[@ref="SemanticDomainsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="SemanticDomainsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="SemanticDomainsConfig"]/@after
+#. (String used 7 times.)
+msgid ".) "
+msgstr ""
+
+#. ellipsis - mark showing missing words, or "more to come".  displayed on a button for launching a dialog box.
+#. /Src/Common/Controls/DetailControls/Resources/DetailControlsStrings.resx::ksEllipsis
+#. /Src/FwCoreDlgs/CnvtrPropertiesCtrl.resx::btnMapFile.Text
+#. /Src/FwCoreDlgs/PicturePropertiesDialog.resx::m_btnBrowseDest.Text
+#. /Src/LexText/LexTextControls/LexImportWizard.resx::btnDatabaseBrowse.Text
+#. /Src/LexText/LexTextControls/LexImportWizard.resx::btnSaveAsBrowse.Text
+#. /Src/LexText/LexTextControls/LexImportWizard.resx::btnSettingsBrowse.Text
+#. (String used 6 times.)
+msgid "..."
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontAttributes.resx::m_cboUnderlineStyle.Items2
+msgid ".1"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontAttributes.resx::m_cboUnderlineStyle.Items3
+msgid ".2"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontAttributes.resx::m_cboUnderlineStyle.Items4
+msgid ".3"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontAttributes.resx::m_cboUnderlineStyle.Items5
+msgid ".4"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishEntryRefForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishEntryRefForReversal"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishSenseRefForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishSenseRefForReversal"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishSubSenseRefForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishSubSenseRefForReversal"]/part[@ref="NamePub"]/@after
+#. (String used 6 times.)
+msgid ":"
+msgstr ""
+
+#. Used in Description on the General tab of the Style dialog box to separate an item label from its value
+#. /Language Explorer/Configuration/Parts/CellarLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-bestAnalysisAbbrName"]/part[@ref="ConfigureAbbr"]/@after
+#. /Language Explorer/Configuration/Parts/CellarParts.xml::/PartInventory/bin/part[@id="CmPossibility-Jt-ParaAbbrColonName"]/para/lit
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexReference-jtview-publishRootEntry"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexReference-jtview-publishRootEntry"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexReference-jtview-publishRootMinorEntry"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexReference-jtview-publishRootMinorEntry"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexReference-jtview-publishRootSubEntry"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexReference-jtview-publishRootSubEntry"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexReference-jtview-publishStemEntry"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexReference-jtview-publishStemEntry"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexReference-jtview-publishStemMinorEntry"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexReference-jtview-publishStemMinorEntry"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexReference-jtview-publishRootMinorSenseRef"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexReference-jtview-publishRootMinorSenseRef"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexReference-jtview-publishRootSenseRef"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexReference-jtview-publishRootSenseRef"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexReference-jtview-publishRootSubSenseRef"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexReference-jtview-publishRootSubSenseRef"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexReference-jtview-publishStemMinorSenseRef"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexReference-jtview-publishStemMinorSenseRef"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexReference-jtview-publishStemSenseRef"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexReference-jtview-publishStemSenseRef"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseParts.XML::/PartInventory/bin/part[@id="LexReference-Jt-TargetsPub"]/choice/where/if/span/lit
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoMorphSynAnalysis-jtview-publishRoot"]/part[@ref="SlotsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoMorphSynAnalysis-jtview-publishRootMinor"]/part[@ref="SlotsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoMorphSynAnalysis-jtview-publishRootSub"]/part[@ref="SlotsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoMorphSynAnalysis-jtview-publishStem"]/part[@ref="SlotsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoMorphSynAnalysis-jtview-publishStemComplexFormGramInfo"]/part[@ref="SlotsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoMorphSynAnalysis-jtview-publishStemMinor"]/part[@ref="SlotsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishEntryRefForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishEntryRefForReversal"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishSenseRefForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishSenseRefForReversal"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishSubSenseRefForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishSubSenseRefForReversal"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["MoMorphSynAnalysis-jtview-publishForReversal"]/part[@ref="SlotsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["MoMorphSynAnalysis-jtview-publishSubForReversal"]/part[@ref="SlotsConfig"]/@before
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwCoreDlgControls.resx::kstidItemValueSeparator
+#. (String used 38 times.)
+msgid ": "
+msgstr ""
+
+#. Label to be used in Export dialog that gets added to the books, when there are less then 4 books
+#. /Src/TE/TeResources/TeStrings.resx::kstidExportDlgMultipleBooks
+msgid ": {0}"
+msgstr ""
+
+#. Text used to separate the names of the selected scripture checks in checking view when the checking toolbar is docked to the top. This separator should also include the space, if desired.
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoForm-Jt-ListedForm"]/lit
+#. /Src/TE/TeResources/TeStrings.resx::kstidScrChkNameSeparator
+#. (String used 2 times.)
+msgid "; "
+msgstr ""
+
+#. Symbol or short string representing an unknown number of unreviewed differences in the Merge Imported Scripture dialog box
+#. /Src/TE/TeResources/TeDialogStrings.resx::kstidUnknown
+msgid "?"
+msgstr ""
+
+#. default for an unknown/unrecognized/undefined value
+#. signals unknown/missing value
+#. missiing/undefined information
+#. indicates unknown/undefined/missing value
+#. marks unknown value that the user shouldn't see
+#. Shown in the file list under book names when the file can not be found
+#. /Language Explorer/Configuration/Parts/LexSenseParts.XML::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-basic"]/choice/where/choice/otherwise/lit
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-Browse"]/choice/where/choice/otherwise/para/lit
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-BrowseAbbr"]/choice/where/choice/otherwise/para/lit
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-PartsOfSpeech"]/para/span/choice/otherwise/choice/where/lit
+#. /Src/Common/Controls/DetailControls/Resources/DetailControlsStrings.resx::ksQuestionable
+#. /Src/Common/Controls/ScrControls/ScrControls.resx::kstidNoBooks
+#. /Src/Common/Controls/XMLViews/XMLViewsStrings.resx::ksQuestionMarks
+#. /Src/FDO/Strings.resx::ksQuestions
+#. /Src/FdoUi/FdoUiStrings.resx::ksQuestions
+#. /Src/FwCoreDlgs/FwCoreDlgs.resx::ksQuestions
+#. /Src/LexText/Interlinear/ITextStrings.resx::ksQuestions
+#. /Src/LexText/Morphology/MEStrings.resx::ksQuestions
+#. /Src/LexText/ParserEngine/ParserCore/ParserCoreStrings.resx::ksQuestions
+#. (String used 13 times.)
+msgid "???"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-PartsOfSpeech"]/para/span/choice/where/choice/otherwise/lit
+msgid "??? > "
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-BrowseAbbr"]/choice/where/choice/where/para/lit
+msgid "??? > ???"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexSenseParts.XML::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-basic"]/choice/otherwise/choice/where/lit
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-Browse"]/choice/otherwise/para/choice/where/lit
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-BrowseAbbr"]/choice/otherwise/para/choice/where/lit
+#. (String used 3 times.)
+msgid "???."
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoMorphSynAnalysis-Jt-Unknown"]/lit
+msgid "????"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishRootForEntryVariant"]/part[@ref="FormPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishRootForLexEntry"]/part[@ref="FormPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishRootForSenseVariant"]/part[@ref="FormPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishRootMinorForEntryVariant"]/part[@ref="FormPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishRootMinorForLexEntry"]/part[@ref="FormPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishRootMinorForSenseVariant"]/part[@ref="FormPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishRootSubForEntryVariant"]/part[@ref="FormPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishRootSubForLexEntry"]/part[@ref="FormPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishRootSubForSenseVariant"]/part[@ref="FormPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishStemForEntryVariant"]/part[@ref="FormPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishStemForLexEntry"]/part[@ref="FormPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishStemForSenseVariant"]/part[@ref="FormPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishStemMinorForEntryVariant"]/part[@ref="FormPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishStemMinorForLexEntry"]/part[@ref="FormPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishStemMinorForSenseVariant"]/part[@ref="FormPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootMinorComplexFormTransType"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootMinorSenseComplexFormTransType"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootMinorStatus"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootMinorTransType"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootSenseComplexFormTransType"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootStatus"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootSubSenseComplexFormTransType"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootSubStatus"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootSubTransType"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootTransType"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemComplexFormTransType"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemMinorComplexFormTransType"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemMinorSenseComplexFormTransType"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemMinorStatus"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemMinorTransType"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemSenseComplexFormTransType"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemStatus"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemTransType"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStem"]/part[@ref="EncyclopedicInfoPub"]/@before
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-publishStatusForReversal"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-publishSubStatusForReversal"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-publishSubTransTypeForReversal"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-publishTransTypeForReversal"]/part[@ref="NamePub"]/@before
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexPronunciation-jtview-publishForReversal"]/part[@ref="FormPub"]/@before
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexPronunciation-jtview-publishForReversalEntryVariant"]/part[@ref="FormPub"]/@before
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexPronunciation-jtview-publishForReversalSenseVariant"]/part[@ref="FormPub"]/@before
+#. /Src/LexText/Interlinear/ITextStrings.resx::ksStartTagSymbol
+#. (String used 42 times.)
+msgid "["
+msgstr ""
+
+#. Format string, {0} replaced with line number of dependent clause.
+#. /Src/LexText/Discourse/DiscourseStrings.resx::ksDepClauseFormat
+msgid "[{0}]"
+msgstr ""
+
+#. Format a reference to lines {0} to {1}.
+#. /Src/LexText/Discourse/DiscourseStrings.resx::ksDepClauseRangeFormat
+msgid "[{0}-{1}]"
+msgstr ""
+
+#. alternate abbreviation for inches
+#. Measurement unit symbol for Inches (If culture doesn't have a separate symbol for specifying inches, localized value for this string should be set to match value of kstidIn.)
+#. /Src/Common/FwPrintLayoutComponents/FwPageSetup.resx::kstidInches
+#. /Src/Common/Utils/UtilsStrings.resx::kstidInches
+#. (String used 2 times.)
+msgid "\""
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishRootForEntryVariant"]/part[@ref="FormPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishRootForLexEntry"]/part[@ref="FormPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishRootForSenseVariant"]/part[@ref="FormPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishRootMinorForEntryVariant"]/part[@ref="FormPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishRootMinorForLexEntry"]/part[@ref="FormPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishRootMinorForSenseVariant"]/part[@ref="FormPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishRootSubForEntryVariant"]/part[@ref="FormPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishRootSubForLexEntry"]/part[@ref="FormPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishRootSubForSenseVariant"]/part[@ref="FormPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishStemForEntryVariant"]/part[@ref="FormPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishStemForLexEntry"]/part[@ref="FormPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishStemForSenseVariant"]/part[@ref="FormPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishStemMinorForEntryVariant"]/part[@ref="FormPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishStemMinorForLexEntry"]/part[@ref="FormPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishStemMinorForSenseVariant"]/part[@ref="FormPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootMinorComplexFormTransType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootMinorSenseComplexFormTransType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootMinorStatus"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootMinorTransType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootSenseComplexFormTransType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootStatus"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootSubSenseComplexFormTransType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootSubStatus"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootSubTransType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootTransType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemComplexFormTransType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemMinorComplexFormTransType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemMinorSenseComplexFormTransType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemMinorStatus"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemMinorTransType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemSenseComplexFormTransType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemStatus"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemTransType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRoot"]/part[@ref="EncyclopedicInfoPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootMinor"]/part[@ref="EncyclopedicInfoPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootSub"]/part[@ref="EncyclopedicInfoPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStemMinor"]/part[@ref="EncyclopedicInfoPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-publishStatusForReversal"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-publishSubStatusForReversal"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-publishSubTransTypeForReversal"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-publishTransTypeForReversal"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexPronunciation-jtview-publishForReversal"]/part[@ref="FormPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexPronunciation-jtview-publishForReversalEntryVariant"]/part[@ref="FormPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexPronunciation-jtview-publishForReversalSenseVariant"]/part[@ref="FormPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="EncyclopedicInfoPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="EncyclopedicInfoPub"]/@after
+#. /Src/LexText/Interlinear/ITextStrings.resx::ksEndTagSymbol
+#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_bracketLabel.Text
+#. (String used 48 times.)
+msgid "]"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRoot"]/part[@ref="RestrictionsPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootMinor"]/part[@ref="RestrictionsPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootSub"]/part[@ref="RestrictionsPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStem"]/part[@ref="EncyclopedicInfoPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStem"]/part[@ref="RestrictionsPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStemMinor"]/part[@ref="RestrictionsPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="RestrictionsPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="RestrictionsPub"]/@after
+#. (String used 8 times.)
+msgid "] "
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRoot"]/part[@ref="UsageTypesConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootMinor"]/part[@ref="UsageTypesConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootSub"]/part[@ref="UsageTypesConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStem"]/part[@ref="UsageTypesConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStemMinor"]/part[@ref="UsageTypesConfig"]/@before
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="UsageTypesConfig"]/@before
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="UsageTypesConfig"]/@before
+#. (String used 7 times.)
+msgid "{"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwUserProperties.resx::lblUserName.Text
+msgid "{0}"
+msgstr ""
+
+#. Format string for showing two pairs of quotation marks, the primary pair and the secondary pair.
+#. /Src/FwCoreDlgs/Properties/Resources.resx::kstidQuotationSetFormat
+msgid "{0}  {1}"
+msgstr ""
+
+#. Used for formatting the Main window caption with the project name (param 0) and the application name (param 1)
+#. Format string for info bar caption; {0} is the basic caption, {1} is the book, chapter, verse reference
+#. Used for formatting the shortcut file name for a remote database, the database name is param 0 and remote server name is param 1.
+#. Used for formatting the project name (param 0) and remote server name (param 1) for display in a window caption.
+#. This is the format string for displaying tooltips for info. bar buttons. Parameter 0 = the tab's text and parameter 1 = the current tab item's text.
+#. title of the button's corresponding sidebar tab followed by the tab's current button
+#. /Src/Common/Framework/FrameworkStrings.resx::ksInfoBarBtnToolTipFmt
+#. /Src/FwResources/FwStrings.resx::kstidAppCaptionWithProjectName
+#. /Src/FwResources/FwStrings.resx::kstidCreateShortcutFilenameRemoteDb
+#. /Src/FwResources/FwStrings.resx::kstidProjectNameWithRemoteServer
+#. /Src/TE/TeEditorialChecks/CheckControl.resx::m_ToolStrip.Text
+#. /Src/TE/TeResources/TeStrings.resx::kstidCaptionWRefFormat
+#. /Src/TE/TeResources/TeStrings.resx::kstidInfoBarButtonTooltipFormat
+#. (String used 7 times.)
+msgid "{0} - {1}"
+msgstr ""
+
+#. Format string for the scripture checks displayed in the EditorialChecksControl tree. The first parameter is the check's name, the second is the date/time or the value of kstidScrCheckNeverRunMsg if the check was not run on one or more scripture books.
+#. This is the format for the window list in the window menu {0} is info bar text and {1} is the project name.
+#. /Src/FwResources/FwTMStrings.resx::kstidWindowListItemFormatter
+#. /Src/TE/TeResources/TeStrings.resx::kstidScrCheckNameFormat
+#. /Src/TE/TeResources/TeStrings.resx::kstidScrChecksTreeNodeTipFormat
+#. (String used 3 times.)
+msgid "{0} ({1})"
+msgstr ""
+
+#. {0} is the lexical form, {1} is the gloss, {2} is the citation form
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksX_Y_Z
+msgid "{0} ({1}): {2}"
+msgstr ""
+
+#. code page name plus code page ID number in brackets
+#. /Src/FwCoreDlgs/FwCoreDlgs.resx::ksCodePageDisplay
+msgid "{0} [{1}]"
+msgstr ""
+
+#. used to concatenate a long format date string with a short format time string.
+#. /Src/Common/Controls/DetailControls/Resources/DetailControlsStrings.resx::ksDateAndTime
+msgid "{0} {1}"
+msgstr ""
+
+#. Displayed in the Zoom combo box
+#. If there is a different percent character for a culture, then  this needs to get it.
+#. /Src/FwResources/FwStrings.resx::ksPercentage
+#. /Src/TE/DiffView/TeDiffViewResources.resx::kstidZoom
+#. (String used 2 times.)
+msgid "{0}%"
+msgstr ""
+
+#. displayed when the text box contains one style and one writing system
+#. /Src/FwCoreDlgs/FwCoreDlgs.resx::kstidOneStyleOneWS
+msgid "{0}, {1}"
+msgstr ""
+
+#. /Src/Common/Controls/XMLViews/XMLViewsStrings.resx::ksRangeXY
+msgid "{0}...{1}"
+msgstr ""
+
+#. {0} is the standardized Scripture range reference. {1} is a section heading.
+#. format for presenting a term and an abbreviation
+#. /Src/LexText/Morphology/MGA/MGAStrings.resx::ksX_Y
+#. /Src/TE/TeResources/TeDialogStrings.resx::kstidOxesExportRef
+#. /Src/xWorks/xWorksStrings.resx::ksHierarchyLabel
+#. (String used 3 times.)
+msgid "{0}: {1}"
+msgstr ""
+
+#. Format string of a pair of opening and closing quotation marks.
+#. /Src/FwCoreDlgs/Properties/Resources.resx::kstidQuotationPairFormat
+msgid "{0}…{1}"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="UsageTypesConfig"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="UsageTypesConfig"]/@after
+#. (String used 2 times.)
+msgid "}"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRoot"]/part[@ref="UsageTypesConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootMinor"]/part[@ref="UsageTypesConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootSub"]/part[@ref="UsageTypesConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStem"]/part[@ref="UsageTypesConfig"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStemMinor"]/part[@ref="UsageTypesConfig"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="UsageTypesConfig"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="UsageTypesConfig"]/@after
+#. (String used 7 times.)
+msgid "} "
+msgstr ""
+
+#. /Src/LexText/GAFAWS/Apps/AffixPositionAnalyzer/ANAConverter/ANAConverterDlg.resx::tbOpenDel.Text
+msgid "<"
+msgstr ""
+
+#. /Src/Common/Controls/XMLViews/XMLViewsStrings.resx::ksLessX
+msgid "< {0}"
+msgstr ""
+
+#. Marker inserted to indicate a moved object to the left of the marker.
+#. /Src/LexText/Discourse/DiscourseStrings.resx::ksMovedTextBefore
+msgid "<<"
+msgstr ""
+
+#. /Src/Common/Controls/XMLViews/XMLViewsStrings.resx::ksLessEqX
+msgid "<= {0}"
+msgstr ""
+
+#. /Src/Common/Controls/XMLViews/XMLViewsStrings.resx::ksGreaterEqX
+msgid "=> {0}"
+msgstr ""
+
+#. /Src/Common/Controls/XMLViews/SimpleMatchDlg.resx::regexHelper.Text
+#. /Src/FwCoreDlgs/FwFindReplaceDlg.resx::btnRegexMenuFind.Text
+#. /Src/FwCoreDlgs/FwFindReplaceDlg.resx::btnRegexMenuReplace.Text
+#. /Src/LexText/GAFAWS/Apps/AffixPositionAnalyzer/ANAConverter/ANAConverterDlg.resx::tbCloseDel.Text
+#. /Src/LexText/Interlinear/ConcordanceControl.resx::m_btnRegExp.Text
+#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::morphBreakHelper.Text
+#. (String used 6 times.)
+msgid ">"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-ConditionalArrow"]/if/if/lit
+msgid "> "
+msgstr ""
+
+#. /Src/Common/Controls/XMLViews/XMLViewsStrings.resx::ksGreaterX
+msgid "> {0}"
+msgstr ""
+
+#. Marker inserted to indicate a moved object to the right of the marker.
+#. /Src/LexText/Discourse/DiscourseStrings.resx::ksMovedTextAfter
+msgid ">>"
+msgstr ""
+
+#. /Language Explorer/Configuration/Lexicon/DataTreeInclude.xml::/window/commands/command/@label
+msgid "↑"
+msgstr ""
+
+#. /Language Explorer/Configuration/Lexicon/DataTreeInclude.xml::/window/commands/command/@label
+msgid "↓"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items4
+msgid "§"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items18
+msgid "¶"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items10
+msgid "⬧"
+msgstr ""
+
+#. U+29EB
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items11
+msgid "⧫"
+msgstr ""
+
+#. U+2318
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items14
+msgid "⌘"
+msgstr ""
+
+#. U+25A0
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items5
+msgid "■"
+msgstr ""
+
+#. U+25A1
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items7
+msgid "□"
+msgstr ""
+
+#. U+25AA
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items4
+msgid "▪"
+msgstr ""
+
+#. U+25AB
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items6
+msgid "▫"
+msgstr ""
+
+#. U+25C6
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items12
+msgid "◆"
+msgstr ""
+
+#. U+25CF
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items2
+msgid "●"
+msgstr ""
+
+#. U+21E8
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items23
+msgid "⇨"
+msgstr ""
+
+#. U+2794
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items21
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items22
+#. (String used 2 times.)
+msgid "➔"
+msgstr ""
+
+#. U+27A2
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items19
+msgid "➢"
+msgstr ""
+
+#. U+27B2
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items20
+msgid "➲"
+msgstr ""
+
+#. U+261E
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items15
+msgid "☞"
+msgstr ""
+
+#. U+00B7
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items
+msgid "·"
+msgstr ""
+
+#. U+2022
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items1
+msgid "•"
+msgstr ""
+
+#. U+2713
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items24
+msgid "✓"
+msgstr ""
+
+#. U+271E
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items16
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items17
+#. (String used 2 times.)
+msgid "✞"
+msgstr ""
+
+#. U+2730
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items18
+msgid "✰"
+msgstr ""
+
+#. U+274D
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items3
+msgid "❍"
+msgstr ""
+
+#. U+2751
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items8
+msgid "❑"
+msgstr ""
+
+#. U+2752
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items9
+msgid "❒"
+msgstr ""
+
+#. U+2756
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items13
+msgid "❖"
+msgstr ""
+
+
+
+#. /Src/Common/Controls/XMLViews/XMLViewsStrings.resx::ksZero
+#. /Src/FDO/Strings.resx::ksZero
+#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMin.Items
+#. (String used 3 times.)
+msgid "0"
+msgstr ""
+
+#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::m_udmFooter.Text
+#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::m_udmHeader.Text
+#. (String used 2 times.)
+msgid "0.51\""
+msgstr ""
+
+#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::m_udmBottom.Text
+#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::m_udmLeft.Text
+#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::m_udmRight.Text
+#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::m_udmTop.Text
+#. (String used 4 times.)
+msgid "0.98\""
+msgstr ""
+
+#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::m_udmGutter.Text
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwParagraphTab.resx::m_nudIndentBy.Text
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwParagraphTab.resx::m_nudLeftIndentation.Text
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwParagraphTab.resx::m_nudRightIndentation.Text
+#. (String used 4 times.)
+msgid "0\""
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboNumberScheme.Items5
+msgid "01, 02, 03, ..."
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_nudStartAt.Text
+#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMax.Items1
+#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMin.Items1
+#. (String used 3 times.)
+msgid "1"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboNumberScheme.Items
+msgid "1, 2, 3, ..."
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontTab.resx::m_cboFontSize.Items3
+#. /Src/FwCoreDlgs/FwFontDialog.resx::m_lbFontSizes.Items2
+#. (String used 2 times.)
+msgid "10"
+msgstr ""
+
+#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::m_udmPaperHeight.Text
+msgid "10.98\""
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontTab.resx::m_cboFontSize.Items4
+#. /Src/FwCoreDlgs/FwFontDialog.resx::m_lbFontSizes.Items3
+#. (String used 2 times.)
+msgid "11"
+msgstr ""
+
+#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::fwOverrideComboBox1.Items
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontTab.resx::m_cboFontSize.Items5
+#. /Src/FwCoreDlgs/FwFontDialog.resx::m_lbFontSizes.Items4
+#. /Src/LexText/ParserEngine/ParserWatcher/Form1.resx::m_highQueueSize.Text
+#. /Src/LexText/ParserEngine/ParserWatcher/Form1.resx::m_lowQueueSize.Text
+#. /Src/LexText/ParserEngine/ParserWatcher/Form1.resx::m_medQueueSize.Text
+#. (String used 6 times.)
+msgid "12"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontTab.resx::m_cboFontSize.Items6
+#. /Src/FwCoreDlgs/FwFontDialog.resx::m_lbFontSizes.Items5
+#. (String used 2 times.)
+msgid "14"
+msgstr ""
+
+#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::fwOverrideComboBox1.Items1
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontTab.resx::m_cboFontSize.Items7
+#. /Src/FwCoreDlgs/FwFontDialog.resx::m_lbFontSizes.Items6
+#. (String used 3 times.)
+msgid "16"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontTab.resx::m_cboFontSize.Items8
+#. /Src/FwCoreDlgs/FwFontDialog.resx::m_lbFontSizes.Items7
+#. (String used 2 times.)
+msgid "18"
+msgstr ""
+
+#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMax.Items2
+#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMin.Items2
+#. (String used 2 times.)
+msgid "2"
+msgstr ""
+
+#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::fwOverrideComboBox1.Items2
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontTab.resx::m_cboFontSize.Items9
+#. /Src/FwCoreDlgs/FwFontDialog.resx::m_lbFontSizes.Items8
+#. (String used 3 times.)
+msgid "20"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontTab.resx::m_cboFontSize.Items10
+#. /Src/FwCoreDlgs/FwFontDialog.resx::m_lbFontSizes.Items9
+#. (String used 2 times.)
+msgid "22"
+msgstr ""
+
+#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::fwOverrideComboBox1.Items3
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontTab.resx::m_cboFontSize.Items11
+#. /Src/FwCoreDlgs/FwFontDialog.resx::m_lbFontSizes.Items10
+#. (String used 3 times.)
+msgid "24"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontTab.resx::m_cboFontSize.Items12
+#. /Src/FwCoreDlgs/FwFontDialog.resx::m_lbFontSizes.Items11
+#. (String used 2 times.)
+msgid "26"
+msgstr ""
+
+#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::fwOverrideComboBox1.Items4
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontTab.resx::m_cboFontSize.Items13
+#. /Src/FwCoreDlgs/FwFontDialog.resx::m_lbFontSizes.Items12
+#. (String used 3 times.)
+msgid "28"
+msgstr ""
+
+#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMax.Items3
+#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMin.Items3
+#. (String used 2 times.)
+msgid "3"
+msgstr ""
+
+#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::fwOverrideComboBox1.Items5
+msgid "32"
+msgstr ""
+
+#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::fwOverrideComboBox1.Items6
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontTab.resx::m_cboFontSize.Items14
+#. /Src/FwCoreDlgs/FwFontDialog.resx::m_lbFontSizes.Items13
+#. (String used 3 times.)
+msgid "36"
+msgstr ""
+
+#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::fwOverrideComboBox1.Items7
+#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMax.Items4
+#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMin.Items4
+#. (String used 3 times.)
+msgid "4"
+msgstr ""
+
+#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::fwOverrideComboBox1.Items8
+msgid "40"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontTab.resx::m_cboFontSize.Items15
+#. /Src/FwCoreDlgs/FwFontDialog.resx::m_lbFontSizes.Items14
+#. (String used 2 times.)
+msgid "48"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwProjPropertiesDlg.resx::m_btnAnalMoveUp.Text
+#. /Src/FwCoreDlgs/FwProjPropertiesDlg.resx::m_btnVernMoveUp.Text
+#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMax.Items5
+#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMin.Items5
+#. /Src/xWorks/XmlDocConfigureDlg.resx::m_btnMoveUp.Text
+#. /Src/xWorks/XmlDocConfigureDlg.resx::m_btnMoveWsUp.Text
+#. (String used 6 times.)
+msgid "5"
+msgstr ""
+
+#. /Src/FwResources/FwStrings.resx::kstidZoomPercent50
+msgid "50%"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwProjPropertiesDlg.resx::m_btnAnalMoveDown.Text
+#. /Src/FwCoreDlgs/FwProjPropertiesDlg.resx::m_btnVernMoveDown.Text
+#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMax.Items6
+#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMin.Items6
+#. /Src/xWorks/XmlDocConfigureDlg.resx::m_btnMoveDown.Text
+#. /Src/xWorks/XmlDocConfigureDlg.resx::m_btnMoveWsDown.Text
+#. (String used 6 times.)
+msgid "6"
+msgstr ""
+
+#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMax.Items7
+#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMin.Items7
+#. (String used 2 times.)
+msgid "7"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontTab.resx::m_cboFontSize.Items16
+#. /Src/FwCoreDlgs/FwFontDialog.resx::m_lbFontSizes.Items15
+#. (String used 2 times.)
+msgid "72"
+msgstr ""
+
+#. the value of the number of pages that is changed in the  header/footer setup dialog
+#. /Src/Common/FwPrintLayoutComponents/FwPrintLayoutStrings.resx::kstidPageCount
+msgid "777"
+msgstr ""
+
+#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::fwOverrideComboBox1.Items9
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontTab.resx::m_cboFontSize.Items1
+#. /Src/FwCoreDlgs/FwFontDialog.resx::m_lbFontSizes.Items
+#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMax.Items8
+#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMin.Items8
+#. (String used 5 times.)
+msgid "8"
+msgstr ""
+
+#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::m_udmPaperWidth.Text
+msgid "8.5\""
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontTab.resx::m_cboFontSize.Items2
+#. /Src/FwCoreDlgs/FwFontDialog.resx::m_lbFontSizes.Items1
+#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMax.Items9
+#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMin.Items9
+#. (String used 4 times.)
+msgid "9"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items
+msgid ""
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items1
+msgid ""
+msgstr ""
+
+#. /Src/xWorks/xWorksStrings.resx::ksHierarchyLabel2
+msgid ""
+"{0}:\n"
+"  {1}"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items21
+msgid "à"
+msgstr ""
+
+#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_infixExample.Text
+msgid "[ -a- ]"
+msgstr ""
+
+#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_prefixExample.Text
+msgid "[a- ]"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboNumberScheme.Items4
+msgid "a, b, c, ..."
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboNumberScheme.Items3
+msgid "A, B, C, ..."
+msgstr ""
+
+#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_encliticExample.Text
+msgid "[ =a]"
+msgstr ""
+
+#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_suffixExample.Text
+msgid "[ -a]"
+msgstr ""
+
+#. /|strings-en.xml::/DialogStrings/EditMorphBreaks-affixExample|
+msgid "[{0}a{1}]"
+msgstr ""
+
+#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_suprafixExample.Text
+msgid "[ ~a~ ]"
+msgstr ""
+
+#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_simulfixExample.Text
+msgid "[ =a= ]"
+msgstr ""
+
+#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_procliticExample.Text
+msgid "[a= ]"
+msgstr ""
+
+#. for list of paper sizes in Page Setup dialog
+#. /Src/FwResources/FwStrings.resx::kstidPaperSizeA4
+msgid "A4"
+msgstr ""
+
+#. for list of paper sizes in Page Setup dialog
+#. /Src/FwResources/FwStrings.resx::kstidPaperSizeA5
+msgid "A5"
+msgstr ""
+
+#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_boundStemExample.Text
+msgid "[*aa ]"
+msgstr ""
+
+#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_stemExample.Text
+msgid "[aa ]"
+msgstr ""
+
+#. /|strings-en.xml::/DialogStrings/EditMorphBreaks-stemExample|
+msgid "[{0}aa{1} ]"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2003
+msgid "EMSP"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2002
+msgid "ENSP"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2007
+msgid "FSP"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200A
+msgid "HSP"
+msgstr ""
+
+#. /Language Explorer/Configuration/Main.xml::/window/commands/command/@label
+msgid "F10"
+msgstr ""
+
+#. /Language Explorer/Configuration/Main.xml::/window/commands/command/@label
+msgid "F11"
+msgstr ""
+
+#. /Language Explorer/Configuration/Main.xml::/window/commands/command/@label
+msgid "F12"
+msgstr ""
+
+#. /Language Explorer/Configuration/Main.xml::/window/commands/command/@label
+msgid "F2"
+msgstr ""
+
+#. /Language Explorer/Configuration/Main.xml::/window/commands/command/@label
+msgid "F3"
+msgstr ""
+
+#. /Language Explorer/Configuration/Main.xml::/window/commands/command/@label
+msgid "F4"
+msgstr ""
+
+#. /Language Explorer/Configuration/Main.xml::/window/commands/command/@label
+msgid "F6"
+msgstr ""
+
+#. /Language Explorer/Configuration/Main.xml::/window/commands/command/@label
+msgid "F7"
+msgstr ""
+
+#. /Language Explorer/Configuration/Main.xml::/window/commands/command/@label
+msgid "F8"
+msgstr ""
+
+#. /Language Explorer/Configuration/Main.xml::/window/commands/command/@label
+msgid "F9"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboNumberScheme.Items2
+msgid "i, ii, iii, ..."
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboNumberScheme.Items1
+msgid "I, II, III, ..."
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoStemMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="InflectionClass"]/@abbr
+msgid "ic"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar3000
+msgid "IDSP"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoInflAffMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="InflFeats"]/@abbr
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoStemMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="MsFeatures"]/@abbr
+#. (String used 2 times.)
+msgid "if"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar202A
+msgid "LRE"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200E
+msgid "LRM"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2028
+msgid "LSEP"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar205F
+msgid "MMSP"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2001
+msgid "MQSP"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2004
+msgid "3/MSP"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2005
+msgid "4/MSP"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2006
+msgid "6/MSP"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar180E
+msgid "MVS"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar00A0
+msgid "NBSP"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar202F
+msgid "NNBSP"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2000
+msgid "NQSP"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar202C
+msgid "PDF"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2029
+msgid "PSEP"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2008
+msgid "PSP"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar202B
+msgid "RLE"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200F
+msgid "RLM"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2009
+msgid "THSP"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items6
+msgid "ú"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items24
+msgid "ü"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items20
+msgid "Ü"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200D
+msgid "ZWJ"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200C
+msgid "ZWNJ"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200B
+msgid "ZWSP"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Is Abstract Form|
+msgid "ab"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Anthropology Categories|
+msgid "ac"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Affix Allomorph|
+#. /|strings-en.xml::/LabelAbbreviations/Affix Form|
+#. /|strings-en.xml::/LabelAbbreviations/Stem Allomorph|
+#. /|strings-en.xml::/LabelAbbreviations/Stem Form|
+#. (String used 4 times.)
+msgid "al"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Antonym|
+msgid "an"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Bibliography|
+msgid "bb"
+msgstr ""
+
+#. help topic ID for data notebook import TopicsListImportOptions Dialog.
+#. /Src/LexText/LexTextDll/HelpTopicPaths.resx::khtpDataNotebookImportDateFormatDef
+msgid "/Beginning_Tasks/Importing_Data/Import_Notebook_Data/Topics_List_Import_Options.htm'"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Compare|
+#. /|strings-en.xml::/LabelAbbreviations/Cross References|
+#. (String used 2 times.)
+msgid "cf"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Inflection Classes|
+msgid "cl"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Condition|
+msgid "cn"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/CV Pattern|
+msgid "cv"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Summary Definition|
+msgid "df"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Date Modified|
+msgid "dt"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Definition|
+msgid "dϰ"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items22
+msgid "è"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Etymology|
+msgid "et"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Encyclopedic Info|
+msgid "eϰ"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Specifics|
+msgid "gs"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Gloss|
+msgid "gϰ"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Infix Positions|
+msgid "ip"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Academic Domains|
+msgid "is"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Citation Form|
+msgid "lc"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Location|
+msgid "lo"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Literal Meaning|
+msgid "lt"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Lexeme Form|
+#. /|strings-en.xml::/LabelAbbreviations/Lexeme|
+#. (String used 2 times.)
+msgid "lx"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Primary Entry References|
+msgid "mn"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Morph Type|
+msgid "mt"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Anthropology Note|
+msgid "na"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Discourse Note|
+msgid "nd"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Grammar Note|
+msgid "ng"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Phonology Note|
+msgid "np"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Sociolinguistics Note|
+msgid "ns"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/General Note|
+#. /|strings-en.xml::/LabelAbbreviations/Note|
+#. (String used 2 times.)
+msgid "nt"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Restrictions|
+msgid "oϰ"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Pronunciation|
+msgid "ph"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Category Info.|
+#. /|strings-en.xml::/LabelAbbreviations/Grammatical Info.|
+#. (String used 2 times.)
+msgid "ps"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Parts|
+msgid "pw"
+msgstr ""
+
+#. /Src/Common/Controls/XMLViews/BulkEditBar.resx::m_transduceProcessorCombo.Items1
+msgid "Python"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Reference|
+msgid "rf"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="FsSymFeatVal-Detail-RightGlossSepAllA"]/slice/@abbr
+msgid "rgs"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Lexical Relations|
+msgid "rl"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Reversal Entries|
+msgid "rϰ"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Scientific Name|
+msgid "sc"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Semantic Domains|
+msgid "sd"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Slots|
+msgid "sl"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Semantics Note|
+msgid "sm"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Sense Number|
+msgid "sn"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Source|
+msgid "so"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Status|
+msgid "st"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Synonyms|
+msgid "sy"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Tone|
+msgid "tn"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Entry Type|
+msgid "tp"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Sense Type|
+msgid "ts"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Type|
+msgid "ty"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Underlying Form|
+msgid "uf"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Usages|
+msgid "uϰ"
+msgstr ""
+
+#. help topic ID for the Time of Day list and the Description field
+#. /Src/LexText/LexTextDll/HelpTopicPaths.resx::khtpField-timeOfDayEdit-Description
+msgid "User_Interface/Field_Descriptions/Lists/Time_of_Day_fields/Description_field_(Time_of_Day).html"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Dialectal Variant|
+msgid "vd"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Free Variant|
+msgid "vf"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Inflectional Variant|
+msgid "vi"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Spelling Variant|
+msgid "vs"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Exclude As Headword|
+msgid "xh"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Translation|
+msgid "xt"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Example|
+msgid "xv"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Import Residue|
+msgid "xx"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Calendar|
+msgid "yr"
+msgstr ""
+
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxDelReapps
+msgid "DelReapps"
+msgstr ""
+
+#. column header, must be unique; Max is short for Maximum number of ...  (Do Not Localize)
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxAnalysesToReturn
+msgid "MaxAnalysesToReturn"
+msgstr ""
+
+#. column header, must be unique; Max is short for Maximum number of ...  (Do Not Localize)
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxInfixes
+msgid "MaxInfixes"
+msgstr ""
+
+#. column header, must be unique; Max is short for Maximum number of ...  (Do Not Localize)
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxInterfixes
+msgid "MaxInterfixes"
+msgstr ""
+
+#. column header, must be unique; Max is short for Maximum number of ...  (Do Not Localize)
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxNulls
+msgid "MaxNulls"
+msgstr ""
+
+#. column header, must be unique; Max is short for Maximum number of ...  (Do Not Localize)
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxPrefixes
+msgid "MaxPrefixes"
+msgstr ""
+
+#. column header, must be unique; Max is short for Maximum number of ...  (Do Not Localize)
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxRoots
+msgid "MaxRoots"
+msgstr ""
+
+#. column header, must be unique; Max is short for Maximum number of ...  (Do Not Localize)
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxSuffixes
+msgid "MaxSuffixes"
+msgstr ""
+
+#. If true, no default compounding rules will be used.  (Do Not Localize)
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksDoNotUseDefaultCompoundRules
+msgid "NoDefaultCompounding"
+msgstr ""
+
+#. If true, the set of phonological rules will not be applied to clitics; if false, the rules will be applied to clitics.  (This value defaults to true, so we have to use this negative sense to get the default to be 'rules do not apply to clitics' because that was how Hermit Crab worked before we made this parameter available.)  (Do Not Localize)
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksRulesDoNotApplyOnClitics
+msgid "NotOnClitics"
+msgstr ""
+
+#. Do not localize
+#. /Src/Common/FieldWorks/WelcomeToFieldWorksDlg.resx::m_openSampleOrLastProjectLink.Text
+msgid "SampleDb"
+msgstr ""
+
+#. /Src/FwCoreDlgs/PicturePropertiesDialog.resx::pnlCaption.Text
+#. /Src/FwCoreDlgs/PicturePropertiesDialog.resx::pnlPicture.Text
+#. /Src/FwCoreDlgs/PunctuationDlg.resx::pnlMatchedPairsGrid.Text
+#. (String used 3 times.)
+msgid "fwPanel1"
+msgstr ""
+
+#. Used to format strings that display Unicode codepoints (e.g. Punctuation dialog box.
+#. /Src/FwCoreDlgs/Properties/Resources.resx::kstidUnicodePointFormat
+#. /Src/FwCoreDlgs/ValidCharactersDlg.resx::lblFirstCharCode.Text
+#. /Src/FwCoreDlgs/ValidCharactersDlg.resx::lblLastCharCode.Text
+#. (String used 3 times.)
+msgid "U+{0:X4}"
+msgstr ""
+
+#. /Language Explorer/Configuration/Lexicon/ReversalIndices/toolConfiguration.xml::/root/tools/tool/control/parameters/control/parameters/control/parameters/configureLayouts/layoutType/@label
+msgid "$wsName"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items15
+msgid "F"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items2
+msgid "l"
+msgstr ""
+
+#. /Src/FwCoreDlgs/PUACharacterDlg.resx::m_lblLowerDisplay.Text
+msgid "L"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items3
+msgid "m"
+msgstr ""
+
+#. /Src/FwCoreDlgs/PUACharacterDlg.resx::m_lblPUADisplay.Text
+msgid "M"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items5
+msgid "n"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items7
+msgid "o"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items8
+msgid "q"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items9
+msgid "r"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items10
+msgid "s"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwHelpAbout.resx::lblSILFieldWorks1.Text
+#. /Src/FwCoreDlgs/RealSplashScreen.resx::label1.Text
+#. (String used 2 times.)
+msgid "SIL FieldWorks 7.0 Beta 3"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwHelpAbout.resx::lblSILFieldWorks1.Text
+#. /Src/FwCoreDlgs/RealSplashScreen.resx::label1.Text
+#. (String used 2 times.)
+msgid "SIL FieldWorks 7.0 Beta 4"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items11
+msgid "t"
+msgstr ""
+
+#. /Src/FwCoreDlgs/PUACharacterDlg.resx::m_lblDecompostionDisplay.Text
+#. /Src/FwCoreDlgs/PUACharacterDlg.resx::m_lblTitleDisplay.Text
+#. (String used 2 times.)
+msgid "T"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items12
+msgid "u"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items16
+#. /Src/FwCoreDlgs/PUACharacterDlg.resx::m_lblUpperDisplay.Text
+#. (String used 2 times.)
+msgid "U"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items13
+msgid "v"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items17
+msgid "V"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items14
+msgid "z"
+msgstr ""
+
+#. Text for the export XHTML menu item
+#. /Src/TE/TeResources/TeTMStrings.resx::kstidExportXhtmlItemName
+msgid "X&HTML..."
+msgstr ""
+
+#. /Src/LexText/Interlinear/LinguaLinksImportDlg.resx::m_LinguaLinksXmlFileName.Text
+msgid "*.xml"
+msgstr ""
+
+#. /Src/Common/Controls/FwControls/WSChooser.resx::button1.Text
+msgid "XYZ"
+msgstr ""
+
+#. /Src/FwCoreDlgs/WritingSystemPropertiesDialog.resx::lblSortingRule2.Text
+msgid "&C<ch<<<Ch<<<CH"
+msgstr ""
+
+#. /Src/FwCoreDlgs/WritingSystemPropertiesDialog.resx::lblSortingRule3.Text
+msgid "&l<ll<<<Ll<<<LL"
+msgstr ""
+
+#. /Src/FwCoreDlgs/WritingSystemPropertiesDialog.resx::lblSortingRule1.Text
+msgid "&N<ñ<<<Ñ"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoStemMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="ProdRestrict"]/@abbr
+msgid "ef"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoStemMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="FromPartsOfSpeech"]/@abbr
+msgid "fc"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoDerivAffMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="FromProdRestrict"]/@abbr
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoInflAffMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="FromProdRestrict"]/@abbr
+#. (String used 2 times.)
+msgid "fef"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoDerivAffMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="FromInflectionClass"]/@abbr
+msgid "fic"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoDerivAffMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="FromMsFeatures"]/@abbr
+msgid "fif"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoDerivAffMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="FromStemName"]/@abbr
+msgid "fsn"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["FsFeatDefn-detail-Edit"]/part[@ref="ShowInGloss"]/@abbr
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["FsSymFeatVal-detail-EditValue"]/part[@ref="ShowInGloss"]/@abbr
+#. (String used 2 times.)
+msgid "sig"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoDerivAffMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="ToProdRestrict"]/@abbr
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoEndoCompound-detail-default"]/part[@ref="ToProdRestrict"]/@abbr
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoExoCompound-detail-default"]/part[@ref="ToProdRestrict"]/@abbr
+#. (String used 3 times.)
+msgid "tef"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoDerivAffMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="ToInflectionClass"]/@abbr
+msgid "tic"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoDerivAffMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="ToMsFeatures"]/@abbr
+msgid "tif"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items23
+msgid "ð"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items19
+msgid "Ø"
+msgstr ""
+
+#. /Src/Common/Framework/FwMainWnd.resx::$this.Text
+msgid "FwMainWnd"
+msgstr ""
+
+#. help topic ID for user account properties dialog
+#. help topic for undefined help topic
+#. help topic ID for insert note dialog
+#. help topic ID for add new user dialog
+#. help topic ID for user features properties dialog
+#. /Src/FwResources/HelpTopicPaths.resx::khtpNoHelpTopic
+#. /Src/FwResources/HelpTopicPaths.resx::khtpUserProperties_Account
+#. /Src/FwResources/HelpTopicPaths.resx::khtpUserProperties_Features
+#. /Src/FwResources/HelpTopicPaths.resx::khtpUserProperties_NewUser
+#. /Src/TE/TeResources/HelpTopicPaths.resx::khtpInsertNote
+#. /Src/TE/TeResources/HelpTopicPaths.resx::khtpUserProperties-DataAccess
+#. (String used 6 times.)
+msgid "Help_topic_does_not_exist.htm"
+msgstr ""
+
+#. Do not translate (if help file is localized and given a new name, then indicate the new name here)
+#. /Src/FwResources/HelpTopicPaths.resx::FLExHelpFile
+#. /Src/LexText/LexTextDll/HelpTopicPaths.resx::UserHelpFile
+#. (String used 2 times.)
+msgid "\\Helps\\FieldWorks_Language_Explorer_Help.chm"
+msgstr ""
+
+#. Do not translate (if help file is localized and given a new name, then indicate the new name here)
+#. /Src/TE/TeResources/HelpTopicPaths.resx::UserHelpFile
+msgid "\\Helps\\FieldWorks_Translation_Editor_Help.chm"
+msgstr ""
+
+#. Do not localize
+#. /Src/Common/CoreImpl/Properties/Resources.resx::kstidAppcastSeUrl
+msgid "http://downloads.sil.org/FieldWorks/appcast.xml"
+msgstr ""
+
+#. Do not localize
+#. /Src/Common/CoreImpl/Properties/Resources.resx::kstidAppcastSeBetasUrl
+msgid "http://downloads.sil.org/FieldWorks/appcastBetas.xml"
+msgstr ""
+
+#. Do not localize
+#. /Src/Common/CoreImpl/Properties/Resources.resx::kstidAppcastBteUrl
+msgid "http://downloads.sil.org/FieldWorks/appcastBTE.xml"
+msgstr ""
+
+#. Do not localize
+#. /Src/Common/CoreImpl/Properties/Resources.resx::kstidAppcastBteBetasUrl
+msgid "http://downloads.sil.org/FieldWorks/appcastBTEbetas.xml"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwFindReplaceDlg.resx::lblFindFormatText.Text
+msgid "lblFindFormatText"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwFindReplaceDlg.resx::lblReplaceFormatText.Text
+msgid "lblReplaceFormatText"
+msgstr ""
+
+#. /Src/Common/Framework/FwMainWnd.resx::statusStrip.Text
+msgid "statusStrip1"
+msgstr ""
+
+#. /Language Explorer/Configuration/Main.xml::/window/commands/command/@label
+msgid "?? Properties (TODO)"
+msgstr ""
+
+#. /Src/LexText/Morphology/MEStrings.resx::ksTodo_WordformEditing
+msgid "TODO: Basic wordform editing happens here."
+msgstr ""
+
+#. A test warning message.
+#. /Src/FwCoreDlgs/FwCoreDlgs.resx::kstidMessageWarning
+msgid "Warning, you must select \"false\" (why do we even have a button???)"
+msgstr ""
+
+#. Email address for sending bug reports to
+#. /Src/LexText/LexTextDll/LexTextStrings.resx::kstidSupportEmail
+msgid "FlexErrors@sil.org"
+msgstr ""
+
+#. Email address for sending bug reports to
+#. /Src/TE/TeResources/TeStrings.resx::kstidSupportEmail
+msgid "TeErrors@sil.org"
+msgstr ""
+
+#. /Src/FDO/Strings.resx::ksInvalidBackendProviderType
+msgid "The FDOBackendProviderType is not supported."
+msgstr ""
+
+#. Displays in the Help/About box
+#. /Src/Common/CoreImpl/CoreImplStrings.resx::kstidLicenseURL
+msgid "(http://www.gnu.org/licenses/lgpl-2.1.html)"
+msgstr ""
+
+#. /Src/FwParatextLexiconPlugin/ProjectExistsForm.resx::label1.Text
+msgid "labelText"
+msgstr ""
+
+#. Displays in the Help/About box and the splash screen
+#. /Src/Common/CoreImpl/CoreImplStrings.resx::kstidLicense
+msgid "This software is licensed under the LGPL, version 2.1 or later"
+msgstr ""

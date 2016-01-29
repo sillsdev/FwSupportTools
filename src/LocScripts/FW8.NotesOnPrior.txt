@@ -1,0 +1,84 @@
+Areas of the tool assigned to the different priority levels:
+
+Last updated: 11/19/15 (08/27/15 POT file) (not including counts)
+
+1 (1606 strings)
+Lexicon Edit field names
+Area names
+View names
+Tab names
+OK/Cancel/Help (and other main dlg buttons)
+About
+Lists area list titles
+Bulk Edit tabs (not Process)
+Backup/Restore
+Migrating
+Getting Started dialog (Open/Restore/Exit)  ("Welcome")
+Concordance
+Export translated lists  ??
+Pathway  ??
+Custom fields (keep??)
+Send/Receive (change?)
+Rapid Words
+Archive
+
+
+Find & Fix errors?
+
+2  (second priority)  (915 strings)
+Discourse chart
+Word Analysis
+Assign Analysis
+Spelling
+Affix which....
+Configure Columns
+Configure dictionary
+Styles
+Export
+Import  -- move to 3 (check)  FIX
+Edit morph breaks
+Add picture or media
+Configure Interlinear
+Variant/Complex forms
+Bug reporting
+Reversal Index
+New project
+Undo/Redo
+WS wizard (some 1s--FIX)
+Configure List
+Choose texts
+
+3 (525 strings)
+Parse
+Linked files  ??  FIX.  (backup and restore diff from properties?)
+Import (most still in 2?)  check
+Text import
+Interlinear import
+Network sharing  ("ShareProjects")
+Valid Characters
+Import Word Set
+Click for invisible spaces
+Make a suggestion
+Complex Concordance
+Check for Updates
+Send/Receive (some)
+Google Analytics/Privacy
+Paratext Integration
+
+
+4  (196 strings)
+(FLEx strings in DN)
+
+5 (130 strings)
+Encoding converters
+Concorder ??
+Regular expressions
+sorting
+
+
+
+Not done yet: (check)
+
+Tooltips for FLEx (ContextHelp)
+LinguaLinks import
+Fix Data
