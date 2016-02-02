@@ -44,6 +44,16 @@ namespace LocaleStrings
 			return String.Format("POString msgid=\"{0}\"", MsgIdAsString());
 		}
 
+		public static int InputLineNumber
+		{
+			get { return s_cLines; }
+		}
+
+		public static void ResetInputLineNumber()
+		{
+			s_cLines = 0;
+		}
+
 		public static POString ReadFromFile(TextReader srIn)
 		{
 			// Move past any blank lines, checking for the end of file.
@@ -146,7 +156,11 @@ namespace LocaleStrings
 							pos.MsgStr.Clear();
 						pos.IsObsolete = true;
 					}
-					pos.UserComments.Add(s.Substring(1));
+					pos.AddUserComment(s.Substring(1));
+				}
+				else if (String.IsNullOrEmpty(s))
+				{
+					Console.WriteLine("Ignoring invalid empty line at line {0}", s_cLines);
 				}
 				else
 				{
@@ -162,7 +176,7 @@ namespace LocaleStrings
 					break;
 				++s_cLines;
 				s = s.Trim();
-			} while (!String.IsNullOrEmpty(s));
+			} while (!String.IsNullOrEmpty(s) || pos.MsgId == null || pos.MsgStr == null);
 			// Multiline messages start with an empty line in PO files.  Remove it from our data.
 			// (Otherwise we add an extra "\n" line on output.)
 			if (pos.MsgId != null && pos.MsgId.Count > 1 && String.IsNullOrEmpty(pos.MsgId[0]))

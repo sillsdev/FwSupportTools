@@ -180,8 +180,6 @@ namespace SIL.FieldWorks.Common.Utils
 			}
 		}
 
-		static string s_sError;
-
 		/// <summary>
 		/// This static method parses the command line, storing the parameter values, and
 		/// returning the index of the first non-option command line argument.
@@ -218,7 +216,7 @@ namespace SIL.FieldWorks.Common.Utils
 			}
 			catch (Exception ex)
 			{
-				s_sError = ex.Message;
+				Console.WriteLine("Error parsing the command line: {0}", ex.Message);
 				return false;
 			}
 		}

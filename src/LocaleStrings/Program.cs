@@ -760,8 +760,6 @@ namespace LocaleStrings
 				throw new Exception("VOID NEW PO FILE");
 			}
 			DateTime now = DateTime.Now;
-			string sTimeStamp = String.Format("{0:D4}{1:D2}{2:D2}{3:D2}{4:D2}{5:D2}",
-				now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second);
 			CheckCompatiblePOFiles(posMainHeader, posNewHeader);
 			MergePOHeaders(posMainHeader, posNewHeader);
 			int cReplaced = 0;
@@ -1072,12 +1070,13 @@ namespace LocaleStrings
 
 		internal static Dictionary<string, POString> ReadPotFile(TextReader srIn, out POString posHeader)
 		{
+			POString.ResetInputLineNumber();
 			var dictTrans = new Dictionary<string, POString>();
 			posHeader = POString.ReadFromFile(srIn);
 			POString pos = POString.ReadFromFile(srIn);
 			while (pos != null)
 			{
-				dictTrans.Add(pos.MsgIdAsString(), pos);
+				StoreString(dictTrans, pos);
 				pos = POString.ReadFromFile(srIn);
 			}
 			return dictTrans;
@@ -1177,6 +1176,7 @@ namespace LocaleStrings
 
 		internal static Dictionary<string, POString> ReadPoFile(TextReader srIn, out POString posHeader, out POString posFinalObsolete)
 		{
+			POString.ResetInputLineNumber();
 			posFinalObsolete = null;
 			Dictionary<string, POString> dictTrans = new Dictionary<string, POString>();
 			posHeader = POString.ReadFromFile(srIn);
@@ -1184,14 +1184,36 @@ namespace LocaleStrings
 			POString pos = POString.ReadFromFile(srIn);
 			while (pos != null)
 			{
-				if (!pos.IsObsolete)
-					dictTrans.Add(pos.MsgIdAsString(), pos);
-				posFinal = pos;
+				if (StoreString(dictTrans, pos))
+					posFinal = pos;
 				pos = POString.ReadFromFile(srIn);
 			}
 			if (posFinal != null && posFinal.IsObsolete)
 				posFinalObsolete = posFinal;
 			return dictTrans;
+		}
+
+		/// <summary>
+		/// Try to store a POString in the dictionary.
+		/// </summary>
+		/// <returns><c>true</c>, if string was stored (or obsolete), <c>false</c> if an error occurs.</returns>
+		private static bool StoreString(Dictionary<string, POString> dictTrans, POString pos)
+		{
+			if (!pos.IsObsolete)
+			{
+				var msgid = pos.MsgIdAsString();
+				if (dictTrans.ContainsKey(msgid))
+				{
+					Console.WriteLine("The message id \"{0}\" already exists.  Ignoring this occurrence around line {1}.",
+						msgid, POString.InputLineNumber);
+					return false;
+				}
+				else
+				{
+					dictTrans.Add(msgid, pos);
+				}
+			}
+			return true;
 		}
 
 		/// <summary>
