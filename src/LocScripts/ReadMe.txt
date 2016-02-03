@@ -2,7 +2,7 @@ LocScripts
 
 Scripts for working with po files as part of the localization of the FieldWorks UI.
 Beth Bryson
-1/29/16
+2/2/16
 
 The scripts in this folder are ones I have used as I prepare files for localizers
 to translate and then prepare those files to be checked in to source.  This file
@@ -20,8 +20,8 @@ Localization process:
 1. To generate a POT file:
 cd fwrepo\fw\Bin
 LocaleStrings.exe -r C:\fwrepo\fw -x
-	(Creates a file in Bin called FieldWorks.POT.  This is the catalog that
-	contains all the localizable strings and that can be used to update po files.)
+	 (Creates a file in Bin called FieldWorks.POT.  This is the catalog that
+	 contains all the localizable strings and that can be used to update po files.)
 
 2. What I did to adjust a POT file before giving it to a localizer:
 a. Convert it to Unix line endings if it is not already.   dos2unix.pl
@@ -100,17 +100,12 @@ I would expect?
 messages.en-ca.po_:  Po file with strings marked for priority for localizing.
 [This file is currently checked in to the Localizations folder/project.]
 This is a po file in which the most important strings have been copied into the
-msgstr field with a priority coded prepended.  ^1^ marks the highest priority of
+msgstr field with a priority coded prepended.  ^1^ marks the highest priority
 strings to translate, ^2^ second priority, and so on.  Some codes mark a group of
 strings rather than priority (e.g., Notebook strings).  Strings with lowest
 priority have not been copied; their msgstr is blank.  This file needs to be
 manually updated periodically.  Near the top it tells when it was last edited,
 and the date of the POT file it was based on.
-
-FW8.NotesOnPrior.txt: Notes about which functions are in which priority group.
-I'm attempting to put all commands related to a specific task or function together.
-This overlaps some with a goal of having a given view either all translated or
-not translated, but not completely.
 
 merge-po4.pl: Merge a prioritized .po file with a partially translated pofile, to
 produce a file for a localizer.  It leaves alone the strings they have already
@@ -122,10 +117,9 @@ This is useful for localizers who are less comfortable picking and choosing stri
 from a file, or who are sharing the work among several.  If I can give them a
 single file with all the "priority 1" strings, they can work to complete that
 whole file.  Someone else could work on the "priority 2" strings, etc.
-**This file is definitely out of date.  When I wrote it, I was marking the priorities
-differently than I am now.  The regular expressions need to be updated to match
-the new codes (^1^, ^2^, ^3^, etc., instead of  1, z, 3, ...)  Also, it is
-hardcoded for Spanish (es).
+**This file is hardcoded for priorities ^1^, ^2^, ^3^, ^4^, ^5 and a couple other
+codes for strings to double check (0 or @) that were specifically in the Spanish
+po file.
 
 rm-priority.pl: Blanks out strings with priority codes, in a file that has been
 partially translated.

@@ -28,6 +28,7 @@ else {
 	$onefile = "$bigfile" . "-1";
 	$twofile = "$bigfile" . "-2";
 	$threefile = "$bigfile" . "-3";
+	$fourfile = "$bigfile" . "-4";
 	$fivefile = "$bigfile" . "-5";
 	$checkfile = "$bigfile" . "-CHECK";
 	$donefile = "$bigfile" . "-DONE";
@@ -35,6 +36,7 @@ else {
 	open(ONEFILE, ">$onefile") or die;
 	open(TWOFILE, ">$twofile") or die;
 	open(THREEFILE, ">$threefile") or die;
+	open(FOURFILE, ">$fourfile") or die;
 	open(FIVEFILE, ">$fivefile") or die;
 	open(CHECKFILE, ">$checkfile") or die;
 	open(DONEFILE, ">$donefile") or die;
@@ -45,6 +47,7 @@ binmode(BIGFILE, "utf8");
 binmode(ONEFILE, "utf8");
 binmode(TWOFILE, "utf8");
 binmode(THREEFILE, "utf8");
+binmode(FOURFILE, "utf8");
 binmode(FIVEFILE, "utf8");
 binmode(CHECKFILE, "utf8");
 binmode(DONEFILE, "utf8");
@@ -79,17 +82,17 @@ while ($line = <BIGFILE>) {
 			if ($#msgid) {
 				#print STDERR " mpl $#msgid: $msgid[1]\n";
 				for $m (1..$#msgid) {
-					#print STDERR "  mpl: $msgid[$m]\n";
+					print STDERR "  mpl: $msgid[$m]\n";
 					$outstring .= sprintf "\"$msgid[$m]\"\n";
 					}
 				}
 			#print STDERR "msgstr = [$msgstr[0]]\n";
 			# TODO:  If msgid also starts with 1, don't treat this as a 1.
-			if ($msgstr[0] =~ /^msgstr \"1(.*)\"/) {
+			if ($msgstr[0] =~ /^msgstr \"\^1\^(.*)\"/) {
 				$msgstr[0] = "msgstr \"$1\"";
 				if ($msgid[0] =~ /^msgid \"1/) {
-					$which = 5;
-					print STDERR "msgid begins with 1: $msgid[0]\n";
+				#	$which = 5;
+				#	print STDERR "msgid begins with 1: $msgid[0]\n";
 					}
 				else {
 					$which = "1";
@@ -104,13 +107,21 @@ while ($line = <BIGFILE>) {
 				$msgstr[0] = "msgstr \"0" . "$1\"";
 				$which = "CHECK";
 				}
-			elsif ($msgstr[0] =~ /^msgstr \"z(.*)\"/) {
+			elsif ($msgstr[0] =~ /^msgstr \"\^2\^(.*)\"/) {
 				$msgstr[0] = "msgstr \"$1\"";
 				$which = "2";
 				}
-			elsif ($msgstr[0] =~ /^msgstr \"3(.*)\"/) {
+			elsif ($msgstr[0] =~ /^msgstr \"\^3\^(.*)\"/) {
 				$msgstr[0] = "msgstr \"$1\"";
 				$which = "3";
+				}
+			elsif ($msgstr[0] =~ /^msgstr \"\^4\^(.*)\"/) {
+				$msgstr[0] = "msgstr \"$1\"";
+				$which = "4";
+				}
+			elsif ($msgstr[0] =~ /^msgstr \"\^5\^(.*)\"/) {
+				$msgstr[0] = "msgstr \"$1\"";
+				$which = "5";
 				}
 			else {
 				# For the ones without a mark, see if it's been translated
@@ -118,7 +129,7 @@ while ($line = <BIGFILE>) {
 					$which = "DONE";
 					}
 				else {
-					$which = "5";
+					$which = "6";
 					}
 				}
 
@@ -137,6 +148,9 @@ while ($line = <BIGFILE>) {
 				}
 			elsif ($which eq "3") {
 				print THREEFILE $outstring;
+				}
+			elsif ($which eq "4") {
+				print FOURFILE $outstring;
 				}
 			elsif ($which eq "5") {
 				print FIVEFILE $outstring;
@@ -201,6 +215,7 @@ close BIGFILE;
 close ONEFILE;
 close TWOFILE;
 close THREEFILE;
+close FOURFILE;
 close FIVEFILE;
 close CHECKFILE;
 close DONEFILE;

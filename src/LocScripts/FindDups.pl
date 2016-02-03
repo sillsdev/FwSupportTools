@@ -9,13 +9,11 @@ use utf8;
 # really needed here.)
 
 # Created:	 2 Nov 2010
-# Modified:
+# Modified:	 2 Feb 2016  Try to clean it up some?  Hope I'm not messing it up.
 
 if ($#ARGV != 0) {
 	print STDERR "Usage: FindDups.pl workingfile.po\n";
 	print "[0] = $ARGV[0]\n";
-	print "[1] = $ARGV[1]\n";
-	print "[2] = $ARGV[2]\n";
 	exit;
 	}
 else {
@@ -74,12 +72,16 @@ while ($line = <WKGFILE>) {
 		# This is for printing, and so it needs to have newlines.
 		# This includes all the quote marks, so when checking for translations, need to account for that.
 
+		# If what we are about to add is already in the hash, print it out.
+		# Otherwise, put it in the hash.
 		if ($str{$idstr}) {
-			print STDERR "Duplicate: $str{$idstr}\n";
+			#print STDERR "Duplicate: $str{$idstr}\n";
+			print STDERR "Duplicate: $idstr\n";
 			}
 		else {
 			$str{$idstr} = 1;
 			#print STDERR " Storing str: [$str{$idstr}]\n";
+			#print STDERR " Storing str: [$str{$idstr} $idstr]\n";
 			}
 
 		$k++;
@@ -99,11 +101,13 @@ while ($line = <WKGFILE>) {
 			}
 		}
 	# No need to store anything for blank lines or comments or memory lines
-	elsif ($line =~ /^\s*$/ || $line =~ /^#\. / || $line =~ /^#~/) {
+	elsif ($line =~ /^\s*$/ || $line =~ /^#\./ || $line =~ /^# / || $line =~ /^#~/) {
 		}
 	elsif ($line =~ /^#,/) {
 		$fuzzy = 1;
 		}
+	# If the line doesn't match any of the cases, warn the user; something isn't right.
+	# (For instance, the file might have Windows line endings instead of Unix ones.)
 	else {
 		print STDERR "None of the above: [$line]\n";
 		}
