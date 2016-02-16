@@ -1,2 +1,18 @@
-#!/bin/sh
-apt-get update
+#!/bin/bash
+
+# Hook to update available package list.
+
+# Sometimes there is a network problem or a "Hash sum mismatch" error that
+# can cause apt-get update to fail. Don't let this make package builds fail
+# without at least trying again.
+
+PROGRAM_NAME=D50apt-get-update
+
+until apt-get update || (( fail_count++ >= 6 )); do
+	if (( fail_count >= 6 )); then
+		echo >&2 "$PROGRAM_NAME: There were too many problems running apt-get update. Giving up."
+		exit 1
+	fi
+	echo >&2 "$PROGRAM_NAME: There was a problem running apt-get update. Trying again soon. Count: $fail_count"
+	sleep 2m
+done
