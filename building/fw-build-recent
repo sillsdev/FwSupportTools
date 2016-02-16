@@ -14,7 +14,9 @@ changed_dirs=$(for file in $changed_files; do
 	dirname "$file"
 done | sort -u)
 changed_dirs_with_projects=$(for dir in $changed_dirs; do
-	[ -e "$dir"/*.csproj ] && echo $dir
+	[ -e "$dir"/*.csproj ] && (cd $dir && pwd) && continue
+	# Look in the parent directory to build projects that have source files in sub directories, like FDO.
+	[ -e "$dir"/../*.csproj ] && (cd "$dir"/.. && pwd)
 done)
 /usr/bin/time -f "$program_name: Total time elapsed %E." cat <(for dir in $changed_dirs_with_projects; do
 	(. environ && cd "$dir" && xbuild || (echo "$program_name: Error building project $(basename "$dir"). Continuing ..."; sleep 5s))
