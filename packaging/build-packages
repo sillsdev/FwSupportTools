@@ -351,7 +351,7 @@ elif [ "$MAIN_PACKAGE_NAME" = "fieldworks-enc-converters" ]; then
 elif [ "$MAIN_PACKAGE_NAME" = "xulrunner-geckofx29" ]; then
 	stderr "Building source package for $MAIN_PACKAGE_NAME with gbp"
 	cd "$debian_path"/..
-	git-buildpackage --git-pristine-tar -uc -us -nc -S
+	git-buildpackage --git-pristine-tar -uc -us -nc -S --git-ignore-new
 elif [ "$MAIN_PACKAGE_NAME" = "flexbridge" ]; then
 	stderr "Building source package for $MAIN_PACKAGE_NAME with own source preparation script"
 	cd "$debian_path"/..
