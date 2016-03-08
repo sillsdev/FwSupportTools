@@ -469,7 +469,7 @@ for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 			# Send the experimental packages to a suite to simplify simultaneous development of packages
 			destination_repository="$DISTFAMILY/$dist-${suite_name:-experimental}"
 			# Send the no-longer experimental packages to llso-main (no suite needed)
-			if [ "$destination_repository_arg" = "llso-main" ]; then
+			if [ "$destination_repository_arg" = "llso-main" -o "$suite_name" = "main" ]; then
 				destination_repository="$DISTFAMILY/$dist"
 			elif [ "$DISTFAMILY" = "debian" ]; then
 				# for debian we don't have different repos
