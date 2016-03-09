@@ -367,15 +367,9 @@ cd "$repo_base_dir"
 if [ -n "$PRESERVE_CHANGELOG" ]; then
 	full_package_name=${source_package_name}_${latest_version_in_debian_changelog}
 	package_debs=${source_package_name}*_${latest_version_in_debian_changelog}
-	if [ "$MAIN_PACKAGE_NAME" = "xulrunner-geckofx29" ]; then
-		package_debs=${MAIN_PACKAGE_NAME}*_${latest_version_in_debian_changelog}
-	fi
 else
 	full_package_name=${source_package_name}_${nightlyversion}
 	package_debs=${source_package_name}*_${nightlyversion}
-	if [ "$MAIN_PACKAGE_NAME" = "xulrunner-geckofx29" ]; then
-		package_debs=${MAIN_PACKAGE_NAME}*_${nightlyversion}
-	fi
 fi
 sha256sum ${full_package_name}*.{dsc,build,changes,tar.gz}
 
