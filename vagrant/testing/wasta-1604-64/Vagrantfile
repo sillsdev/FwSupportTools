@@ -1,0 +1,50 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-vagrant.box"
+  config.vm.define :"testing"
+  config.vm.provision "shell", inline: 'echo >>/etc/hosts  127.0.0.1 $(hostname)'
+
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 1536
+    v.cpus = 1
+    v.gui = true
+  end
+
+  # Provision
+
+  config.vm.provision "shell", inline: """
+  set -e -o pipefail
+
+  # Install normal Ubuntu desktop
+  sudo apt-get install -y ubuntu-desktop
+
+  # Add wasta ppas
+  # The wasta-testing ppa is temporary
+  sudo add-apt-repository ppa:wasta-linux/wasta
+  sudo add-apt-repository ppa:wasta-linux/wasta-apps
+  sudo add-apt-repository ppa:wasta-linux/wasta-testing
+  sudo apt-get update
+
+  # Install Wasta
+  sudo apt-get install -y wasta-core-xenial
+  sudo apt-get update
+  sudo apt-get install -y wasta-cinnamon-xenial
+  sudo wasta-initial-setup auto
+  """
+
+  # Set default password
+  config.vm.provision "shell", inline: 'echo -e "ubuntu\nubuntu" | sudo passwd ubuntu'
+
+  # Skip normal provision-fw-test-machine script until fw is at pso for Ubuntu 16.04
+  config.vm.provision "shell", inline: 'wget -qO - http://linux.lsdev.sil.org/downloads/sil-testing.gpg | sudo apt-key add - &&
+  sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $(lsb_release -sc) main" &&
+  sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $(lsb_release -sc)-experimental main" &&
+  sudo apt-get update &&
+  sudo apt-get install -y wget curl vim meld ack-grep dconf-tools &&
+  sudo apt-get install -dy fieldworks'
+  config.vm.provision "shell", inline: "mkdir -p ~/Desktop && cd ~/Desktop && wget 'http://downloads.sil.org/FieldWorks/8.1.1/Sena%203%202013-11-27%200947.fwbackup'", privileged: false
+  #config.vm.provision "shell", path: "../provision-fw-test-machine", privileged: false
+end
