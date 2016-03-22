@@ -1,0 +1,86 @@
+#!/usr/bin/env python3
+
+# List packages in repositories. The tab-separated output can be opened in LibreOffice Calc.
+# Modify the list of Packages URLs as desired to get the repositories you are interested in examining
+# (by putting a # character before undesired lines).
+#
+# This quick and dirty script may not be an example of how to write good python :-).
+# Original author: MarkS 2016-03-18
+
+import urllib.request
+import re
+import collections
+
+# Dictionary of URLs to Packages files, and an abbreviated name for that repository.
+urls=collections.OrderedDict(
+(
+('http://packages.sil.org/ubuntu/dists/xenial/main/binary-amd64/Packages', 'pso:xenial 64'),
+('http://packages.sil.org/ubuntu/dists/xenial/main/binary-i386/Packages', 'pso:xenial 32'),
+('http://packages.sil.org/ubuntu/dists/xenial-experimental/main/binary-amd64/Packages', 'pso:xenial-experimental 64'),
+('http://packages.sil.org/ubuntu/dists/xenial-experimental/main/binary-i386/Packages', 'pso:xenial-experimental 32'),
+
+('http://packages.sil.org/ubuntu/dists/trusty/main/binary-amd64/Packages', 'pso:trusty 64'),
+('http://packages.sil.org/ubuntu/dists/trusty/main/binary-i386/Packages', 'pso:trusty 32'),
+('http://packages.sil.org/ubuntu/dists/trusty-experimental/main/binary-amd64/Packages', 'pso:trusty-experimental 64'),
+('http://packages.sil.org/ubuntu/dists/trusty-experimental/main/binary-i386/Packages', 'pso:trusty-experimental 32'),
+
+('http://packages.sil.org/ubuntu/dists/precise/main/binary-amd64/Packages', 'pso:precise 64'),
+('http://packages.sil.org/ubuntu/dists/precise/main/binary-i386/Packages', 'pso:precise 32'),
+('http://packages.sil.org/ubuntu/dists/precise-experimental/main/binary-amd64/Packages', 'pso:precise-experimental 64'),
+('http://packages.sil.org/ubuntu/dists/precise-experimental/main/binary-i386/Packages', 'pso:precise-experimental 32'),
+
+('http://linux.lsdev.sil.org/ubuntu/dists/xenial/main/binary-amd64/Packages', 'llso:xenial 64'),
+('http://linux.lsdev.sil.org/ubuntu/dists/xenial/main/binary-i386/Packages', 'llso:xenial 32'),
+('http://linux.lsdev.sil.org/ubuntu/dists/xenial-proposed/main/binary-amd64/Packages', 'llso:xenial-proposed 64'),
+('http://linux.lsdev.sil.org/ubuntu/dists/xenial-experimental/main/binary-amd64/Packages', 'llso:xenial-experimental 64'),
+('http://linux.lsdev.sil.org/ubuntu/dists/xenial-dictionary/main/binary-amd64/Packages', 'llso:xenial-dictionary 64'),
+
+('http://linux.lsdev.sil.org/ubuntu/dists/trusty/main/binary-amd64/Packages', 'llso:trusty 64'),
+('http://linux.lsdev.sil.org/ubuntu/dists/trusty/main/binary-i386/Packages', 'llso:trusty 32'),
+('http://linux.lsdev.sil.org/ubuntu/dists/trusty-proposed/main/binary-amd64/Packages', 'llso:trusty-proposed 64'),
+('http://linux.lsdev.sil.org/ubuntu/dists/trusty-experimental/main/binary-amd64/Packages', 'llso:trusty-experimental 64'),
+('http://linux.lsdev.sil.org/ubuntu/dists/trusty-dictionary/main/binary-amd64/Packages', 'llso:trusty-dictionary 64'),
+
+('http://linux.lsdev.sil.org/ubuntu/dists/precise/main/binary-amd64/Packages', 'llso:precise 64'),
+('http://linux.lsdev.sil.org/ubuntu/dists/precise/main/binary-i386/Packages', 'llso:precise 32'),
+('http://linux.lsdev.sil.org/ubuntu/dists/precise-proposed/main/binary-amd64/Packages', 'llso:precise-proposed 64'),
+('http://linux.lsdev.sil.org/ubuntu/dists/precise-experimental/main/binary-amd64/Packages', 'llso:precise-experimental 64'),
+('http://linux.lsdev.sil.org/ubuntu/dists/precise-dictionary/main/binary-amd64/Packages', 'llso:precise-dictionary 64'),
+)
+)
+
+package_list={}
+
+# Collect data
+
+for url in urls.keys():
+	package_list[url]={}
+	response=urllib.request.urlopen(url)
+	text = response.read().decode('utf-8')
+	for item in re.findall('Package: (.+?)\n(?:Source: .+\n)?Version: (.+?)\nArchitecture: (.+?)\n',text,re.MULTILINE):
+		package_name=item[0]
+		package_version=item[1]
+		package_list[url][package_name]=package_version
+
+all_package_names=[]
+for url in urls.keys():
+	all_package_names.extend(package_list[url].keys())
+# Remove duplicate package names
+all_package_names=sorted(list(collections.OrderedDict.fromkeys(all_package_names)))
+
+# Produce table of data
+
+# Header
+print ('Package name',end="")
+for area in urls.values():
+	print('\t',area,end="")
+print ()
+# Body
+for package_name in all_package_names:
+	print(package_name,end="")
+	for url in urls.keys():
+		if package_name in package_list[url]:
+			print('\t',package_list[url][package_name],end="")
+		else:
+			print('\t',end="")
+	print()
