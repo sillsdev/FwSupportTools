@@ -1,0 +1,100 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "ubuntu/xenial64"
+  config.vm.define :"development"
+  config.vm.provision "shell", inline: 'echo >>/etc/hosts  127.0.0.1 $(hostname)'
+
+  config.vm.provider "virtualbox" do |v|
+    # Override name specified in ubuntu/xenial64 basebox, which can cause problems if used more than once.
+    v.name="wasta-1604-fw-dev"
+    v.memory = 3584
+    v.cpus = 4
+    v.gui = true
+
+    # Add in another disk for more space than the base box gives. http://askubuntu.com/a/404500
+
+    file_to_disk = File.realpath( "." ).to_s + "/home-partition.vdi"
+
+    if ARGV[0] == "up" && ! File.exist?(file_to_disk)
+       puts "Planning to create more storage at #{file_to_disk}."
+       v.customize [
+            'createhd',
+            '--filename', file_to_disk,
+            '--format', 'VDI',
+            '--size', 30 * 1024 # 30 GB
+            ]
+       v.customize [
+            'storageattach', :id,
+            '--storagectl', 'SCSI Controller',
+            '--port', 2, '--device', 0,
+            '--type', 'hdd', '--medium',
+            file_to_disk
+            ]
+    end
+  end
+
+  # Provision
+
+  # The ubuntu/xenial64 vagrant box doesn't have enough disk space. Mount a bigger disk for /home so we have enough.
+  config.vm.provision "shell", inline: """
+  set -e
+  set -x
+
+  if [ -f /etc/homedisk_added ]
+  then
+     echo home disk already added.
+     exit 0
+  fi
+
+  sudo fdisk -u /dev/sdc <<EOF
+n
+p
+1
+
+
+w
+EOF
+  sudo mkfs.ext4 /dev/sdc1
+  mkdir -p /var/tmp/original-home
+  sudo mv /home/* /var/tmp/original-home/
+  touch /home/original-home-partition-which-should-be-mounted-over-for-more-storage
+  sudo mount /dev/sdc1 /home
+  sudo mv /var/tmp/original-home/* /home/
+  echo /dev/sdc1 /home auto defaults,noatime 0 2 | sudo tee -a /etc/fstab
+  touch /etc/homedisk_added
+  """
+
+  config.vm.provision "shell", inline: '''
+  set -e -o pipefail
+
+  # Install normal Ubuntu desktop
+  sudo apt-get update
+  sudo apt-get install -y ubuntu-desktop
+
+  # Add wasta ppas
+  # The wasta-testing ppa is temporary
+  sudo add-apt-repository ppa:wasta-linux/wasta
+  sudo add-apt-repository ppa:wasta-linux/wasta-apps
+  sudo add-apt-repository ppa:wasta-linux/wasta-testing
+  sudo apt-get update
+
+  # Install Wasta
+  sudo apt-get install -y wasta-core-xenial
+  sudo apt-get update
+  sudo apt-get install -y wasta-cinnamon-xenial
+  sudo DEBIAN_FRONTEND=noninteractive wasta-initial-setup auto
+  '''
+
+  # Set default password
+  config.vm.provision "shell", inline: 'echo -e "ubuntu\nubuntu" | sudo passwd ubuntu'
+
+  config.vm.provision "file", source: "~/.gitconfig", destination: ".gitconfig"
+  config.vm.provision "shell", inline: 'sudo apt-get -y install git; [ -n "$(git config --get fwinit.gerrituser)" ] || { echo ERROR Cannot provision without gerrit username. To fix, on your host machine execute the following command and then re-provision: git config --global fwinit.gerrituser YOUR_GERRIT_USERNAME && exit 1; }', privileged: false
+  # Key file for uploading to gerrit
+  config.vm.provision "file", source: "~/.ssh/id_rsa", destination: "~/.ssh/id_rsa"
+  config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/id_rsa.pub"
+  config.vm.provision "shell", path: "../provision-fw-dev-machine", privileged: false
+end

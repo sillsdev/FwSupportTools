@@ -36,8 +36,30 @@ sudo apt-get update
 # If this vagrant box already has a GUI running, then report in the GUI.
 (DISPLAY=:0 zenity --warning --no-wrap --title='Provisioning' --text="$(date '+%F %T')\nPlease wait for your vagrant to finish provisioning." ||true) &
 sudo DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y
-# (For Ubuntu 14.04: python-pyinotify. For Wasta-Linux: xterm.)
-sudo apt-get install -y git-gui terminator meld kdiff3-qt vim links2 gdb wget synaptic ack-grep geany xchat chromium-browser skype byobu indicator-multiload dconf-tools git-cola mercurial python-pyinotify xterm devscripts tortoisehg nunit
+# (For Ubuntu 14.04: python-pyinotify. For Wasta 14.04: xterm.)
+sudo apt-get install -y \
+  git-gui \
+  terminator \
+  meld \
+  kdiff3-qt \
+  vim \
+  links2 \
+  gdb \
+  wget \
+  synaptic \
+  ack-grep \
+  geany \
+  chromium-browser \
+  byobu \
+  indicator-multiload \
+  dconf-tools \
+  git-cola \
+  mercurial \
+  python-pyinotify \
+  xterm \
+  devscripts \
+  tortoisehg \
+  nunit
 
 git config --global diff.tool meld
 git config --global merge.conflictstyle diff3
@@ -124,17 +146,17 @@ zenity --warning --no-wrap --title='Rebooting' --text='Your computer will now be
 # Delay to let the launcher bar get populated with the desktop launchers before it's overwritten.
 sleep 20s
 # Ubuntu 12.04
-dconf write  /desktop/unity/launcher/favorites "['nautilus-home.desktop', 'firefox.desktop', 'chromium-browser.desktop', 'terminator.desktop', '$HOME/launchers/monodevelop.desktop', 'geany.desktop', 'gedit.desktop', '$HOME/launchers/fw-git-cola.desktop', '$HOME/launchers/xephyr.desktop', 'skype.desktop', 'xchat.desktop']"
+dconf write  /desktop/unity/launcher/favorites "['nautilus-home.desktop', 'firefox.desktop', 'chromium-browser.desktop', 'terminator.desktop', '$HOME/launchers/monodevelop.desktop', 'geany.desktop', 'gedit.desktop', '$HOME/launchers/fw-git-cola.desktop', '$HOME/launchers/xephyr.desktop']"
 # Ubuntu 14.04
-dconf write /com/canonical/unity/launcher/favorites "['application://nautilus.desktop', 'application://firefox.desktop', 'application://chromium-browser.desktop', 'application://terminator.desktop', 'application://$HOME/launchers/monodevelop.desktop', 'application://geany.desktop', 'application://gedit.desktop', 'application://$HOME/launchers/fw-git-cola.desktop', 'application://skype.desktop', 'application://xchat.desktop', 'unity://running-apps', 'unity://expo-icon', 'unity://devices']"
-# Wasta 14.04
-if [ -f /etc/wasta-release ]; then
+dconf write /com/canonical/unity/launcher/favorites "['application://nautilus.desktop', 'application://firefox.desktop', 'application://chromium-browser.desktop', 'application://terminator.desktop', 'application://$HOME/launchers/monodevelop.desktop', 'application://geany.desktop', 'application://gedit.desktop', 'application://$HOME/launchers/fw-git-cola.desktop', 'unity://running-apps', 'unity://expo-icon', 'unity://devices']"
+# Wasta 14.04 and 16.04
+if [[ -f /etc/wasta-release ]] || [[ $(lsb_release -sc) == "xenial" ]]; then
   TOOLSDIR=$HOME/Desktop/development-tools
-  mkdir -p "$TOOLSDIR"
-  mv $HOME/launchers/* "$TOOLSDIR"
-  mv $HOME/Desktop/{fw-git-gui.desktop,fw-gitk.desktop,monowinformsspy.desktop} "$TOOLSDIR"
-  cp -a /usr/share/applications/{nautilus,firefox,chromium-browser,terminator,geany,gedit,skype,xchat}.desktop "$TOOLSDIR"
-  chmod +x "$TOOLSDIR/{nautilus,firefox,chromium-browser,terminator,geany,gedit,skype,xchat}.desktop"
+  mkdir -p "\$TOOLSDIR"
+  mv $HOME/launchers/* "\$TOOLSDIR"
+  mv $HOME/Desktop/{fw-git-gui.desktop,fw-gitk.desktop,monowinformsspy.desktop} "\$TOOLSDIR"
+  cp -a /usr/share/applications/{terminator,geany}.desktop "\$TOOLSDIR"
+  chmod +x "\$TOOLSDIR"/{terminator,geany}.desktop
 fi
 
 sudo reboot now
@@ -166,10 +188,9 @@ mkdir -p $BASEDIR/fwrepo/fw/DistFiles/Projects
 
 # Libraries
 
-git clone https://github.com/sillsdev/flexbridge.git ~/fwrepo/flexbridge
-git clone https://github.com/sillsdev/libpalaso.git ~/projects/libpalaso
-git clone --branch develop https://bitbucket.org/smcconnel/ipcframework ~/projects/ipcframework
-
+[ -d ~/fwrepo/flexbridge ] || git clone https://github.com/sillsdev/flexbridge.git ~/fwrepo/flexbridge
+[ -d ~/projects/libpalaso ] || git clone https://github.com/sillsdev/libpalaso.git ~/projects/libpalaso
+[ -d ~/projects/ipcframework ] || git clone --branch develop https://bitbucket.org/smcconnel/ipcframework ~/projects/ipcframework
 
 # Monodevelop
 
@@ -374,7 +395,8 @@ chmod +x "$OUTPUTFILE"
 
 # Mono
 
-sudo apt-get install -y bison mono-devel libgif-dev libjpeg-dev libtiff4-dev libexif-dev git quilt mono-mcs
+sudo apt-get install -y libtiff4-dev || sudo apt-get install -y libtiff5-dev
+sudo apt-get install -y bison mono-devel libgif-dev libjpeg-dev libexif-dev git quilt mono-mcs
 
 OUTPUTFILE="$HOME/initial-mono-install.sh"
 cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
@@ -400,6 +422,12 @@ cd ~
   echo $SCRIPTNAME: Mono finished compiling and installing successfully.
 else
   echo $SCRIPTNAME: Mono failed to compile and install.  You can try again by running $HOME/initial-mono-install.sh
+
+  # Just install the wrapper script on Ubuntu 16.04 until mono is made to compile.
+  MONO_BIN=/opt/mono-sil/bin
+  if [ ! -f $MONO_BIN/mono-sil ]; then
+    sudo cp -v ~/fwrepo/mono/mono-calgary/mono-sil $MONO_BIN/mono-sil && sudo mv -v $MONO_BIN/mono{,-real} && sudo ln -sf mono-sil $MONO_BIN/mono
+  fi
 fi
 
 # Compile FieldWorks
