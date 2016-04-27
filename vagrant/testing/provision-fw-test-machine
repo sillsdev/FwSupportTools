@@ -32,12 +32,12 @@ sudo apt-get update
 if ! sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade; then
   echo provisioner: There were errors while updating system packages. Ignoring.
 fi
-sudo DEBIAN_FRONTEND=noninteractive apt-get -y install wget curl vim meld ack-grep dconf-tools
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y install wget curl vim meld ack-grep dconf-tools synaptic
 
 # FieldWorks
 
 # Download but don't install FieldWorks and its dependencies
-sudo DEBIAN_FRONTEND=noninteractive apt-get -dy install fieldworks-applications
+sudo DEBIAN_FRONTEND=noninteractive apt-get -dy install fieldworks
 
 # Sample data
 
