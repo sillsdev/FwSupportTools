@@ -170,7 +170,7 @@ elif [ "$MAIN_PACKAGE_NAME" = "mono-sil" -o \
 	"$MAIN_PACKAGE_NAME" = "mono-basic-sil" -o \
 	"$MAIN_PACKAGE_NAME" = "mono4-sil" -o \
 	"$MAIN_PACKAGE_NAME" = "libgdiplus4-sil" -o \
-	"$MAIN_PACKAGE_NAME" = "gtk-sharp24-sil" -o \
+	"$MAIN_PACKAGE_NAME" = "gtk-sharp4-sil" -o \
 	"$MAIN_PACKAGE_NAME" = "mono-basic4-sil" ]; then
 	short_mono_package_name=${MAIN_PACKAGE_NAME%-sil}
 	# Strip the '4' from the end
