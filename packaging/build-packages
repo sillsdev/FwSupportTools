@@ -200,12 +200,28 @@ fi
 
 # Use repository committishes requested in commandline, if available.
 
+function EscapeString() {
+	local tmp
+	tmp="${1//\//_slash}"
+	tmp="${tmp//-/_hyphen}"
+	tmp="${tmp// /_space}"
+
+	echo "$tmp"
+}
+
+function UnescapeString() {
+	local tmp
+	tmp="$(eval echo $1)"
+	tmp="${tmp//_slash//}"
+	tmp="${tmp//_hyphen/-}"
+
+	echo "$tmp"
+}
+
 # Set repositorydir=committish mappings.
 OLDIFS="$IFS"
 IFS=,; for repo_branch_setting in ${repository_committishes_arg}; do
-	repo_branch_setting="${repo_branch_setting//\//_slash}"
-	repo_branch_setting="${repo_branch_setting//-/_hyphen}"
-	repo_branch_setting="${repo_branch_setting// /_space}"
+	repo_branch_setting="$(EscapeString "$repo_branch_setting")"
 	eval $repo_branch_setting
 done
 IFS="$OLDIFS"
@@ -217,17 +233,13 @@ else
 fi
 
 for dir in "${repository_directory_list[@]}"; do
-	escaped_dir="${dir//\//_slash}"
-	escaped_dir="${escaped_dir//-/_hyphen}"
-	escaped_dir="${escaped_dir// /_space}"
-	dir_branch_requested="$(eval echo \$${escaped_dir})"
-	dir_branch_requested="${dir_branch_requested//_slash//}"
-	dir_branch_requested="${dir_branch_requested//_hyphen/-}"
+	escaped_dir="$(EscapeString $dir)"
+	dir_branch_requested="$(UnescapeString "\$${escaped_dir}")"
 	clean_update_and_set_repository_to_committish "$repo_base_dir/$dir" ${dir_branch_requested:-$default_repository_branch}
 done
 
 if [ -n "$short_mono_package_name" ]; then
-	MONO_COMMITTISH_TO_USE=${!short_mono_package_name:-origin/develop}
+	MONO_COMMITTISH_TO_USE="$(UnescapeString ${!short_mono_package_name:-origin/develop})"
 fi
 
 stderr "Preparing"
