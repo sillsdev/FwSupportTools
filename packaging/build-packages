@@ -239,7 +239,8 @@ for dir in "${repository_directory_list[@]}"; do
 done
 
 if [ -n "$short_mono_package_name" ]; then
-	MONO_COMMITTISH_TO_USE="$(UnescapeString ${!short_mono_package_name:-origin/develop})"
+	escaped_name="$(EscapeString $short_mono_package_name)"
+	MONO_COMMITTISH_TO_USE="$(UnescapeString ${!escaped_name:-origin/develop})"
 fi
 
 stderr "Preparing"
