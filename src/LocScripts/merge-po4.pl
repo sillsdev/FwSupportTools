@@ -1,14 +1,19 @@
-#!/usr/bin/perl #-CS
+#!/usr/bin/perl
 
 use utf8;
 
 # merge-po4.pl workingfile.po catalog.po missing.po newfile.po
 
-# Merge a catalog file with a working .po file.
-# If the .po file has translations, leave those as they are.
-# If the catalog has "translations" (they would really be annotations),
-# then put those in the new file only for strings that have not been translated yet.
+# Merge translations from a working .po file into a catalog file.
+# Creates a new .po file consisting of all and only the strings in the catalog.
+# If the .po file has translations for any of these strings, include those.
+# If the catalog has "translations" (they would really be annotations), then
+# put those in the new file only for strings without translatoins in working file.
 # Use user comments from working file and auto comments from catalog.
+# Use all the strings in the catalog.  Ignore strings that are only in working.
+
+# To do: Adjust so we pull the initial msgstr (with header info for the catalog)
+# from the catalog, not from workingfile.po.
 
 # Created:
 # Modified:
@@ -17,8 +22,11 @@ use utf8;
 
 if ($#ARGV != 2) {
 	print STDERR "Usage: merge-po4.pl catalog.po workingfile.po newfile.po\n";
-	print STDERR "Merges strings (including annotations) from catalog.po into workingfile.po,\n";
-	print STDERR "leaving any translated strings in workingfile.po untouched.\n";
+	print STDERR "Merges translations from workingfile.po into catalog.po,\n";
+	print STDERR "retaining any \"translations\" in catalog.po for strings\n";
+	print STDERR "that don't have a translation in workingfile.po.\n";
+	print STDERR "Initial msgstr should be modified by hand to reflect\n";
+	print STDERR "correct header info for the catalog.\n";
 	print "[0] = $ARGV[0]\n";
 	print "[1] = $ARGV[1]\n";
 	print "[2] = $ARGV[2]\n";
@@ -309,6 +317,105 @@ while ($line = <CATFILE>) {
 			}
 		}
 	}
+
+# Process the last record
+# (I realize this is bad coding, to just copy this much code
+# from inside the loop.  There must be a way to do this as part
+# of the above loop.)
+if (!$blank) {
+	# See if it's also in the working file
+	$teststr =~ s/([\(\)\[\]\$\{\}\*\+\|\?\"\\])/\\$1/g;
+	#print STDERR "[$teststr]\n";
+	if (grep(/^$teststr$/, @ids)) {
+		# found
+		#print STDERR "Match: $teststr\n";
+		# print these to the output file, with "working"
+		# string, or catalog string, if "working" string was empty
+		# Use the user comments from the working file
+		if ($comment{$teststr}) {
+			print stderr "have cmts\n";
+			print NEWFILE "$comment{$teststr}\n";
+			}
+		# Use the automatic comments from the catalog file
+		foreach $cm (@cmt) {
+			print NEWFILE "$cm\n";
+			}
+		if ($fuzzy{$teststr}) {
+			print NEWFILE "#, fuzzy\n";
+			}
+		print NEWFILE "msgid $msgid[0]\n";
+		if ($#msgid) {
+			#print STDERR " mpl $#msgid: $msgid[1]\n";
+			for $m (1..$#msgid) {
+				#print STDERR "  mpl: $msgid[$m]\n";
+				print NEWFILE "$msgid[$m]\n";
+				}
+			}
+
+		#print STDERR " Multiline msgstr? $#msgstr\n";
+		# If it was translated in the working file, print that
+		if ($str{$teststr} !~ /msgstr \"\"\n$/) {
+			#print STDERR "  Translated str: [$str{$teststr}]\n$teststr";
+			print NEWFILE "$str{$teststr}\n";
+			}
+		# otherwise print multiline strings from catalog
+		elsif ($#msgstr) {
+			foreach $ms (@msgstr) {
+				print NEWFILE "$ms\n";
+				}
+			print NEWFILE "\n";
+			#@msgstr = ();
+			}
+		# as well as single line ones.
+		elsif ($msgstr[0] ne "msgstr \"\"") {
+			print NEWFILE "$msgstr[0]\n\n";
+			}
+		# otherwise make it blank
+		else {
+			print NEWFILE "msgstr \"\"\n\n";
+			}
+		#print NEWFILE "\n";
+
+		}
+	else {
+		#print STDERR " Doesn't match: $teststr\n";
+		# not found, so just print this record as is
+		#print STDERR " Not found: [$teststr]\n";
+		foreach $cm (@cmt) {
+			print NEWFILE "$cm\n";
+			}
+		print NEWFILE "msgid $msgid[0]\n";
+		if ($#msgid) {
+			#print STDERR " mpl $#msgid: $msgid[1]\n";
+			for $m (1..$#msgid) {
+				#print STDERR "  mpl: $msgid[$m]\n";
+				print NEWFILE "$msgid[$m]\n";
+				}
+			}
+		foreach $ms (@msgstr) {
+			print NEWFILE "$ms\n";
+			}
+		print NEWFILE "\n";
+		}
+
+	# Reset the arrays and counters
+#print STDERR "teststr was: [$teststr]\n";
+	$teststr = "";
+	undef @cmt;
+	undef @comts;
+	$i = 0;
+	undef @msgid;
+	$j = 0;
+	undef @msgstr;
+	$k = 0;
+	#Next few lines might be blank
+	$blank = 1;
+	}
+else {
+	# do just print extra blank lines
+	#print "\n";
+	}
+
 
 close WKGFILE;
 close CATFILE;
