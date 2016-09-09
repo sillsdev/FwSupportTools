@@ -1,0 +1,49 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "ubuntu/xenial32"
+  config.vm.define :"testing"
+  config.vm.provision "shell", inline: 'echo >>/etc/hosts  127.0.0.1 $(hostname)'
+
+  config.vm.provider "virtualbox" do |v|
+    # Override name specified in ubuntu/xenial64 basebox, which can cause problems if used more than once.
+    v.name="wasta-1604-32-fw-test"
+    v.memory = 1536
+    v.cpus = 1
+    v.gui = true
+  end
+
+  # Provision
+
+  config.vm.provision "shell", inline: '''
+  set -e -o pipefail
+
+  function tryharderto() { i=0; until "$@"; do ((++i > 3)) && false; echo >&2 Retrying $i; sleep 2m; done }
+
+  # Install normal Ubuntu desktop
+  tryharderto sudo apt-get update
+  tryharderto sudo apt-get install -y ubuntu-desktop
+
+  # Add wasta ppas
+  # The wasta-testing ppa is temporary
+  sudo add-apt-repository ppa:wasta-linux/wasta
+  sudo add-apt-repository ppa:wasta-linux/wasta-apps
+  sudo add-apt-repository ppa:wasta-linux/wasta-testing
+  tryharderto sudo apt-get update
+
+  # Install Wasta
+  tryharderto sudo apt-get install -y wasta-core-xenial
+  tryharderto sudo apt-get update
+  tryharderto sudo apt-get install -y wasta-cinnamon-xenial
+  sudo DEBIAN_FRONTEND=noninteractive wasta-initial-setup auto
+
+  tryharderto sudo apt-get install -y gnome-software software-center
+  '''
+
+  # Set default password
+  config.vm.provision "shell", inline: 'echo -e "ubuntu\nubuntu" | sudo passwd ubuntu'
+
+  config.vm.provision "shell", path: "../provision-fw-test-machine", privileged: false
+end
