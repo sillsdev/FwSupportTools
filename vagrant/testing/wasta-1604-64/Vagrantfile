@@ -38,6 +38,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   tryharderto sudo apt-get update
   tryharderto sudo apt-get install -y wasta-cinnamon-xenial
   sudo DEBIAN_FRONTEND=noninteractive wasta-initial-setup auto
+
+  tryharderto sudo apt-get install -y gnome-software software-center
   '''
 
   # Set default password

@@ -68,6 +68,8 @@ git config --global color.ui true
 git config --global rerere.enabled true
 git config --global gui.editor gedit
 git config --global rebase.autosquash true
+# Set the textwidth on the commit tool so commit messages are automatically restrained within the policy settings.
+git config --global cola.textwidth 70
 # Don't absorb Windows line ending settings from host.
 git config --global --unset core.autocrlf ||true
 
@@ -226,6 +228,7 @@ cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
   <Property key="BuildBeforeRunningTests" value="False" />
   <Property key="MonoDevelop.Ide.DefaultTargetRuntime" value="Mono 3.4.0.1 (23d8e3b)" />
   <Property key="MonoDevelop.Ide.BuildBeforeExecuting" value="False" />
+  <Property key="MonoDevelop.Debugger.DebuggingService.ProjectAssembliesOnly" value="False" />
 </MonoDevelopProperties>
 ENDOFOUTPUTFILE
 
@@ -407,7 +410,8 @@ cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
 
 set -e -o pipefail
 
-[ ! -d "$BASEDIR/fwrepo/mono/mono-calgary" ] && git clone git://github.com/sillsdev/mono-calgary.git "$BASEDIR/fwrepo/mono/mono-calgary"
+# Use mono 3 until intentionally move to mono 4.
+[ ! -d "$BASEDIR/fwrepo/mono/mono-calgary" ] && git clone --branch release/mono-sil-3.4 git://github.com/sillsdev/mono-calgary.git "$BASEDIR/fwrepo/mono/mono-calgary"
 cd "$BASEDIR/fwrepo/mono" && mono-calgary/BuildOptMono.sh
 
 mozroots --import --ask-remove
