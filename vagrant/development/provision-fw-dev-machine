@@ -78,6 +78,9 @@ EOF
 
 perl -pi -e s/^#force_color_prompt/force_color_prompt/ ~/.bashrc
 grep __git_ps1 ~/.bashrc || echo 'export PS1="\$(__git_ps1) $PS1"' |tee -a ~/.bashrc
+# Don't report developer or tester usage to analytics.
+echo export FEEDBACK=false | tee -a ~/.bashrc
+echo export WESAY_TRACK_AS_DEVELOPER=1 | tee -a ~/.bashrc
 
 mkdir -p ~/.config/terminator
 echo '[profiles]
