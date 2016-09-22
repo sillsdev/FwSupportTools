@@ -1968,7 +1968,34 @@ msgstr ""
 msgid "labelText"
 msgstr ""
 
-#. Displays in the Help/About box and the splash screen
-#. /Src/Common/CoreImpl/CoreImplStrings.resx::kstidLicense
-msgid "This software is licensed under the LGPL, version 2.1 or later"
+#. /Language Explorer/DefaultConfigurations/ReversalIndex/AllReversalIndexes.fwdictconfig:://ConfigurationItem/@name
+msgid "AllReversalSubentries"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Bibliographic Source|
+msgid "bs"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Etymology Note|
+msgid "en"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Discussion|
+msgid "enn"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Preceding Annotation|
+msgid "pa"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Source Form|
+msgid "sf"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Source Language|
+msgid "slg"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Source Language Notes|
+msgid "slgn"
 msgstr ""
