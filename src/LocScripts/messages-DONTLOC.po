@@ -1,27 +1,12 @@
-#. used to indicate no value in ksQueueXYZ
-#. does not need to be localized
-#. /Src/Common/Controls/SideBar/SideBarTab.resx::mnuSeparator2.Text
-#. /Src/Common/Controls/SideBar/SideBarTab.resx::mnuSepr.Text
-#. /Src/LexText/GAFAWS/Apps/AffixPositionAnalyzer/ANAConverter/ANAConverterDlg.resx::tbAffixSep.Text
-#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksDash
-#. (String used 4 times.)
-msgid "-"
+
+#. /Language Explorer/Configuration/Parts/CellarParts.xml::/PartInventory/bin/part[@id="CmPossibility-Jt-SpaceParenAbbr"]/ifnot/lit
+#. /Language Explorer/Configuration/Parts/CmPossibilityParts.xml::/PartInventory/bin/part[@id="LexEntryType-Jt-SpaceParenRevAbbr"]/ifnot/lit
+#. (String used 2 times.)
+msgid "  ("
 msgstr ""
 
-#. Marker for missing items.
-#. /Src/LexText/Discourse/DiscourseStrings.resx::ksMissingMarker
-msgid "---"
-msgstr ""
-
-#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmAnthroItem-jtview-publishAnthroForReversal"]/part[@ref="AbbreviationPub"]/@after
-#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmAnthroItem-jtview-publishSubAnthroForReversal"]/part[@ref="AbbreviationPub"]/@after
-#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmLocation-jtview-publishLocationForReversal"]/part[@ref="AbbreviationPub"]/@after
-#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmLocation-jtview-publishSenseVariantLocationForReversal"]/part[@ref="AbbreviationPub"]/@after
-#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmLocation-jtview-publishVariantLocationForReversal"]/part[@ref="AbbreviationPub"]/@after
-#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmSemanticDomain-jtview-publishSemDomForReversal"]/part[@ref="AbbreviationPub"]/@after
-#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmSemanticDomain-jtview-publishSubSemDomForReversal"]/part[@ref="AbbreviationPub"]/@after
-#. (String used 7 times.)
-msgid " -"
+#. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid.fwdictconfig:://ConfigurationItem/@before
+msgid "  ["
 msgstr ""
 
 #. separate name and abbreviation (space dash space)
@@ -48,12 +33,6 @@ msgstr ""
 #. /Src/FDO/Strings.resx::ksNameAbbrSep
 #. (String used 21 times.)
 msgid " - "
-msgstr ""
-
-#. /Language Explorer/Configuration/Parts/CellarParts.xml::/PartInventory/bin/part[@id="CmPossibility-Jt-SpaceParenAbbr"]/ifnot/lit
-#. /Language Explorer/Configuration/Parts/CmPossibilityParts.xml::/PartInventory/bin/part[@id="LexEntryType-Jt-SpaceParenRevAbbr"]/ifnot/lit
-#. (String used 2 times.)
-msgid "  ("
 msgstr ""
 
 #. /Language Explorer/Configuration/Parts/CellarLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-bestAnalysisNameAbbr"]/part[@ref="ConfigureAbbr"]/@before
@@ -89,6 +68,17 @@ msgstr ""
 msgid " '{0}'"
 msgstr ""
 
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmAnthroItem-jtview-publishAnthroForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmAnthroItem-jtview-publishSubAnthroForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmLocation-jtview-publishLocationForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmLocation-jtview-publishSenseVariantLocationForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmLocation-jtview-publishVariantLocationForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmSemanticDomain-jtview-publishSemDomForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmSemanticDomain-jtview-publishSubSemDomForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. (String used 7 times.)
+msgid " -"
+msgstr ""
+
 #. /Language Explorer/Configuration/Parts/LexSenseParts.XML::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-basic"]/choice/otherwise/lit
 #. /Language Explorer/Configuration/Parts/LexSenseParts.XML::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-basic"]/choice/where/choice/otherwise/lit
 #. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-Browse"]/choice/otherwise/para/lit
@@ -103,14 +93,11 @@ msgstr ""
 #. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoInflAffixSlot-Jt-PrefixSlotNameRTL"]/cell/para/lit
 #. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoInflAffixSlot-Jt-SuffixSlotNameRTL"]/cell/para/lit
 #. (String used 2 times.)
-msgid "‏  "
+msgid "?��"
 msgstr ""
 
-#. leading tab character, {1} is a newline character; is the 'Bullet" character culturally sensitive?
-#. /Src/LexText/LexTextControls/LexTextControls.resx::ksBullettedItem
-#. /Src/LexText/Morphology/MGA/MGAStrings.resx::ksBullettedItem
-#. (String used 2 times.)
-msgid "	• {0}{1}"
+#. /Src/FwCoreDlgs/WritingSystemPropertiesDialog.resx::m_LanguageCode.Text
+msgid "###"
 msgstr ""
 
 #. /Src/Common/Controls/FwControls/ProgressDialogImpl.resx::lblStatusMessage.Text
@@ -142,8 +129,8 @@ msgstr ""
 msgid "#"
 msgstr ""
 
-#. /Src/FwCoreDlgs/WritingSystemPropertiesDialog.resx::m_LanguageCode.Text
-msgid "###"
+#. /Language Explorer/Configuration/Lexicon/ReversalIndices/toolConfiguration.xml::/root/tools/tool/control/parameters/control/parameters/control/parameters/configureLayouts/layoutType/@label
+msgid "$wsName"
 msgstr ""
 
 #. /Src/LexText/GAFAWS/Apps/AffixPositionAnalyzer/ANAConverter/ANAConverterDlg.resx::tbAmbigMarker.Text
@@ -151,11 +138,23 @@ msgid "%"
 msgstr ""
 
 #. /Src/FwCoreDlgs/WritingSystemPropertiesDialog.resx::m_ampersandButton.Text
-msgid "&"
+msgid "&&"
 msgstr ""
 
 #. /Src/FwCoreDlgs/WritingSystemPropertiesDialog.resx::m_ampersandButton.Text
-msgid "&&"
+msgid "&"
+msgstr ""
+
+#. /Src/FwCoreDlgs/WritingSystemPropertiesDialog.resx::lblSortingRule2.Text
+msgid "&C<ch<<<Ch<<<CH"
+msgstr ""
+
+#. /Src/FwCoreDlgs/WritingSystemPropertiesDialog.resx::lblSortingRule3.Text
+msgid "&l<ll<<<Ll<<<LL"
+msgstr ""
+
+#. /Src/FwCoreDlgs/WritingSystemPropertiesDialog.resx::lblSortingRule1.Text
+msgid "&N<�<<<�"
 msgstr ""
 
 #. /Language Explorer/Configuration/Parts/CellarParts.xml::/PartInventory/bin/part[@id="CmPossibility-Jt-ItalicNameList"]/span/lit
@@ -185,17 +184,9 @@ msgstr ""
 msgid "("
 msgstr ""
 
-#. /Language Explorer/Configuration/Parts/CellarLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-bestAnalysisNameAbbr"]/part[@ref="ConfigureAbbr"]/@after
-#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntryType-jtview-publishRootSubEntryType"]/part[@ref="ReverseAbbrPub"]/@after
-#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootDomainType"]/part[@ref="NamePub"]/@after
-#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootMinorDomainType"]/part[@ref="NamePub"]/@after
-#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootSubDomainType"]/part[@ref="NamePub"]/@after
-#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemDomainType"]/part[@ref="NamePub"]/@after
-#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemMinorDomainType"]/part[@ref="NamePub"]/@after
-#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-publishDomainTypeForReversal"]/part[@ref="NamePub"]/@after
-#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-publishSubDomainTypeForReversal"]/part[@ref="NamePub"]/@after
-#. (String used 9 times.)
-msgid ")"
+#. Displays in the Help/About box
+#. /Src/Common/CoreImpl/CoreImplStrings.resx::kstidLicenseURL
+msgid "(http://www.gnu.org/licenses/lgpl-2.1.html)"
 msgstr ""
 
 #. /Language Explorer/Configuration/Parts/CellarParts.xml::/PartInventory/bin/part[@id="CmPossibility-Jt-ItalicNameList"]/span/lit
@@ -230,8 +221,17 @@ msgstr ""
 msgid ") "
 msgstr ""
 
-#. /Src/TE/TeDialogs/FootnotePropertiesSelector.resx::txtMarker.Text
-msgid "*"
+#. /Language Explorer/Configuration/Parts/CellarLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-bestAnalysisNameAbbr"]/part[@ref="ConfigureAbbr"]/@after
+#. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexEntryType-jtview-publishRootSubEntryType"]/part[@ref="ReverseAbbrPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootDomainType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootMinorDomainType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishRootSubDomainType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemDomainType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["CmPossibility-jtview-publishStemMinorDomainType"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-publishDomainTypeForReversal"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["CmPossibility-jtview-publishSubDomainTypeForReversal"]/part[@ref="NamePub"]/@after
+#. (String used 9 times.)
+msgid ")"
 msgstr ""
 
 #. indicates a missing value
@@ -246,21 +246,28 @@ msgstr ""
 msgid "***"
 msgstr ""
 
+#. /Src/LexText/Interlinear/LinguaLinksImportDlg.resx::m_LinguaLinksXmlFileName.Text
+msgid "*.xml"
+msgstr ""
+
+#. /Src/TE/TeDialogs/FootnotePropertiesSelector.resx::txtMarker.Text
+msgid "*"
+msgstr ""
+
 #. Used in Description on the General tab of the Style dialog box to separate detail items
 #. separate items in a list (comma space)
 #. /Src/FDO/Strings.resx::ksListSep
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwCoreDlgControls.resx::kstidItemSeparator
 #. (String used 2 times.)
-msgid ", "
+"msgid ", ""
 msgstr ""
 
-#. /Language Explorer/Configuration/Parts/LexSenseParts.XML::/PartInventory/bin/part[@id="CmPossibility-Jt-BoldItalicAbbr"]/span/lit
-#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="CmPossibility-Jt-AffixCategory"]/if/ifnot/lit
-#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="CmPossibility-Jt-AffixCategory"]/ifnot/lit
-#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="PartOfSpeech-Jt-ShowPartOfSpeech"]/ifnot/lit
-#. /Language Explorer/Configuration/Parts/ReversalParts.xml::/PartInventory/bin/part[@id="CmPossibility-Jt-RevIdxEntryPOSItalicAbbr"]/span/lit
-#. (String used 5 times.)
-msgid "."
+#. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid.fwdictconfig:://ConfigurationItem/@between
+#. /Language Explorer/DefaultConfigurations/Dictionary/Lexeme.fwdictconfig:://ConfigurationItem/@between
+#. /Language Explorer/DefaultConfigurations/Dictionary/Root.fwdictconfig:://ConfigurationItem/@between
+#. /Language Explorer/DefaultConfigurations/ReversalIndex/AllReversalIndexes.fwdictconfig:://ConfigurationItem/@between
+#. (String used 60 times.)
+"msgid ",""
 msgstr ""
 
 #. /Language Explorer/Configuration/Parts/CellarParts.xml::/PartInventory/bin/part[@id="CmPossibility-Jt-AbbreviationDot"]/lit
@@ -281,12 +288,6 @@ msgstr ""
 msgid ". "
 msgstr ""
 
-#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="SemanticDomainsConfig"]/@after
-#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="SemanticDomainsConfig"]/@after
-#. (String used 2 times.)
-msgid ".)"
-msgstr ""
-
 #. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRoot"]/part[@ref="SemanticDomainsConfig"]/@after
 #. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootMinor"]/part[@ref="SemanticDomainsConfig"]/@after
 #. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootSub"]/part[@ref="SemanticDomainsConfig"]/@after
@@ -298,6 +299,12 @@ msgstr ""
 msgid ".) "
 msgstr ""
 
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="SemanticDomainsConfig"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="SemanticDomainsConfig"]/@after
+#. (String used 2 times.)
+msgid ".)"
+msgstr ""
+"
 #. ellipsis - mark showing missing words, or "more to come".  displayed on a button for launching a dialog box.
 #. /Src/Common/Controls/DetailControls/Resources/DetailControlsStrings.resx::ksEllipsis
 #. /Src/FwCoreDlgs/CnvtrPropertiesCtrl.resx::btnMapFile.Text
@@ -305,8 +312,17 @@ msgstr ""
 #. /Src/LexText/LexTextControls/LexImportWizard.resx::btnDatabaseBrowse.Text
 #. /Src/LexText/LexTextControls/LexImportWizard.resx::btnSaveAsBrowse.Text
 #. /Src/LexText/LexTextControls/LexImportWizard.resx::btnSettingsBrowse.Text
-#. (String used 6 times.)
+#. (String used 6 times.)"
 msgid "..."
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexSenseParts.XML::/PartInventory/bin/part[@id="CmPossibility-Jt-BoldItalicAbbr"]/span/lit
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="CmPossibility-Jt-AffixCategory"]/if/ifnot/lit
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="CmPossibility-Jt-AffixCategory"]/ifnot/lit
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="PartOfSpeech-Jt-ShowPartOfSpeech"]/ifnot/lit
+#. /Language Explorer/Configuration/Parts/ReversalParts.xml::/PartInventory/bin/part[@id="CmPossibility-Jt-RevIdxEntryPOSItalicAbbr"]/span/lit
+#. (String used 5 times.)
+msgid "."
 msgstr ""
 
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontAttributes.resx::m_cboUnderlineStyle.Items2
@@ -325,14 +341,14 @@ msgstr ""
 msgid ".4"
 msgstr ""
 
-#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishEntryRefForReversal"]/part[@ref="AbbreviationPub"]/@after
-#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishEntryRefForReversal"]/part[@ref="NamePub"]/@after
-#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishSenseRefForReversal"]/part[@ref="AbbreviationPub"]/@after
-#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishSenseRefForReversal"]/part[@ref="NamePub"]/@after
-#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishSubSenseRefForReversal"]/part[@ref="AbbreviationPub"]/@after
-#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishSubSenseRefForReversal"]/part[@ref="NamePub"]/@after
-#. (String used 6 times.)
-msgid ":"
+#. help topic ID for data notebook import TopicsListImportOptions Dialog.
+#. /Src/LexText/LexTextDll/HelpTopicPaths.resx::khtpDataNotebookImportDateFormatDef
+msgid "/Beginning_Tasks/Importing_Data/Import_Notebook_Data/Topics_List_Import_Options.htm'"
+msgstr ""
+"
+#. Label to be used in Export dialog that gets added to the books, when there are less then 4 books
+#. /Src/TE/TeResources/TeStrings.resx::kstidExportDlgMultipleBooks"
+msgid ": {0}"
 msgstr ""
 
 #. Used in Description on the General tab of the Style dialog box to separate an item label from its value
@@ -378,21 +394,44 @@ msgstr ""
 msgid ": "
 msgstr ""
 
-#. Label to be used in Export dialog that gets added to the books, when there are less then 4 books
-#. /Src/TE/TeResources/TeStrings.resx::kstidExportDlgMultipleBooks
-msgid ": {0}"
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishEntryRefForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishEntryRefForReversal"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishSenseRefForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishSenseRefForReversal"]/part[@ref="NamePub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishSubSenseRefForReversal"]/part[@ref="AbbreviationPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexReference-jtview-publishSubSenseRefForReversal"]/part[@ref="NamePub"]/@after
+#. (String used 6 times.)
+msgid ":"
 msgstr ""
-
+"
 #. Text used to separate the names of the selected scripture checks in checking view when the checking toolbar is docked to the top. This separator should also include the space, if desired.
 #. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoForm-Jt-ListedForm"]/lit
 #. /Src/TE/TeResources/TeStrings.resx::kstidScrChkNameSeparator
-#. (String used 2 times.)
+#. (String used 2 times.)"
 msgid "; "
 msgstr ""
 
-#. Symbol or short string representing an unknown number of unreviewed differences in the Merge Imported Scripture dialog box
-#. /Src/TE/TeResources/TeDialogStrings.resx::kstidUnknown
-msgid "?"
+#. /Language Explorer/Configuration/Main.xml::/window/commands/command/@label
+msgid "?? Properties (TODO)"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-BrowseAbbr"]/choice/where/choice/where/para/lit
+msgid "??? > ???"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-PartsOfSpeech"]/para/span/choice/where/choice/otherwise/lit
+msgid "??? > "
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexSenseParts.XML::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-basic"]/choice/otherwise/choice/where/lit
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-Browse"]/choice/otherwise/para/choice/where/lit
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-BrowseAbbr"]/choice/otherwise/para/choice/where/lit
+#. (String used 3 times.)
+msgid "???."
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoMorphSynAnalysis-Jt-Unknown"]/lit
+msgid "????"
 msgstr ""
 
 #. default for an unknown/unrecognized/undefined value
@@ -418,23 +457,51 @@ msgstr ""
 msgid "???"
 msgstr ""
 
-#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-PartsOfSpeech"]/para/span/choice/where/choice/otherwise/lit
-msgid "??? > "
+#. Symbol or short string representing an unknown number of unreviewed differences in the Merge Imported Scripture dialog box
+#. /Src/TE/TeResources/TeDialogStrings.resx::kstidUnknown
+msgid "?"
 msgstr ""
 
-#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-BrowseAbbr"]/choice/where/choice/where/para/lit
-msgid "??? > ???"
+#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_suprafixExample.Text
+msgid "[ ~a~ ]"
 msgstr ""
 
-#. /Language Explorer/Configuration/Parts/LexSenseParts.XML::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-basic"]/choice/otherwise/choice/where/lit
-#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-Browse"]/choice/otherwise/para/choice/where/lit
-#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-BrowseAbbr"]/choice/otherwise/para/choice/where/lit
-#. (String used 3 times.)
-msgid "???."
+#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_encliticExample.Text
+msgid "[ =a]"
 msgstr ""
 
-#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoMorphSynAnalysis-Jt-Unknown"]/lit
-msgid "????"
+#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_simulfixExample.Text
+msgid "[ =a= ]"
+msgstr ""
+
+#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_infixExample.Text
+msgid "[ -a- ]"
+msgstr ""
+
+#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_suffixExample.Text
+msgid "[ -a]"
+msgstr ""
+
+#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_boundStemExample.Text
+msgid "[*aa ]"
+msgstr ""
+"
+#. Format string, {0} replaced with line number of dependent clause.
+#. /Src/LexText/Discourse/DiscourseStrings.resx::ksDepClauseFormat"
+msgid "[{0}]"
+msgstr ""
+
+#. Format a reference to lines {0} to {1}.
+#. /Src/LexText/Discourse/DiscourseStrings.resx::ksDepClauseRangeFormat
+msgid "[{0}-{1}]"
+msgstr ""
+
+#. /|strings-en.xml::/DialogStrings/EditMorphBreaks-affixExample|
+msgid "[{0}a{1}]"
+msgstr ""
+
+#. /|strings-en.xml::/DialogStrings/EditMorphBreaks-stemExample|
+msgid "[{0}aa{1} ]"
 msgstr ""
 
 #. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishRootForEntryVariant"]/part[@ref="FormPub"]/@before
@@ -483,22 +550,48 @@ msgstr ""
 msgid "["
 msgstr ""
 
-#. Format string, {0} replaced with line number of dependent clause.
-#. /Src/LexText/Discourse/DiscourseStrings.resx::ksDepClauseFormat
-msgid "[{0}]"
+#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_prefixExample.Text
+msgid "[a- ]"
 msgstr ""
 
-#. Format a reference to lines {0} to {1}.
-#. /Src/LexText/Discourse/DiscourseStrings.resx::ksDepClauseRangeFormat
-msgid "[{0}-{1}]"
+#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_procliticExample.Text
+msgid "[a= ]"
 msgstr ""
 
+#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_stemExample.Text
+msgid "[aa ]"
+msgstr ""
+"
+#. Do not translate (if help file is localized and given a new name, then indicate the new name here)
+#. /Src/FwResources/HelpTopicPaths.resx::FLExHelpFile
+#. /Src/LexText/LexTextDll/HelpTopicPaths.resx::UserHelpFile
+#. (String used 2 times.)"
+msgid "\\Helps\\FieldWorks_Language_Explorer_Help.chm"
+msgstr ""
+"
+#. Do not translate (if help file is localized and given a new name, then indicate the new name here)
+#. /Src/TE/TeResources/HelpTopicPaths.resx::UserHelpFile"
+msgid "\\Helps\\FieldWorks_Translation_Editor_Help.chm"
+msgstr ""
+"
 #. alternate abbreviation for inches
 #. Measurement unit symbol for Inches (If culture doesn't have a separate symbol for specifying inches, localized value for this string should be set to match value of kstidIn.)
 #. /Src/Common/FwPrintLayoutComponents/FwPageSetup.resx::kstidInches
 #. /Src/Common/Utils/UtilsStrings.resx::kstidInches
-#. (String used 2 times.)
+#. (String used 2 times.)"
 msgid "\""
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRoot"]/part[@ref="RestrictionsPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootMinor"]/part[@ref="RestrictionsPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootSub"]/part[@ref="RestrictionsPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStem"]/part[@ref="EncyclopedicInfoPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStem"]/part[@ref="RestrictionsPub"]/@after
+#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStemMinor"]/part[@ref="RestrictionsPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="RestrictionsPub"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="RestrictionsPub"]/@after
+#. (String used 8 times.)
+msgid "] "
 msgstr ""
 
 #. /Language Explorer/Configuration/Parts/LexEntryLayouts.XML::/LayoutInventory/layout["LexPronunciation-jtview-publishRootForEntryVariant"]/part[@ref="FormPub"]/@after
@@ -553,18 +646,6 @@ msgstr ""
 msgid "]"
 msgstr ""
 
-#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRoot"]/part[@ref="RestrictionsPub"]/@after
-#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootMinor"]/part[@ref="RestrictionsPub"]/@after
-#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootSub"]/part[@ref="RestrictionsPub"]/@after
-#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStem"]/part[@ref="EncyclopedicInfoPub"]/@after
-#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStem"]/part[@ref="RestrictionsPub"]/@after
-#. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishStemMinor"]/part[@ref="RestrictionsPub"]/@after
-#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="RestrictionsPub"]/@after
-#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="RestrictionsPub"]/@after
-#. (String used 8 times.)
-msgid "] "
-msgstr ""
-
 #. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRoot"]/part[@ref="UsageTypesConfig"]/@before
 #. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootMinor"]/part[@ref="UsageTypesConfig"]/@before
 #. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRootSub"]/part[@ref="UsageTypesConfig"]/@before
@@ -575,16 +656,12 @@ msgstr ""
 #. (String used 7 times.)
 msgid "{"
 msgstr ""
-
-#. /Src/FwCoreDlgs/FwUserProperties.resx::lblUserName.Text
-msgid "{0}"
-msgstr ""
-
+"
 #. Format string for showing two pairs of quotation marks, the primary pair and the secondary pair.
-#. /Src/FwCoreDlgs/Properties/Resources.resx::kstidQuotationSetFormat
+#. /Src/FwCoreDlgs/Properties/Resources.resx::kstidQuotationSetFormat"
 msgid "{0}  {1}"
 msgstr ""
-
+"
 #. Used for formatting the Main window caption with the project name (param 0) and the application name (param 1)
 #. Format string for info bar caption; {0} is the basic caption, {1} is the book, chapter, verse reference
 #. Used for formatting the shortcut file name for a remote database, the database name is param 0 and remote server name is param 1.
@@ -598,22 +675,22 @@ msgstr ""
 #. /Src/TE/TeEditorialChecks/CheckControl.resx::m_ToolStrip.Text
 #. /Src/TE/TeResources/TeStrings.resx::kstidCaptionWRefFormat
 #. /Src/TE/TeResources/TeStrings.resx::kstidInfoBarButtonTooltipFormat
-#. (String used 7 times.)
+#. (String used 7 times.)"
 msgid "{0} - {1}"
 msgstr ""
-
+"
+#. {0} is the lexical form, {1} is the gloss, {2} is the citation form
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksX_Y_Z"
+msgid "{0} ({1}): {2}"
+msgstr ""
+"
 #. Format string for the scripture checks displayed in the EditorialChecksControl tree. The first parameter is the check's name, the second is the date/time or the value of kstidScrCheckNeverRunMsg if the check was not run on one or more scripture books.
 #. This is the format for the window list in the window menu {0} is info bar text and {1} is the project name.
 #. /Src/FwResources/FwTMStrings.resx::kstidWindowListItemFormatter
 #. /Src/TE/TeResources/TeStrings.resx::kstidScrCheckNameFormat
 #. /Src/TE/TeResources/TeStrings.resx::kstidScrChecksTreeNodeTipFormat
-#. (String used 3 times.)
+#. (String used 3 times.)"
 msgid "{0} ({1})"
-msgstr ""
-
-#. {0} is the lexical form, {1} is the gloss, {2} is the citation form
-#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksX_Y_Z
-msgid "{0} ({1}): {2}"
 msgstr ""
 
 #. code page name plus code page ID number in brackets
@@ -625,18 +702,18 @@ msgstr ""
 #. /Src/Common/Controls/DetailControls/Resources/DetailControlsStrings.resx::ksDateAndTime
 msgid "{0} {1}"
 msgstr ""
-
+"
 #. Displayed in the Zoom combo box
 #. If there is a different percent character for a culture, then  this needs to get it.
 #. /Src/FwResources/FwStrings.resx::ksPercentage
 #. /Src/TE/DiffView/TeDiffViewResources.resx::kstidZoom
-#. (String used 2 times.)
+#. (String used 2 times.)"
 msgid "{0}%"
 msgstr ""
 
 #. displayed when the text box contains one style and one writing system
 #. /Src/FwCoreDlgs/FwCoreDlgs.resx::kstidOneStyleOneWS
-msgid "{0}, {1}"
+"msgid "{0}, {1}""
 msgstr ""
 
 #. /Src/Common/Controls/XMLViews/XMLViewsStrings.resx::ksRangeXY
@@ -652,15 +729,34 @@ msgstr ""
 msgid "{0}: {1}"
 msgstr ""
 
-#. Format string of a pair of opening and closing quotation marks.
-#. /Src/FwCoreDlgs/Properties/Resources.resx::kstidQuotationPairFormat
-msgid "{0}…{1}"
+#. /Src/FwCoreDlgs/FwUserProperties.resx::lblUserName.Text
+msgid "{0}"
 msgstr ""
 
-#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="UsageTypesConfig"]/@after
-#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="UsageTypesConfig"]/@after
-#. (String used 2 times.)
-msgid "}"
+#. Format string of a pair of opening and closing quotation marks.
+#. /Src/FwCoreDlgs/Properties/Resources.resx::kstidQuotationPairFormat
+msgid "{0}�{1}"
+msgstr ""
+
+#. used to indicate no value in ksQueueXYZ
+#. does not need to be localized
+#. /Src/Common/Controls/SideBar/SideBarTab.resx::mnuSeparator2.Text
+#. /Src/Common/Controls/SideBar/SideBarTab.resx::mnuSepr.Text
+#. /Src/LexText/GAFAWS/Apps/AffixPositionAnalyzer/ANAConverter/ANAConverterDlg.resx::tbAffixSep.Text
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksDash
+#. (String used 4 times.)
+msgid "-"
+msgstr ""
+
+#. Marker for missing items.
+#. /Src/LexText/Discourse/DiscourseStrings.resx::ksMissingMarker
+msgid "---"
+msgstr ""
+
+#. /Src/xWorks/xWorksStrings.resx::ksHierarchyLabel2
+msgid ""
+"{0}:\n"
+"  {1}"
 msgstr ""
 
 #. /Language Explorer/Configuration/Parts/LexSenseLayouts.XML::/LayoutInventory/layout["LexSense-jtview-publishRoot"]/part[@ref="UsageTypesConfig"]/@after
@@ -674,12 +770,18 @@ msgstr ""
 msgid "} "
 msgstr ""
 
-#. /Src/LexText/GAFAWS/Apps/AffixPositionAnalyzer/ANAConverter/ANAConverterDlg.resx::tbOpenDel.Text
-msgid "<"
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="UsageTypesConfig"]/@after
+#. /Language Explorer/Configuration/Parts/ReversalLayouts.xml::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="UsageTypesConfig"]/@after
+#. (String used 2 times.)
+msgid "}"
 msgstr ""
 
 #. /Src/Common/Controls/XMLViews/XMLViewsStrings.resx::ksLessX
 msgid "< {0}"
+msgstr ""
+
+#. /Src/LexText/GAFAWS/Apps/AffixPositionAnalyzer/ANAConverter/ANAConverterDlg.resx::tbOpenDel.Text
+msgid "<"
 msgstr ""
 
 #. Marker inserted to indicate a moved object to the left of the marker.
@@ -695,6 +797,14 @@ msgstr ""
 msgid "=> {0}"
 msgstr ""
 
+#. /Src/Common/Controls/XMLViews/XMLViewsStrings.resx::ksGreaterX
+msgid "> {0}"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-ConditionalArrow"]/if/if/lit
+msgid "> "
+msgstr ""
+
 #. /Src/Common/Controls/XMLViews/SimpleMatchDlg.resx::regexHelper.Text
 #. /Src/FwCoreDlgs/FwFindReplaceDlg.resx::btnRegexMenuFind.Text
 #. /Src/FwCoreDlgs/FwFindReplaceDlg.resx::btnRegexMenuReplace.Text
@@ -705,160 +815,143 @@ msgstr ""
 msgid ">"
 msgstr ""
 
-#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-ConditionalArrow"]/if/if/lit
-msgid "> "
-msgstr ""
-
-#. /Src/Common/Controls/XMLViews/XMLViewsStrings.resx::ksGreaterX
-msgid "> {0}"
-msgstr ""
-
 #. Marker inserted to indicate a moved object to the right of the marker.
 #. /Src/LexText/Discourse/DiscourseStrings.resx::ksMovedTextAfter
 msgid ">>"
 msgstr ""
 
-#. /Language Explorer/Configuration/Lexicon/DataTreeInclude.xml::/window/commands/command/@label
-msgid "↑"
-msgstr ""
-
-#. /Language Explorer/Configuration/Lexicon/DataTreeInclude.xml::/window/commands/command/@label
-msgid "↓"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items4
-msgid "§"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items18
-msgid "¶"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items10
-msgid "⬧"
-msgstr ""
-
-#. U+29EB
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items11
-msgid "⧫"
-msgstr ""
-
 #. U+2318
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items14
-msgid "⌘"
+msgid "?"
 msgstr ""
 
 #. U+25A0
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items5
-msgid "■"
+msgid "?"
 msgstr ""
 
 #. U+25A1
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items7
-msgid "□"
+msgid "?"
 msgstr ""
 
 #. U+25AA
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items4
-msgid "▪"
+msgid "?"
 msgstr ""
 
 #. U+25AB
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items6
-msgid "▫"
+msgid "?"
 msgstr ""
 
 #. U+25C6
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items12
-msgid "◆"
+msgid "?"
 msgstr ""
 
 #. U+25CF
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items2
-msgid "●"
+msgid "?"
+msgstr ""
+
+#. /Language Explorer/Configuration/Lexicon/DataTreeInclude.xml::/window/commands/command/@label
+msgid "?"
 msgstr ""
 
 #. U+21E8
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items23
-msgid "⇨"
+msgid "?"
 msgstr ""
 
 #. U+2794
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items21
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items22
 #. (String used 2 times.)
-msgid "➔"
+msgid "?"
 msgstr ""
 
 #. U+27A2
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items19
-msgid "➢"
+msgid "?"
 msgstr ""
 
 #. U+27B2
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items20
-msgid "➲"
+msgid "?"
 msgstr ""
 
 #. U+261E
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items15
-msgid "☞"
+msgid "?"
+msgstr ""
+
+#. /Language Explorer/Configuration/Lexicon/DataTreeInclude.xml::/window/commands/command/@label
+msgid "?"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items4
+msgid "�"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items18
+msgid "�"
 msgstr ""
 
 #. U+00B7
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items
-msgid "·"
-msgstr ""
-
-#. U+2022
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items1
-msgid "•"
+msgid "�"
 msgstr ""
 
 #. U+2713
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items24
-msgid "✓"
+msgid "?"
 msgstr ""
 
 #. U+271E
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items16
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items17
 #. (String used 2 times.)
-msgid "✞"
+msgid "?"
 msgstr ""
 
 #. U+2730
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items18
-msgid "✰"
+msgid "?"
 msgstr ""
 
 #. U+274D
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items3
-msgid "❍"
+msgid "?"
 msgstr ""
 
 #. U+2751
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items8
-msgid "❑"
+msgid "?"
 msgstr ""
 
 #. U+2752
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items9
-msgid "❒"
+msgid "?"
 msgstr ""
 
 #. U+2756
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items13
-msgid "❖"
+msgid "?"
 msgstr ""
 
+#. U+2022
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items1
+msgid "�"
+msgstr ""
 
+#. U+29EB
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items11
+msgid "?"
+msgstr ""
 
-#. /Src/Common/Controls/XMLViews/XMLViewsStrings.resx::ksZero
-#. /Src/FDO/Strings.resx::ksZero
-#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMin.Items
-#. (String used 3 times.)
-msgid "0"
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items10
+msgid "?"
 msgstr ""
 
 #. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::m_udmFooter.Text
@@ -883,8 +976,19 @@ msgstr ""
 msgid "0\""
 msgstr ""
 
+#. /Src/Common/Controls/XMLViews/XMLViewsStrings.resx::ksZero
+#. /Src/FDO/Strings.resx::ksZero
+#. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMin.Items
+#. (String used 3 times.)
+msgid "0"
+msgstr ""
+
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboNumberScheme.Items5
-msgid "01, 02, 03, ..."
+"msgid "01, 02, 03, ...""
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboNumberScheme.Items
+"msgid "1, 2, 3, ...""
 msgstr ""
 
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_nudStartAt.Text
@@ -894,18 +998,14 @@ msgstr ""
 msgid "1"
 msgstr ""
 
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboNumberScheme.Items
-msgid "1, 2, 3, ..."
+#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::m_udmPaperHeight.Text
+msgid "10.98\""
 msgstr ""
 
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontTab.resx::m_cboFontSize.Items3
 #. /Src/FwCoreDlgs/FwFontDialog.resx::m_lbFontSizes.Items2
 #. (String used 2 times.)
 msgid "10"
-msgstr ""
-
-#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::m_udmPaperHeight.Text
-msgid "10.98\""
 msgstr ""
 
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontTab.resx::m_cboFontSize.Items4
@@ -982,6 +1082,11 @@ msgstr ""
 msgid "28"
 msgstr ""
 
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2004
+msgid "3/MSP"
+msgstr ""
+
 #. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMax.Items3
 #. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMin.Items3
 #. (String used 2 times.)
@@ -997,6 +1102,11 @@ msgstr ""
 #. /Src/FwCoreDlgs/FwFontDialog.resx::m_lbFontSizes.Items13
 #. (String used 3 times.)
 msgid "36"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2005
+msgid "4/MSP"
 msgstr ""
 
 #. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::fwOverrideComboBox1.Items7
@@ -1030,6 +1140,11 @@ msgstr ""
 msgid "50%"
 msgstr ""
 
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2006
+msgid "6/MSP"
+msgstr ""
+
 #. /Src/FwCoreDlgs/FwProjPropertiesDlg.resx::m_btnAnalMoveDown.Text
 #. /Src/FwCoreDlgs/FwProjPropertiesDlg.resx::m_btnVernMoveDown.Text
 #. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMax.Items6
@@ -1057,6 +1172,10 @@ msgstr ""
 msgid "777"
 msgstr ""
 
+#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::m_udmPaperWidth.Text
+msgid "8.5\""
+msgstr ""
+
 #. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::fwOverrideComboBox1.Items9
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontTab.resx::m_cboFontSize.Items1
 #. /Src/FwCoreDlgs/FwFontDialog.resx::m_lbFontSizes.Items
@@ -1064,10 +1183,6 @@ msgstr ""
 #. /Src/LexText/Morphology/ContextOccurrenceDlg.resx::m_cboMin.Items8
 #. (String used 5 times.)
 msgid "8"
-msgstr ""
-
-#. /Src/Common/FwPrintLayoutComponents/PageSetupDlg.resx::m_udmPaperWidth.Text
-msgid "8.5\""
 msgstr ""
 
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwFontTab.resx::m_cboFontSize.Items2
@@ -1078,62 +1193,16 @@ msgstr ""
 msgid "9"
 msgstr ""
 
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items
-msgid ""
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items1
-msgid ""
-msgstr ""
-
-#. /Src/xWorks/xWorksStrings.resx::ksHierarchyLabel2
-msgid ""
-"{0}:\n"
-"  {1}"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items21
-msgid "à"
-msgstr ""
-
-#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_infixExample.Text
-msgid "[ -a- ]"
-msgstr ""
-
-#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_prefixExample.Text
-msgid "[a- ]"
-msgstr ""
-
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboNumberScheme.Items4
-msgid "a, b, c, ..."
+"msgid "a, b, c, ...""
 msgstr ""
 
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboNumberScheme.Items3
-msgid "A, B, C, ..."
+"msgid "A, B, C, ...""
 msgstr ""
 
-#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_encliticExample.Text
-msgid "[ =a]"
-msgstr ""
-
-#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_suffixExample.Text
-msgid "[ -a]"
-msgstr ""
-
-#. /|strings-en.xml::/DialogStrings/EditMorphBreaks-affixExample|
-msgid "[{0}a{1}]"
-msgstr ""
-
-#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_suprafixExample.Text
-msgid "[ ~a~ ]"
-msgstr ""
-
-#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_simulfixExample.Text
-msgid "[ =a= ]"
-msgstr ""
-
-#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_procliticExample.Text
-msgid "[a= ]"
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items21
+msgid "�"
 msgstr ""
 
 #. for list of paper sizes in Page Setup dialog
@@ -1146,16 +1215,98 @@ msgstr ""
 msgid "A5"
 msgstr ""
 
-#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_boundStemExample.Text
-msgid "[*aa ]"
+#. /|strings-en.xml::/LabelAbbreviations/Is Abstract Form|
+msgid "ab"
 msgstr ""
 
-#. /Src/LexText/Interlinear/EditMorphBreaksDlg.resx::lblBreak_stemExample.Text
-msgid "[aa ]"
+#. /|strings-en.xml::/LabelAbbreviations/Anthropology Categories|
+msgid "ac"
 msgstr ""
 
-#. /|strings-en.xml::/DialogStrings/EditMorphBreaks-stemExample|
-msgid "[{0}aa{1} ]"
+#. /|strings-en.xml::/LabelAbbreviations/Affix Allomorph|
+#. /|strings-en.xml::/LabelAbbreviations/Affix Form|
+#. /|strings-en.xml::/LabelAbbreviations/Stem Allomorph|
+#. /|strings-en.xml::/LabelAbbreviations/Stem Form|
+#. (String used 4 times.)
+msgid "al"
+msgstr ""
+
+#. /Language Explorer/DefaultConfigurations/ReversalIndex/AllReversalIndexes.fwdictconfig:://ConfigurationItem/@name
+msgid "AllReversalSubentries"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Antonym|
+msgid "an"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Bibliography|
+msgid "bb"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Bibliographic Source|
+msgid "bs"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Compare|
+#. /|strings-en.xml::/LabelAbbreviations/Cross References|
+#. (String used 2 times.)
+msgid "cf"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Inflection Classes|
+msgid "cl"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Condition|
+msgid "cn"
+msgstr ""
+
+#. /Src/FwCoreDlgs/WritingSystemPropertiesDialog.resx::m_FullCode.Text
+msgid "CurrentFullLocale"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/CV Pattern|
+msgid "cv"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items23
+msgid "�"
+msgstr ""
+
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxDelReapps
+msgid "DelReapps"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Summary Definition|
+msgid "df"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Date Modified|
+msgid "dt"
+msgstr ""
+
+#. /Src/Common/Controls/FwControls/FwControlsTests/DummyDerivedForm.resx::$this.Text
+msgid "DummyDerivedForm"
+msgstr ""
+
+#. /Src/Common/Controls/FwControls/FwControlsTests/DummyPersistedFormManual.resx::$this.Text
+msgid "DummyPersistedFormManual"
+msgstr ""
+
+#. /Src/Common/Controls/FwControls/FwControlsTests/DummyPersistedFormWinDef.resx::$this.Text
+msgid "DummyPersistedFormWinDef"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Definition|
+msgid "d?"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items22
+msgid "�"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoStemMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="ProdRestrict"]/@abbr
+msgid "ef"
 msgstr ""
 
 #. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
@@ -1163,19 +1314,33 @@ msgstr ""
 msgid "EMSP"
 msgstr ""
 
+#. /|strings-en.xml::/LabelAbbreviations/Etymology Note|
+msgid "en"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Etymology Note|
+msgid "en"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Discussion|
+msgid "enn"
+msgstr ""
+
 #. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
 #. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2002
 msgid "ENSP"
 msgstr ""
 
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2007
-msgid "FSP"
+#. /|strings-en.xml::/LabelAbbreviations/Etymology|
+msgid "et"
 msgstr ""
 
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200A
-msgid "HSP"
+#. /|strings-en.xml::/LabelAbbreviations/Encyclopedic Info|
+msgid "e?"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items15
+msgid "F"
 msgstr ""
 
 #. /Language Explorer/Configuration/Main.xml::/window/commands/command/@label
@@ -1218,606 +1383,6 @@ msgstr ""
 msgid "F9"
 msgstr ""
 
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboNumberScheme.Items2
-msgid "i, ii, iii, ..."
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboNumberScheme.Items1
-msgid "I, II, III, ..."
-msgstr ""
-
-#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoStemMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="InflectionClass"]/@abbr
-msgid "ic"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar3000
-msgid "IDSP"
-msgstr ""
-
-#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoInflAffMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="InflFeats"]/@abbr
-#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoStemMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="MsFeatures"]/@abbr
-#. (String used 2 times.)
-msgid "if"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar202A
-msgid "LRE"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200E
-msgid "LRM"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2028
-msgid "LSEP"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar205F
-msgid "MMSP"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2001
-msgid "MQSP"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2004
-msgid "3/MSP"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2005
-msgid "4/MSP"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2006
-msgid "6/MSP"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar180E
-msgid "MVS"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar00A0
-msgid "NBSP"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar202F
-msgid "NNBSP"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2000
-msgid "NQSP"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar202C
-msgid "PDF"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2029
-msgid "PSEP"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2008
-msgid "PSP"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar202B
-msgid "RLE"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200F
-msgid "RLM"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2009
-msgid "THSP"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items6
-msgid "ú"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items24
-msgid "ü"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items20
-msgid "Ü"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200D
-msgid "ZWJ"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200C
-msgid "ZWNJ"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200B
-msgid "ZWSP"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Is Abstract Form|
-msgid "ab"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Anthropology Categories|
-msgid "ac"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Affix Allomorph|
-#. /|strings-en.xml::/LabelAbbreviations/Affix Form|
-#. /|strings-en.xml::/LabelAbbreviations/Stem Allomorph|
-#. /|strings-en.xml::/LabelAbbreviations/Stem Form|
-#. (String used 4 times.)
-msgid "al"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Antonym|
-msgid "an"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Bibliography|
-msgid "bb"
-msgstr ""
-
-#. help topic ID for data notebook import TopicsListImportOptions Dialog.
-#. /Src/LexText/LexTextDll/HelpTopicPaths.resx::khtpDataNotebookImportDateFormatDef
-msgid "/Beginning_Tasks/Importing_Data/Import_Notebook_Data/Topics_List_Import_Options.htm'"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Compare|
-#. /|strings-en.xml::/LabelAbbreviations/Cross References|
-#. (String used 2 times.)
-msgid "cf"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Inflection Classes|
-msgid "cl"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Condition|
-msgid "cn"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/CV Pattern|
-msgid "cv"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Summary Definition|
-msgid "df"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Date Modified|
-msgid "dt"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Definition|
-msgid "dϰ"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items22
-msgid "è"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Etymology|
-msgid "et"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Encyclopedic Info|
-msgid "eϰ"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Specifics|
-msgid "gs"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Gloss|
-msgid "gϰ"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Infix Positions|
-msgid "ip"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Academic Domains|
-msgid "is"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Citation Form|
-msgid "lc"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Location|
-msgid "lo"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Literal Meaning|
-msgid "lt"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Lexeme Form|
-#. /|strings-en.xml::/LabelAbbreviations/Lexeme|
-#. (String used 2 times.)
-msgid "lx"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Primary Entry References|
-msgid "mn"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Morph Type|
-msgid "mt"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Anthropology Note|
-msgid "na"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Discourse Note|
-msgid "nd"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Grammar Note|
-msgid "ng"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Phonology Note|
-msgid "np"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Sociolinguistics Note|
-msgid "ns"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/General Note|
-#. /|strings-en.xml::/LabelAbbreviations/Note|
-#. (String used 2 times.)
-msgid "nt"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Restrictions|
-msgid "oϰ"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Pronunciation|
-msgid "ph"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Category Info.|
-#. /|strings-en.xml::/LabelAbbreviations/Grammatical Info.|
-#. (String used 2 times.)
-msgid "ps"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Parts|
-msgid "pw"
-msgstr ""
-
-#. /Src/Common/Controls/XMLViews/BulkEditBar.resx::m_transduceProcessorCombo.Items1
-msgid "Python"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Reference|
-msgid "rf"
-msgstr ""
-
-#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="FsSymFeatVal-Detail-RightGlossSepAllA"]/slice/@abbr
-msgid "rgs"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Lexical Relations|
-msgid "rl"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Reversal Entries|
-msgid "rϰ"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Scientific Name|
-msgid "sc"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Semantic Domains|
-msgid "sd"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Slots|
-msgid "sl"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Semantics Note|
-msgid "sm"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Sense Number|
-msgid "sn"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Source|
-msgid "so"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Status|
-msgid "st"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Synonyms|
-msgid "sy"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Tone|
-msgid "tn"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Entry Type|
-msgid "tp"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Sense Type|
-msgid "ts"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Type|
-msgid "ty"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Underlying Form|
-msgid "uf"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Usages|
-msgid "uϰ"
-msgstr ""
-
-#. help topic ID for the Time of Day list and the Description field
-#. /Src/LexText/LexTextDll/HelpTopicPaths.resx::khtpField-timeOfDayEdit-Description
-msgid "User_Interface/Field_Descriptions/Lists/Time_of_Day_fields/Description_field_(Time_of_Day).html"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Dialectal Variant|
-msgid "vd"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Free Variant|
-msgid "vf"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Inflectional Variant|
-msgid "vi"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Spelling Variant|
-msgid "vs"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Exclude As Headword|
-msgid "xh"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Translation|
-msgid "xt"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Example|
-msgid "xv"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Import Residue|
-msgid "xx"
-msgstr ""
-
-#. /|strings-en.xml::/LabelAbbreviations/Calendar|
-msgid "yr"
-msgstr ""
-
-#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxDelReapps
-msgid "DelReapps"
-msgstr ""
-
-#. column header, must be unique; Max is short for Maximum number of ...  (Do Not Localize)
-#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxAnalysesToReturn
-msgid "MaxAnalysesToReturn"
-msgstr ""
-
-#. column header, must be unique; Max is short for Maximum number of ...  (Do Not Localize)
-#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxInfixes
-msgid "MaxInfixes"
-msgstr ""
-
-#. column header, must be unique; Max is short for Maximum number of ...  (Do Not Localize)
-#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxInterfixes
-msgid "MaxInterfixes"
-msgstr ""
-
-#. column header, must be unique; Max is short for Maximum number of ...  (Do Not Localize)
-#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxNulls
-msgid "MaxNulls"
-msgstr ""
-
-#. column header, must be unique; Max is short for Maximum number of ...  (Do Not Localize)
-#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxPrefixes
-msgid "MaxPrefixes"
-msgstr ""
-
-#. column header, must be unique; Max is short for Maximum number of ...  (Do Not Localize)
-#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxRoots
-msgid "MaxRoots"
-msgstr ""
-
-#. column header, must be unique; Max is short for Maximum number of ...  (Do Not Localize)
-#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxSuffixes
-msgid "MaxSuffixes"
-msgstr ""
-
-#. If true, no default compounding rules will be used.  (Do Not Localize)
-#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksDoNotUseDefaultCompoundRules
-msgid "NoDefaultCompounding"
-msgstr ""
-
-#. If true, the set of phonological rules will not be applied to clitics; if false, the rules will be applied to clitics.  (This value defaults to true, so we have to use this negative sense to get the default to be 'rules do not apply to clitics' because that was how Hermit Crab worked before we made this parameter available.)  (Do Not Localize)
-#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksRulesDoNotApplyOnClitics
-msgid "NotOnClitics"
-msgstr ""
-
-#. Do not localize
-#. /Src/Common/FieldWorks/WelcomeToFieldWorksDlg.resx::m_openSampleOrLastProjectLink.Text
-msgid "SampleDb"
-msgstr ""
-
-#. /Src/FwCoreDlgs/PicturePropertiesDialog.resx::pnlCaption.Text
-#. /Src/FwCoreDlgs/PicturePropertiesDialog.resx::pnlPicture.Text
-#. /Src/FwCoreDlgs/PunctuationDlg.resx::pnlMatchedPairsGrid.Text
-#. (String used 3 times.)
-msgid "fwPanel1"
-msgstr ""
-
-#. Used to format strings that display Unicode codepoints (e.g. Punctuation dialog box.
-#. /Src/FwCoreDlgs/Properties/Resources.resx::kstidUnicodePointFormat
-#. /Src/FwCoreDlgs/ValidCharactersDlg.resx::lblFirstCharCode.Text
-#. /Src/FwCoreDlgs/ValidCharactersDlg.resx::lblLastCharCode.Text
-#. (String used 3 times.)
-msgid "U+{0:X4}"
-msgstr ""
-
-#. /Language Explorer/Configuration/Lexicon/ReversalIndices/toolConfiguration.xml::/root/tools/tool/control/parameters/control/parameters/control/parameters/configureLayouts/layoutType/@label
-msgid "$wsName"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items15
-msgid "F"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items2
-msgid "l"
-msgstr ""
-
-#. /Src/FwCoreDlgs/PUACharacterDlg.resx::m_lblLowerDisplay.Text
-msgid "L"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items3
-msgid "m"
-msgstr ""
-
-#. /Src/FwCoreDlgs/PUACharacterDlg.resx::m_lblPUADisplay.Text
-msgid "M"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items5
-msgid "n"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items7
-msgid "o"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items8
-msgid "q"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items9
-msgid "r"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items10
-msgid "s"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwHelpAbout.resx::lblSILFieldWorks1.Text
-#. /Src/FwCoreDlgs/RealSplashScreen.resx::label1.Text
-#. (String used 2 times.)
-msgid "SIL FieldWorks 7.0 Beta 3"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwHelpAbout.resx::lblSILFieldWorks1.Text
-#. /Src/FwCoreDlgs/RealSplashScreen.resx::label1.Text
-#. (String used 2 times.)
-msgid "SIL FieldWorks 7.0 Beta 4"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items11
-msgid "t"
-msgstr ""
-
-#. /Src/FwCoreDlgs/PUACharacterDlg.resx::m_lblDecompostionDisplay.Text
-#. /Src/FwCoreDlgs/PUACharacterDlg.resx::m_lblTitleDisplay.Text
-#. (String used 2 times.)
-msgid "T"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items12
-msgid "u"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items16
-#. /Src/FwCoreDlgs/PUACharacterDlg.resx::m_lblUpperDisplay.Text
-#. (String used 2 times.)
-msgid "U"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items13
-msgid "v"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items17
-msgid "V"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items14
-msgid "z"
-msgstr ""
-
-#. Text for the export XHTML menu item
-#. /Src/TE/TeResources/TeTMStrings.resx::kstidExportXhtmlItemName
-msgid "X&HTML..."
-msgstr ""
-
-#. /Src/LexText/Interlinear/LinguaLinksImportDlg.resx::m_LinguaLinksXmlFileName.Text
-msgid "*.xml"
-msgstr ""
-
-#. /Src/Common/Controls/FwControls/WSChooser.resx::button1.Text
-msgid "XYZ"
-msgstr ""
-
-#. /Src/FwCoreDlgs/WritingSystemPropertiesDialog.resx::lblSortingRule2.Text
-msgid "&C<ch<<<Ch<<<CH"
-msgstr ""
-
-#. /Src/FwCoreDlgs/WritingSystemPropertiesDialog.resx::lblSortingRule3.Text
-msgid "&l<ll<<<Ll<<<LL"
-msgstr ""
-
-#. /Src/FwCoreDlgs/WritingSystemPropertiesDialog.resx::lblSortingRule1.Text
-msgid "&N<ñ<<<Ñ"
-msgstr ""
-
-#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoStemMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="ProdRestrict"]/@abbr
-msgid "ef"
-msgstr ""
-
 #. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoStemMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="FromPartsOfSpeech"]/@abbr
 msgid "fc"
 msgstr ""
@@ -1836,41 +1401,37 @@ msgstr ""
 msgid "fif"
 msgstr ""
 
+#. Email address for sending bug reports to
+#. /Src/LexText/LexTextDll/LexTextStrings.resx::kstidSupportEmail
+msgid "FlexErrors@sil.org"
+msgstr ""
+
 #. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoDerivAffMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="FromStemName"]/@abbr
 msgid "fsn"
 msgstr ""
 
-#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["FsFeatDefn-detail-Edit"]/part[@ref="ShowInGloss"]/@abbr
-#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["FsSymFeatVal-detail-EditValue"]/part[@ref="ShowInGloss"]/@abbr
-#. (String used 2 times.)
-msgid "sig"
-msgstr ""
-
-#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoDerivAffMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="ToProdRestrict"]/@abbr
-#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoEndoCompound-detail-default"]/part[@ref="ToProdRestrict"]/@abbr
-#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoExoCompound-detail-default"]/part[@ref="ToProdRestrict"]/@abbr
-#. (String used 3 times.)
-msgid "tef"
-msgstr ""
-
-#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoDerivAffMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="ToInflectionClass"]/@abbr
-msgid "tic"
-msgstr ""
-
-#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoDerivAffMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="ToMsFeatures"]/@abbr
-msgid "tif"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items23
-msgid "ð"
-msgstr ""
-
-#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items19
-msgid "Ø"
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2007
+msgid "FSP"
 msgstr ""
 
 #. /Src/Common/Framework/FwMainWnd.resx::$this.Text
 msgid "FwMainWnd"
+msgstr ""
+
+#. /Src/FwCoreDlgs/PicturePropertiesDialog.resx::pnlCaption.Text
+#. /Src/FwCoreDlgs/PicturePropertiesDialog.resx::pnlPicture.Text
+#. /Src/FwCoreDlgs/PunctuationDlg.resx::pnlMatchedPairsGrid.Text
+#. (String used 3 times.)
+msgid "fwPanel1"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Specifics|
+msgid "gs"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Gloss|
+msgid "g?"
 msgstr ""
 
 #. help topic ID for user account properties dialog
@@ -1888,16 +1449,9 @@ msgstr ""
 msgid "Help_topic_does_not_exist.htm"
 msgstr ""
 
-#. Do not translate (if help file is localized and given a new name, then indicate the new name here)
-#. /Src/FwResources/HelpTopicPaths.resx::FLExHelpFile
-#. /Src/LexText/LexTextDll/HelpTopicPaths.resx::UserHelpFile
-#. (String used 2 times.)
-msgid "\\Helps\\FieldWorks_Language_Explorer_Help.chm"
-msgstr ""
-
-#. Do not translate (if help file is localized and given a new name, then indicate the new name here)
-#. /Src/TE/TeResources/HelpTopicPaths.resx::UserHelpFile
-msgid "\\Helps\\FieldWorks_Translation_Editor_Help.chm"
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200A
+msgid "HSP"
 msgstr ""
 
 #. Do not localize
@@ -1920,6 +1474,53 @@ msgstr ""
 msgid "http://downloads.sil.org/FieldWorks/appcastBTEbetas.xml"
 msgstr ""
 
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboNumberScheme.Items2
+"msgid "i, ii, iii, ...""
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboNumberScheme.Items1
+"msgid "I, II, III, ...""
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoStemMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="InflectionClass"]/@abbr
+msgid "ic"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar3000
+msgid "IDSP"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoInflAffMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="InflFeats"]/@abbr
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoStemMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="MsFeatures"]/@abbr
+#. (String used 2 times.)
+msgid "if"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Infix Positions|
+msgid "ip"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Academic Domains|
+msgid "is"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="MoForm-Detail-IsAbstractBasic"]/slice/@label
+msgid "IsAbstract"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items2
+msgid "l"
+msgstr ""
+
+#. /Src/FwCoreDlgs/PUACharacterDlg.resx::m_lblLowerDisplay.Text
+msgid "L"
+msgstr ""
+
+#. /Src/FwParatextLexiconPlugin/ProjectExistsForm.resx::label1.Text
+msgid "labelText"
+msgstr ""
+
 #. /Src/FwCoreDlgs/FwFindReplaceDlg.resx::lblFindFormatText.Text
 msgid "lblFindFormatText"
 msgstr ""
@@ -1928,68 +1529,332 @@ msgstr ""
 msgid "lblReplaceFormatText"
 msgstr ""
 
-#. /Src/Common/Framework/FwMainWnd.resx::statusStrip.Text
-msgid "statusStrip1"
+#. /|strings-en.xml::/LabelAbbreviations/Citation Form|
+msgid "lc"
 msgstr ""
 
-#. /Language Explorer/Configuration/Main.xml::/window/commands/command/@label
-msgid "?? Properties (TODO)"
+#. /|strings-en.xml::/LabelAbbreviations/Location|
+msgid "lo"
 msgstr ""
 
-#. /Src/LexText/Morphology/MEStrings.resx::ksTodo_WordformEditing
-msgid "TODO: Basic wordform editing happens here."
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar202A
+msgid "LRE"
 msgstr ""
 
-#. A test warning message.
-#. /Src/FwCoreDlgs/FwCoreDlgs.resx::kstidMessageWarning
-msgid "Warning, you must select \"false\" (why do we even have a button???)"
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200E
+msgid "LRM"
 msgstr ""
 
-#. Email address for sending bug reports to
-#. /Src/LexText/LexTextDll/LexTextStrings.resx::kstidSupportEmail
-msgid "FlexErrors@sil.org"
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2028
+msgid "LSEP"
 msgstr ""
 
-#. Email address for sending bug reports to
-#. /Src/TE/TeResources/TeStrings.resx::kstidSupportEmail
-msgid "TeErrors@sil.org"
+#. /|strings-en.xml::/LabelAbbreviations/Literal Meaning|
+msgid "lt"
 msgstr ""
 
-#. /Src/FDO/Strings.resx::ksInvalidBackendProviderType
-msgid "The FDOBackendProviderType is not supported."
+#. /|strings-en.xml::/LabelAbbreviations/Lexeme Form|
+#. /|strings-en.xml::/LabelAbbreviations/Lexeme|
+#. (String used 2 times.)
+msgid "lx"
 msgstr ""
 
-#. Displays in the Help/About box
-#. /Src/Common/CoreImpl/CoreImplStrings.resx::kstidLicenseURL
-msgid "(http://www.gnu.org/licenses/lgpl-2.1.html)"
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items3
+msgid "m"
 msgstr ""
 
-#. /Src/FwParatextLexiconPlugin/ProjectExistsForm.resx::label1.Text
-msgid "labelText"
+#. /Src/FwCoreDlgs/PUACharacterDlg.resx::m_lblPUADisplay.Text
+msgid "M"
 msgstr ""
 
-#. /Language Explorer/DefaultConfigurations/ReversalIndex/AllReversalIndexes.fwdictconfig:://ConfigurationItem/@name
-msgid "AllReversalSubentries"
+#. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid.fwdictconfig:://ConfigurationItem/@name
+#. /Language Explorer/DefaultConfigurations/Dictionary/Root.fwdictconfig:://ConfigurationItem/@name
+#. (String used 2 times.)
+msgid "MainEntrySubentries"
 msgstr ""
 
-#. /|strings-en.xml::/LabelAbbreviations/Bibliographic Source|
-msgid "bs"
+#. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid.fwdictconfig:://ConfigurationItem/@name
+#. /Language Explorer/DefaultConfigurations/Dictionary/Lexeme.fwdictconfig:://ConfigurationItem/@name
+#. /Language Explorer/DefaultConfigurations/Dictionary/Root.fwdictconfig:://ConfigurationItem/@name
+#. (String used 3 times.)
+msgid "MainEntrySubsenses"
+msgstr ""
+"
+#. column header, must be unique; Max is short for Maximum number of ...  (Do Not Localize)
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxAnalysesToReturn"
+msgid "MaxAnalysesToReturn"
+msgstr ""
+"
+#. column header, must be unique; Max is short for Maximum number of ...  (Do Not Localize)
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxInfixes"
+msgid "MaxInfixes"
+msgstr ""
+"
+#. column header, must be unique; Max is short for Maximum number of ...  (Do Not Localize)
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxInterfixes"
+msgid "MaxInterfixes"
+msgstr ""
+"
+#. column header, must be unique; Max is short for Maximum number of ...  (Do Not Localize)
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxNulls"
+msgid "MaxNulls"
+msgstr ""
+"
+#. column header, must be unique; Max is short for Maximum number of ...  (Do Not Localize)
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxPrefixes"
+msgid "MaxPrefixes"
+msgstr ""
+"
+#. column header, must be unique; Max is short for Maximum number of ...  (Do Not Localize)
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxRoots"
+msgid "MaxRoots"
+msgstr ""
+"
+#. column header, must be unique; Max is short for Maximum number of ...  (Do Not Localize)
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksMaxSuffixes"
+msgid "MaxSuffixes"
 msgstr ""
 
-#. /|strings-en.xml::/LabelAbbreviations/Etymology Note|
-msgid "en"
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar205F
+msgid "MMSP"
 msgstr ""
 
-#. /|strings-en.xml::/LabelAbbreviations/Discussion|
-msgid "enn"
+#. /|strings-en.xml::/LabelAbbreviations/Primary Entry References|
+msgid "mn"
+msgstr ""
+
+#. /|strings-en.xml::/Linguistics/Morphology/MorphSketch/MorphSketchFileName|
+msgid "MorphSketch"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2001
+msgid "MQSP"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Morph Type|
+msgid "mt"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar180E
+msgid "MVS"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items5
+msgid "n"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Anthropology Note|
+msgid "na"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar00A0
+msgid "NBSP"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Discourse Note|
+msgid "nd"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Grammar Note|
+msgid "ng"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar202F
+msgid "NNBSP"
+msgstr ""
+"
+#. If true, no default compounding rules will be used.  (Do Not Localize)
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksDoNotUseDefaultCompoundRules"
+msgid "NoDefaultCompounding"
+msgstr ""
+"
+#. If true, the set of phonological rules will not be applied to clitics; if false, the rules will be applied to clitics.  (This value defaults to true, so we have to use this negative sense to get the default to be 'rules do not apply to clitics' because that was how Hermit Crab worked before we made this parameter available.)  (Do Not Localize)
+#. /Src/LexText/ParserUI/ParserUIStrings.resx::ksRulesDoNotApplyOnClitics"
+msgid "NotOnClitics"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Phonology Note|
+msgid "np"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2000
+msgid "NQSP"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Sociolinguistics Note|
+msgid "ns"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/General Note|
+#. /|strings-en.xml::/LabelAbbreviations/Note|
+#. (String used 2 times.)
+msgid "nt"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items7
+msgid "o"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items19
+msgid "�"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Restrictions|
+msgid "o?"
 msgstr ""
 
 #. /|strings-en.xml::/LabelAbbreviations/Preceding Annotation|
 msgid "pa"
 msgstr ""
 
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar202C
+msgid "PDF"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Pronunciation|
+msgid "ph"
+msgstr ""
+
+#. field name for Data Notebook records
+#. /Src/FwResources/FwStrings.resx::kstidPhraseTags
+msgid "PhraseTags"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Category Info.|
+#. /|strings-en.xml::/LabelAbbreviations/Grammatical Info.|
+#. (String used 2 times.)
+msgid "ps"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2029
+msgid "PSEP"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2008
+msgid "PSP"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Parts|
+msgid "pw"
+msgstr ""
+
+#. /Src/Common/Controls/XMLViews/BulkEditBar.resx::m_transduceProcessorCombo.Items1
+msgid "Python"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items8
+msgid "q"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items9
+msgid "r"
+msgstr ""
+
+#. field name for Data Notebook records
+#. /Src/FwResources/FwStrings.resx::kstidResearchPlan
+msgid "ResearchPlan"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Reference|
+msgid "rf"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id="FsSymFeatVal-Detail-RightGlossSepAllA"]/slice/@abbr
+msgid "rgs"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Lexical Relations|
+msgid "rl"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar202B
+msgid "RLE"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200F
+msgid "RLM"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Reversal Entries|
+msgid "r?"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items10
+msgid "s"
+msgstr ""
+
+#. Do not localize
+#. /Src/Common/FieldWorks/WelcomeToFieldWorksDlg.resx::m_openSampleOrLastProjectLink.Text
+msgid "SampleDb"
+msgstr ""
+
+#. /Src/XCore/ControlLibrary/SidebarLibrary/Resources/ImagesColorPicker.resX::MySample
+msgid "SampleString"
+msgstr ""
+
+#. /Src/XCore/ControlLibrary/SidebarLibrary/Controls.resX::SampleString
+#. /Src/XCore/ControlLibrary/SidebarLibrary/Resources/Controls.resX::SampleString
+#. /Src/XCore/ControlLibrary/SidebarLibrary/Resources/ImagesMenu.resX::SampleString
+#. /Src/XCore/ControlLibrary/SidebarLibrary/Resources/MenuControlImages.resX::SampleString
+#. /Src/XCore/ControlLibrary/SidebarLibrary/Resources/SortedListView.resX::SampleString
+#. (String used 5 times.)
+msgid "SampleValue"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Scientific Name|
+msgid "sc"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexSenseParts.xml::/PartInventory/bin/part[@id="LexSense-Detail-ScientificName"]/slice/@label
+msgid "ScientificName"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Semantic Domains|
+msgid "sd"
+msgstr ""
+
 #. /|strings-en.xml::/LabelAbbreviations/Source Form|
 msgid "sf"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["FsFeatDefn-detail-Edit"]/part[@ref="ShowInGloss"]/@abbr
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["FsSymFeatVal-detail-EditValue"]/part[@ref="ShowInGloss"]/@abbr
+#. (String used 2 times.)
+msgid "sig"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwHelpAbout.resx::lblSILFieldWorks1.Text
+#. /Src/FwCoreDlgs/RealSplashScreen.resx::label1.Text
+#. (String used 2 times.)
+msgid "SIL FieldWorks 7.0 Beta 3"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwHelpAbout.resx::lblSILFieldWorks1.Text
+#. /Src/FwCoreDlgs/RealSplashScreen.resx::label1.Text
+#. (String used 2 times.)
+msgid "SIL FieldWorks 7.0 Beta 4"
+msgstr ""
+
+#. /Src/Common/Controls/XMLViews/ReallySimpleListChooser.resx::$this.Text
+msgid "SimpleListChooser"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Slots|
+msgid "sl"
 msgstr ""
 
 #. /|strings-en.xml::/LabelAbbreviations/Source Language|
@@ -1998,4 +1863,245 @@ msgstr ""
 
 #. /|strings-en.xml::/LabelAbbreviations/Source Language Notes|
 msgid "slgn"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Source Language Notes|
+msgid "slgn"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Semantics Note|
+msgid "sm"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Sense Number|
+msgid "sn"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Source|
+msgid "so"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Status|
+msgid "st"
+msgstr ""
+
+#. /Src/Common/Framework/FwMainWnd.resx::statusStrip.Text
+msgid "statusStrip1"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Synonyms|
+msgid "sy"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items11
+msgid "t"
+msgstr ""
+
+#. /Src/FwCoreDlgs/PUACharacterDlg.resx::m_lblDecompostionDisplay.Text
+#. /Src/FwCoreDlgs/PUACharacterDlg.resx::m_lblTitleDisplay.Text
+#. (String used 2 times.)
+msgid "T"
+msgstr ""
+
+#. Email address for sending bug reports to
+#. /Src/TE/TeResources/TeStrings.resx::kstidSupportEmail
+msgid "TeErrors@sil.org"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoDerivAffMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="ToProdRestrict"]/@abbr
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoEndoCompound-detail-default"]/part[@ref="ToProdRestrict"]/@abbr
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoExoCompound-detail-default"]/part[@ref="ToProdRestrict"]/@abbr
+#. (String used 3 times.)
+msgid "tef"
+msgstr ""
+
+#. /Src/Common/Controls/ScrControls/DbScrPassageControl.resx::txtScrRef.Text
+#. /Src/LexText/LexTextControls/LexReferenceDetailsDlg.resx::m_tbName.Text
+#. (String used 2 times.)
+msgid "textBox1"
+msgstr ""
+
+#. /Src/LexText/LexTextControls/LexReferenceDetailsDlg.resx::m_tbComment.Text
+msgid "textBox2"
+msgstr ""
+
+#. /Src/UnicodeCharEditor/CustomCharDlg.resx::m_txtCodepoint.Text
+#. /Src/UnicodeCharEditor/CustomCharDlg.resx::m_txtName.Text
+#. /Src/UnicodeCharEditor/CustomCharDlg.resx::m_txtUpperEquiv.Text
+#. (String used 3 times.)
+msgid "textBox3"
+msgstr ""
+
+#. /Src/UnicodeCharEditor/CustomCharDlg.resx::m_txtTitleEquiv.Text
+msgid "textBox4"
+msgstr ""
+
+#. /Src/UnicodeCharEditor/CustomCharDlg.resx::m_txtLowerEquiv.Text
+msgid "textBox5"
+msgstr ""
+
+#. /Src/UnicodeCharEditor/CustomCharDlg.resx::m_txtDecomposition.Text
+#. /Src/UnicodeCharEditor/CustomCharDlg.resx::m_txtNumericValue.Text
+#. (String used 2 times.)
+msgid "textBox6"
+msgstr ""
+
+#. /Src/FDO/Strings.resx::ksInvalidBackendProviderType
+msgid "The FDOBackendProviderType is not supported."
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2009
+msgid "THSP"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoDerivAffMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="ToInflectionClass"]/@abbr
+msgid "tic"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/MorphologyLayouts.xml::/LayoutInventory/layout["MoDerivAffMsa-detail-Normal"]/part[@ref="MainEdit"]/indent/part[@ref="ToMsFeatures"]/@abbr
+msgid "tif"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Tone|
+msgid "tn"
+msgstr ""
+
+#. /Src/LexText/Morphology/MEStrings.resx::ksTodo_WordformEditing
+msgid "TODO: Basic wordform editing happens here."
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Entry Type|
+msgid "tp"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Sense Type|
+msgid "ts"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Type|
+msgid "ty"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items12
+msgid "u"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items16
+#. /Src/FwCoreDlgs/PUACharacterDlg.resx::m_lblUpperDisplay.Text
+#. (String used 2 times.)
+msgid "U"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items6
+msgid "�"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items24
+msgid "�"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items20
+msgid "�"
+msgstr ""
+
+#. Used to format strings that display Unicode codepoints (e.g. Punctuation dialog box.
+#. /Src/FwCoreDlgs/Properties/Resources.resx::kstidUnicodePointFormat
+#. /Src/FwCoreDlgs/ValidCharactersDlg.resx::lblFirstCharCode.Text
+#. /Src/FwCoreDlgs/ValidCharactersDlg.resx::lblLastCharCode.Text
+#. (String used 3 times.)
+msgid "U+{0:X4}"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Underlying Form|
+msgid "uf"
+msgstr ""
+
+#. help topic ID for the Time of Day list and the Description field
+#. /Src/LexText/LexTextDll/HelpTopicPaths.resx::khtpField-timeOfDayEdit-Description
+msgid "User_Interface/Field_Descriptions/Lists/Time_of_Day_fields/Description_field_(Time_of_Day).html"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Usages|
+msgid "u?"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items13
+msgid "v"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items17
+msgid "V"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Dialectal Variant|
+msgid "vd"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Free Variant|
+msgid "vf"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Inflectional Variant|
+msgid "vi"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Spelling Variant|
+msgid "vs"
+msgstr ""
+
+#. A test warning message.
+#. /Src/FwCoreDlgs/FwCoreDlgs.resx::kstidMessageWarning
+"msgid "Warning, you must select \"false\" (why do we even have a button???)""
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Exclude As Headword|
+msgid "xh"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Translation|
+msgid "xt"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Example|
+msgid "xv"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Import Residue|
+msgid "xx"
+msgstr ""
+
+#. /Src/Common/Controls/FwControls/WSChooser.resx::button1.Text
+msgid "XYZ"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Calendar|
+msgid "yr"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items14
+msgid "z"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200D
+msgid "ZWJ"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200C
+msgid "ZWNJ"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200B
+msgid "ZWSP"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items
+msgid "?"
+msgstr ""
+
+#. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items1
+msgid "?"
 msgstr ""
