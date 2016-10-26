@@ -27,10 +27,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   tryharderto sudo apt-get install -y ubuntu-desktop
 
   # Add wasta ppas
-  # The wasta-testing ppa is temporary
   sudo add-apt-repository ppa:wasta-linux/wasta
   sudo add-apt-repository ppa:wasta-linux/wasta-apps
-  sudo add-apt-repository ppa:wasta-linux/wasta-testing
   tryharderto sudo apt-get update
 
   # Install Wasta

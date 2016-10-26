@@ -196,6 +196,7 @@ mkdir -p $BASEDIR/fwrepo/fw/DistFiles/Projects
 [ -d ~/fwrepo/flexbridge ] || git clone https://github.com/sillsdev/flexbridge.git ~/fwrepo/flexbridge
 [ -d ~/projects/libpalaso ] || git clone https://github.com/sillsdev/libpalaso.git ~/projects/libpalaso
 [ -d ~/projects/ipcframework ] || git clone --branch develop https://bitbucket.org/smcconnel/ipcframework ~/projects/ipcframework
+[ -d ~/projects/chorus ] || git clone https://github.com/sillsdev/chorus.git ~/projects/chorus
 
 # Monodevelop
 

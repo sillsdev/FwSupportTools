@@ -28,7 +28,7 @@ sudo apt-get update
 if ! sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade; then
   echo provisioner: There were errors while updating system packages. Ignoring.
 fi
-sudo apt-get -y install wget curl vim meld ack-grep dconf-tools mercurial debhelper dh-autoreconf git-cola geany quilt git-buildpackage
+sudo apt-get -y install wget curl vim meld ack-grep dconf-tools mercurial debhelper dh-autoreconf git-cola geany quilt git-buildpackage tig
 
 # pbuilder
 sudo apt-get -y install pbuilder
@@ -46,6 +46,15 @@ fqdn = packager.lsdev.sil.org
 login = upload
 incoming = %(pso)s
 EOF
+
+git config --global color.ui true
+# Set name,email,gerrituser until build-packages interfaces with initrepo better.
+git config --global user.name packaging
+git config --global user.email packaging
+git config --global fwinit.gerrituser packaging
+
+perl -pi -e s/^#force_color_prompt/force_color_prompt/ ~/.bashrc
+grep __git_ps1 ~/.bashrc || echo 'export PS1="\$(__git_ps1) $PS1"' |tee -a ~/.bashrc
 
 cd ~
 if [ ! -d FwSupportTools ]; then
