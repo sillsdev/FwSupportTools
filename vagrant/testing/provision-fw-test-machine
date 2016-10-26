@@ -37,6 +37,8 @@ if ! sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade; then
   echo provisioner: There were errors while updating system packages. Ignoring.
 fi
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y install wget curl vim meld ack-grep dconf-tools synaptic
+# Enable debugging
+sudo perl -pi -e 's/kernel.yama.ptrace_scope = 1/kernel.yama.ptrace_scope = 0/' /etc/sysctl.d/10-ptrace.conf
 
 # FieldWorks
 
