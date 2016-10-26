@@ -253,7 +253,7 @@ fi
 # Clean out old source packages
 cd "$debian_path"/..
 source_package_name=$(dpkg-parsechangelog |grep ^Source:|cut -d' ' -f2)
-rm -f "$repo_base_dir"/${source_package_name}_*.{dsc,build,changes,tar.gz}
+rm -f "$repo_base_dir"/${source_package_name}_*.{dsc,build,changes,tar.[xg]z}
 
 # Optionally omit binary packages from build
 for package in $OMIT_BINARY_PACKAGES_LIST; do
@@ -362,7 +362,7 @@ if [ -n "$short_mono_package_name" ]; then
 	stderr "Building source package for $short_mono_package_name with own source preparation script"
 	cd "$repo_base_dir/mono-calgary"
 	DEBUILD_ADDITIONAL_OPTS="-uc -us" REFREPODIR="$repo_base_dir" ./make-source-package ${short_mono_package_name} ${MONO_COMMITTISH_TO_USE}
-	mv ${MAIN_PACKAGE_NAME}*.{dsc,build,changes,tar.gz} "$repo_base_dir/"
+	mv ${MAIN_PACKAGE_NAME}*.{dsc,build,changes,tar.[xg]z} "$repo_base_dir/"
 elif [ "$MAIN_PACKAGE_NAME" = "fieldworks-enc-converters" ]; then
 	stderr "Building source package for $MAIN_PACKAGE_NAME with own source preparation script"
 	cd "$debian_path"/..
@@ -390,18 +390,18 @@ else
 	full_package_name=${source_package_name}_${nightlyversion}
 	package_debs=${source_package_name}*_${nightlyversion}
 fi
-sha256sum ${full_package_name}*.{dsc,build,changes,tar.gz}
+sha256sum ${full_package_name}*.{dsc,build,changes,tar.[xg]z}
 
 if [ -n "$preserve_products_arg" ]; then
 	stderr "Preserving source package files."
 	mkdir -p "$PRODUCTS_PRESERVATION_PATH"
-	cp -a "$repo_base_dir"/${full_package_name}*.{dsc,build,changes,tar.gz} "$PRODUCTS_PRESERVATION_PATH"/
-	cp -a "$repo_base_dir"/${source_package_name}*.orig.tar.gz "$PRODUCTS_PRESERVATION_PATH"/ || true
+	cp -a "$repo_base_dir"/${full_package_name}*.{dsc,build,changes,tar.[xg]z} "$PRODUCTS_PRESERVATION_PATH"/
+	cp -a "$repo_base_dir"/${source_package_name}*.orig.tar.[xg]z "$PRODUCTS_PRESERVATION_PATH"/ || true
 fi
 
 if [ -n "$ARTIFACT_RESULTS_PATH" ]; then
-	cp -a "$repo_base_dir"/${full_package_name}*.{dsc,build,changes,tar.gz} "$ARTIFACT_RESULTS_PATH"/
-	cp -a "$repo_base_dir"/${source_package_name}*.orig.tar.gz "$ARTIFACT_RESULTS_PATH"/ || true
+	cp -a "$repo_base_dir"/${full_package_name}*.{dsc,build,changes,tar.[xg]z} "$ARTIFACT_RESULTS_PATH"/
+	cp -a "$repo_base_dir"/${source_package_name}*.orig.tar.[xg]z "$ARTIFACT_RESULTS_PATH"/ || true
 fi
 
 stderr "Building binary package(s)"
