@@ -20,3 +20,6 @@ BUILDUSERID=1234
 BUILDUSERNAME=pbuilder
 PKGNAME_LOGFILE=yes
 PKGNAME_LOGFILE_EXTENTION=_$ARCH.build # sic
+
+# Allow downloading dependencies during builds in Ubuntu 16.04 pbuilder
+USENETWORK=yes
