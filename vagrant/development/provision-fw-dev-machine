@@ -35,7 +35,7 @@ sudo perl -pi -e '/partner/ and s/^# //' /etc/apt/sources.list
 sudo apt-get update
 # If this vagrant box already has a GUI running, then report in the GUI.
 (DISPLAY=:0 zenity --warning --no-wrap --title='Provisioning' --text="$(date '+%F %T')\nPlease wait for your vagrant to finish provisioning." ||true) &
-sudo DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y
+sudo DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" --force-yes
 # (For Ubuntu 14.04: python-pyinotify. For Wasta 14.04: xterm.)
 sudo apt-get install -y \
   git-gui \
