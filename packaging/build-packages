@@ -128,7 +128,8 @@ cd $repo_base_dir
 
 if [ "$MAIN_PACKAGE_NAME" = "xulrunner-geckofx29" ]; then
 	if [ ! -d xulrunner-geckofx29 ]; then
-		gbp-clone --pristine-tar git://gerrit.lsdev.sil.org/xulrunner-geckofx29.git
+		# Ubuntu 12.04 uses gbp-clone. Ubuntu 16.04 uses gbp clone (without a hyphen).
+		gbp-clone --pristine-tar git://gerrit.lsdev.sil.org/xulrunner-geckofx29.git || gbp clone --pristine-tar git://gerrit.lsdev.sil.org/xulrunner-geckofx29.git
 	fi
 
 	debian_path=$repo_base_dir/xulrunner-geckofx29/debian
@@ -370,7 +371,8 @@ elif [ "$MAIN_PACKAGE_NAME" = "fieldworks-enc-converters" ]; then
 elif [ "$MAIN_PACKAGE_NAME" = "xulrunner-geckofx29" ]; then
 	stderr "Building source package for $MAIN_PACKAGE_NAME with gbp"
 	cd "$debian_path"/..
-	git-buildpackage --git-pristine-tar -uc -us -nc -S --git-ignore-new
+	# Ubuntu 12.04 uses git-buildpackage. Ubuntu 16.04 uses gbp buildpackage.
+	git-buildpackage --git-pristine-tar -uc -us -nc -S --git-ignore-new || gbp buildpackage --git-pristine-tar -uc -us -nc -S --git-ignore-new --git-ignore-branch
 elif [ "$MAIN_PACKAGE_NAME" = "flexbridge" ]; then
 	stderr "Building source package for $MAIN_PACKAGE_NAME with own source preparation script"
 	cd "$debian_path"/..
