@@ -170,7 +170,7 @@ elif [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 	if [ ! -d "$fwrepodir"/fw ]; then
 		stderr "Initial clone of some repositories"
 		repos="FieldWorks libcom FwLocalizations FwHelps"
-		branches="master develop"
+		branches="master develop feature/* release/* hotfix/* support/*"
 		cd "$fwrepodir"
 		echo -e "$repos\n$branches\n" | fwmeta/initrepo
 
