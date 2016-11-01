@@ -67,8 +67,7 @@ ln -sf ~/FwSupportTools/packaging/pbuilder/pbuilderrc .pbuilderrc
 
 cd ~/pbuilder
 wget http://linux.lsdev.sil.org/downloads/sil-testing.gpg
-# Using a smaller set of platforms to be able to package for to begin with.
-DISTRIBUTIONS="precise trusty xenial" ./setup.sh
+DISTRIBUTIONS="xenial trusty" ./setup.sh
 
 echo provisioner: Done.
 
