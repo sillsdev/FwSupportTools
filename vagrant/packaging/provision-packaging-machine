@@ -13,26 +13,30 @@ if [ -f /etc/wasta-release ]; then
   RELEASE=$CODENAME
 fi
 
-# Remove existing SIL repositories
+# Remove any existing SIL repositories
 sudo perl -ni -e 'print unless /sil\.org/' /etc/apt/sources.list
-
-wget -qO - http://packages.sil.org/sil.gpg | sudo apt-key add -
-wget -qO - http://linux.lsdev.sil.org/downloads/sil-testing.gpg | sudo apt-key add -
-sudo add-apt-repository "deb http://packages.sil.org/ubuntu $RELEASE main"
-sudo add-apt-repository "deb http://packages.sil.org/ubuntu $RELEASE-experimental main"
-sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE main"
-sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE-proposed main"
-sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE-experimental main"
 
 sudo apt-get update
 if ! sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade; then
   echo provisioner: There were errors while updating system packages. Ignoring.
 fi
-sudo apt-get -y install wget curl vim meld ack-grep dconf-tools mercurial debhelper dh-autoreconf git-cola geany quilt git-buildpackage tig
-
-# pbuilder
-sudo apt-get -y install pbuilder
-sudo apt-get -y install git
+sudo apt-get -y install \
+  wget \
+  curl \
+  vim \
+  meld \
+  ack-grep \
+  dconf-tools \
+  mercurial \
+  debhelper \
+  dh-autoreconf \
+  git-cola \
+  geany \
+  quilt \
+  git-buildpackage \
+  tig \
+  pbuilder \
+  git
 
 cat > ~/.hgrc <<EOF
 [extensions]
