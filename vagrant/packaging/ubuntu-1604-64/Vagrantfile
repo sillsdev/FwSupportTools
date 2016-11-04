@@ -1,0 +1,85 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "ubuntu/xenial64"
+  config.vm.define :"packaging"
+  config.vm.hostname = "vag-ub1604-pkg"
+
+  config.vm.provider "virtualbox" do |v|
+    # Override name specified in ubuntu/xenial64 basebox, which can cause problems if used more than once.
+    v.name="ubuntu-1604-pkg"
+    v.memory = 2560
+    v.cpus = 2
+    v.gui = true
+
+    # Add in another disk for more space than the base box gives. http://askubuntu.com/a/404500
+
+    file_to_disk = File.realpath( "." ).to_s + "/home-partition.vdi"
+
+    if ARGV[0] == "up" && ! File.exist?(file_to_disk)
+       puts "Planning to create more storage at #{file_to_disk}."
+       v.customize [
+            'createhd',
+            '--filename', file_to_disk,
+            '--format', 'VDI',
+            '--size', 30 * 1024 # 30 GB
+            ]
+       v.customize [
+            'storageattach', :id,
+            '--storagectl', 'SCSI Controller',
+            '--port', 2, '--device', 0,
+            '--type', 'hdd', '--medium',
+            file_to_disk
+            ]
+    end
+  end
+
+  # Provision
+
+  # The ubuntu/xenial64 vagrant box doesn't have enough disk space. Mount a bigger disk for /home so we have enough.
+  config.vm.provision "shell", inline: """
+  set -e
+  set -x
+
+  if [ -f /etc/homedisk_added ]
+  then
+     echo home disk already added.
+     exit 0
+  fi
+
+  sudo fdisk -u /dev/sdc <<EOF
+n
+p
+1
+
+
+w
+EOF
+  sudo mkfs.ext4 /dev/sdc1
+  mkdir -p /var/tmp/original-home
+  sudo mv /home/* /var/tmp/original-home/
+  touch /home/original-home-partition-which-should-be-mounted-over-for-more-storage
+  sudo mount /dev/sdc1 /home
+  sudo mv /var/tmp/original-home/* /home/
+  echo /dev/sdc1 /home auto defaults,noatime 0 2 | sudo tee -a /etc/fstab
+  touch /etc/homedisk_added
+  """
+
+  config.vm.provision "shell", inline: '''
+  set -e -o pipefail
+
+  function tryharderto() { i=0; until "$@"; do ((++i > 3)) && false; echo >&2 Retrying $i; sleep 2m; done }
+
+  # Install normal Ubuntu desktop
+  tryharderto sudo apt-get update
+  tryharderto sudo apt-get install -y ubuntu-desktop
+  '''
+
+  # Set default password
+  config.vm.provision "shell", inline: 'echo -e "ubuntu\nubuntu" | sudo passwd ubuntu'
+
+  config.vm.provision "shell", path: "../provision-packaging-machine", privileged: false
+end
