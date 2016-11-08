@@ -310,7 +310,13 @@ namespace LocaleStrings
 		{
 			WritePoHeader(swOut, sRoot, String.Empty);
 			for (int i = 0; i < rgsPOStrings.Count; ++i)
-				rgsPOStrings[i].Write(swOut);
+			{
+				var poString = rgsPOStrings[i];
+				if (poString.Flags == null || !poString.Flags.Contains("fuzzy"))
+				{
+					poString.Write(swOut);
+				}
+			}
 		}
 
 		/// <summary>

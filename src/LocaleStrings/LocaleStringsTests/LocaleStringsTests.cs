@@ -801,6 +801,10 @@ namespace LocaleStringsTests
 "msgid \"You still have {0} difference(s) left.  Are you sure you want to exit?\"" + Environment.NewLine +
 "msgstr \"Il reste {0} différences. Êtes-vous sûr de vouloir quitter?\"" + Environment.NewLine +
 "" + Environment.NewLine +
+"msgid \"You don't know how to translate this yet do you?\"" + Environment.NewLine +
+"msgstr \"Que?\"" + Environment.NewLine +
+"#, fuzzy" + Environment.NewLine +
+"" + Environment.NewLine +
 "# JDX" + Environment.NewLine +
 "#~ msgid \"Check for _Updates...\"" + Environment.NewLine +
 "#~ msgstr \"Rechercher les mises à jo_ur...\"" + Environment.NewLine +
@@ -833,7 +837,7 @@ namespace LocaleStringsTests
 			Assert.AreEqual(" JDX", posObsolete.UserComments[0]);
 			Assert.AreEqual("~ msgid \"Check for _Updates...\"", posObsolete.UserComments[1]);
 			Assert.AreEqual(", fuzzy", posObsolete.UserComments[7]);
-			Assert.AreEqual(49, dictFrenchPo.Count);
+			Assert.AreEqual(50, dictFrenchPo.Count);
 			var rgsPoStrings = dictFrenchPo.ToList();
 			var postr0 = rgsPoStrings[0].Value;
 			Assert.IsNotNull(postr0, "French po string[0] has data");
@@ -887,6 +891,15 @@ namespace LocaleStringsTests
 				postr48.AutoComments[0], "French po string[48] has the expected first line of Auto Comment");
 			Assert.AreEqual("/Src/TE/TeResources/TeStrings.resx::kstidExitDiffMsg",
 				postr48.AutoComments[1], "French po string[48] has the expected second line of Auto Comment");
+
+			var postr49 = rgsPoStrings[49].Value;
+			Assert.IsNotNull(postr49, "French po string[49] has data");
+			Assert.IsNotNull(postr49.MsgId, "French po string[49] has MsgId data");
+			Assert.AreEqual(1, postr49.MsgId.Count, "French po string[49] has one line of MsgId data");
+			Assert.AreEqual("You don't know how to translate this yet do you?", postr49.MsgId[0], "French po string[49] has the expected MsgId data");
+			Assert.AreEqual("Que?", postr49.MsgStrAsString());
+			Assert.IsNotNull(postr49.Flags);
+			Assert.AreEqual(postr49.Flags[0], "fuzzy");
 		}
 
 #region TestData
@@ -1037,8 +1050,8 @@ namespace LocaleStringsTests
 			var dictMerged = Program.MergePoFileData(swLog, srMain, srNew, "Test.fr.po", "Test2.fr.po", out posHeader, out posObsolete);
 			Assert.IsNotNull(posHeader, "Merged po files should still have a header!");
 			Assert.IsNotNull(posObsolete, "Merged po files should have the obsolete data from the first");
-			// first "file" has 49 messages, second "file" has 20 messages but 4 overlap with first file and 1 new string is untranslated.  48 + 20 - 5 = 63.
-			Assert.AreEqual(64, dictMerged.Count, "Merged po files should have 64 messages");
+			// first "file" has 50 messages, second "file" has 20 messages but 4 overlap with first file and 1 new string is untranslated.  50 + 20 - 5 = 65.
+			Assert.AreEqual(65, dictMerged.Count, "Merged po files should have 64 messages");
 			POString posTest;
 			// test word that is translated in the first file, but left untranslated in the second file
 			var exists = dictMerged.TryGetValue("Allomorph", out posTest);
@@ -1113,7 +1126,7 @@ namespace LocaleStringsTests
 			var srFrenchPo = new StringReader(_sFrenchPoData);
 			POString posHeader, posObsolete;
 			var dictFrenchPo = Program.ReadPoFile(srFrenchPo, out posHeader, out posObsolete);
-			Assert.AreEqual(49, dictFrenchPo.Count);
+			Assert.AreEqual(50, dictFrenchPo.Count);
 			POString posNewHeader;
 			var dictPot = Program.ReadPotFile(srPot, out posNewHeader);
 			Assert.AreEqual(56, dictPot.Count);
@@ -1125,7 +1138,7 @@ namespace LocaleStringsTests
 			POString posUpdatedHeader, posUpdatedObsolete;
 			var dictUpdatedPo = Program.ReadPoFile(srIn, out posUpdatedHeader, out posUpdatedObsolete);
 			// SUT
-			Assert.AreEqual(61, dictUpdatedPo.Count);
+			Assert.AreEqual(62, dictUpdatedPo.Count);
 			POString posTest;
 
 			// test message that is translated in the French po data and is found in the pot data
