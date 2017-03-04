@@ -1185,6 +1185,10 @@ msgstr ""
 msgid "[{0}aa{1} ]"
 msgstr ""
 
+#. /Language Explorer/DefaultConfigurations/ReversalIndex/AllReversalIndexes.fwdictconfig:://ConfigurationItem/@name
+msgid "AllReversalSubentries"
+msgstr ""
+
 #. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
 #. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2003
 msgid "EMSP"
@@ -1414,6 +1418,10 @@ msgstr ""
 msgid "/Beginning_Tasks/Importing_Data/Import_Notebook_Data/Topics_List_Import_Options.htm'"
 msgstr ""
 
+#. /|strings-en.xml::/LabelAbbreviations/Bibliographic Source|
+msgid "bs"
+msgstr ""
+
 #. /|strings-en.xml::/LabelAbbreviations/Compare|
 #. /|strings-en.xml::/LabelAbbreviations/Cross References|
 #. (String used 2 times.)
@@ -1446,6 +1454,14 @@ msgstr ""
 
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items22
 msgid "è"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Etymology Note|
+msgid "en"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Discussion|
+msgid "enn"
 msgstr ""
 
 #. /|strings-en.xml::/LabelAbbreviations/Etymology|
@@ -1528,6 +1544,10 @@ msgstr ""
 msgid "oϰ"
 msgstr ""
 
+#. /|strings-en.xml::/LabelAbbreviations/Preceding Annotation|
+msgid "pa"
+msgstr ""
+
 #. /|strings-en.xml::/LabelAbbreviations/Pronunciation|
 msgid "ph"
 msgstr ""
@@ -1570,8 +1590,20 @@ msgstr ""
 msgid "sd"
 msgstr ""
 
+#. /|strings-en.xml::/LabelAbbreviations/Source Form|
+msgid "sf"
+msgstr ""
+
 #. /|strings-en.xml::/LabelAbbreviations/Slots|
 msgid "sl"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Source Language|
+msgid "slg"
+msgstr ""
+
+#. /|strings-en.xml::/LabelAbbreviations/Source Language Notes|
+msgid "slgn"
 msgstr ""
 
 #. /|strings-en.xml::/LabelAbbreviations/Semantics Note|
