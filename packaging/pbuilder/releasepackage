@@ -1,14 +1,34 @@
-#!/bin/bash
-# Download a pre-built package from Jenkins, sign it and upload to pso
-set -e
+#!/bin/bash -e
+# This script provides two modes:
+# 1. Locally: Download a pre-built package from Jenkins, sign it and upload to pso or llso
+# 2. Remote: Remotely sign pre-built package from Jenkins and upload to pso or llso
+#
+# NOTE: for the second mode, this requires ssh access to $JENKINS_HOST, and a file .dput.cf in
+# your home directory on $JENKINS_HOST with the following content:
+# [llso]
+# method   = rsync
+# fqdn     = linux.lsdev.sil.org
+# login    = <yourusername>
+# incoming = /var/tmp/reprepro/incoming/%(llso)s
+# [pso]
+# method   = rsync
+# fqdn     = packager.lsdev.sil.org
+# login    = upload
+# incoming = %(pso)s
+#
+# Also, to set up make sure that you ssh into $JENKINS_HOST and run:
+# gpg --recv-keys $DEBSIGNKEY
+# ssh <yourusername>@linux.lsdev.sil.org
 
 PROGRAM_NAME="$(basename "$0")"
 WHERE=$(pwd)
+SOURCEDIST=xenial
 
 . $(dirname "$0")/${PROGRAM_NAME}.config
 
-if [ -z "$JENKINS_USER" -o -z "$JENKINS_APITOKEN" ]; then
-	echo "Please set JENKINS_USER and JENKINS_APITOKEN variables in $PROGRAM_NAME.config"
+if [ -z "$JENKINS_USER" -o -z "$JENKINS_APITOKEN" -o -z "$JENKINS_HOST" ]; then
+	echo "Please set JENKINS_USER, JENKINS_APITOKEN, and JENKINS_HOST variables in"
+	echo "$PROGRAM_NAME.config"
 	exit 1
 fi
 
@@ -32,8 +52,8 @@ help()
 	echo "-nn "
 	echo "	Run script without doing anything and print commands"
 	echo ""
-	echo "--component <experimental|main>"
-	echo "	Where the package should go: experimental or main section."
+	echo "--component <experimental|proposed|main>"
+	echo "	Where the package should go: experimental, proposed or main section."
 	echo "	Default: experimental"
 	echo ""
 	echo "--repo <llso|pso>"
@@ -42,8 +62,13 @@ help()
 	echo "--build <buildno>"
 	echo "	Build number/string where the archifacts can be found"
 	echo ""
+	echo "--remote|--local"
+	echo "	Mode to run in. Determines whether to completely download packages before signing or"
+	echo "	leaving them on the server."
+	echo "	Default: --local"
+	echo ""
 	echo "<project>"
-	echo "  One of bloom, bloom-unstable or geckofx29"
+	echo "  One of bloom, bloom-master, geckofx29, lfmerge-fdo, lfmerge, lfmerge-qa, lfmerge-master, mono, mono-3.4"
 	echo ""
 	echo ""
 	echo "Example:"
@@ -60,6 +85,8 @@ while (( $# )); do
 		--component)
 			if [ "$2" == "experimental" ]; then
 				DESTINATION=-experimental
+			elif [ "$2" == "proposed" ]; then
+				DESTINATION=-proposed
 			elif [ "$2" == "main" ]; then
 				DESTINATION=
 			else
@@ -72,6 +99,8 @@ while (( $# )); do
 		--repo) REPO=$2; shift;;
 		--help) help;;
 		--build) BUILD=$2; shift;;
+		--remote) REMOTE=1;;
+		--local) ;;
 		*)
 			if [ $# -eq 1 ]; then
 				break
@@ -92,46 +121,110 @@ if [ $# -eq 0 ]; then
 fi
 
 PROJECT=$1
+SOURCE_DIR=archive
+BINARY_DIR=archive/results
 
 case $PROJECT in
 	Bloom|bloom)
 		JENKINS_JOB=Bloom_Packaging-Linux-all-3.0-release
 		;;
-	Bloom-unstable|bloom-unstable)
+	Bloom-master|bloom-master)
 		JENKINS_JOB=Bloom_Packaging-Linux-all-master-release
 		;;
 	geckofx29)
 		JENKINS_JOB=Geckofx29_NightlyPackaging-Linux-all-master-debug
+		;;
+	lfmerge-fdo)
+		JENKINS_JOB=LfMergeFDO_Packaging-Linux-all-lfmerge-release
+		;;
+	lfmerge-master)
+		JENKINS_JOB=LfMerge_Packaging-Linux-all-master-release
+		BINARY_DIR=archive/finalresults
+		;;
+	lfmerge-qa)
+		JENKINS_JOB=LfMerge_Packaging-Linux-all-qa-release
+		BINARY_DIR=archive/finalresults
+	;;
+	lfmerge)
+		JENKINS_JOB=LfMerge_Packaging-Linux-all-live-release
+		BINARY_DIR=archive/finalresults
+	;;
+	mono)
+		JENKINS_JOB=Mono_NightlyPackaging-Linux-all-develop-debug
+		SOURCE_DIR=archive/results
+		;;
+	mono-3.4)
+		JENKINS_JOB=Mono_NightlyPackaging-Linux-all-release_mono_sil_3.4-debug
+		SOURCE_DIR=archive/results
 		;;
 	*)
 		echo "Unknown project $PROJECT. Exiting."
 		exit 4
 esac
 
-TMPDIR=/tmp/$PROJECT-package
-rm -rf $TMPDIR
-mkdir -p $TMPDIR
-cd $TMPDIR
+runLocal()
+{
+	TMPDIR=/tmp/$PROJECT-package
+	rm -rf $TMPDIR
+	mkdir -p $TMPDIR
+	cd $TMPDIR
 
-wget --auth-no-challenge --http-user=${JENKINS_USER} --http-password=${JENKINS_APITOKEN} --secure-protocol=TLSv1 \
-	https://jenkins.lsdev.sil.org:45192/view/Packaging/job/${JENKINS_JOB}/${BUILD}/artifact/*zip*/archive.zip
+	wget --auth-no-challenge --http-user=${JENKINS_USER} --http-password=${JENKINS_APITOKEN} --secure-protocol=TLSv1 \
+		https://jenkins.lsdev.sil.org:45192/view/Packaging/job/${JENKINS_JOB}/${BUILD}/artifact/*zip*/archive.zip
 
-unzip archive.zip
+	unzip archive.zip
 
-cd archive
-# Source package
-echo "Signing and uploading source package"
-$NOOP debsign --re-sign $DEBSIGNKEY *_source.changes
-$NOOP dput -U $REPO:ubuntu/trusty$DESTINATION *_source.changes
+	cd $TMPDIR/$SOURCE_DIR
+	# Source package
+	echo "Signing and uploading source package"
+	$NOOP debsign --re-sign $DEBSIGNKEY *_source.changes
+	$NOOP dput -U $REPO:ubuntu/${SOURCEDIST}$DESTINATION *_source.changes
 
-# binary packages
-echo "Signing and uploading binary packages"
-cd results
-for changesfile in *.changes; do
-	distro=$(sed 's/^[^+]*+\([a-z]*\).*/\1/' <<< $changesfile)
-	$NOOP debsign --re-sign $DEBSIGNKEY $changesfile
-	$NOOP dput $REPO:ubuntu/$distro$DESTINATION $changesfile
+	# binary packages
+	echo "Signing and uploading binary packages"
+	cd $TMPDIR/$BINARY_DIR
+	for changesfile in *+*.changes; do
+		distro=$(sed 's/^[^+]*+\([a-z]*\).*/\1/' <<< $changesfile)
+		$NOOP debsign --re-sign $DEBSIGNKEY $changesfile
+		$NOOP dput $REPO:ubuntu/$distro$DESTINATION $changesfile
+	done
+
+	cd $WHERE
+	rm -rf $TMPDIR
+}
+
+runRemote()
+{
+	# Copy package to temp directory on the server where we have write permission
+	echo "Copy package to temporary directory"
+	TMP_PACKAGE_DIR=tmp-package
+	$NOOP ssh $JENKINS_HOST >/dev/null 2>&1 << EOF
+mkdir -p ${TMP_PACKAGE_DIR}
+rm -rf ${TMP_PACKAGE_DIR}/*
+cp -a ~jenkins/jobs/${JENKINS_JOB}/builds/${BUILD}/archive ${TMP_PACKAGE_DIR}/
+EOF
+
+	# Source package
+	echo "Signing and uploading source package"
+	$NOOP debsign --re-sign $DEBSIGNKEY -r $JENKINS_HOST ${TMP_PACKAGE_DIR}/archive/*_source.changes
+	$NOOP ssh $JENKINS_HOST dput -U $REPO:ubuntu/${SOURCEDIST}${DESTINATION} ${TMP_PACKAGE_DIR}/archive/*_source.changes
+
+	# binary packages
+	echo ""
+	echo "Signing and uploading binary packages"
+
+	$NOOP debsign --re-sign $DEBSIGNKEY -r $JENKINS_HOST ${TMP_PACKAGE_DIR}/${BINARY_DIR}/*+*.changes
+
+	$NOOP ssh $JENKINS_HOST 2>/dev/null << EOF
+for changesfile in ${TMP_PACKAGE_DIR}/${BINARY_DIR}/*+*.changes; do
+	distro=\$(sed 's/^[^+]*+\([a-z]*\).*/\1/' <<< \$changesfile)
+	dput $REPO:ubuntu/\$distro$DESTINATION \$changesfile
 done
+EOF
+}
 
-cd $WHERE
-rm -rf $TMPDIR
+if [ -n "$REMOTE" ]; then
+	runRemote
+else
+	runLocal
+fi
