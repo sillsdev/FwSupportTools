@@ -1189,6 +1189,61 @@ msgstr ""
 msgid "AllReversalSubentries"
 msgstr ""
 
+#. /Language Explorer/Configuration/Parts/Reversal.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="AnthroCodesConfig"]/@before
+#. /Language Explorer/Configuration/Parts/Reversal.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="AnthroCodesConfig"]/@before
+#. (String used 2 times.)
+msgid " anthro. codes"
+msgstr ""
+
+#. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid-MXB.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/Dictionary/Lexeme.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/Dictionary/Root.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/ReversalIndex/AllReversalIndexes.fwdictconfig:://ConfigurationItem/@before
+#. (String used 18 times.)
+msgid " anthro. codes "
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishCd"]/part[@ref="AnthroCodesConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishRoot"]/part[@ref="AnthroCodesConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishRootMinor"]/part[@ref="AnthroCodesConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishRootMinorSub"]/part[@ref="AnthroCodesConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishRootSub"]/part[@ref="AnthroCodesConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishStem"]/part[@ref="AnthroCodesConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishStemMinor"]/part[@ref="AnthroCodesConfig"]/@before
+#. (String used 7 times.)
+msgid "anthro. codes "
+msgstr ""
+
+#. Measurement unit abbreviation for Centimeters (Localized string should preserve leading space if needed in formatted display.)
+#. /Src/Common/FwUtils/FwUtilsStrings.resx::kstidCm
+msgid " cm"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/Notebook.fwlayout::/LayoutInventory/layout["RnGenericRec-jtview-publishClassifications"]/part[@ref="ConfidenceConfig"]/@before
+msgid "Confidence: "
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/Cellar.fwlayout::/LayoutInventory/layout["CmPossibility-jtview-advanced1"]/@label
+msgid "Configurable Item Layout 1"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/Cellar.fwlayout::/LayoutInventory/layout["CmPossibility-jtview-advanced2"]/@label
+msgid "Configurable Item Layout 2"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/Cellar.fwlayout::/LayoutInventory/layout["CmPossibility-jtview-advanced3"]/@label
+msgid "Configurable Item Layout 3"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/Cellar.fwlayout::/LayoutInventory/layout["CmPossibility-jtview-advanced4"]/@label
+msgid "Configurable Item Layout 4"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/Cellar.fwlayout::/LayoutInventory/layout["CmPossibility-jtview-advanced5"]/@label
+msgid "Configurable Item Layout 5"
+msgstr ""
+
 #. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
 #. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2003
 msgid "EMSP"
@@ -1202,11 +1257,6 @@ msgstr ""
 #. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
 #. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2007
 msgid "FSP"
-msgstr ""
-
-#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
-#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200A
-msgid "HSP"
 msgstr ""
 
 #. /Language Explorer/Configuration/Main.xml::/window/commands/command/@label
@@ -1247,6 +1297,15 @@ msgstr ""
 
 #. /Language Explorer/Configuration/Main.xml::/window/commands/command/@label
 msgid "F9"
+msgstr ""
+
+#. /Src/xWorks/XmlDiagnosticsDlg.resx::m_lbl_guid.Text
+msgid "GUID"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200A
+msgid "HSP"
 msgstr ""
 
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboNumberScheme.Items2
@@ -1355,6 +1414,86 @@ msgstr ""
 #. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
 #. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200F
 msgid "RLM"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexEntry.fwlayout::/LayoutInventory/layout["LexEntryRef-jtview-publishRootComplexFormRef"]/part[@ref="SubentryUnder"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntry.fwlayout::/LayoutInventory/layout["LexEntryRef-jtview-publishRootMinorSenseComplexFormRef"]/part[@ref="SubentryUnder"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntry.fwlayout::/LayoutInventory/layout["LexEntryRef-jtview-publishRootMinorSubSenseComplexFormRef"]/part[@ref="SubentryUnder"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntry.fwlayout::/LayoutInventory/layout["LexEntryRef-jtview-publishRootSenseComplexFormRef"]/part[@ref="SubentryUnder"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntry.fwlayout::/LayoutInventory/layout["LexEntryRef-jtview-publishRootSubSenseComplexFormRef"]/part[@ref="SubentryUnder"]/@before
+#. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid-MXB.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/Dictionary/Root.fwdictconfig:://ConfigurationItem/@before
+#. (String used 22 times.)
+msgid " (see under "
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexEntry.fwlayout::/LayoutInventory/layout["LexEntryRef-jtview-publishRootComponentRefs"]/part[@ref="SubentryUnder"]/@before
+#. /Language Explorer/DefaultConfigurations/Dictionary/Root.fwdictconfig:://ConfigurationItem/@before
+#. (String used 3 times.)
+msgid ", see under "
+msgstr ""
+
+#. /Language Explorer/DefaultConfigurations/ReversalIndex/AllReversalIndexes.fwdictconfig:://ConfigurationItem/@before
+#. (String used 2 times.)
+msgid "  (sem. domains:"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/Reversal.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="SemanticDomainsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/Reversal.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="SemanticDomainsConfig"]/@before
+#. (String used 2 times.)
+msgid " (sem. domains:"
+msgstr ""
+
+#. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid-MXB.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/Dictionary/Lexeme.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/Dictionary/Root.fwdictconfig:://ConfigurationItem/@before
+#. (String used 16 times.)
+msgid " (sem. domains: "
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishCd"]/part[@ref="SemanticDomainsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishRoot"]/part[@ref="SemanticDomainsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishRootMinor"]/part[@ref="SemanticDomainsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishRootMinorSub"]/part[@ref="SemanticDomainsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishRootSub"]/part[@ref="SemanticDomainsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishStem"]/part[@ref="SemanticDomainsConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishStemMinor"]/part[@ref="SemanticDomainsConfig"]/@before
+#. (String used 7 times.)
+msgid "(sem. domains: "
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/Notebook.fwlayout::/LayoutInventory/layout["RnGenericRec-jtview-publishClassifications"]/part[@ref="SourcesConfig"]/@before
+msgid "Source: "
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/Reversal.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="StatusConfig"]/@before
+#. /Language Explorer/Configuration/Parts/Reversal.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="StatusConfig"]/@before
+#. (String used 2 times.)
+msgid " status"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishCd"]/part[@ref="StatusConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishRoot"]/part[@ref="StatusConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishRootMinor"]/part[@ref="StatusConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishRootMinorSub"]/part[@ref="StatusConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishRootSub"]/part[@ref="StatusConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishStem"]/part[@ref="StatusConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishStemMinor"]/part[@ref="StatusConfig"]/@before
+#. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid-MXB.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/Dictionary/Lexeme.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/Dictionary/Root.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/ReversalIndex/AllReversalIndexes.fwdictconfig:://ConfigurationItem/@before
+#. (String used 24 times.)
+msgid " status "
+msgstr ""
+
+#. /Src/xWorks/HeadWordNumbersDlg.resx::m_configurationDescription.Text
+msgid ""
+"These settings affect the current TYPESTRING configuration:\n"
+"Example-string DO NOT LOCALIZE THIS STRING"
 msgstr ""
 
 #. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
