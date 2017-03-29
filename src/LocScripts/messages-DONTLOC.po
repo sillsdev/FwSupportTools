@@ -1,5 +1,6 @@
-﻿#. Date modified:  03 Mar 2017
-#. FW version: 8.3.5
+﻿#. Date modified:  29 Mar 2017
+#. FW version: 8.3.7
+
 #. used to indicate no value in ksQueueXYZ
 #. does not need to be localized
 #. /Src/Common/Controls/SideBar/SideBarTab.resx::mnuSeparator2.Text
@@ -114,6 +115,11 @@ msgstr ""
 #. this is used to build a list (for a log file message) by appending 1 or more items together.
 #. /Src/Utilities/SfmToXml/Sfm2XmlStrings.resx::ksQuotedItem
 msgid " '{0}'"
+msgstr ""
+
+#. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid.fwdictconfig:://ConfigurationItem/@between
+#. (String used 2 times.)
+msgid " + "
 msgstr ""
 
 #. /Language Explorer/Configuration/Parts/LexSenseParts.XML::/PartInventory/bin/part[@id="MoDerivAffMsa-Jt-basic"]/choice/otherwise/lit
@@ -1185,6 +1191,32 @@ msgstr ""
 msgid "[{0}aa{1} ]"
 msgstr ""
 
+#. /Language Explorer/Configuration/Parts/Reversal.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="DomainTypesConfig"]/@before
+#. /Language Explorer/Configuration/Parts/Reversal.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="DomainTypesConfig"]/@before
+#. /Language Explorer/DefaultConfigurations/ReversalIndex/AllReversalIndexes.fwdictconfig:://ConfigurationItem/@before
+#. (String used 3 times.)
+msgid " ac. domains:"
+msgstr ""
+
+#. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/Dictionary/Lexeme.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/Dictionary/Root.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/ReversalIndex/AllReversalIndexes.fwdictconfig:://ConfigurationItem/@before
+#. (String used 17 times.)
+msgid " ac. domains: "
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishCd"]/part[@ref="DomainTypesConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishRoot"]/part[@ref="DomainTypesConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishRootMinor"]/part[@ref="DomainTypesConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishRootMinorSub"]/part[@ref="DomainTypesConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishRootSub"]/part[@ref="DomainTypesConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishStem"]/part[@ref="DomainTypesConfig"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishStemMinor"]/part[@ref="DomainTypesConfig"]/@before
+#. (String used 7 times.)
+msgid "ac. domains: "
+msgstr ""
+
 #. /Language Explorer/DefaultConfigurations/ReversalIndex/AllReversalIndexes.fwdictconfig:://ConfigurationItem/@name
 msgid "AllReversalSubentries"
 msgstr ""
@@ -1196,7 +1228,6 @@ msgid " anthro. codes"
 msgstr ""
 
 #. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid.fwdictconfig:://ConfigurationItem/@before
-#. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid-MXB.fwdictconfig:://ConfigurationItem/@before
 #. /Language Explorer/DefaultConfigurations/Dictionary/Lexeme.fwdictconfig:://ConfigurationItem/@before
 #. /Language Explorer/DefaultConfigurations/Dictionary/Root.fwdictconfig:://ConfigurationItem/@before
 #. /Language Explorer/DefaultConfigurations/ReversalIndex/AllReversalIndexes.fwdictconfig:://ConfigurationItem/@before
@@ -1244,6 +1275,34 @@ msgstr ""
 msgid "Configurable Item Layout 5"
 msgstr ""
 
+#. /Language Explorer/Configuration/Parts/Reversal.fwlayout::/LayoutInventory/layout["LexEntry-jtview-publishRIELexEntry10"]/part[@ref="DateCreated"]/@before
+msgid " created on:"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexEntry.fwlayout::/LayoutInventory/layout["LexEntry-jtview-publishRootMinorPara"]/part[@ref="DateCreated"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntry.fwlayout::/LayoutInventory/layout["LexEntry-jtview-publishRootPara"]/part[@ref="DateCreated"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntry.fwlayout::/LayoutInventory/layout["LexEntry-jtview-publishRootSubentryPara"]/part[@ref="DateCreated"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntry.fwlayout::/LayoutInventory/layout["LexEntry-jtview-publishStemMinorPara"]/part[@ref="DateCreated"]/@before
+#. (String used 4 times.)
+msgid " created on: "
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexEntry.fwlayout::/LayoutInventory/layout["LexEntry-jtview-publishStemPara"]/part[@ref="DateCreated"]/@before
+msgid "created on: "
+msgstr ""
+
+#. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/Dictionary/Root.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/ReversalIndex/AllReversalIndexes.fwdictconfig:://ConfigurationItem/@before
+#. (String used 12 times.)
+msgid "  Created on: "
+msgstr ""
+
+#. /Language Explorer/DefaultConfigurations/Dictionary/Lexeme.fwdictconfig:://ConfigurationItem/@before
+#. (String used 2 times.)
+msgid " Created on: "
+msgstr ""
+
 #. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
 #. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2003
 msgid "EMSP"
@@ -1252,6 +1311,23 @@ msgstr ""
 #. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
 #. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2002
 msgid "ENSP"
+msgstr ""
+
+#. /Src/xWorks/DictionaryConfigurationImportDlg.resx::explanationLabel.Text
+msgid ""
+"Explanation box\n"
+"\n"
+"More explanation\n"
+"\n"
+"Even more explanation Even more explanation Even more explanation Even more explanation Still long explanation.\n"
+"\n"
+"Yet more explanation!\n"
+"\n"
+"Yet even more explanation.\n"
+"\n"
+"Even more explanation still. \n"
+"\n"
+"Lots of explanation here, to be sure.\n"
 msgstr ""
 
 #. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
@@ -1346,9 +1422,41 @@ msgstr ""
 msgid "LSEP"
 msgstr ""
 
+#. Measurement unit abbreviation for Millimeters (Localized string should preserve leading space if needed in formatted display.)
+#. /Src/Common/FwUtils/FwUtilsStrings.resx::kstidMm
+msgid " mm"
+msgstr ""
+
 #. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
 #. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar205F
 msgid "MMSP"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/Reversal.fwlayout::/LayoutInventory/layout["LexEntry-jtview-publishRIELexEntry11"]/part[@ref="DateModified"]/@before
+msgid " modified on:"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexEntry.fwlayout::/LayoutInventory/layout["LexEntry-jtview-publishRootMinorPara"]/part[@ref="DateModified"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntry.fwlayout::/LayoutInventory/layout["LexEntry-jtview-publishRootPara"]/part[@ref="DateModified"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntry.fwlayout::/LayoutInventory/layout["LexEntry-jtview-publishRootSubentryPara"]/part[@ref="DateModified"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntry.fwlayout::/LayoutInventory/layout["LexEntry-jtview-publishStemMinorPara"]/part[@ref="DateModified"]/@before
+#. (String used 4 times.)
+msgid " modified on: "
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexEntry.fwlayout::/LayoutInventory/layout["LexEntry-jtview-publishDateCreatedCd"]/part[@ref="DateCreated"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntry.fwlayout::/LayoutInventory/layout["LexEntry-jtview-publishDateModifiedCd"]/part[@ref="DateModified"]/@before
+#. /Language Explorer/Configuration/Parts/LexEntry.fwlayout::/LayoutInventory/layout["LexEntry-jtview-publishStemPara"]/part[@ref="DateModified"]/@before
+#. (String used 3 times.)
+msgid "modified on: "
+msgstr ""
+
+#. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/Dictionary/Lexeme.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/Dictionary/Root.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/ReversalIndex/AllReversalIndexes.fwdictconfig:://ConfigurationItem/@before
+#. (String used 14 times.)
+msgid " Modified on: "
 msgstr ""
 
 #. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
@@ -1386,9 +1494,24 @@ msgstr ""
 msgid "NNBSP"
 msgstr ""
 
+#. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid.fwdictconfig:://ConfigurationItem/@after
+#. /Language Explorer/DefaultConfigurations/Dictionary/Lexeme.fwdictconfig:://ConfigurationItem/@after
+#. /Language Explorer/DefaultConfigurations/Dictionary/Root.fwdictconfig:://ConfigurationItem/@after
+#. (String used 12 times.)
+msgid " Note: "
+msgstr ""
+
+#. /Src/xWorks/DictionaryConfigurationImportDlg.resx::notOverwriteRadioOption.Text
+msgid "Not overwrite option"
+msgstr ""
+
 #. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
 #. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2000
 msgid "NQSP"
+msgstr ""
+
+#. /Src/xWorks/DictionaryConfigurationImportDlg.resx::doOverwriteRadioOption.Text
+msgid "Overwrite option"
 msgstr ""
 
 #. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
@@ -1404,6 +1527,27 @@ msgstr ""
 #. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
 #. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar2008
 msgid "PSP"
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishRoot"]/part[@ref="RestrictionsPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishRootMinor"]/part[@ref="RestrictionsPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishRootMinorSub"]/part[@ref="RestrictionsPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishRootSub"]/part[@ref="RestrictionsPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishStemMinor"]/part[@ref="RestrictionsPub"]/@before
+#. /Language Explorer/Configuration/Parts/Reversal.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishForReversal"]/part[@ref="RestrictionsPub"]/@before
+#. /Language Explorer/Configuration/Parts/Reversal.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishSubForReversal"]/part[@ref="RestrictionsPub"]/@before
+#. /Language Explorer/DefaultConfigurations/Dictionary/Lexeme.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/Dictionary/Root.fwdictconfig:://ConfigurationItem/@before
+#. /Language Explorer/DefaultConfigurations/ReversalIndex/AllReversalIndexes.fwdictconfig:://ConfigurationItem/@before
+#. (String used 17 times.)
+msgid " Restrictions: "
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishCd"]/part[@ref="RestrictionsPub"]/@before
+#. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishStem"]/part[@ref="RestrictionsPub"]/@before
+#. /Language Explorer/Configuration/Parts/Notebook.fwlayout::/LayoutInventory/layout["RnGenericRec-jtview-publishClassifications"]/part[@ref="RestrictionsConfig"]/@before
+#. (String used 3 times.)
+msgid "Restrictions: "
 msgstr ""
 
 #. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
@@ -1422,7 +1566,6 @@ msgstr ""
 #. /Language Explorer/Configuration/Parts/LexEntry.fwlayout::/LayoutInventory/layout["LexEntryRef-jtview-publishRootSenseComplexFormRef"]/part[@ref="SubentryUnder"]/@before
 #. /Language Explorer/Configuration/Parts/LexEntry.fwlayout::/LayoutInventory/layout["LexEntryRef-jtview-publishRootSubSenseComplexFormRef"]/part[@ref="SubentryUnder"]/@before
 #. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid.fwdictconfig:://ConfigurationItem/@before
-#. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid-MXB.fwdictconfig:://ConfigurationItem/@before
 #. /Language Explorer/DefaultConfigurations/Dictionary/Root.fwdictconfig:://ConfigurationItem/@before
 #. (String used 22 times.)
 msgid " (see under "
@@ -1446,7 +1589,6 @@ msgid " (sem. domains:"
 msgstr ""
 
 #. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid.fwdictconfig:://ConfigurationItem/@before
-#. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid-MXB.fwdictconfig:://ConfigurationItem/@before
 #. /Language Explorer/DefaultConfigurations/Dictionary/Lexeme.fwdictconfig:://ConfigurationItem/@before
 #. /Language Explorer/DefaultConfigurations/Dictionary/Root.fwdictconfig:://ConfigurationItem/@before
 #. (String used 16 times.)
@@ -1482,12 +1624,19 @@ msgstr ""
 #. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishStem"]/part[@ref="StatusConfig"]/@before
 #. /Language Explorer/Configuration/Parts/LexSense.fwlayout::/LayoutInventory/layout["LexSense-jtview-publishStemMinor"]/part[@ref="StatusConfig"]/@before
 #. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid.fwdictconfig:://ConfigurationItem/@before
-#. /Language Explorer/DefaultConfigurations/Dictionary/Hybrid-MXB.fwdictconfig:://ConfigurationItem/@before
 #. /Language Explorer/DefaultConfigurations/Dictionary/Lexeme.fwdictconfig:://ConfigurationItem/@before
 #. /Language Explorer/DefaultConfigurations/Dictionary/Root.fwdictconfig:://ConfigurationItem/@before
 #. /Language Explorer/DefaultConfigurations/ReversalIndex/AllReversalIndexes.fwdictconfig:://ConfigurationItem/@before
 #. (String used 24 times.)
 msgid " status "
+msgstr ""
+
+#. /Language Explorer/DefaultConfigurations/ReversalIndex/AllReversalIndexes.fwdictconfig:://ConfigurationItem/@before
+msgid " status ["
+msgstr ""
+
+#. /Language Explorer/Configuration/Parts/Notebook.fwlayout::/LayoutInventory/layout["RnGenericRec-jtview-publishClassifications"]/part[@ref="StatusConfig"]/@before
+msgid "Status: "
 msgstr ""
 
 #. /Src/xWorks/HeadWordNumbersDlg.resx::m_configurationDescription.Text
@@ -1992,8 +2141,48 @@ msgstr ""
 msgid "textBox6"
 msgstr ""
 
+#. /Src/UnicodeCharEditor/CustomCharDlg.resx::m_lblUpperDisplay.Text
+msgid "U"
+msgstr ""
+
+#. Used to format strings that display Unicode codepoints (e.g. Punctuation dialog box.
+#. /Src/FwCoreDlgs/Properties/Resources.resx::kstidUnicodePointFormat
+#. /Src/FwCoreDlgs/ValidCharactersDlg.resx::lblFirstCharCode.Text
+#. /Src/FwCoreDlgs/ValidCharactersDlg.resx::lblLastCharCode.Text
+#. (String used 3 times.)
+msgid "U+{0:X4}"
+msgstr ""
+
 #. /Src/LexText/Morphology/MGA/MGAStrings.resx::ksUnknownAbbreviation
 msgid "UnknownAbbreviation!"
+msgstr ""
+
+#. A test warning message.
+#. /Src/FwCoreDlgs/FwCoreDlgs.resx::kstidMessageWarning
+msgid "Warning, you must select \"false\" (why do we even have a button???)"
+msgstr ""
+
+#. /Src/xWorks/XmlDiagnosticsDlg.resx::m_lbl_xml.Text
+msgid "XHTML"
+msgstr ""
+
+#. /Src/Common/Controls/FwControls/WSChooser.resx::button1.Text
+msgid "XYZ"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200D
+msgid "ZWJ"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200C
+msgid "ZWNJ"
+msgstr ""
+
+#. Text displayed in a character grid for the Unicode charater indicated by the 4 digit hexidecimal number found at the end of the resource name.
+#. /Src/Common/Controls/FwControls/Properties/Resources.resx::kstidSpecialChar200B
+msgid "ZWSP"
 msgstr ""
 
 #. /Src/FwCoreDlgs/PicturePropertiesDialog.resx::pnlCaption.Text
@@ -2023,8 +2212,9 @@ msgstr ""
 msgid "U+{0:X4}"
 msgstr ""
 
+# REMOVE THIS ONE MANUALLY
 #. /Language Explorer/Configuration/Lexicon/ReversalIndices/toolConfiguration.xml::/root/tools/tool/control/parameters/control/parameters/control/parameters/configureLayouts/layoutType/@label
-msgid "$wsName"
+msgid "\$wsName"
 msgstr ""
 
 #. /Src/FwCoreDlgs/FwCoreDlgControls/FwBulletsTab.resx::m_cboBulletScheme.Items15
@@ -2116,8 +2306,9 @@ msgstr ""
 msgid "X&HTML..."
 msgstr ""
 
+# REMOVE THIS ONE MANUALLY
 #. /Src/LexText/Interlinear/LinguaLinksImportDlg.resx::m_LinguaLinksXmlFileName.Text
-msgid "*.xml"
+msgid "\*\.xml"
 msgstr ""
 
 #. /Src/Common/Controls/FwControls/WSChooser.resx::button1.Text
