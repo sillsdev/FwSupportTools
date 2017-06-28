@@ -80,6 +80,10 @@ do
 				addmirror "deb $LLSO $D$S $COMPONENTS"
 				addmirror "deb $PSO $D$S $COMPONENTS"
 			done
+			if [ $D != "precise" ]; then
+				# allow to install current nodejs packages
+				addmirror "deb https://deb.nodesource.com/node_8.x $D main"
+			fi
 		elif [[ $DEBIAN_DISTROS == *$D* ]]; then
 			MIRROR="${DEBIAN_MIRROR:-http://ftp.ca.debian.org/debian/}"
 			COMPONENTS="main contrib non-free"
@@ -89,6 +93,10 @@ do
 			PSO="http://packages.sil.org/debian/"
 			addmirror "deb $LLSO $D $COMPONENTS"
 			addmirror "deb $PSO $D $COMPONENTS"
+			if [ $D != "wheezy" ]; then
+				# allow to install current nodejs packages
+				addmirror "deb https://deb.nodesource.com/node_8.x $D main"
+			fi
 		else
 			echo "Unknown distribution $D. Please update the script $0"
 			exit 1
