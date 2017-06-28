@@ -24,4 +24,8 @@ init()
 	UBUNTU_OLDMIRROR=${UBUNTU_OLDMIRROR:-http://old-releases.ubuntu.com/ubuntu/}
 
 	PBUILDERSUDO=${PBUILDERSUDO:-}
+
+	RED='\033[0;31m'
+	GREEN='\033[0;32m'
+	NC='\033[0m' # No Color
 }

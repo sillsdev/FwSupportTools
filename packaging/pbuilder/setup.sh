@@ -13,7 +13,7 @@ while (( $# )); do
 	case $1 in
 		# Process individual arguments here. Use shift and $1 to get an argument value.
 		--update) update=true ;;
-		*) echo "Error: Unexpected argument \"$1\". Exiting." ; exit 1 ;;
+		*) echo -e "${RED}Error: Unexpected argument \"$1\". Exiting.${NC}" ; exit 1 ;;
 	esac
 	shift
 done
@@ -54,7 +54,7 @@ do
 		[ -e $D/$A/base.tgz -a -z "$update" ] && continue
 		[ ! -e $D/$A/base.tgz -a -n "$update" ] && continue
 
-		echo "Processing $D/$A"
+		echo -e "${GREEN}Processing $D/$A${NC}"
 
 		mkdir -p $D/$A/{aptcache,build,result}
 
