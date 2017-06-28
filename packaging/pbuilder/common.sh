@@ -6,9 +6,11 @@ init()
 	[ -e $CONFIGFILE ] && . $CONFIGFILE # Settings for PBUILDERDIR, DISTRIBUTIONS, etc.
 
 	# currently supported and future Ubuntu versions
-	UBUNTU_DISTROS="precise trusty vivid wily xenial"
+	UBUNTU_DISTROS="precise trusty xenial zasty artful"
 	# no longer supported Ubuntu versions that live in old-releases.ubuntu.com
-	UBUNTU_OLDDISTROS="quantal raring saucy utopic"
+	UBUNTU_OLDDISTROS=""
+	# We're no longer building packages for: quantal raring saucy utopic vivid wily yakkety
+
 	# Debian versions
 	DEBIAN_DISTROS="wheezy jessie stretch"
 
