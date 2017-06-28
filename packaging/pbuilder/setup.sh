@@ -112,7 +112,7 @@ do
 			${KEYRINGMAIN:+--debootstrapopts --keyring=}$KEYRINGMAIN \
 			${KEYRINGLLSO:+--keyring }$KEYRINGLLSO \
 			${KEYRINGPSO:+--keyring }$KEYRINGPSO \
-			--extrapackages "apt-utils devscripts lsb-release" \
+			--extrapackages "apt-utils devscripts lsb-release apt-transport-https" \
 			--othermirror "$OTHERMIRROR" \
 			--mirror "$MIRROR" \
 			--components "$COMPONENTS" \
