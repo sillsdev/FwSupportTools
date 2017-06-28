@@ -42,9 +42,14 @@ cd "${PBUILDERDIR:-$(dirname "$0")}"
 
 KEYRINGLLSO="$PBUILDERDIR/sil-testing.gpg"
 KEYRINGPSO="$PBUILDERDIR/sil.gpg"
+KEYRINGNODE="$PBUILDERDIR/nodesource.gpg"
 
 if [ ! -f $KEYRINGPSO ]; then
 	wget --output-document=$KEYRINGPSO http://packages.sil.org/sil.gpg
+fi
+
+if [ ! -f $KEYRINGNODE ]; then
+	wget --output-document=$KEYRINGNODE https://deb.nodesource.com/gpgkey/nodesource.gpg.key
 fi
 
 for D in ${DISTRIBUTIONS:-$UBUNTU_DISTROS $UBUNTU_OLDDISTROS $DEBIAN_DISTROS}
@@ -112,7 +117,8 @@ do
 			${KEYRINGMAIN:+--debootstrapopts --keyring=}$KEYRINGMAIN \
 			${KEYRINGLLSO:+--keyring }$KEYRINGLLSO \
 			${KEYRINGPSO:+--keyring }$KEYRINGPSO \
-			--extrapackages "apt-utils devscripts lsb-release apt-transport-https" \
+			${KEYRINGNODE:+--keyring }$KEYRINGNODE \
+			--extrapackages "apt-utils devscripts lsb-release apt-transport-https ca-certificates" \
 			--othermirror "$OTHERMIRROR" \
 			--mirror "$MIRROR" \
 			--components "$COMPONENTS" \
