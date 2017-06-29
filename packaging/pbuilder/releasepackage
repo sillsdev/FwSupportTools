@@ -23,17 +23,28 @@
 PROGRAM_NAME="$(basename "$0")"
 WHERE=$(pwd)
 SOURCEDIST=xenial
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
 
 . $(dirname "$0")/${PROGRAM_NAME}.config
 
+err() {
+	echo -e "${RED}$1${NC}"
+}
+
+log() {
+	echo -e "${GREEN}$1${NC}"
+}
+
 if [ -z "$JENKINS_USER" -o -z "$JENKINS_APITOKEN" -o -z "$JENKINS_HOST" ]; then
-	echo "Please set JENKINS_USER, JENKINS_APITOKEN, and JENKINS_HOST variables in"
-	echo "$PROGRAM_NAME.config"
+	err "Please set JENKINS_USER, JENKINS_APITOKEN, and JENKINS_HOST variables in"
+	err "$PROGRAM_NAME.config"
 	exit 1
 fi
 
 if [ -z "$DEBSIGNKEY" ]; then
-	echo "DEBSIGNKEY not set. Exiting."
+	err "DEBSIGNKEY not set. Exiting."
 	exit 1
 fi
 
@@ -44,35 +55,35 @@ BUILD=lastSuccessfulBuild
 
 help()
 {
-	echo "Usage:"
-	echo "$(basename $0) [-n|-nn] [--component <experimental|main>] [--repo <llso|pso>] [--build <buildno>] <project>"
-	echo ""
-	echo "-n "
-	echo "	Run script without doing anything"
-	echo "-nn "
-	echo "	Run script without doing anything and print commands"
-	echo ""
-	echo "--component <experimental|proposed|main>"
-	echo "	Where the package should go: experimental, proposed or main section."
-	echo "	Default: experimental"
-	echo ""
-	echo "--repo <llso|pso>"
-	echo "	Repo to upload to. Default: llso"
-	echo ""
-	echo "--build <buildno>"
-	echo "	Build number/string where the archifacts can be found"
-	echo ""
-	echo "--remote|--local"
-	echo "	Mode to run in. Determines whether to completely download packages before signing or"
-	echo "	leaving them on the server."
-	echo "	Default: --local"
-	echo ""
-	echo "<project>"
-	echo "  One of bloom, bloom-master, geckofx29, lfmerge-fdo, lfmerge, lfmerge-qa, lfmerge-master, mono, mono-3.4"
-	echo ""
-	echo ""
-	echo "Example:"
-	echo "$0 --repo pso --build 324 bloom"
+	log "Usage:"
+	log "$(basename $0) [-n|-nn] [--component <experimental|main>] [--repo <llso|pso>] [--build <buildno>] <project>"
+	log ""
+	log "-n "
+	log "	Run script without doing anything"
+	log "-nn "
+	log "	Run script without doing anything and print commands"
+	log ""
+	log "--component <experimental|proposed|main>"
+	log "	Where the package should go: experimental, proposed or main section."
+	log "	Default: experimental"
+	log ""
+	log "--repo <llso|pso>"
+	log "	Repo to upload to. Default: llso"
+	log ""
+	log "--build <buildno>"
+	log "	Build number/string where the archifacts can be found"
+	log ""
+	log "--remote|--local"
+	log "	Mode to run in. Determines whether to completely download packages before signing or"
+	log "	leaving them on the server."
+	log "	Default: --local"
+	log ""
+	log "<project>"
+	log "  One of bloom, bloom-master, geckofx29, lfmerge-fdo, lfmerge, lfmerge-qa, lfmerge-master, mono, mono-3.4"
+	log ""
+	log ""
+	log "Example:"
+	log "$0 --repo pso --build 324 bloom"
 	exit 0
 }
 
@@ -90,7 +101,7 @@ while (( $# )); do
 			elif [ "$2" == "main" ]; then
 				DESTINATION=
 			else
-				echo "Error: Unknown component \"$2\". Exiting"
+				err "Error: Unknown component \"$2\". Exiting"
 				help
 				exit 2
 			fi
@@ -105,7 +116,7 @@ while (( $# )); do
 			if [ $# -eq 1 ]; then
 				break
 			else
-				echo "Error: Unexpected argument \"$1\". Exiting."
+				err "Error: Unexpected argument \"$1\". Exiting."
 				help
 				exit 1
 			fi
@@ -115,7 +126,7 @@ while (( $# )); do
 done
 
 if [ $# -eq 0 ]; then
-	echo "Error: No project specified. Exiting."
+	err "Error: No project specified. Exiting."
 	help
 	exit 3
 fi
@@ -158,7 +169,7 @@ case $PROJECT in
 		SOURCE_DIR=archive/results
 		;;
 	*)
-		echo "Unknown project $PROJECT. Exiting."
+		err "Unknown project $PROJECT. Exiting."
 		exit 4
 esac
 
@@ -176,12 +187,12 @@ runLocal()
 
 	cd $TMPDIR/$SOURCE_DIR
 	# Source package
-	echo "Signing and uploading source package"
+	log "Signing and uploading source package"
 	$NOOP debsign --re-sign $DEBSIGNKEY *_source.changes
 	$NOOP dput -U $REPO:ubuntu/${SOURCEDIST}$DESTINATION *_source.changes
 
 	# binary packages
-	echo "Signing and uploading binary packages"
+	log "Signing and uploading binary packages"
 	cd $TMPDIR/$BINARY_DIR
 	for changesfile in *+*.changes; do
 		distro=$(sed 's/^[^+]*+\([a-z]*\).*/\1/' <<< $changesfile)
@@ -196,7 +207,7 @@ runLocal()
 runRemote()
 {
 	# Copy package to temp directory on the server where we have write permission
-	echo "Copy package to temporary directory"
+	log "Copy package to temporary directory"
 	TMP_PACKAGE_DIR=tmp-package
 	$NOOP ssh $JENKINS_HOST >/dev/null 2>&1 << EOF
 mkdir -p ${TMP_PACKAGE_DIR}
@@ -205,13 +216,13 @@ cp -a ~jenkins/jobs/${JENKINS_JOB}/builds/${BUILD}/archive ${TMP_PACKAGE_DIR}/
 EOF
 
 	# Source package
-	echo "Signing and uploading source package"
+	log "Signing and uploading source package"
 	$NOOP debsign --re-sign $DEBSIGNKEY -r $JENKINS_HOST ${TMP_PACKAGE_DIR}/archive/*_source.changes
 	$NOOP ssh $JENKINS_HOST dput -U $REPO:ubuntu/${SOURCEDIST}${DESTINATION} ${TMP_PACKAGE_DIR}/archive/*_source.changes
 
 	# binary packages
-	echo ""
-	echo "Signing and uploading binary packages"
+	log ""
+	log "Signing and uploading binary packages"
 
 	$NOOP debsign --re-sign $DEBSIGNKEY -r $JENKINS_HOST ${TMP_PACKAGE_DIR}/${BINARY_DIR}/*+*.changes
 

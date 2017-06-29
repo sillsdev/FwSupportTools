@@ -10,20 +10,20 @@ REPO=llso
 
 help()
 {
-	echo "Usage:"
-	echo "$(basename $0) [-n|-nn] [--component <experimental|main>] [--repo <llso|pso>] <package.dsc>"
-	echo ""
-	echo "-n "
-	echo "	Run script without doing the actual upload"
-	echo "-nn "
-	echo "	Run script without doing the actual upload and print commands"
-	echo ""
-	echo "--component <experimental|main|proposed|updates>"
-	echo "	Where the package should go: experimental, proposed, updates, or main section."
-	echo "	Default: experimental"
-	echo ""
-	echo "--repo <llso|pso>"
-	echo "	Repo to upload to. Default: llso"
+	log "Usage:"
+	log "$(basename $0) [-n|-nn] [--component <experimental|main>] [--repo <llso|pso>] <package.dsc>"
+	log ""
+	log "-n "
+	log "	Run script without doing the actual upload"
+	log "-nn "
+	log "	Run script without doing the actual upload and print commands"
+	log ""
+	log "--component <experimental|main|proposed|updates>"
+	log "	Where the package should go: experimental, proposed, updates, or main section."
+	log "	Default: experimental"
+	log ""
+	log "--repo <llso|pso>"
+	log "	Repo to upload to. Default: llso"
 	exit 0
 }
 
@@ -43,7 +43,7 @@ while (( $# )); do
 			elif [ "$2" == "main" ]; then
 				DISTROCOMPONENT=
 			else
-				echo "Error: Unknown component \"$2\". Exiting"
+				err "Error: Unknown component \"$2\". Exiting"
 				exit 2
 			fi
 			shift
@@ -54,7 +54,7 @@ while (( $# )); do
 			if [ $# -eq 1 ]; then
 				break
 			else
-				echo "Error: Unexpected argument \"$1\". Exiting."
+				err "Error: Unexpected argument \"$1\". Exiting."
 				exit 1
 			fi
 			;;
@@ -63,7 +63,7 @@ while (( $# )); do
 done
 
 if [ $# -eq 0 ]; then
-	echo "Error: No .dsc file specified. Exiting."
+	err "Error: No .dsc file specified. Exiting."
 	exit 3
 fi
 
@@ -73,7 +73,7 @@ do
 
 	for D in $DISTRIBUTIONS
 	do
-		echo "D=$D"
+		log "D=$D"
 		if [[ "$UBUNTU_DISTROS $UBUNTU_OLDDISTROS" == "*$D*" ]]; then
 			DISTRO=ubuntu
 			COMPONENT=$DISTROCOMPONENT
@@ -81,13 +81,13 @@ do
 			DISTRO=debian
 			COMPONENT=
 		else
-			echo "Unknown distribution $D. Please update the script $0"
+			err "Unknown distribution $D. Please update the script $0"
 			exit 1
 		fi
 
 		for A in $ARCHES
 		do
-			echo "Processing $D${DIST_ARCH_SEP}$A"
+			log "Processing $D${DIST_ARCH_SEP}$A"
 			RESULT="$PBUILDERDIR/$D${DIST_ARCH_SEP}$A/result"
 
 			if [ ! -d "$RESULT" ]
@@ -110,7 +110,7 @@ do
 				$NOOP debsign $DEBSIGNKEY $CHANGES
 				$NOOP dput $REPO:$DISTRO/$D$COMPONENT $CHANGES
 			else
-				echo "Package $FULLPACKAGE already uploaded. Ignoring."
+				log "Package $FULLPACKAGE already uploaded. Ignoring."
 			fi
 		done
 	done

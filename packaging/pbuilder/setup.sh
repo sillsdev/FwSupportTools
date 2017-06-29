@@ -13,7 +13,7 @@ while (( $# )); do
 	case $1 in
 		# Process individual arguments here. Use shift and $1 to get an argument value.
 		--update) update=true ;;
-		*) echo -e "${RED}Error: Unexpected argument \"$1\". Exiting.${NC}" ; exit 1 ;;
+		*) err "Error: Unexpected argument \"$1\". Exiting." ; exit 1 ;;
 	esac
 	shift
 done
@@ -59,7 +59,7 @@ do
 		[ -e $D/$A/base.tgz -a -z "$update" ] && continue
 		[ ! -e $D/$A/base.tgz -a -n "$update" ] && continue
 
-		echo -e "${GREEN}Processing $D/$A${NC}"
+		log "Processing $D/$A$"
 
 		mkdir -p $D/$A/{aptcache,build,result}
 
@@ -103,7 +103,7 @@ do
 				addmirror "deb https://deb.nodesource.com/node_8.x $D main"
 			fi
 		else
-			echo "Unknown distribution $D. Please update the script $0"
+			err "Unknown distribution $D. Please update the script $0."
 			exit 1
 		fi
 

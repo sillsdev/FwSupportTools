@@ -55,7 +55,7 @@ binaries()
 }
 
 if [[ "$1" != *.dsc ]]; then
-	echo "Usage: $0 <package>.dsc [<package2>.dsc]"
+	log "Usage: $0 <package>.dsc [<package2>.dsc]"
 	exit 1
 fi
 
@@ -70,11 +70,11 @@ do
 		for ARCH in $ARCHES
 		do
 			RESULT="$PBUILDERDIR/$DIST/$ARCH/result"
-			echo "Processing ${DIST}/${ARCH}"
+			log "Processing ${DIST}/${ARCH}"
 
 			if [ ! -d "$RESULT" ]
 			then
-				echo "Directory $RESULT doesn't exist - skipping"
+				log "Directory $RESULT doesn't exist - skipping"
 				continue
 			fi
 
@@ -106,15 +106,15 @@ do
 			fi
 
 			if [ $SRC -nt $CHANGES ]; then
-				echo "PACKAGE=$PACKAGE DIST=$DIST ARCH=$ARCH"
+				log "PACKAGE=$PACKAGE DIST=$DIST ARCH=$ARCH"
 				$NOOP $PBUILDERSUDO setarch $(cpuarch $ARCH) pbuilder --build \
 					--distribution $DIST --architecture $ARCH --logfile ${PACKAGE}-$DIST-$ARCH.log \
 					"${OPTS[@]}" $SRC
-				echo "Done building: PACKAGE=$PACKAGE DIST=$DIST ARCH=$ARCH"
+				log "Done building: PACKAGE=$PACKAGE DIST=$DIST ARCH=$ARCH"
 				echo $? | $NOOP tee $RESULT/${PACKAGE}_$ARCH.status
 				$NOOP $PBUILDERSUDO rm -f $RESULT/${PACKAGE}.{dsc,{debian.,orig.,}tar.*}
 			else
-				echo "Not building $PACKAGE for $DIST/$ARCH because it already exists"
+				log "Not building $PACKAGE for $DIST/$ARCH because it already exists"
 			fi
 		done
 	done
