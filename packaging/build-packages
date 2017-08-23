@@ -188,12 +188,17 @@ elif [ "$MAIN_PACKAGE_NAME" = "mono-sil" -o \
 	"$MAIN_PACKAGE_NAME" = "gtk-sharp2-sil" -o \
 	"$MAIN_PACKAGE_NAME" = "mono-basic-sil" -o \
 	"$MAIN_PACKAGE_NAME" = "mono4-sil" -o \
+	"$MAIN_PACKAGE_NAME" = "mono5-sil" -o \
 	"$MAIN_PACKAGE_NAME" = "libgdiplus4-sil" -o \
+	"$MAIN_PACKAGE_NAME" = "libgdiplus5-sil" -o \
 	"$MAIN_PACKAGE_NAME" = "gtk-sharp4-sil" -o \
-	"$MAIN_PACKAGE_NAME" = "mono-basic4-sil" ]; then
+	"$MAIN_PACKAGE_NAME" = "gtk-sharp5-sil" -o \
+	"$MAIN_PACKAGE_NAME" = "mono-basic4-sil" -o \
+	"$MAIN_PACKAGE_NAME" = "mono-basic5-sil" ]; then
 	short_mono_package_name=${MAIN_PACKAGE_NAME%-sil}
-	# Strip the '4' from the end
+	# Strip the '4' and '5' from the end
 	short_mono_package_name=${short_mono_package_name%4}
+	short_mono_package_name=${short_mono_package_name%5}
 	# And without the '2' at the end of 'gtk-sharp2'
 	short_mono_package_name=${short_mono_package_name%2}
 	if [ ! -d mono-calgary ]; then
