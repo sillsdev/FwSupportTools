@@ -422,7 +422,7 @@ chmod +x "$OUTPUTFILE"
 # FieldWorks sample data
 
 cd ~
-[ -e Sena*.fwbackup ] || wget 'http://downloads.sil.org/FieldWorks/8.1.1/Sena%203%202013-11-27%200947.fwbackup'
+[ -e Sena*.fwbackup ] || wget 'http://downloads.sil.org/FieldWorks/8.3.9/Sena%203%202017-07-27%201102.fwbackup'
 
 # Compile mono, but handle any problems gracefully.
 
