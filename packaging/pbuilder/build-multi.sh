@@ -114,7 +114,7 @@ do
 				echo $? | $NOOP tee $RESULT/${PACKAGE}_$ARCH.status
 				$NOOP $PBUILDERSUDO rm -f $RESULT/${PACKAGE}.{dsc,{debian.,orig.,}tar.*}
 			else
-				log "Not building $PACKAGE for $DIST/$ARCH because it already exists"
+				log "Not building $PACKAGE for $DIST/$ARCH because it already exists (SRC=$SRC, CHANGES=$CHANGES)"
 			fi
 		done
 	done
