@@ -13,5 +13,16 @@ export DEBFULLNAME="pbuilder"
 export DEBEMAIL="$USER@$HOST"
 
 cd /tmp/buildd/*/
-debchange --local=+$DIST "Build for $DIST"
+if [ "$(cat debian/source/format)" == "3.0 (quilt)" ]; then
+	VERSION=$(dpkg-parsechangelog --show-field=Version)
+	if [[ $VERSION == *"-"* ]]; then
+		SEP="+"
+	else
+		SEP="-"
+	fi
+else
+	SEP="+"
+fi
+
+debchange --local=${SEP}${DIST} "Build for $DIST"
 debchange --release --distribution=$DIST ""
