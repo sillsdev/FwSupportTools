@@ -112,7 +112,6 @@ do
 					"${OPTS[@]}" $SRC
 				log "Done building: PACKAGE=$PACKAGE DIST=$DIST ARCH=$ARCH"
 				echo $? | $NOOP tee $RESULT/${PACKAGE}_$ARCH.status
-				ls $RESULT/${PACKAGE}.{dsc,{debian.,orig.,}tar.*}
 				$NOOP $PBUILDERSUDO rm -f $RESULT/${PACKAGE}.{dsc,{debian.,orig.,}tar.*}
 			else
 				log "Not building $PACKAGE for $DIST/$ARCH because it already exists"
