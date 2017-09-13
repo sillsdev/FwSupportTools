@@ -78,14 +78,9 @@ do
 				continue
 			fi
 
-			CH1="$RESULT/${PACKAGE}_${ARCH}.changes"
-			CH2="$RESULT/${PACKAGE}+${DIST}1_${ARCH}.changes"
-
-			if [ -e $CH1 ]
-			then
-				CHANGES=$CH1
-			else
-				CHANGES=$CH2
+			CHANGES="$RESULT/${PACKAGE}_${ARCH}.changes"
+			if [ ! -e $CHANGES ]; then
+				CHANGES="$RESULT/${PACKAGE}+${DIST}1_${ARCH}.changes"
 			fi
 
 			OPTS=()
@@ -114,7 +109,13 @@ do
 				echo $? | $NOOP tee $RESULT/${PACKAGE}_$ARCH.status
 				$NOOP $PBUILDERSUDO rm -f $RESULT/${PACKAGE}.{dsc,{debian.,orig.,}tar.*}
 			else
-				log "Not building $PACKAGE for $DIST/$ARCH because it already exists (SRC=$SRC, CHANGES=$CHANGES)"
+				if [ -e $CHANGES ]; then
+					err "Not building $PACKAGE for $DIST/$ARCH because it already exists"
+				elif [ ! -e $SRC ]; then
+					err "Not building $PACKAGE for $DIST/$ARCH - \"$SRC\" doesn't exist"
+				else
+					err "Not building $PACKAGE for $DIST/$ARCH - unknown reason (SRC=$SRC, CHANGES=$CHANGES)"
+				fi
 			fi
 		done
 	done
