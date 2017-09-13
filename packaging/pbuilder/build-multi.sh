@@ -85,12 +85,7 @@ do
 
 			OPTS=()
 
-			if [ $ARCH = amd64 ]
-			then
-				# Don't build a source package - we already have one
-				#OPTS+=(--debbuildopts -b)
-				:
-			else
+			if [ $ARCH != amd64 ]; then
 				# Don't build arch-independent packages - that's done with amd64
 				OPTS+=(--binary-arch)
 
@@ -108,7 +103,6 @@ do
 					"${OPTS[@]}" $SRC
 				log "Done building: PACKAGE=$PACKAGE DIST=$DIST ARCH=$ARCH"
 				echo $? | $NOOP tee $RESULT/${PACKAGE}_$ARCH.status
-				#$NOOP $PBUILDERSUDO rm -f $RESULT/${PACKAGE}.{dsc,{debian.,orig.,}tar.*}
 			else
 				if [ -e $CHANGES ]; then
 					err "Not building $PACKAGE for $DIST/$ARCH because it already exists"
