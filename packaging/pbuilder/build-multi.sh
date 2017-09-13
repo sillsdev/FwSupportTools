@@ -88,7 +88,7 @@ do
 			if [ $ARCH = amd64 ]
 			then
 				# Don't build a source package - we already have one
-				OPTS+=(--debbuildopts -b)
+				#OPTS+=(--debbuildopts -b)
 			else
 				# Don't build arch-independent packages - that's done with amd64
 				OPTS+=(--binary-arch)
