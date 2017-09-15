@@ -16,9 +16,16 @@ PROGRAM_NAME="$(basename "$0")"
 
 SCRIPTDIR="$(dirname "$0")"
 
-stderr ()
-{
-	echo >&2 "$PROGRAM_NAME: $1"
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
+stderr() {
+	echo -e "${RED}$PROGRAM_NAME: $1${NC}" >&2
+}
+
+log() {
+	echo -e "${GREEN}$PROGRAM_NAME: $1${NC}"
 }
 
 # Process arguments.
@@ -118,7 +125,7 @@ function UnescapeString() {
 	echo "$tmp"
 }
 
-stderr "Updating sources"
+log "Updating sources"
 
 repo_base_dir=$PACKAGING_ROOT/$MAIN_PACKAGE_NAME
 pbuilder_path="$HOME/pbuilder"
@@ -162,14 +169,14 @@ elif [ "$MAIN_PACKAGE_NAME" = "fieldworks-enc-converters" ]; then
 	VCS="hg"
 elif [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 	if [ ! -d fwrepo ]; then
-		stderr "Initial clone of fwrepo"
+		log "Initial clone of fwrepo"
 		git clone --recurse-submodules http://github.com/sillsdev/fwmeta.git fwrepo
 	fi
 
 	fwrepodir="$repo_base_dir"/fwrepo
 
 	if [ ! -d "$fwrepodir"/fw ]; then
-		stderr "Initial clone of some repositories"
+		log "Initial clone of some repositories"
 		repos="FieldWorks libcom FwLocalizations FwHelps"
 		branches="master develop feature/* release/* hotfix/* support/*"
 		cd "$fwrepodir"
@@ -249,7 +256,7 @@ if [ -n "$short_mono_package_name" ]; then
 	MONO_COMMITTISH_TO_USE="$(UnescapeString ${!escaped_name:-origin/develop})"
 fi
 
-stderr "Preparing"
+log "Preparing"
 
 if [ "$MAIN_PACKAGE_NAME" = "fieldworks-enc-converters" ]; then
 	mv $repo_base_dir/ec-main/debian $repo_base_dir/ec-main/debian-aside
@@ -263,7 +270,7 @@ rm -f "$repo_base_dir"/${source_package_name}_*.{dsc,build,changes,tar.[xg]z}
 
 # Optionally omit binary packages from build
 for package in $OMIT_BINARY_PACKAGES_LIST; do
-	stderr "Omitting binary package: $package"
+	log "Omitting binary package: $package"
 	cd "$debian_path"
 	# Remove binary package section from control file
 	sed -i control -e "/^Package: $package$/,/^$/d"
@@ -271,7 +278,7 @@ done
 
 # Don't try to process 32-bit package products if they are all architectureless.
 grep "^Architecture: " "$debian_path"/control|grep -q -v "Architecture: all$" || {
-	stderr "All binary packages are listed as 'all' architecture. Resetting --arches to 'amd64'."
+	log "All binary packages are listed as 'all' architecture. Resetting --arches to 'amd64'."
 	ARCHES_TO_PACKAGE="amd64"
 }
 
@@ -335,10 +342,10 @@ if [ -n "$most_recent_tag" ]; then
 	changelog_message="See git log $most_recent_tag..$hash_of_current_commit"
 fi
 if [ -z "$PRESERVE_CHANGELOG" ]; then
-	stderr "Using package version: $nightlyversion"
+	log "Using package version: $nightlyversion"
 	dch --distribution $distribution_of_last_change --force-distribution --upstream --newversion "$nightlyversion" --force-bad-version "$changelog_message"
 else
-	stderr "Using package version: $latest_version_in_debian_changelog"
+	log "Using package version: $latest_version_in_debian_changelog"
 fi
 
 if [ "$MAIN_PACKAGE_NAME" = "fieldworks-enc-converters" ]; then
@@ -346,7 +353,7 @@ if [ "$MAIN_PACKAGE_NAME" = "fieldworks-enc-converters" ]; then
 	mv $repo_base_dir/ec-main/debian-aside $repo_base_dir/ec-main/debian
 fi
 
-stderr "Building source package(s) using sources from the following repository commits (possibly with local modifications):"
+log "Building source package(s) using sources from the following repository commits (possibly with local modifications):"
 
 for repo in "${repository_directory_list[@]}"; do
 	(cd "$repo_base_dir/$repo"
@@ -365,30 +372,30 @@ done
 
 if [ -n "$short_mono_package_name" ]; then
 	# Build using its own source preparation script, and put the results in the right place.
-	stderr "Building source package for $short_mono_package_name with own source preparation script"
+	log "Building source package for $short_mono_package_name with own source preparation script"
 	cd "$repo_base_dir/mono-calgary"
 	DEBUILD_ADDITIONAL_OPTS="-uc -us" REFREPODIR="$repo_base_dir" ./make-source-package ${short_mono_package_name} ${MONO_COMMITTISH_TO_USE}
 	mv ${MAIN_PACKAGE_NAME}*.{dsc,build,changes,tar.[xg]z} "$repo_base_dir/"
 elif [ "$MAIN_PACKAGE_NAME" = "fieldworks-enc-converters" ]; then
-	stderr "Building source package for $MAIN_PACKAGE_NAME with own source preparation script"
+	log "Building source package for $MAIN_PACKAGE_NAME with own source preparation script"
 	cd "$debian_path"/..
 	./BuildFWSourcePackage.sh
 elif [ "$MAIN_PACKAGE_NAME" = "xulrunner-geckofx29" ]; then
-	stderr "Building source package for $MAIN_PACKAGE_NAME with gbp"
+	log "Building source package for $MAIN_PACKAGE_NAME with gbp"
 	cd "$debian_path"/..
 	# Ubuntu 12.04 uses git-buildpackage. Ubuntu 16.04 uses gbp buildpackage.
 	git-buildpackage --git-pristine-tar -uc -us -nc -S --git-ignore-new || gbp buildpackage --git-pristine-tar -uc -us -nc -S --git-ignore-new --git-ignore-branch
 elif [ "$MAIN_PACKAGE_NAME" = "flexbridge" ]; then
-	stderr "Building source package for $MAIN_PACKAGE_NAME with own source preparation script"
+	log "Building source package for $MAIN_PACKAGE_NAME with own source preparation script"
 	cd "$debian_path"/..
 	./make-source-package.sh
 else
-	stderr "Building source package with debuild"
+	log "Building source package with debuild"
 	cd "$debian_path"/..
 	debuild -uc -us -S -nc
 fi
 
-stderr "Source package files exist with the following sha256sums:"
+log "Source package files exist with the following sha256sums:"
 cd "$repo_base_dir"
 if [ -n "$PRESERVE_CHANGELOG" ]; then
 	full_package_name=${source_package_name}_${latest_version_in_debian_changelog}
@@ -400,7 +407,7 @@ fi
 sha256sum ${full_package_name}*.{dsc,build,changes,tar.[xg]z}
 
 if [ -n "$preserve_products_arg" ]; then
-	stderr "Preserving source package files."
+	log "Preserving source package files."
 	mkdir -p "$PRODUCTS_PRESERVATION_PATH"
 	cp -a "$repo_base_dir"/${full_package_name}*.{dsc,build,changes,tar.[xg]z} "$PRODUCTS_PRESERVATION_PATH"/
 	cp -a "$repo_base_dir"/${source_package_name}*.orig.tar.[xg]z "$PRODUCTS_PRESERVATION_PATH"/ || true
@@ -411,7 +418,7 @@ if [ -n "$ARTIFACT_RESULTS_PATH" ]; then
 	cp -a "$repo_base_dir"/${source_package_name}*.orig.tar.[xg]z "$ARTIFACT_RESULTS_PATH"/ || true
 fi
 
-stderr "Building binary package(s)"
+log "Building binary package(s)"
 
 mkdir -p "$pbuilder_path"
 
@@ -428,7 +435,7 @@ cd "$repo_base_dir"
 packagedsc="${full_package_name}.dsc"
 sudo HOME=~ PBUILDERDIR="$pbuilder_path" HOOKDIR="$SCRIPTDIR/pbuilder/hooks" http_proxy="$http_proxy" no_proxy="$no_proxy" DISTRIBUTIONS="$DISTRIBUTIONS_TO_PACKAGE" ARCHES="$ARCHES_TO_PACKAGE" $SCRIPTDIR/pbuilder/build-multi.sh "$packagedsc"
 
-stderr "Signing package(s)"
+log "Signing package(s)"
 
 cd "$pbuilder_path"
 for dist in $DISTRIBUTIONS_TO_PACKAGE; do
@@ -446,7 +453,7 @@ for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 	done
 done
 
-stderr "Binary package files exist with the following sha256sums:"
+log "Binary package files exist with the following sha256sums:"
 
 for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 	for arch in $ARCHES_TO_PACKAGE; do
@@ -459,9 +466,9 @@ for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 		[ -n "$ARTIFACT_RESULTS_PATH" ] && cp -a ${full_package_name}+*.changes ${package_debs}+*.deb "$ARTIFACT_RESULTS_PATH"/
 	done
 done
-[ -n "$preserve_products_arg" ] && stderr "Preserved binary package files."
+[ -n "$preserve_products_arg" ] && log "Preserved binary package files."
 
-stderr "Results:"
+log "Results:"
 
 any_failures=false
 for dist in $DISTRIBUTIONS_TO_PACKAGE; do
@@ -478,7 +485,7 @@ if [ "$any_failures" = "true" ]; then
 	exit 100
 fi
 
-stderr "Uploading package(s)"
+log "Uploading package(s)"
 
 cd "$pbuilder_path"
 for dist in $DISTRIBUTIONS_TO_PACKAGE; do
@@ -499,7 +506,7 @@ for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 				# for debian we don't have different repos
 				destination_repository="$DISTFAMILY/$dist"
 			fi
-			stderr "Uploading to llso:$destination_repository $arch"
+			log "Uploading to llso:$destination_repository $arch"
 			dput $dput_simulate -U llso:$destination_repository ${full_package_name}+*.changes
 		fi
 	done
