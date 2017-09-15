@@ -87,12 +87,12 @@ PRODUCTS_PRESERVATION_PATH="$PRODUCTS_PRESERVATION_ROOT/$MAIN_PACKAGE_NAME"
 clean_update_and_set_repository_to_committish ()
 {
 	if [ -n "$PRESERVE_REPOSITORY" ]; then
-		stderr "Not cleaning, updating, or changing branches for repo '$1'"
+		log "Not cleaning, updating, or changing branches for repo '$1'"
 		return
 	fi
 
 	cd "$1"
-	stderr "Cleaning and updating repo '$1', using committish '$2'"
+	log "Cleaning and updating repo '$1', using committish '$2'"
 	if [ "$VCS" = "hg" ]; then
 		hg revert -a
 		hg pull
@@ -372,7 +372,7 @@ done
 
 if [ -n "$short_mono_package_name" ]; then
 	# Build using its own source preparation script, and put the results in the right place.
-	log "Building source package for $short_mono_package_name with own source preparation script"
+	log "Building source package for ${short_mono_package_name} (${MAIN_PACKAGE_NAME}) with own source preparation script"
 	cd "$repo_base_dir/mono-calgary"
 	DEBUILD_ADDITIONAL_OPTS="-uc -us" REFREPODIR="$repo_base_dir" ./make-source-package ${short_mono_package_name} ${MONO_COMMITTISH_TO_USE}
 	mv ${MAIN_PACKAGE_NAME}*.{dsc,build,changes,tar.[xg]z} "$repo_base_dir/"
