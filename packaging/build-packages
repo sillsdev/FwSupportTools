@@ -396,14 +396,18 @@ else
 fi
 
 log "Source package files exist with the following sha256sums:"
-cd "$repo_base_dir"
 if [ -n "$PRESERVE_CHANGELOG" ]; then
-	full_package_name=${source_package_name}_${latest_version_in_debian_changelog}
-	package_debs=${source_package_name}*_${latest_version_in_debian_changelog}
+	package_version=${latest_version_in_debian_changelog}
 else
-	full_package_name=${source_package_name}_${nightlyversion}
-	package_debs=${source_package_name}*_${nightlyversion}
+	package_version=${nightlyversion}
 fi
+# Put package version in a file so that Jenkins job can pick that up
+echo "PACKAGE_VERSION=${package_version}" > ${source_package_name}-packageversion.properties
+
+cd "$repo_base_dir"
+full_package_name=${source_package_name}_${package_version}
+package_debs=${source_package_name}*_${package_version}
+
 sha256sum ${full_package_name}*.{dsc,build,changes,tar.[xg]z}
 
 if [ -n "$preserve_products_arg" ]; then
