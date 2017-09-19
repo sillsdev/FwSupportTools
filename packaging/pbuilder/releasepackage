@@ -79,7 +79,8 @@ help()
 	log "	Default: --local"
 	log ""
 	log "<project>"
-	log "  One of bloom, bloom-master, geckofx29, lfmerge-fdo, lfmerge, lfmerge-qa, lfmerge-master, mono, mono-3.4"
+	log "	One of bloom, bloom-master, geckofx29, lfmerge-fdo, lfmerge, lfmerge-qa, lfmerge-master,"
+	log "	mono, mono-4, mono-3.4, wesay, wesay-beta, wesay-alpha"
 	log ""
 	log ""
 	log "Example:"
@@ -164,8 +165,24 @@ case $PROJECT in
 		JENKINS_JOB=Mono_NightlyPackaging-Linux-all-develop-debug
 		SOURCE_DIR=archive/results
 		;;
+	mono-4)
+		JENKINS_JOB=Mono_NightlyPackaging-Linux-all-release_mono4_sil-debug
+		SOURCE_DIR=archive/results
+		;;
 	mono-3.4)
 		JENKINS_JOB=Mono_NightlyPackaging-Linux-all-release_mono_sil_3.4-debug
+		SOURCE_DIR=archive/results
+		;;
+	wesay)
+		JENKINS_JOB=WeSay_Packaging-Linux-all-master-release
+		SOURCE_DIR=archive/results
+		;;
+	wesay-beta)
+		JENKINS_JOB=WeSay_Packaging-Linux-all-master-beta
+		SOURCE_DIR=archive/results
+		;;
+	wesay-alpha)
+		JENKINS_JOB=WeSay_Packaging-Linux-all-develop-alpha
 		SOURCE_DIR=archive/results
 		;;
 	*)
