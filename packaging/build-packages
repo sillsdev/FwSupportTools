@@ -401,10 +401,12 @@ if [ -n "$PRESERVE_CHANGELOG" ]; then
 else
 	package_version=${nightlyversion}
 fi
+
+cd "$repo_base_dir"
+
 # Put package version in a file so that Jenkins job can pick that up
 echo "PACKAGE_VERSION=${package_version}" > ${source_package_name}-packageversion.properties
 
-cd "$repo_base_dir"
 full_package_name=${source_package_name}_${package_version}
 package_debs=${source_package_name}*_${package_version}
 
