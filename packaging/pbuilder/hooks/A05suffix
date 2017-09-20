@@ -9,9 +9,15 @@ DIST=$(lsb_release -sc)
 USER=$(id -un)
 HOST=$(uname -n)
 
-export DEBFULLNAME="pbuilder"
-export DEBEMAIL="$USER@$HOST"
-
 cd /tmp/buildd/*/
-debchange --local=+$DIST "Build for $DIST"
-debchange --release --distribution=$DIST ""
+
+if [ "$(dpkg-parsechangelog --show-field=Distribution)" = "UNRELEASED" ]; then
+	unset DEBFULLNAME
+	export DEBEMAIL="$(dpkg-parsechangelog --show-field=Maintainer)"
+else
+	export DEBFULLNAME="pbuilder"
+	export DEBEMAIL="$USER@$HOST"
+fi
+
+dch --local=+$DIST --nomultimaint "Build for $DIST"
+dch --release --distribution=$DIST --nomultimaint ""
