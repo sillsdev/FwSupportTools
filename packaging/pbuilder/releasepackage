@@ -18,7 +18,17 @@
 #
 # Also, to set up make sure that you ssh into $JENKINS_HOST and run:
 # gpg --recv-keys $DEBSIGNKEY
+#
+# This step is optional, but removes a warning: set your gpg key to ultimate trust:
+# gpg --edit-key $DEBSIGNKEY
+# At the gpg> prompt, type trust, then type 5 for ultimate trust, then y to confirm, then quit.
+#
 # ssh <yourusername>@linux.lsdev.sil.org
+#
+# In order to be able to upload to pso your public key from $JENKINS_HOST has to be added to
+# ~upload/.ssh/authorized_keys with permissions matching the other lines.
+#
+# ssh upload@packager.lsdev.sil.org
 
 PROGRAM_NAME="$(basename "$0")"
 WHERE=$(pwd)
@@ -84,7 +94,7 @@ help()
 	log ""
 	log ""
 	log "Example:"
-	log "$0 --repo pso --build 324 bloom"
+	log "$0 --repo pso --component experimental --build 324 bloom"
 	exit 0
 }
 
@@ -202,17 +212,23 @@ runLocal()
 
 	unzip archive.zip
 
-	cd $TMPDIR/$SOURCE_DIR
-	# Source package
-	log "Signing and uploading source package"
-	$NOOP debsign --re-sign $DEBSIGNKEY *_source.changes
-	$NOOP dput -U $REPO:ubuntu/${SOURCEDIST}$DESTINATION *_source.changes
+	if [ "${SOURCE_DIR}" = "${BINARY_DIR}" ]; then
+		# Source package is part of binary package
+		PackagesToUpload="source and binary"
+	else
+		cd $TMPDIR/$SOURCE_DIR
+		# Source package
+		log "Signing and uploading source package"
+		$NOOP debsign --re-sign $DEBSIGNKEY *_source.changes
+		$NOOP dput -U $REPO:ubuntu/${SOURCEDIST}$DESTINATION *_source.changes
+		PackagesToUpload="binary"
+	fi
 
 	# binary packages
 	log "Signing and uploading binary packages"
 	cd $TMPDIR/$BINARY_DIR
 	for changesfile in *+*.changes; do
-		distro=$(sed 's/^[^+]*+\([a-z]*\).*/\1/' <<< $changesfile)
+		distro=$(sed 's/^.*+\([a-z]*\)[0-9]*_\(amd64\|i386\).changes$/\1/' <<< $changesfile)
 		$NOOP debsign --re-sign $DEBSIGNKEY $changesfile
 		$NOOP dput $REPO:ubuntu/$distro$DESTINATION $changesfile
 	done
@@ -225,30 +241,41 @@ runRemote()
 {
 	# Copy package to temp directory on the server where we have write permission
 	log "Copy package to temporary directory"
-	TMP_PACKAGE_DIR=tmp-package
-	$NOOP ssh $JENKINS_HOST >/dev/null 2>&1 << EOF
+	TMP_PACKAGE_DIR=$(mktemp -d tmp-package.XXXXXX)
+	$NOOP ssh -T $JENKINS_HOST >/dev/null << EOF
 mkdir -p ${TMP_PACKAGE_DIR}
 rm -rf ${TMP_PACKAGE_DIR}/*
 cp -a ~jenkins/jobs/${JENKINS_JOB}/builds/${BUILD}/archive ${TMP_PACKAGE_DIR}/
 EOF
 
-	# Source package
-	log "Signing and uploading source package"
-	$NOOP debsign --re-sign $DEBSIGNKEY -r $JENKINS_HOST ${TMP_PACKAGE_DIR}/archive/*_source.changes
-	$NOOP ssh $JENKINS_HOST dput -U $REPO:ubuntu/${SOURCEDIST}${DESTINATION} ${TMP_PACKAGE_DIR}/archive/*_source.changes
+	if [ "${SOURCE_DIR}" = "${BINARY_DIR}" ]; then
+		# Source package is part of binary package
+		PackagesToUpload="source and binary"
+	else
+		# Source package
+		log "Signing source package"
+		$NOOP debsign --re-sign $DEBSIGNKEY -r $JENKINS_HOST ${TMP_PACKAGE_DIR}/${SOURCE_DIR}/*_source.changes
+		log "Uploading source package"
+		$NOOP ssh $JENKINS_HOST dput -U $REPO:ubuntu/${SOURCEDIST}${DESTINATION} ${TMP_PACKAGE_DIR}/${SOURCE_DIR}/*_source.changes
+		PackagesToUpload="binary"
+	fi
 
 	# binary packages
 	log ""
-	log "Signing and uploading binary packages"
+	log "Signing ${PackagesToUpload} packages"
 
 	$NOOP debsign --re-sign $DEBSIGNKEY -r $JENKINS_HOST ${TMP_PACKAGE_DIR}/${BINARY_DIR}/*+*.changes
 
-	$NOOP ssh $JENKINS_HOST 2>/dev/null << EOF
+	log "Uploading ${PackagesToUpload} packages"
+	$NOOP ssh -T $JENKINS_HOST >/dev/null << EOF
 for changesfile in ${TMP_PACKAGE_DIR}/${BINARY_DIR}/*+*.changes; do
-	distro=\$(sed 's/^[^+]*+\([a-z]*\).*/\1/' <<< \$changesfile)
+	distro=\$(sed 's/^.*+\([a-z]*\)[0-9]*_\(amd64\|i386\).changes$/\1/' <<< \$changesfile)
 	dput $REPO:ubuntu/\$distro$DESTINATION \$changesfile
 done
+rm -rf $TMP_PACKAGE_DIR
 EOF
+
+	rm -rf $TMP_PACKAGE_DIR
 }
 
 if [ -n "$REMOTE" ]; then
