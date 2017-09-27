@@ -423,6 +423,7 @@ if [ -n "$preserve_products_arg" ]; then
 	mkdir -p "$PRODUCTS_PRESERVATION_PATH"
 	cp -a "$repo_base_dir"/${full_package_name}*.{dsc,build,changes,tar.[xg]z} "$PRODUCTS_PRESERVATION_PATH"/
 	cp -a "$repo_base_dir"/${source_package_name}*.orig.tar.[xg]z "$PRODUCTS_PRESERVATION_PATH"/ || true
+	cp -a "$repo_base_dir"/${source_package_name}-packageversion.properties "$PRODUCTS_PRESERVATION_PATH"/ || true
 fi
 
 if [ -n "$ARTIFACT_RESULTS_PATH" ]; then
