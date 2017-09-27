@@ -370,6 +370,12 @@ for repo in "${repository_directory_list[@]}"; do
 	)
 done
 
+if [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
+	log "Building localization sources"
+	cd "$fwrepodir/fw"
+	make localize-source
+fi
+
 if [ -n "$short_mono_package_name" ]; then
 	# Build using its own source preparation script, and put the results in the right place.
 	log "Building source package for ${short_mono_package_name} (${MAIN_PACKAGE_NAME}) with own source preparation script"
