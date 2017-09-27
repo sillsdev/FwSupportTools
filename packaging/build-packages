@@ -429,6 +429,7 @@ fi
 if [ -n "$ARTIFACT_RESULTS_PATH" ]; then
 	cp -a "$repo_base_dir"/${full_package_name}*.{dsc,build,changes,tar.[xg]z} "$ARTIFACT_RESULTS_PATH"/
 	cp -a "$repo_base_dir"/${source_package_name}*.orig.tar.[xg]z "$ARTIFACT_RESULTS_PATH"/ || true
+	cp -a "$repo_base_dir"/${source_package_name}-packageversion.properties "$ARTIFACT_RESULTS_PATH"/ || true
 fi
 
 log "Building binary package(s)"
