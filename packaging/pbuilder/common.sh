@@ -12,7 +12,7 @@ init()
 	# We're no longer building packages for: quantal raring saucy utopic vivid wily yakkety
 
 	# Debian versions
-	DEBIAN_DISTROS="wheezy jessie stretch"
+	DEBIAN_DISTROS="wheezy jessie stretch buster bullseye"
 
 	# set default values in case we don't have a config file or the config file
 	# doesn't set all variables
