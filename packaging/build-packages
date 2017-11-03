@@ -373,7 +373,11 @@ done
 if [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 	log "Building localization sources"
 	cd "$fwrepodir/fw"
-	make localize-source
+	if [[ grep localize-source Makefile ]]; then
+		make localize-source
+	else
+		log "Skipping localize-source for older FW, such as 8.3"
+	fi
 fi
 
 if [ -n "$short_mono_package_name" ]; then
