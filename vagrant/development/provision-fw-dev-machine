@@ -18,9 +18,8 @@ if [ -f /etc/wasta-release ]; then
   RELEASE=$CODENAME
 fi
 
-# Remove existing SIL repositories
+# Remove any existing SIL repositories, and add pso-main, pso-experimental, and llso-main.
 sudo perl -ni -e 'print unless /sil\.org/' /etc/apt/sources.list
-
 wget -qO - http://packages.sil.org/sil.gpg | sudo apt-key add -
 wget -qO - http://linux.lsdev.sil.org/downloads/sil-testing.gpg | sudo apt-key add -
 sudo add-apt-repository "deb http://packages.sil.org/ubuntu $RELEASE main"
@@ -39,22 +38,23 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y -o Dpkg::Options::="
 # (For Ubuntu 14.04: python-pyinotify. For Wasta 14.04: xterm.)
 sudo apt-get install -y \
   git-gui \
+  mercurial \
+  vim \
+  wget \
   terminator \
   meld \
   kdiff3-qt \
-  vim \
   links2 \
   gdb \
-  wget \
   synaptic \
   ack-grep \
   geany \
+  geany-plugin-markdown \
   chromium-browser \
   byobu \
   indicator-multiload \
   dconf-tools \
   git-cola \
-  mercurial \
   python-pyinotify \
   xterm \
   devscripts \
@@ -179,7 +179,7 @@ fi
 [ ! -d "$BASEDIR/fwrepo" ] && git clone git://github.com/sillsdev/fwmeta.git $BASEDIR/fwrepo
 cd $BASEDIR/fwrepo
 repos="FieldWorks FwSampleProjects mono mono-basic gtk-sharp libgdiplus libcom FwDebian FwSupportTools FwLocalizations FwHelps"
-branches="master develop feature/* release/* hotfix/*"
+branches="master develop feature/* release/* hotfix/* support/*"
 echo $SCRIPTNAME: Note that cloning may not report its progress during provisioning.
 #perl -pi -e 's/git fetch -p origin/git fetch --depth=1 -p origin/' fwmeta/initrepo  # Uncomment to speed up by not downloading repository history
 echo -e "$repos\n$branches\n" | fwmeta/initrepo
@@ -413,6 +413,7 @@ set -e -o pipefail
 
 # Use mono 3 until intentionally move to mono 4.
 [ ! -d "$BASEDIR/fwrepo/mono/mono-calgary" ] && git clone --branch release/mono-sil-3.4 git://github.com/sillsdev/mono-calgary.git "$BASEDIR/fwrepo/mono/mono-calgary"
+cd "$BASEDIR/fwrepo/mono/mono" && git checkout release/mono-sil-3.4
 cd "$BASEDIR/fwrepo/mono" && mono-calgary/BuildOptMono.sh
 
 mozroots --import --ask-remove
@@ -456,7 +457,7 @@ make debug
 # WinFormsSpy tool
 
 cd ~
-hg clone https://bitbucket.org/hindlemail/winformsspy
+[[ -d ~/winformsspy ]] || hg clone https://bitbucket.org/hindlemail/winformsspy
 cd winformsspy
 xbuild
 
