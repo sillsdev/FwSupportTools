@@ -56,8 +56,8 @@ for D in ${DISTRIBUTIONS:-$UBUNTU_DISTROS $UBUNTU_OLDDISTROS $DEBIAN_DISTROS}
 do
 	for A in ${ARCHES-amd64 i386}
 	do
-		[ -e $D/$A/base.tgz -a -z "$update" ] && continue
-		[ ! -e $D/$A/base.tgz -a -n "$update" ] && continue
+		[ -e $D/$A/base.tgz -a -z "$update" ] && echo "$D/$A already exists - skipping creation" && continue
+		[ ! -e $D/$A/base.tgz -a -n "$update" ] && echo "$D/$A doesn't exist - skipping update" && continue
 
 		log "Processing $D/$A$"
 
