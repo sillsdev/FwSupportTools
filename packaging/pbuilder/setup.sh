@@ -87,7 +87,11 @@ do
 			done
 			if [ $D != "precise" ]; then
 				# allow to install current nodejs packages
-				addmirror "deb https://deb.nodesource.com/node_8.x $D main"
+				if [ -n "$update" ]; then
+					# we can't use https when creating the chroot because apt-transport-https
+					# isn't available yet
+					addmirror "deb https://deb.nodesource.com/node_8.x $D main"
+				fi
 			fi
 		elif [[ $DEBIAN_DISTROS == *$D* ]]; then
 			MIRROR="${DEBIAN_MIRROR:-http://ftp.ca.debian.org/debian/}"
@@ -100,7 +104,11 @@ do
 			addmirror "deb $PSO $D $COMPONENTS"
 			if [ $D != "wheezy" ]; then
 				# allow to install current nodejs packages
-				addmirror "deb https://deb.nodesource.com/node_8.x $D main"
+				if [ -n "$update" ]; then
+					# we can't use https when creating the chroot because apt-transport-https
+					# isn't available yet
+					addmirror "deb https://deb.nodesource.com/node_8.x $D main"
+				fi
 			fi
 		else
 			err "Unknown distribution $D. Please update the script $0."
