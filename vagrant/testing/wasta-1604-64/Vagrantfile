@@ -33,6 +33,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Install Wasta
   tryharderto sudo apt-get install -y wasta-core-xenial
+  # Remove erroneous quotes from repo line
+  sudo perl -pi -e "s/\'xenial\'/xenial/" /etc/apt/sources.list.d/*
   tryharderto sudo apt-get update
   tryharderto sudo apt-get install -y wasta-cinnamon-xenial
   sudo DEBIAN_FRONTEND=noninteractive wasta-initial-setup auto
