@@ -54,6 +54,6 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get -dy install fieldworks
 
 mkdir -p ~/Desktop
 cd ~/Desktop
-wget 'http://downloads.sil.org/FieldWorks/8.1.1/Sena%203%202013-11-27%200947.fwbackup'
+wget 'http://downloads.sil.org/FieldWorks/8.2.9/Sena%203%202013-11-27%200947.fwbackup'
 
 echo provisioner: Done.
