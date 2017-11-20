@@ -481,7 +481,7 @@ for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 			mkdir -p "$PRODUCTS_PRESERVATION_PATH"
 			cp -a ${full_package_name}+*.changes ${package_debs}+*.deb "$PRODUCTS_PRESERVATION_PATH"/
 		fi
-		[ -n "$ARTIFACT_RESULTS_PATH" ] && cp -a ${full_package_name}+*.changes ${package_debs}+*.deb "$ARTIFACT_RESULTS_PATH"/
+		[ -n "$ARTIFACT_RESULTS_PATH" ] && cp -a ${full_package_name}+*.changes ${full_package_name}+*.dsc ${package_debs}+*.deb "$ARTIFACT_RESULTS_PATH"/
 	done
 done
 [ -n "$preserve_products_arg" ] && log "Preserved binary package files."
