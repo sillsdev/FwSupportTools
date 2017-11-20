@@ -172,15 +172,15 @@ case $PROJECT in
 		BINARY_DIR=archive/finalresults
 	;;
 	mono)
-		JENKINS_JOB=Mono_NightlyPackaging-Linux-all-develop-debug
+		JENKINS_JOB=Mono_Packaging-Linux-all-develop-debug
 		SOURCE_DIR=archive/results
 		;;
 	mono-4)
-		JENKINS_JOB=Mono_NightlyPackaging-Linux-all-release_mono4_sil-debug
+		JENKINS_JOB=Mono_Packaging-Linux-all-release_mono4_sil-debug
 		SOURCE_DIR=archive/results
 		;;
 	mono-3.4)
-		JENKINS_JOB=Mono_NightlyPackaging-Linux-all-release_mono_sil_3.4-debug
+		JENKINS_JOB=Mono_Packaging-Linux-all-release_mono_sil_3.4-debug
 		SOURCE_DIR=archive/results
 		;;
 	wesay)
