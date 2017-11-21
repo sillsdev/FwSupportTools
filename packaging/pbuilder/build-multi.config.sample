@@ -1,5 +1,5 @@
 PBUILDERDIR=${PBUILDERDIR:-$HOME/pbuilder}
-DISTRIBUTIONS=${DISTRIBUTIONS:-precise trusty wily jessie}
+DISTRIBUTIONS=${DISTRIBUTIONS:-trusty xenial bionic jessie stretch}
 ARCHES=${ARCHES:-amd64 i386}
 UBUNTU_MIRROR=${UBUNTU_MIRROR:-http://archive.ubuntu.com/ubuntu/}
 DEBIAN_MIRROR=${DEBIAN_MIRROR:-http://ftp.ca.debian.org/debian/}

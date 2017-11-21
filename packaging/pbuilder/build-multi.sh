@@ -54,8 +54,16 @@ binaries()
 	get_field Binary $1 | sed 's/,//g'
 }
 
+if [ "$1" = "--no-source-package" -o "$1" = "-n" ]; then
+	NO_SOURCE_PACKAGE=true
+	log "Not saving distribution-specific source package."
+	shift
+fi
+
 if [[ "$1" != *.dsc ]]; then
-	log "Usage: $0 <package>.dsc [<package2>.dsc]"
+	log "Usage: $0 [-n|--no-source-package] <package>.dsc [<package2>.dsc ...]"
+	log "Options:"
+	log "-n|--no-source-package\tdon't create distribution-specific source package"
 	exit 1
 fi
 
@@ -85,7 +93,11 @@ do
 
 			OPTS=()
 
-			if [ $ARCH != amd64 ]; then
+			if [ $ARCH = amd64 ]; then
+				if [ -n "$NO_SOURCE_PACKAGE" ]; then
+					OPTS+=(--debbuildopts -b)
+				fi
+			else
 				# Don't build arch-independent packages - that's done with amd64
 				OPTS+=(--binary-arch)
 
@@ -103,6 +115,10 @@ do
 					"${OPTS[@]}" $SRC
 				log "Done building: PACKAGE=$PACKAGE DIST=$DIST ARCH=$ARCH"
 				echo $? | $NOOP tee $RESULT/${PACKAGE}_$ARCH.status
+
+				if [ -n "$NO_SOURCE_PACKAGE" ]; then
+					$NOOP $PBUILDERSUDO rm -f $RESULT/${PACKAGE}.{dsc,{debian.,orig.,}tar.*}
+				fi
 			else
 				if [ -e $CHANGES ]; then
 					err "Not building $PACKAGE for $DIST/$ARCH because it already exists"
