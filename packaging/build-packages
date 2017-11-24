@@ -405,7 +405,6 @@ else
 	debuild -uc -us -S -nc
 fi
 
-log "Source package files exist with the following sha256sums:"
 if [ -n "$PRESERVE_CHANGELOG" ]; then
 	package_version=${latest_version_in_debian_changelog}
 else
@@ -420,6 +419,7 @@ echo "PACKAGE_VERSION=${package_version}" > ${source_package_name}-packageversio
 full_package_name=${source_package_name}_${package_version}
 package_debs=${source_package_name}*_${package_version}
 
+log "Source package files exist with the following sha256sums:"
 sha256sum ${full_package_name}*.{dsc,build,changes,tar.[xg]z}
 
 if [ -n "$preserve_products_arg" ]; then
@@ -476,12 +476,23 @@ log "Binary package files exist with the following sha256sums:"
 for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 	for arch in $ARCHES_TO_PACKAGE; do
 		cd $pbuilder_path/$dist/$arch/result
-		sha256sum ${full_package_name}+*.changes ${full_package_name}*.dsc ${package_debs}+*.deb || true
+		dcmd --deb --changes sha256sum ${source_package_name}_*.changes || true
 		if [ -n "$preserve_products_arg" ]; then
 			mkdir -p "$PRODUCTS_PRESERVATION_PATH"
-			cp -a ${full_package_name}+*.changes ${full_package_name}*.dsc ${package_debs}+*.deb "$PRODUCTS_PRESERVATION_PATH"/
+			dcmd --deb --changes cp ${source_package_name}_*.changes "$PRODUCTS_PRESERVATION_PATH"
 		fi
-		[ -n "$ARTIFACT_RESULTS_PATH" ] && cp -a ${full_package_name}+*.changes ${full_package_name}*.dsc ${package_debs}+*.deb "$ARTIFACT_RESULTS_PATH"/
+		if [ $( ls ${source_package_name}_*-1+*.dsc 2> /dev/null | wc -l) -ge 1 ]; then
+			dcmd --dsc --orig --debtar sha256sum ${source_package_name}_*-1+*.dsc || true
+			if [ -n "$preserve_products_arg" ]; then
+				dcmd --dsc --orig --debtar cp ${source_package_name}_*-1+*.dsc "$PRODUCTS_PRESERVATION_PATH"
+			fi
+		fi
+		if [ -n "$ARTIFACT_RESULTS_PATH" ]; then
+			dcmd --deb --changes cp ${source_package_name}_*.changes "$ARTIFACT_RESULTS_PATH"
+			if [ $( ls ${source_package_name}_*-1+*.dsc 2> /dev/null | wc -l) -ge 1 ]; then
+				dcmd --dsc --orig --debtar cp ${source_package_name}_*-1+*.dsc "$ARTIFACT_RESULTS_PATH"
+			fi
+		fi
 	done
 done
 [ -n "$preserve_products_arg" ] && log "Preserved binary package files."
@@ -525,7 +536,7 @@ for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 				destination_repository="$DISTFAMILY/$dist"
 			fi
 			log "Uploading to llso:$destination_repository $arch"
-			dput $dput_simulate -U llso:$destination_repository ${full_package_name}+*.changes
+			dput $dput_simulate -U llso:$destination_repository ${source_package_name}_*.changes
 		fi
 	done
 done
