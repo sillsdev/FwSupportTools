@@ -182,7 +182,7 @@ elif [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 		repos="FieldWorks libcom FwLocalizations FwHelps"
 		branches="master develop feature/* release/* hotfix/* support/*"
 		cd "$fwrepodir"
-		echo -e "$repos\n$branches\n" | fwmeta/initrepo
+		echo -e "$repos\n$branches\n" | fwmeta/initrepo -m
 
 		git clone --recurse-submodules http://github.com/sillsdev/FwDebian.git debian
 	fi
