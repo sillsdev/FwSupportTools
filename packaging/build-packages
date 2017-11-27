@@ -175,7 +175,9 @@ elif [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 
 	fwrepodir="$repo_base_dir"/fwrepo
 
-	if [ ! -d "$fwrepodir"/fw ]; then
+	if [[ ! -d "$fwrepodir"/fw || ! -d "$fwrepodir"/fw/Localizations || ! -d "$fwrepodir"/fw/DistFiles/Helps || ! -d "$fwrepodir"/libcom || ! -d "$fwrepodir"/debian ]]; then
+		# The above checks for more than just fwrepodir/fw in case the initial setup was
+		# only part-way done.
 		log "Initial clone of some repositories"
 		repos="FieldWorks libcom FwLocalizations FwHelps"
 		branches="master develop feature/* release/* hotfix/* support/*"
