@@ -516,7 +516,6 @@ for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 
 		[ -n "$ARTIFACT_RESULTS_PATH" ] && archiveBinaryPackageFiles "$ARTIFACT_RESULTS_PATH"
 		[ -n "$preserve_products_arg" ] && archiveBinaryPackageFiles "$PRODUCTS_PRESERVATION_PATH" ${full_package_name}*.changes ${full_package_name}*.dsc
-		fi
 	done
 done
 [ -n "$preserve_products_arg" ] && log "Preserved binary package files."
