@@ -465,6 +465,9 @@ signPackage() {
 	shift
 
 	for changesFile; do
+		# REVIEW: why do we delete line 10? Wouldn't it be better to explicitly
+		# search for the text and delete that instead of relying that the fields
+		# are always on the same line?
 		sed -i '10d' ${changesFile}
 
 		# .changes files can have their Distribution set to UNRELEASED sometimes. Fix it.
@@ -479,9 +482,7 @@ log "Signing package(s)"
 
 # sign source package
 cd "$repo_base_dir"
-for dist in $DISTRIBUTIONS_TO_PACKAGE; do
-	signPackage $dist "${source_package_name}_${base_version}*source.changes"
-done
+signPackage $(echo $DISTRIBUTIONS_TO_PACKAGE | cut -f1 -d' ') "${source_package_name}_${base_version}*source.changes"
 
 # sign binary packages
 cd "$pbuilder_path"
