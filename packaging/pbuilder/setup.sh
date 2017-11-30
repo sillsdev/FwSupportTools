@@ -126,7 +126,7 @@ do
 			${KEYRINGLLSO:+--keyring }$KEYRINGLLSO \
 			${KEYRINGPSO:+--keyring }$KEYRINGPSO \
 			${KEYRINGNODE:+--keyring }$KEYRINGNODE \
-			--extrapackages "apt-utils devscripts lsb-release apt-transport-https ca-certificates" \
+			--extrapackages "apt-utils devscripts lsb-release apt-transport-https ca-certificates gnupg" \
 			--othermirror "$OTHERMIRROR" \
 			--mirror "$MIRROR" \
 			--components "$COMPONENTS" \
