@@ -569,11 +569,11 @@ uploadPackage() {
 log "Uploading package(s)"
 
 # upload source package
-cd "$repo_base_dir"
-for dist in $DISTRIBUTIONS_TO_PACKAGE; do
-	arch=$(echo $ARCHES_TO_PACKAGE | cut -f1 -d' ')
-	uploadPackage $dist $arch "${source_package_name}_${base_version}*source.changes"
-done
+#cd "$repo_base_dir"
+#for dist in $DISTRIBUTIONS_TO_PACKAGE; do
+#	arch=$(echo $ARCHES_TO_PACKAGE | cut -f1 -d' ')
+#	uploadPackage $dist $arch "${source_package_name}_${base_version}*source.changes"
+#done
 
 # upload binary packages
 cd "$pbuilder_path"
