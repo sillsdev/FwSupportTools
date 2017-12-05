@@ -79,8 +79,11 @@ PRODUCTS_PRESERVATION_PATH="$PRODUCTS_PRESERVATION_ROOT/$MAIN_PACKAGE_NAME"
 
 # If running as a jenkins job, clear out and later populate a results directory so artifacts can be kept if desired.
 [ -n "$WORKSPACE" ] && ARTIFACT_RESULTS_PATH="$WORKSPACE/results"
-[ -n "$ARTIFACT_RESULTS_PATH" ] && mkdir -p "$ARTIFACT_RESULTS_PATH"
-[ -n "$ARTIFACT_RESULTS_PATH" ] && rm -f "$ARTIFACT_RESULTS_PATH"/*
+if [ -n "$ARTIFACT_RESULTS_PATH" ]; then
+	log "Clean out results directory $ARTIFACT_RESULTS_PATH"
+	mkdir -p "$ARTIFACT_RESULTS_PATH"
+	rm -f "$ARTIFACT_RESULTS_PATH"/*
+fi
 
 # Where $1 is the repository directory, and $2 is a committish to set the repository to.
 # Non-branch committishes are not supported yet for hg projects.
