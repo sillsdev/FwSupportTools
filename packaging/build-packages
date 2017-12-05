@@ -503,7 +503,7 @@ log "Binary package files exist with the following sha256sums:"
 archiveBinaryPackageFiles() {
 	local archivePath=$1
 
-	for f in ${full_package_name}*.changes ${full_package_name}*.dsc; do
+	for f in ${full_package_name}+*.changes ${full_package_name}.dsc; do
 		if [[ "$f" =~ .dsc$ ]]; then
 			dcmd --dsc --orig ${dcmd_opts} cp $f "$archivePath" || true
 		else
@@ -515,13 +515,13 @@ archiveBinaryPackageFiles() {
 for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 	for arch in $ARCHES_TO_PACKAGE; do
 		cd $pbuilder_path/$dist/$arch/result
-		dcmd --deb --changes sha256sum ${full_package_name}*.changes || true
+		dcmd --deb --changes sha256sum ${full_package_name}+*.changes || true
 		if [ $( ls ${full_package_name}*.dsc 2> /dev/null | wc -l) -ge 1 ]; then
-			dcmd --dsc --orig ${dcmd_opts} sha256sum ${full_package_name}*.dsc || true
+			dcmd --dsc --orig ${dcmd_opts} sha256sum ${full_package_name}.dsc || true
 		fi
 
 		[ -n "$ARTIFACT_RESULTS_PATH" ] && archiveBinaryPackageFiles "$ARTIFACT_RESULTS_PATH"
-		[ -n "$preserve_products_arg" ] && archiveBinaryPackageFiles "$PRODUCTS_PRESERVATION_PATH" ${full_package_name}*.changes ${full_package_name}*.dsc
+		[ -n "$preserve_products_arg" ] && archiveBinaryPackageFiles "$PRODUCTS_PRESERVATION_PATH" ${full_package_name}+*.changes ${full_package_name}.dsc
 	done
 done
 [ -n "$preserve_products_arg" ] && log "Preserved binary package files."
