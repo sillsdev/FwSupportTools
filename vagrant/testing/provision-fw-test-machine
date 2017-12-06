@@ -33,8 +33,8 @@ sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE-updates 
 sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE-proposed main"
 sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE-experimental main"
 sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE-dictionary main"
-sudo perl -pi -e '/linux.lsdev.sil.org/ and s/^/#/' /etc/apt/sources.list
-sudo perl -pi -e "/$RELEASE-experimental/ and s/^/#/" /etc/apt/sources.list
+sudo perl -pi -e '/^deb.*linux.lsdev.sil.org/ and s/^/#/' /etc/apt/sources.list
+sudo perl -pi -e "/^deb.*$RELEASE-experimental/ and s/^/#/" /etc/apt/sources.list
 
 sudo apt-get update
 if ! sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade; then
