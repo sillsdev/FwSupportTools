@@ -25,6 +25,7 @@ wget -qO - http://linux.lsdev.sil.org/downloads/sil-testing.gpg | sudo apt-key a
 sudo add-apt-repository "deb http://packages.sil.org/ubuntu $RELEASE main"
 sudo add-apt-repository "deb http://packages.sil.org/ubuntu $RELEASE-experimental main"
 sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE main"
+# llso:experimental for some mono or icu-fw pieces until they are promoted to llso:main.
 sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE-experimental main"
 
 # Enable multiverse repository
@@ -70,7 +71,7 @@ git config --global gui.editor gedit
 git config --global rebase.autosquash true
 # Set the textwidth on the commit tool so commit messages are automatically restrained within the policy settings.
 git config --global cola.textwidth 70
-# Don't absorb Windows line ending settings from host.
+# Don't absorb Windows line ending settings from host, if .gitconfig was copied in from Windows.
 git config --global --unset core.autocrlf ||true
 
 cat > ~/.hgrc <<EOF
@@ -83,6 +84,9 @@ grep __git_ps1 ~/.bashrc || echo 'export PS1="\$(__git_ps1) $PS1"' |tee -a ~/.ba
 # Don't report developer or tester usage to analytics.
 echo export FEEDBACK=false | tee -a ~/.bashrc
 echo export WESAY_TRACK_AS_DEVELOPER=1 | tee -a ~/.bashrc
+
+# Enable debugging
+sudo perl -pi -e 's/kernel.yama.ptrace_scope = 1/kernel.yama.ptrace_scope = 0/' /etc/sysctl.d/10-ptrace.conf
 
 mkdir -p ~/.config/terminator
 echo '[profiles]
@@ -160,8 +164,8 @@ if [[ -f /etc/wasta-release ]] || [[ $(lsb_release -sc) == "xenial" ]]; then
   mkdir -p "\$TOOLSDIR"
   mv $HOME/launchers/* "\$TOOLSDIR"
   mv $HOME/Desktop/{fw-git-gui.desktop,fw-gitk.desktop,monowinformsspy.desktop} "\$TOOLSDIR"
-  cp -a /usr/share/applications/{terminator,geany}.desktop "\$TOOLSDIR"
-  chmod +x "\$TOOLSDIR"/{terminator,geany}.desktop
+  cp -a /usr/share/applications/{terminator,geany,code}.desktop "\$TOOLSDIR"
+  chmod +x "\$TOOLSDIR"/{terminator,geany,code}.desktop
 fi
 
 sudo reboot now
@@ -171,18 +175,20 @@ chmod +x "$OUTPUTFILE"
 
 # FieldWorks
 
-if [ -z "$(git config --get fwinit.gerrituser)" ]; then
-  echo $SCRIPTNAME: Error: Cannot provision without gerrit username in git config fwinit.gerrituser.
-  exit 1
-fi
+# If absent, set placeholder variables for git and gerrit settings so we can provision on a machine without any existing personalization or authentication.
+[[ -n $(git config --get fwinit.gerrituser) ]] || git config --global fwinit.gerrituser GERRIT_USER_PLACEHOLDER
+[[ -n $(git config --get user.name) ]] || git config --global user.name GIT_USERNAME_PLACEHOLDER
+[[ -n $(git config --get user.email) ]] || git config --global user.email GIT_EMAIL_PLACEHOLDER
 
-[ ! -d "$BASEDIR/fwrepo" ] && git clone git://github.com/sillsdev/fwmeta.git $BASEDIR/fwrepo
-cd $BASEDIR/fwrepo
-repos="FieldWorks FwSampleProjects mono mono-basic gtk-sharp libgdiplus libcom FwDebian FwSupportTools FwLocalizations FwHelps"
-branches="master develop feature/* release/* hotfix/* support/*"
-echo $SCRIPTNAME: Note that cloning may not report its progress during provisioning.
-#perl -pi -e 's/git fetch -p origin/git fetch --depth=1 -p origin/' fwmeta/initrepo  # Uncomment to speed up by not downloading repository history
-echo -e "$repos\n$branches\n" | fwmeta/initrepo
+# Clone from the develop branch of fwmeta until the --shallow argument, introduced on 2017-11-29, is merged to master.
+if [ ! -d "$BASEDIR/fwrepo" ]; then
+    git clone --depth=1 --branch develop git://github.com/sillsdev/fwmeta.git $BASEDIR/fwrepo
+    cd $BASEDIR/fwrepo
+    repos="FieldWorks mono-calgary mono mono-basic gtk-sharp libgdiplus libcom FwDebian FwSupportTools FwLocalizations FwHelps FwInstaller"
+    branches="master develop feature/* release/* hotfix/* support/*"
+    echo $SCRIPTNAME: Note that cloning may not report its progress during provisioning.
+    echo -e "$repos\n$branches\n" | fwmeta/initrepo --shallow
+fi
 
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
 echo ttf-mscorefonts-installer msttcorefonts/present-mscorefonts-eula note | sudo debconf-set-selections
@@ -193,10 +199,10 @@ mkdir -p $BASEDIR/fwrepo/fw/DistFiles/Projects
 
 # Libraries
 
-[ -d ~/fwrepo/flexbridge ] || git clone https://github.com/sillsdev/flexbridge.git ~/fwrepo/flexbridge
-[ -d ~/projects/libpalaso ] || git clone https://github.com/sillsdev/libpalaso.git ~/projects/libpalaso
-[ -d ~/projects/ipcframework ] || git clone --branch develop https://bitbucket.org/smcconnel/ipcframework ~/projects/ipcframework
-[ -d ~/projects/chorus ] || git clone https://github.com/sillsdev/chorus.git ~/projects/chorus
+[ -d ~/fwrepo/flexbridge ] || git clone --depth=1 https://github.com/sillsdev/flexbridge.git ~/fwrepo/flexbridge
+[ -d ~/projects/libpalaso ] || git clone --depth=1 https://github.com/sillsdev/libpalaso.git ~/projects/libpalaso
+[ -d ~/projects/ipcframework ] || git clone --depth=1 --branch develop https://bitbucket.org/smcconnel/ipcframework ~/projects/ipcframework
+[ -d ~/projects/chorus ] || git clone --depth=1 https://github.com/sillsdev/chorus.git ~/projects/chorus
 
 # Monodevelop
 
@@ -295,24 +301,9 @@ cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
 Version=1.0
 Type=Application
 Terminal=false
-Exec=bash -c '$HOME/check-mono; export MONO_ENVIRON="\$HOME/fwrepo/fw/environ"; /opt/monodevelop/bin/monodevelop-launcher.sh'
+Exec=bash -c 'export MONO_ENVIRON="\$HOME/fwrepo/fw/environ"; /opt/monodevelop/bin/monodevelop-launcher.sh'
 Name=Monodevelop FW
 Icon=/opt/monodevelop/share/icons/hicolor/scalable/apps/monodevelop.svg
-ENDOFOUTPUTFILE
-chmod +x "$OUTPUTFILE"
-
-OUTPUTFILE="$HOME/check-mono"
-cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
-#!/bin/bash
-
-if [ ! -e /opt/mono-sil/bin/mono-sil ]; then
-    zenity --warning --no-wrap --text="There is no mono-sil wrapper script available in /opt/mono-sil/bin."
-    exit 0
-fi
-
-if [ "\$(readlink /opt/mono-sil/bin/mono)" != mono-sil ]; then
-    zenity --warning --no-wrap --text="Your mono wrapper script needs to be re-activated. Please run\nsudo ln -sf mono-sil /opt/mono-sil/bin/mono"
-fi
 ENDOFOUTPUTFILE
 chmod +x "$OUTPUTFILE"
 
@@ -340,7 +331,7 @@ Type=Application
 Terminal=false
 Exec=bash -c 'cd \$HOME/fwrepo/fw && git cola'
 Name=FW Git Cola Commit Tool
-Icon=/usr/share/git-cola/icons/git.svg
+Icon=/usr/share/git-cola/icons/git-cola.svg
 ENDOFOUTPUTFILE
 chmod +x "$OUTPUTFILE"
 
@@ -402,50 +393,27 @@ chmod +x "$OUTPUTFILE"
 
 # Mono
 
+sudo apt-get install -y mono4-sil gtk-sharp4-sil libgdiplus4-sil mono-basic4-sil mono4-sil-dev
+# Need to manually add /opt/mono4-sil in monodevelop .net runtimes list.
+
+# For compiling mono
+
 sudo apt-get install -y libtiff4-dev || sudo apt-get install -y libtiff5-dev
 sudo apt-get install -y bison mono-devel libgif-dev libjpeg-dev libexif-dev git quilt mono-mcs
-
-OUTPUTFILE="$HOME/initial-mono-install.sh"
-cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
-#!/bin/bash
-
-set -e -o pipefail
-
-# Use mono 3 until intentionally move to mono 4.
-[ ! -d "$BASEDIR/fwrepo/mono/mono-calgary" ] && git clone --branch release/mono-sil-3.4 git://github.com/sillsdev/mono-calgary.git "$BASEDIR/fwrepo/mono/mono-calgary"
-cd "$BASEDIR/fwrepo/mono/mono" && git checkout release/mono-sil-3.4
-cd "$BASEDIR/fwrepo/mono" && mono-calgary/BuildOptMono.sh
-
-mozroots --import --ask-remove
-ENDOFOUTPUTFILE
-chmod +x "$OUTPUTFILE"
 
 # FieldWorks sample data
 
 cd ~
 [ -e Sena*.fwbackup ] || wget 'http://downloads.sil.org/FieldWorks/8.3.9/Sena%203%202017-07-27%201102.fwbackup'
 
-# Compile mono, but handle any problems gracefully.
-
-[ -e /usr/local/bin/mono-real ] || if $HOME/initial-mono-install.sh; then
-  echo $SCRIPTNAME: Mono finished compiling and installing successfully.
-else
-  echo $SCRIPTNAME: Mono failed to compile and install.  You can try again by running $HOME/initial-mono-install.sh
-
-  # Just install the wrapper script on Ubuntu 16.04 until mono is made to compile.
-  MONO_BIN=/opt/mono-sil/bin
-  if [ ! -f $MONO_BIN/mono-sil ]; then
-    sudo cp -v ~/fwrepo/mono/mono-calgary/mono-sil $MONO_BIN/mono-sil && sudo mv -v $MONO_BIN/mono{,-real} && sudo ln -sf mono-sil $MONO_BIN/mono
-  fi
-fi
-
 # Compile FieldWorks
 
-if [ -e /opt/mono-sil/bin/mono-real ]; then
-  cd $BASEDIR/fwrepo/fw/Build && ./build /t:refreshTargets && ./build /t:remakefw &&
-	echo $SCRIPTNAME: FieldWorks compiled successfully. ||
-	echo $SCRIPTNAME: FieldWorks failed to compile.
-fi
+# The 'yes n |' part specifies to not use local artifacts. Temporarily unsetting pipefail.
+set +o pipefail
+cd $BASEDIR/fwrepo/fw/Build && yes n | ./build /t:UpdateDevelopmentPropertiesFile && ./build /t:refreshTargets && ./build /t:remakefw &&
+    echo $SCRIPTNAME: FieldWorks compiled successfully. ||
+    echo $SCRIPTNAME: FieldWorks failed to compile.
+set -o pipefail
 
 mkdir -p $BASEDIR/fwrepo/fw/Output_x86_64/registry/LocalMachine/software/sil/fieldworks/8
 
@@ -461,9 +429,17 @@ cd ~
 cd winformsspy
 xbuild
 
+# Visual Studio Code https://code.visualstudio.com/docs/setup/linux
+cd
+curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
+sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
+sudo apt-get update
+sudo apt-get install code
+
 # Wrapup
 # If this vagrant box already has a GUI running, then report in the GUI.
 (DISPLAY=:0 zenity --warning --no-wrap --title='Provisioning' --text="$(date '+%F %T')\nProvisioning is almost finished.  See the vagrant output in the host terminal\nfor any errors or further instructions. You must reboot this vagrant box\nto finish the provisioning process." ||true) &
 
-echo $SCRIPTNAME: Reboot the vagrant guest to bring up the GUI. Open fwrepo/fw/RunFieldWorks.csproj in MonoDevelop to debug FieldWorks, and in Preferences set the .NET Runtimes default runtime to Mono 3.4.
+echo $SCRIPTNAME: Reboot the vagrant guest to bring up the GUI. Open fwrepo/fw/RunFieldWorks.csproj in MonoDevelop to debug FieldWorks, and in Preferences set the .NET Runtimes default runtime to the latest mono in /opt.
 echo $SCRIPTNAME: Done.
