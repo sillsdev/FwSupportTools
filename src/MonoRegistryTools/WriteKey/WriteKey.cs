@@ -79,27 +79,31 @@ namespace MonoRegistryTools
 
 		public static void PrintUsage()
 		{
-			Console.Error.WriteLine("Write Usage:\n");
-			Console.Error.WriteLine("WriteKey Mode Location Key Value\n");
-			Console.Error.WriteLine("Mode One of:");
-			Console.Error.WriteLine("CU - CurrentUser");
-			Console.Error.WriteLine("LM - LocalMachine");
-			Console.Error.WriteLine("CR - ClassesRoot");
-			Console.Error.WriteLine("U - Users");
-			Console.Error.WriteLine("PD - PerformanceData");
-			Console.Error.WriteLine("CC - CurrentConfig");
-			Console.Error.WriteLine("DD - DynData\n");
-			Console.Error.WriteLine("For Example: WriteKey LM \"Software\\SIL\" \"Icu36Dir \" \"/usr/local/FieldWorks/DistFiles/Icu36\" ");
+			Console.Error.WriteLine("Usage: WriteKey.exe MODE LOCATION KEY VALUE");
+			Console.Error.WriteLine("Writes registry key.");
+			Console.Error.WriteLine("Example: WriteKey.exe LM \"Software/SIL/FieldWorks/9\" \"ProjectsDir\" \"$HOME/.local/share/fieldworks/Projects\"");
+			Console.Error.WriteLine();
+			Console.Error.WriteLine("MODE is one of:");
+			Console.Error.WriteLine("  CU - CurrentUser");
+			Console.Error.WriteLine("  LM - LocalMachine");
+			Console.Error.WriteLine("  CR - ClassesRoot");
+			Console.Error.WriteLine("  U  - Users");
+			Console.Error.WriteLine("  PD - PerformanceData");
+			Console.Error.WriteLine("  CC - CurrentConfig");
+			Console.Error.WriteLine("  DD - DynData");
+			Console.Error.WriteLine();
+			Console.Error.WriteLine("Exit status:");
+			Console.Error.WriteLine("  0  if read successfully");
+			Console.Error.WriteLine("  1  if there was an error writing the key");
+			Console.Error.WriteLine("  2  for invalid arguments");
 
 			string doublequote = "\"";
 			string backslash = "\\";
 
 			Console.Error.WriteLine();
-			Console.Error.WriteLine(String.Format(".NET cmd processing treats {1}{0} as a single {0}, not part of a delimiter.", doublequote, backslash));
-			Console.Error.WriteLine(String.Format("This can mess up closing {0} delimiters when the string ends with {1}.", doublequote, backslash));
-			Console.Error.WriteLine(String.Format("To get around this, you need to add an extra {1} to the end.  {0}D:{1}{0}  -> D:{0}     {0}D:{1}{1}{0} -> D:{1}", doublequote, backslash));
-			Console.Error.WriteLine(String.Format("Cmd line with 4 args: {0}Software{1}SIL{1}{0}7.0{0} {0}Projects{1}{1}Dir{1}{0} {0}I:{1}{0} {0}e:{1}{1}{0}", doublequote, backslash));
-			Console.Error.WriteLine(String.Format("Interpreted as 3 args: 1){0}Software{1}{1}SIL{1}{1}FieldWorks{1}{0}7.0{0}  2){0}Projects{1}{1}{1}{1}Dir{1}{0} I:{1}{0}{0}  3){0}e:{1}{1}{0}", doublequote, backslash));
+			Console.Error.WriteLine($"Note: Be aware that .NET command processing converts {backslash}{doublequote} to a literal {doublequote}");
+			Console.Error.WriteLine($"  So if your string ends with a backslash, you will want to escape it and");
+			Console.Error.WriteLine($"  other backslashes. For example, change {doublequote}C:{backslash}Projects{backslash}{doublequote} to {doublequote}C:{backslash}{backslash}Projects{backslash}{backslash}{doublequote}");
 		}
 	}
 }

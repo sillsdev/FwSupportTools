@@ -6,3 +6,5 @@ C:\\WW\Bin\src\MonoRegistryTools\WriteKey\bin\Release, it must be edited to remo
 Also, to make the program appear safer to users, have Alistair sign the compiled WriteKey.exe file to indicate that it is a FieldWorks Registry Updater program signed by SIL International.
 
 Then check the modified WriteKey.exe and WriteKey.exe.manifest into C:\WW\Bin.
+
+2017-12-08 WriteKey.exe was updated, without signing or corresponding .manifest changes, in 2013, so the above notes may be out of date. There is a WriteKey.exe.manifest in fwrepo/fw/Bin.

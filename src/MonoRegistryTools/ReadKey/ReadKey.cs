@@ -83,17 +83,23 @@ namespace MonoRegistryTools
 
 		public static void PrintUsage()
 		{
-			Console.Error.WriteLine("ReadKey Usage:\n");
-			Console.Error.WriteLine("ReadKey Mode Location Key\n");
-			Console.Error.WriteLine("Mode One of:");
-			Console.Error.WriteLine("CU - CurrentUser");
-			Console.Error.WriteLine("LM - LocalMachine");
-			Console.Error.WriteLine("CR - ClassesRoot");
-			Console.Error.WriteLine("U - Users");
-			Console.Error.WriteLine("PD - PerformanceData");
-			Console.Error.WriteLine("CC - CurrentConfig");
-			Console.Error.WriteLine("DD - DynData\n");
-			Console.Error.WriteLine("For Example: ReadKey LM \"Software\\SIL\" \"Icu36Dir\" ");
+			Console.Error.WriteLine("Usage: ReadKey.exe MODE LOCATION KEY");
+			Console.Error.WriteLine("Prints registry key.");
+			Console.Error.WriteLine("Example: ReadKey.exe LM \"Software/SIL/FieldWorks/9\" \"ProjectsDir\"");
+			Console.Error.WriteLine();
+			Console.Error.WriteLine("MODE is one of:");
+			Console.Error.WriteLine("  CU - CurrentUser");
+			Console.Error.WriteLine("  LM - LocalMachine");
+			Console.Error.WriteLine("  CR - ClassesRoot");
+			Console.Error.WriteLine("  U  - Users");
+			Console.Error.WriteLine("  PD - PerformanceData");
+			Console.Error.WriteLine("  CC - CurrentConfig");
+			Console.Error.WriteLine("  DD - DynData");
+			Console.Error.WriteLine();
+			Console.Error.WriteLine("Exit status:");
+			Console.Error.WriteLine("  0  if read successfully");
+			Console.Error.WriteLine("  1  if there was an error reading the key");
+			Console.Error.WriteLine("  2  for invalid arguments");
 		}
 	}
 }

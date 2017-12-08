@@ -12,6 +12,7 @@
 *.ReSharper -whitespace
 *.vcxproj -whitespace
 *.vcxproj.filters -whitespace
+*.md -whitespace
 provision-fw-dev-machine -whitespace
 LICENSING.txt whitespace=-indent-with-non-tab
 Vagrantfile -whitespace
