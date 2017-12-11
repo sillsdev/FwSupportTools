@@ -13,5 +13,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.gui = true
   end
 
+  # Turn off auto-dowloading of available packages, until this change is made in the base box.
+  config.vm.provision "shell", inline: 'sudo perl -pi -e "/APT::Periodic::Download-Upgradeable-Packages/ && s/1/0/" /etc/apt/apt.conf.d/20auto-upgrades /etc/apt/apt.conf.d/10periodic'
+
+  # Fix too many comment characters in /etc/apt/sources.list, until this change is made in the base box.
+  config.vm.provision "shell", inline: 'sudo perl -pi -e "/^##deb.*linux.lsdev.sil.org.*xenial-experimental/ && s/^##/#/" /etc/apt/sources.list'
+
   config.vm.provision "file", source: "../dot-gdbinit", destination: "~/.gdbinit"
 end
