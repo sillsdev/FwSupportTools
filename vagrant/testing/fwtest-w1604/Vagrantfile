@@ -14,7 +14,21 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Turn off auto-dowloading of available packages, until this change is made in the base box.
-  config.vm.provision "shell", inline: 'sudo perl -pi -e "/APT::Periodic::Download-Upgradeable-Packages/ && s/1/0/" /etc/apt/apt.conf.d/20auto-upgrades /etc/apt/apt.conf.d/10periodic'
+  config.vm.provision "shell", inline: '''
+cat > /etc/apt/apt.conf.d/20auto-upgrades << END
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Download-Upgradeable-Packages "0";
+APT::Periodic::AutocleanInterval "0";
+APT::Periodic::Unattended-Upgrade "0";
+END
+
+cat > /etc/apt/apt.conf.d/10periodic << END
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Download-Upgradeable-Packages "0";
+APT::Periodic::AutocleanInterval "0";
+APT::Periodic::Unattended-Upgrade "0";
+END
+'''
 
   # Fix too many comment characters in /etc/apt/sources.list, until this change is made in the base box.
   config.vm.provision "shell", inline: 'sudo perl -pi -e "/^##deb.*linux.lsdev.sil.org.*xenial-experimental/ && s/^##/#/" /etc/apt/sources.list'
