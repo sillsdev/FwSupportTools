@@ -485,7 +485,7 @@ log "Signing package(s)"
 
 # sign source package
 cd "$repo_base_dir"
-signPackage $(echo $DISTRIBUTIONS_TO_PACKAGE | cut -f1 -d' ') "${source_package_name}_${base_version}*source.changes"
+signPackage stable "${source_package_name}_${base_version}*source.changes"
 
 # sign binary packages
 cd "$pbuilder_path"
