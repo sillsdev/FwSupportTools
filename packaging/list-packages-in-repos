@@ -14,38 +14,32 @@ import collections
 # Dictionary of URLs to Packages files, and an abbreviated name for that repository.
 urls=collections.OrderedDict(
 (
+('http://packages.sil.org/ubuntu/dists/bionic/main/binary-amd64/Packages', 'pso:bionic 64'),
+('http://packages.sil.org/ubuntu/dists/bionic/main/binary-i386/Packages', 'pso:bionic 32'),
+('http://packages.sil.org/ubuntu/dists/bionic-experimental/main/binary-amd64/Packages', 'pso:bionic-experimental 64'),
+
 ('http://packages.sil.org/ubuntu/dists/xenial/main/binary-amd64/Packages', 'pso:xenial 64'),
 ('http://packages.sil.org/ubuntu/dists/xenial/main/binary-i386/Packages', 'pso:xenial 32'),
 ('http://packages.sil.org/ubuntu/dists/xenial-experimental/main/binary-amd64/Packages', 'pso:xenial-experimental 64'),
-('http://packages.sil.org/ubuntu/dists/xenial-experimental/main/binary-i386/Packages', 'pso:xenial-experimental 32'),
 
 ('http://packages.sil.org/ubuntu/dists/trusty/main/binary-amd64/Packages', 'pso:trusty 64'),
 ('http://packages.sil.org/ubuntu/dists/trusty/main/binary-i386/Packages', 'pso:trusty 32'),
 ('http://packages.sil.org/ubuntu/dists/trusty-experimental/main/binary-amd64/Packages', 'pso:trusty-experimental 64'),
-('http://packages.sil.org/ubuntu/dists/trusty-experimental/main/binary-i386/Packages', 'pso:trusty-experimental 32'),
 
-('http://packages.sil.org/ubuntu/dists/precise/main/binary-amd64/Packages', 'pso:precise 64'),
-('http://packages.sil.org/ubuntu/dists/precise/main/binary-i386/Packages', 'pso:precise 32'),
-('http://packages.sil.org/ubuntu/dists/precise-experimental/main/binary-amd64/Packages', 'pso:precise-experimental 64'),
-('http://packages.sil.org/ubuntu/dists/precise-experimental/main/binary-i386/Packages', 'pso:precise-experimental 32'),
+('http://linux.lsdev.sil.org/ubuntu/dists/bionic/main/binary-amd64/Packages', 'llso:bionic 64'),
+('http://linux.lsdev.sil.org/ubuntu/dists/bionic-updates/main/binary-amd64/Packages', 'llso:bionic-updates 64'),
+('http://linux.lsdev.sil.org/ubuntu/dists/bionic-proposed/main/binary-amd64/Packages', 'llso:bionic-proposed 64'),
+('http://linux.lsdev.sil.org/ubuntu/dists/bionic-experimental/main/binary-amd64/Packages', 'llso:bionic-experimental 64'),
 
 ('http://linux.lsdev.sil.org/ubuntu/dists/xenial/main/binary-amd64/Packages', 'llso:xenial 64'),
-('http://linux.lsdev.sil.org/ubuntu/dists/xenial/main/binary-i386/Packages', 'llso:xenial 32'),
+('http://linux.lsdev.sil.org/ubuntu/dists/xenial-updates/main/binary-amd64/Packages', 'llso:xenial-updates 64'),
 ('http://linux.lsdev.sil.org/ubuntu/dists/xenial-proposed/main/binary-amd64/Packages', 'llso:xenial-proposed 64'),
 ('http://linux.lsdev.sil.org/ubuntu/dists/xenial-experimental/main/binary-amd64/Packages', 'llso:xenial-experimental 64'),
-('http://linux.lsdev.sil.org/ubuntu/dists/xenial-dictionary/main/binary-amd64/Packages', 'llso:xenial-dictionary 64'),
 
 ('http://linux.lsdev.sil.org/ubuntu/dists/trusty/main/binary-amd64/Packages', 'llso:trusty 64'),
-('http://linux.lsdev.sil.org/ubuntu/dists/trusty/main/binary-i386/Packages', 'llso:trusty 32'),
+('http://linux.lsdev.sil.org/ubuntu/dists/trusty-updates/main/binary-amd64/Packages', 'llso:trusty-updates 64'),
 ('http://linux.lsdev.sil.org/ubuntu/dists/trusty-proposed/main/binary-amd64/Packages', 'llso:trusty-proposed 64'),
 ('http://linux.lsdev.sil.org/ubuntu/dists/trusty-experimental/main/binary-amd64/Packages', 'llso:trusty-experimental 64'),
-('http://linux.lsdev.sil.org/ubuntu/dists/trusty-dictionary/main/binary-amd64/Packages', 'llso:trusty-dictionary 64'),
-
-('http://linux.lsdev.sil.org/ubuntu/dists/precise/main/binary-amd64/Packages', 'llso:precise 64'),
-('http://linux.lsdev.sil.org/ubuntu/dists/precise/main/binary-i386/Packages', 'llso:precise 32'),
-('http://linux.lsdev.sil.org/ubuntu/dists/precise-proposed/main/binary-amd64/Packages', 'llso:precise-proposed 64'),
-('http://linux.lsdev.sil.org/ubuntu/dists/precise-experimental/main/binary-amd64/Packages', 'llso:precise-experimental 64'),
-('http://linux.lsdev.sil.org/ubuntu/dists/precise-dictionary/main/binary-amd64/Packages', 'llso:precise-dictionary 64'),
 )
 )
 
