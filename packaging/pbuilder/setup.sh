@@ -85,7 +85,8 @@ do
 				addmirror "deb $LLSO $D$S $COMPONENTS"
 				addmirror "deb $PSO $D$S $COMPONENTS"
 			done
-			if [ $D != "precise" ]; then
+			# TODO Remove the following bionic exclusion when that section of the repository is available
+			if [ $D != "precise" -a $D != "bionic" ]; then
 				# allow to install current nodejs packages
 				if [ -n "$update" ]; then
 					# we can't use https when creating the chroot because apt-transport-https
@@ -121,12 +122,35 @@ do
 			options="--update --override-config"
 		fi
 
+		if [[ $D == "bionic" && -z "$update" ]]; then
+				# Hack to work around trouble with pbuilder --keyring giving error
+				# "E: gnupg, gnupg2 and gnupg1 do not seem to be installed,
+				# but one of them is required for this operation" on bionic. Build
+				# a smaller base.tgz, and include gnupg. Manually add the
+				# keyrings. Then let the base.tgz get updated with the othermirrors.
+
+				sudo HOME=~ DIST=$D ARCH=$A pbuilder $options \
+						${KEYRINGMAIN:+--debootstrapopts --keyring=}$KEYRINGMAIN \
+						--extrapackages "apt-utils devscripts lsb-release apt-transport-https ca-certificates gnupg" \
+						--mirror "$MIRROR" \
+						--components "$COMPONENTS" \
+						${PROXY:+--http-proxy }$PROXY
+
+				echo >addkey '/usr/bin/apt-key add -'
+				sudo HOME=~ DIST=$D ARCH=$A pbuilder --execute --save-after-exec -- addkey < $KEYRINGLLSO
+				sudo HOME=~ DIST=$D ARCH=$A pbuilder --execute --save-after-exec -- addkey < $KEYRINGPSO
+				sudo HOME=~ DIST=$D ARCH=$A pbuilder --execute --save-after-exec -- addkey < $KEYRINGNODE
+				rm addkey
+
+				options="--update --override-config"
+		fi
+
 		sudo HOME=~ DIST=$D ARCH=$A pbuilder $options \
 			${KEYRINGMAIN:+--debootstrapopts --keyring=}$KEYRINGMAIN \
 			${KEYRINGLLSO:+--keyring }$KEYRINGLLSO \
 			${KEYRINGPSO:+--keyring }$KEYRINGPSO \
 			${KEYRINGNODE:+--keyring }$KEYRINGNODE \
-			--extrapackages "apt-utils devscripts lsb-release apt-transport-https ca-certificates" \
+			--extrapackages "apt-utils devscripts lsb-release apt-transport-https ca-certificates gnupg" \
 			--othermirror "$OTHERMIRROR" \
 			--mirror "$MIRROR" \
 			--components "$COMPONENTS" \
