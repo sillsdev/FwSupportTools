@@ -163,13 +163,13 @@ elif [ "$MAIN_PACKAGE_NAME" = "flexbridgehg" ]; then
 	repository_directory_list=(fwbridge)
 	VCS="hg"
 elif [ "$MAIN_PACKAGE_NAME" = "fieldworks-enc-converters" ]; then
-	if [ ! -d ec-main ]; then
-		hg clone http://hg.palaso.org/ec-main
+	if [ ! -d encoding-converters-core ]; then
+		git clone --recurse-submodules https://github.com/silnrsi/encoding-converters-core.git
 	fi
 
-	debian_path=$repo_base_dir/ec-main/debian
-	repository_directory_list=(ec-main)
-	VCS="hg"
+	debian_path=$repo_base_dir/encoding-converters-core/debian
+	repository_directory_list=(encoding-converters-core)
+	VCS="git"
 elif [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 	if [ ! -d fwrepo ]; then
 		log "Initial clone of fwrepo"
@@ -264,8 +264,8 @@ fi
 log "Preparing"
 
 if [ "$MAIN_PACKAGE_NAME" = "fieldworks-enc-converters" ]; then
-	mv $repo_base_dir/ec-main/debian $repo_base_dir/ec-main/debian-aside
-	mv $repo_base_dir/ec-main/debian-fieldworks $repo_base_dir/ec-main/debian
+	mv $repo_base_dir/encoding-converters-core/debian $repo_base_dir/encoding-converters-core/debian-aside
+	mv $repo_base_dir/encoding-converters-core/debian-fieldworks $repo_base_dir/encoding-converters-core/debian
 fi
 
 # Clean out old source packages
@@ -354,8 +354,8 @@ else
 fi
 
 if [ "$MAIN_PACKAGE_NAME" = "fieldworks-enc-converters" ]; then
-	mv $repo_base_dir/ec-main/debian $repo_base_dir/ec-main/debian-fieldworks
-	mv $repo_base_dir/ec-main/debian-aside $repo_base_dir/ec-main/debian
+	mv $repo_base_dir/encoding-converters-core/debian $repo_base_dir/encoding-converters-core/debian-fieldworks
+	mv $repo_base_dir/encoding-converters-core/debian-aside $repo_base_dir/encoding-converters-core/debian
 fi
 
 log "Building source package(s) using sources from the following repository commits (possibly with local modifications):"
