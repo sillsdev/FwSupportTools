@@ -199,7 +199,8 @@ mkdir -p $BASEDIR/fwrepo/fw/DistFiles/Projects
 
 # Libraries
 
-[ -d ~/fwrepo/flexbridge ] || git clone --depth=1 https://github.com/sillsdev/flexbridge.git ~/fwrepo/flexbridge
+[ -d ~/fwrepo/liblcm ] || git clone --depth=1 https://github.com/sillsdev/liblcm.git ~/fwrepo/liblcm
+[ -d ~/fwrepo/flexbridge ] || git clone --depth=1 --branch develop https://github.com/sillsdev/flexbridge.git ~/fwrepo/flexbridge
 [ -d ~/projects/libpalaso ] || git clone --depth=1 https://github.com/sillsdev/libpalaso.git ~/projects/libpalaso
 [ -d ~/projects/ipcframework ] || git clone --depth=1 --branch develop https://bitbucket.org/smcconnel/ipcframework ~/projects/ipcframework
 [ -d ~/projects/chorus ] || git clone --depth=1 https://github.com/sillsdev/chorus.git ~/projects/chorus
