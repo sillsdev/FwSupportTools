@@ -389,7 +389,7 @@ if [ -n "$short_mono_package_name" ]; then
 	# Build using its own source preparation script, and put the results in the right place.
 	log "Building source package for ${short_mono_package_name} (${MAIN_PACKAGE_NAME}) with own source preparation script"
 	cd "$repo_base_dir/mono-calgary"
-	DEBUILD_ADDITIONAL_OPTS="-uc -us" REFREPODIR="$repo_base_dir" ./make-source-package ${short_mono_package_name} ${MONO_COMMITTISH_TO_USE}
+	DEBUILD_ADDITIONAL_OPTS="-uc -us $DEBUILD_ADDITIONAL_OPTS" REFREPODIR="$repo_base_dir" ./make-source-package ${short_mono_package_name} ${MONO_COMMITTISH_TO_USE}
 	mv ${MAIN_PACKAGE_NAME}*.{dsc,build,changes,tar.[xg]z} "$repo_base_dir/"
 elif [ "$MAIN_PACKAGE_NAME" = "fieldworks-enc-converters" ]; then
 	log "Building source package for $MAIN_PACKAGE_NAME with own source preparation script"
