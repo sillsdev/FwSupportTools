@@ -492,6 +492,10 @@ cd "$pbuilder_path"
 for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 	for arch in $ARCHES_TO_PACKAGE; do
 		cd $pbuilder_path/$dist/$arch/result
+		# Don't sign source package here - the source package is the same for
+		# all dists, so it is sufficient to sign it once. In fact we shouldn't
+		# try to sign it more than once because we delete line 10 (why?), so
+		# everytime we sign it we get a different checksum.
 		signPackage $dist "${full_package_name}+*.changes"
 	done
 done
@@ -576,14 +580,25 @@ uploadPackage() {
 
 log "Uploading package(s)"
 
-# upload source package
-#cd "$repo_base_dir"
-#for dist in $DISTRIBUTIONS_TO_PACKAGE; do
-#	arch=$(echo $ARCHES_TO_PACKAGE | cut -f1 -d' ')
-#	uploadPackage $dist $arch "${source_package_name}_${base_version}*source.changes"
-#done
+# NOTE: if you debug this script because the source package didn't get uploaded, make
+# sure that the changelog entry is not finalized (i.e. it should be set to UNRELEASED),
+# and that there either is a *.orig.tar* file already on llso with the same upstream/
+# native version number, or this is the first entry in the changelog file with this
+# upstream/native version number.
+#
+# `build-multi.sh` updates the changelog. If the last entry it finds is finalized it
+# creates a new entry, otherwise it appends it. A new entry means that the *.orig.tar*
+# file isn't included in the `*source.changes` file and thus not uploaded.
+#
+# The upstream/native version number for a package version mono-sil 3.4.0-19 is 3.4.0.
+# The source package will only be uploaded for the first version that has a different
+# upstream/native version number.
+#
+# Explicitly uploading the source package causes different problems because both the
+# source package and the binary packages (that include the source .dsc file) reference
+# the `*orig.tar*` file. The first package that gets processed in the incoming directory
+# will delete the `*orig.tar*` file so that the other package can't find it anymore.
 
-# upload binary packages
 cd "$pbuilder_path"
 for dist in $DISTRIBUTIONS_TO_PACKAGE; do
 	for arch in $ARCHES_TO_PACKAGE; do
