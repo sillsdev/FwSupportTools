@@ -150,7 +150,7 @@ BINARY_DIR=archive/results
 
 case $PROJECT in
 	Bloom|bloom)
-		JENKINS_JOB=Bloom_Packaging-Linux-all-3.0-release
+		JENKINS_JOB=Bloom_Packaging-Linux-all-4.0-release
 		;;
 	Bloom-master|bloom-master)
 		JENKINS_JOB=Bloom_Packaging-Linux-all-master-release
