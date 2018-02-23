@@ -48,9 +48,7 @@ sudo apt-get install -y \
   links2 \
   gdb \
   synaptic \
-  ack-grep \
   geany \
-  geany-plugin-markdown \
   chromium-browser \
   byobu \
   indicator-multiload \
@@ -61,6 +59,9 @@ sudo apt-get install -y \
   devscripts \
   tortoisehg \
   nunit
+# bionic may not have ack or geany-plugin-markdown
+sudo apt-get install -y ack || sudo apt-get install -y ack-grep || true
+sudo apt-get install -y geany-plugin-markdown || true
 
 git config --global diff.tool meld
 git config --global merge.conflictstyle diff3
@@ -168,6 +169,14 @@ if [[ -f /etc/wasta-release ]] || [[ $(lsb_release -sc) == "xenial" ]]; then
   chmod +x "\$TOOLSDIR"/{terminator,geany,code}.desktop
 fi
 
+# On Ubuntu 18.04, trust the launchers.
+if [[ $(lsb_release -sc) == "bionic" ]]; then
+  cd $HOME/Desktop/development-tools
+  for launcher in *desktop; do
+    gio set "$launcher" metadata::trusted yes
+  done
+fi
+
 sudo reboot now
 
 ENDOFOUTPUTFILE
@@ -207,9 +216,14 @@ mkdir -p $BASEDIR/fwrepo/fw/DistFiles/Projects
 
 # Monodevelop
 
-sudo add-apt-repository -y ppa:ermshiperete/monodevelop
-sudo apt-get update
-sudo apt-get install -y monodevelop-current
+if [[ $(lsb_release -sc) == "bionic" ]]; then
+  # ermshiperete/monodevelop may not be available or necessary for bionic.
+  sudo apt-get install -y monodevelop
+else
+  sudo add-apt-repository -y ppa:ermshiperete/monodevelop
+  sudo apt-get update
+  sudo apt-get install -y monodevelop-current
+fi
 
 cp -a $BASEDIR/fwrepo/FwSupportTools/building/RunFieldWorks.csproj $BASEDIR/fwrepo/fw/
 sed -i $BASEDIR/fwrepo/fw/RunFieldWorks.csproj -e "s/USERNAME/$USER/"
@@ -295,6 +309,10 @@ mkdir -p "$HOME/Desktop"
 mkdir -p "$HOME/launchers"
 
 OUTPUTFILE="$HOME/launchers/monodevelop.desktop"
+MONODEVELOP_EXECUTABLE=/opt/monodevelop/bin/monodevelop-launcher.sh
+if [[ $(lsb_release -sc) == "bionic" ]]; then
+  MONODEVELOP_EXECUTABLE=/usr/bin/monodevelop
+fi
 cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
 #!/usr/bin/env xdg-open
 
@@ -302,7 +320,7 @@ cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
 Version=1.0
 Type=Application
 Terminal=false
-Exec=bash -c 'export MONO_ENVIRON="\$HOME/fwrepo/fw/environ"; /opt/monodevelop/bin/monodevelop-launcher.sh'
+Exec=bash -c 'export MONO_ENVIRON="\$HOME/fwrepo/fw/environ"; $MONODEVELOP_EXECUTABLE'
 Name=Monodevelop FW
 Icon=/opt/monodevelop/share/icons/hicolor/scalable/apps/monodevelop.svg
 ENDOFOUTPUTFILE
@@ -399,7 +417,7 @@ sudo apt-get install -y mono4-sil gtk-sharp4-sil libgdiplus4-sil mono-basic4-sil
 
 # For compiling mono
 
-sudo apt-get install -y libtiff4-dev || sudo apt-get install -y libtiff5-dev
+sudo apt-get install -y libtiff5-dev || sudo apt-get install -y libtiff4-dev
 sudo apt-get install -y bison mono-devel libgif-dev libjpeg-dev libexif-dev git quilt mono-mcs
 
 # FieldWorks sample data
@@ -431,6 +449,7 @@ cd winformsspy
 xbuild
 
 # Visual Studio Code https://code.visualstudio.com/docs/setup/linux
+sudo apt-get install -y curl
 cd
 curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
 sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
