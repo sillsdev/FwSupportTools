@@ -6,14 +6,15 @@ Created 2017-12-01.
 
 ## Creating the base box
 
-This assumes using an Ubuntu 16.04 host machine.
+This assumes using an Ubuntu 16.04 host machine. These instructions were used for Wasta 16.04 and Ubuntu 18.04 guests.
 
 ### Install machine
 
-1. Use virtualbox manager to create a new Ubuntu virtual machine. (name fwtest-w1604-base or fwdev-w1604-base). Give 60 GB dymanic storage (for fwdev, or 50 for fwtest). 0.75 GB ram is too small, give 2048 MB RAM for fwdev or 1536 for fwtest.
+1. Make sure you have at least 30 GB of disk space free, as you will end up with a few copies of the machine you are working on, in different forms.
+* Use virtualbox manager to create a new Ubuntu virtual machine. (named something like fwtest-w1604-base or fwdev-w1604-base). Give 60 GB dymanic storage (for fwdev, or 50 for fwtest). 0.75 GB ram is too small, give 2048 MB RAM for fwdev or 1536 for fwtest.
 * Boot new virtual machine, specifying wasta 16.04 iso file.
 * At wasta grub menu, specify to start installing right away.
-* Don't download updates while installing (it may use a slow mirror and take forever). Don't install flash, etc.
+* Use default keyboard. Don't download updates while installing (it may use a slow mirror and take forever). Don't install flash, etc.
 * Choose "Something else" and make one big `/` partition with no swap.
 * Set location to near Dallas (for timezone and locale).
 * Name vagrant, computer name fwtest-w1604 or fwdev-w1604, user vagrant, pass vagrant. Choose Log in automatically.
@@ -25,12 +26,13 @@ This assumes using an Ubuntu 16.04 host machine.
 
 1. Turn off screen blanking and locking.
 
-* Remove anything from dock that will just get in the way of use as a testing or dev machine, like thunderbird, libreoffice, vlc. On fwdev, remove all the launcher icons. On fwtest, add terminal to dock/panel.
+* Remove anything from bottom panel that will just get in the way of use as a testing or dev machine, like thunderbird, libreoffice, vlc. On fwdev, remove all the launcher icons. On fwtest, add terminal and synaptic to dock/panel.
 
 * Change the desktop background to something specific to this machine.
 
   * fwtest-w1604 - green grass
   * fwdev-w1604 - park bench
+  * fwtest-w1804 - green island
 
 * You may need to wait 20 minutes for the machine's automated package upgrading to finish before apt will work.
 
@@ -40,11 +42,9 @@ This assumes using an Ubuntu 16.04 host machine.
 		wget http://download.virtualbox.org/virtualbox/5.2.0/VBoxGuestAdditions_5.2.0.iso
 		# Record for security
 		sha256sum *iso>VBoxGuestAdditionsUsed.sha256
-		sudo mkdir /media/VBoxGuestAdditions
-		sudo mount -o loop,ro VBoxGuestAdditions_5.2.0.iso /media/VBoxGuestAdditions
-		sudo sh /media/VBoxGuestAdditions/VBoxLinuxAdditions.run
-		sudo umount /media/VBoxGuestAdditions
-		sudo rmdir /media/VBoxGuestAdditions
+		sudo mount -o loop,ro VBoxGuestAdditions_5.2.0.iso /mnt
+		sudo sh /mnt/VBoxLinuxAdditions.run
+		sudo umount /mnt
 		rm VBoxGuestAdditions_5.2.0.iso
 
 * Reboot.
@@ -70,12 +70,14 @@ This assumes using an Ubuntu 16.04 host machine.
 * Install some packages, and apply updates.
 
 		sudo apt update
-		sudo apt install -y synaptic gdebi vim meld
+		sudo apt install -y synaptic gdebi vim meld openssh-server
 		sudo apt dist-upgrade
 
 * Turn off automatic updates, so that a user won't turn off the machine during updates, which may make a mess. In Wasta 16.04, launch Software Settings, go to the Updates tab. Change 'When there are security updates' to 'Download automatically'. Change 'When there are other updates' to 'Display every two weeks'. Change 'Notify me of..' to 'Never'.
 
-* Prepare for re-generating ssh host keys by appending this line to `/etc/rc.local`
+  For fwtest, set "When there are security updates" to "Display immediately" to prevent the fwtest machine from starting downloads immediately upon boot, which gets in the way of the machine being used to immediately install software to test.
+
+* Prepare for re-generating ssh host keys by appending this line to `/etc/rc.local`. If /etc/rc.local doesn't exist yet, then prepend `#!/bin/bash` and chmod +x it.
 
 		test -f /etc/ssh/ssh_host_rsa_key || dpkg-reconfigure openssh-server
 
@@ -103,6 +105,21 @@ This assumes using an Ubuntu 16.04 host machine.
 		git fetch --unshallow
 
 	Note that if you switch between FW 9 and FW 8, you will need to switch the default .NET runtime between mono 4 and mono 3 in MonoDevelop, Edit, Preferences, Projects, .NET Runtimes.
+
+### Wastaize
+
+If you there is no Wasta .iso available and you are creating a Wasta machine from an Ubuntu 18.04 machine, then do the following. When installing wasta-cinnamon-bionic, it may ask which display manager to use. Make sure to use lightdm for Wasta.
+
+        sudo add-apt-repository -y ppa:wasta-linux/wasta
+        sudo add-apt-repository -y ppa:wasta-linux/wasta-apps
+        sudo add-apt-repository -y ppa:wasta-linux/wasta-testing
+        sudo add-apt-repository -y ppa:wasta-linux/cinnamon-3-6
+        sudo apt-get update
+        sudo apt-get install -y wasta-core-bionic
+        sudo apt-get install -y wasta-cinnamon-bionic
+        sudo wasta-initial-setup --auto
+
+Reboot.
 
 ### Provision
 
@@ -133,7 +150,7 @@ This assumes using an Ubuntu 16.04 host machine.
 
 ### Finalize
 
-1. Boot to single user mode: Turn on the machine using virtualbox manager. When the virtualbox window says to press F12 to select boot device, hold left shift until Grub appears. For Wasta 16.04, choose Advanced options, and then the recovery option. Choose root from the recovery menu.
+1. Boot to single user mode: Turn on the machine using virtualbox manager. When the virtualbox window says to press F12 to select boot device, hold left shift until Grub appears. For Wasta 16.04 and 18.04, choose Advanced options, and then the recovery option. Choose root from the recovery menu.
 
 * Remount filesystem for writing
 
@@ -153,7 +170,7 @@ This assumes using an Ubuntu 16.04 host machine.
 
 ### Generate and publish product
 
-1. Export VM .box file. This may take up to 15 minutes. The `--base` argument is the name of the base machine in virtualbox manager.
+1. Export VM .box file. This may take 5-15 minutes. The `--base` argument is the name of the base machine in virtualbox manager.
 
 		time vagrant package --base fwdev-w1604-base --output fwdev-w1604-0.0.0.box
 
@@ -167,7 +184,7 @@ This assumes using an Ubuntu 16.04 host machine.
 
 * For fwdev, verify that Monodevelop can start FieldWorks using the debugger, and that you can start flexbridge from fieldworks, such as by clicking "Get project from colleague".
 
-* Clean up box test machine. In the `test` directory, run the following. Then delete the `test` directory. The `vagrant box remove` command removes the internally stored copy of the base box (to free disk space).
+* Clean up box test machine. In the `test` directory, run the following. Then delete the `test` directory. The `vagrant box remove` command removes the internally stored copy of the base box (to free disk space); it's not removing the '../foo' *file*, but internally stored data with the designation of '../foo'.
 
 		vagrant destroy
 		vagrant box remove '../fwdev-w1604-0.0.0.box'
@@ -180,6 +197,10 @@ This assumes using an Ubuntu 16.04 host machine.
 
 		chmod g+x *box *json
 
+	If you created a new directory, also chmod g+x that new directory.
+
+* If this is a new box, then you may want to create a new file somewhere like `FwSupportTools/vagrant/testing/fwtest-w1804/Vagrant`.
+
 ## Modifying the base box
 
 1. Check that your host clipboard ring doesn't have anything sensitive.
@@ -191,9 +212,9 @@ This assumes using an Ubuntu 16.04 host machine.
 		sudo apt update
 		sudo apt dist-upgrade
 
-* Make any modifications, such as to settings or adding new VCS repositories. Make equivalent modifications to the `provision-fw-dev-machine` script, as appropriate.
+* Make any modifications, such as to settings or adding new VCS repositories. Make equivalent modifications to the `provision-fw-dev-machine` script, as appropriate, so the changes will happen automatically next time.
 
-* Decide whether or not to fetch and rebuild code from various VCS repositories. Fetching may add hundreds of megs to the box image.
+* Decide whether or not to fetch and rebuild code from various VCS repositories. Fetching may add hundreds of megs to the box image (because they won't be entirely shallow checkouts).
 
 * Follow the "Finish creation" and "Finalize" instructions above.
 
