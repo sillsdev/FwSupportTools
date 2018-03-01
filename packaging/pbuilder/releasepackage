@@ -145,8 +145,6 @@ if [ $# -eq 0 ]; then
 fi
 
 PROJECT=$1
-SOURCE_DIR=archive
-BINARY_DIR=archive/results
 
 case $PROJECT in
 	Bloom|bloom)
@@ -163,15 +161,12 @@ case $PROJECT in
 		;;
 	gtk-sharp)
 		JENKINS_JOB=Gtksharp_Packaging-Linux-all-develop-debug
-		SOURCE_DIR=archive/results
 		;;
 	gtk-sharp-4)
 		JENKINS_JOB=Gtksharp_Packaging-Linux-all-release_mono4_sil-debug
-		SOURCE_DIR=archive/results
 		;;
 	gtk-sharp-3.4)
 		JENKINS_JOB=Gtksharp_Packaging-Linux-all-release_mono_sil_3.4-debug
-		SOURCE_DIR=archive/results
 		;;
 	lfmerge-master)
 		JENKINS_JOB=LfMerge_Packaging-Linux-all-master-release
@@ -187,56 +182,47 @@ case $PROJECT in
 		;;
 	libgdiplus)
 		JENKINS_JOB=Libgdiplus_Packaging-Linux-all-develop-debug
-		SOURCE_DIR=archive/results
 		;;
 	libgdiplus-4)
 		JENKINS_JOB=Libgdiplus_Packaging-Linux-all-release_mono4_sil-debug
-		SOURCE_DIR=archive/results
 		;;
 	libgdiplus-3.4)
 		JENKINS_JOB=Libgdiplus_Packaging-Linux-all-release_mono_sil_3.4-debug
-		SOURCE_DIR=archive/results
 		;;
 	mono)
 		JENKINS_JOB=Mono_Packaging-Linux-all-develop-debug
-		SOURCE_DIR=archive/results
 		;;
 	mono-4)
 		JENKINS_JOB=Mono_Packaging-Linux-all-release_mono4_sil-debug
-		SOURCE_DIR=archive/results
 		;;
 	mono-3.4)
 		JENKINS_JOB=Mono_Packaging-Linux-all-release_mono_sil_3.4-debug
-		SOURCE_DIR=archive/results
 		;;
 	monobasic)
 		JENKINS_JOB=Monobasic_Packaging-Linux-all-develop-debug
-		SOURCE_DIR=archive/results
 		;;
 	monobasic-4)
 		JENKINS_JOB=Monobasic_Packaging-Linux-all-release_mono4_sil-debug
-		SOURCE_DIR=archive/results
 		;;
 	monobasic-3.4)
 		JENKINS_JOB=Monobasic_Packaging-Linux-all-release_mono_sil_3.4-debug
-		SOURCE_DIR=archive/results
 		;;
 	wesay)
 		JENKINS_JOB=WeSay_Packaging-Linux-all-master-release
-		SOURCE_DIR=archive/results
 		;;
 	wesay-beta)
 		JENKINS_JOB=WeSay_Packaging-Linux-all-master-beta
-		SOURCE_DIR=archive/results
 		;;
 	wesay-alpha)
 		JENKINS_JOB=WeSay_Packaging-Linux-all-develop-alpha
-		SOURCE_DIR=archive/results
 		;;
 	*)
 		err "Unknown project $PROJECT. Exiting."
 		exit 4
 esac
+
+BINARY_DIR=${BINARY_DIR-archive/results}
+SOURCE_DIR=${SOURCE_DIR-$BINARY_DIR}
 
 runLocal()
 {
