@@ -2,7 +2,7 @@
 
 # provision-fw-dev-machine
 # Set up a FieldWorks development environment on a vagrant machine. Don't require user interaction.
-# Script created in part from http://linux.lsdev.sil.org/wiki/index.php/Set_up_new_FieldWorks_development_workstation
+# See also http://linux.lsdev.sil.org/wiki/index.php/Set_up_new_FieldWorks_development_workstation
 
 set -e -o pipefail
 
@@ -456,6 +456,31 @@ sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
 sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
 sudo apt-get update
 sudo apt-get install code
+
+# Set up machine to also be able to make packages
+
+sudo apt-get -y install \
+  debhelper \
+  dh-autoreconf \
+  quilt \
+  git-buildpackage \
+  pbuilder
+
+[[ -f ~/.dput.cf ]] || cat > ~/.dput.cf <<EOF
+[pso]
+method = rsync
+fqdn = packager.lsdev.sil.org
+login = upload
+incoming = %(pso)s
+EOF
+
+FWSUPPORTTOOLS=$HOME/fwrepo/FwSupportTools
+cd ~
+ln -sf "$FWSUPPORTTOOLS"/packaging/pbuilder
+ln -sf "$FWSUPPORTTOOLS"/packaging/pbuilder/pbuilderrc .pbuilderrc
+
+cd ~/pbuilder
+wget http://linux.lsdev.sil.org/downloads/sil-testing.gpg
 
 # Wrapup
 # If this vagrant box already has a GUI running, then report in the GUI.

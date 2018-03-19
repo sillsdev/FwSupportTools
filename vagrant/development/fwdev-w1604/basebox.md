@@ -89,9 +89,11 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 
 	Your ssh private key, to commit to gerrit, should have been copied to ~/.ssh/id_rsa .
 
+	Next steps:
+
 	Set your git author name, git email address, and gerrit username by doing the following:
 
-	In the following four lines, replacing YOUR_GERRIT_USERNAME, YOUR_GIT_AUTHOR_NAME, and YOUR_GIT_EMAIL_ADDRESS with your gerrit username, git author name, and git email address. The paste the lines into a terminal.
+	In the following four lines, replacing YOUR_GERRIT_USERNAME, YOUR_GIT_AUTHOR_NAME, and YOUR_GIT_EMAIL_ADDRESS with your gerrit username, git author name, and git email address. (Leave GERRIT_USER_PLACEHOLDER alone.) Then paste the lines into a terminal.
 
 	    git config --global fwinit.gerrituser YOUR_GERRIT_USERNAME
 	    git config --global user.name YOUR_GIT_AUTHOR_NAME
@@ -106,6 +108,21 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 
 	Note that if you switch between FW 9 and FW 8, you will need to switch the default .NET runtime between mono 4 and mono 3 in MonoDevelop, Edit, Preferences, Projects, .NET Runtimes.
 
+	Packaging:
+
+	To use this machine to build packages, first run
+
+	    cd ~/pbuilder && DISTRIBUTIONS="bionic xenial trusty" ./setup.sh
+
+	You can then build a package managed by build-packages by running a command such as
+
+	    ~/fwrepo/FwSupportTools/packaging/build-packages --main-package-name flexbridge --dists "xenial" --arches "amd64"  --repository-committishes flexbridge=origin/master --simulate-dput |& tee /var/tmp/log
+
+	Or you can build a source and binary package by running commands such as
+
+	    cd someproject && debuild -uc -us -S -nc
+	    cd someproject/.. && sudo DISTRIBUTIONS=xenial ARCHES=amd64 ~/pbuilder/build-multi.sh source-package-name.dsc |& tee /var/tmp/log
+
 ### Wastaize
 
 If you there is no Wasta .iso available and you are creating a Wasta machine from an Ubuntu 18.04 machine, then do the following. When installing wasta-cinnamon-bionic, it may ask which display manager to use. Make sure to use lightdm for Wasta.
@@ -117,7 +134,7 @@ If you there is no Wasta .iso available and you are creating a Wasta machine fro
         sudo apt-get update
         sudo apt-get install -y wasta-core-bionic
         sudo apt-get install -y wasta-cinnamon-bionic
-        sudo wasta-initial-setup --auto
+        sudo wasta-initial-setup auto
 
 Reboot.
 
