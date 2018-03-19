@@ -263,11 +263,6 @@ fi
 
 log "Preparing"
 
-if [ "$MAIN_PACKAGE_NAME" = "fieldworks-enc-converters" ]; then
-	mv $repo_base_dir/encoding-converters-core/debian $repo_base_dir/encoding-converters-core/debian-aside
-	mv $repo_base_dir/encoding-converters-core/debian-fieldworks $repo_base_dir/encoding-converters-core/debian
-fi
-
 # Clean out old source packages
 cd "$debian_path"/..
 source_package_name=$(dpkg-parsechangelog |grep ^Source:|cut -d' ' -f2)
@@ -353,11 +348,6 @@ else
 	log "Using package version: $latest_version_in_debian_changelog"
 fi
 
-if [ "$MAIN_PACKAGE_NAME" = "fieldworks-enc-converters" ]; then
-	mv $repo_base_dir/encoding-converters-core/debian $repo_base_dir/encoding-converters-core/debian-fieldworks
-	mv $repo_base_dir/encoding-converters-core/debian-aside $repo_base_dir/encoding-converters-core/debian
-fi
-
 log "Building source package(s) using sources from the following repository commits (possibly with local modifications):"
 
 for repo in "${repository_directory_list[@]}"; do
@@ -391,10 +381,6 @@ if [ -n "$short_mono_package_name" ]; then
 	cd "$repo_base_dir/mono-calgary"
 	DEBUILD_ADDITIONAL_OPTS="-uc -us $DEBUILD_ADDITIONAL_OPTS" REFREPODIR="$repo_base_dir" ./make-source-package ${short_mono_package_name} ${MONO_COMMITTISH_TO_USE}
 	mv ${MAIN_PACKAGE_NAME}*.{dsc,build,changes,tar.[xg]z} "$repo_base_dir/"
-elif [ "$MAIN_PACKAGE_NAME" = "fieldworks-enc-converters" ]; then
-	log "Building source package for $MAIN_PACKAGE_NAME with own source preparation script"
-	cd "$debian_path"/..
-	./BuildFWSourcePackage.sh
 elif [ "$MAIN_PACKAGE_NAME" = "xulrunner-geckofx29" ]; then
 	log "Building source package for $MAIN_PACKAGE_NAME with gbp"
 	cd "$debian_path"/..
