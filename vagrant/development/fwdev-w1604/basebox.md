@@ -10,9 +10,9 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 
 ### Install machine
 
-1. Make sure you have at least 30 GB of disk space free, as you will end up with a few copies of the machine you are working on, in different forms.
+1. Make sure you have at least 40 GB of disk space free, as you will end up with a few copies of the machine you are working on, in different forms.
 * Use virtualbox manager to create a new Ubuntu virtual machine. (named something like fwtest-w1604-base or fwdev-w1604-base). Give 60 GB dymanic storage (for fwdev, or 50 for fwtest). 0.75 GB ram is too small, give 2048 MB RAM for fwdev or 1536 for fwtest.
-* Boot new virtual machine, specifying wasta 16.04 iso file.
+* Boot new virtual machine, specifying wasta 16.04 or 18.04 iso file.
 * At wasta grub menu, specify to start installing right away.
 * Use default keyboard. Don't download updates while installing (it may use a slow mirror and take forever). Don't install flash, etc.
 * Choose "Something else" and make one big `/` partition with no swap.
@@ -33,6 +33,7 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
   * fwtest-w1604 - green grass
   * fwdev-w1604 - park bench
   * fwtest-w1804 - green island
+  * fwdev-w1804 - lighthouse
 
 * You may need to wait 20 minutes for the machine's automated package upgrading to finish before apt will work.
 
@@ -108,7 +109,7 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 
 	Note that if you switch between FW 9 and FW 8, you will need to switch the default .NET runtime between mono 4 and mono 3 in MonoDevelop, Edit, Preferences, Projects, .NET Runtimes.
 
-	Packaging:
+	Packaging: (Not yet fully working.)
 
 	To use this machine to build packages, first run
 
@@ -137,6 +138,8 @@ If you there is no Wasta .iso available and you are creating a Wasta machine fro
         sudo wasta-initial-setup auto
 
 Reboot.
+
+If necessary, again turn off screen blanking and locking, set wallpaper, and adjust panel icons.
 
 ### Provision
 
@@ -179,7 +182,7 @@ Reboot.
 
 * Zero-out deleted files so they don't take up space shipping with the product. Note: This does not appear to make the .vdi file on the host grow in size, so it should be safe to do for guests that need more space than the host has available. The `cat: write error: No space left on device` is expected and not a problem.
 
-		df -h ; date ; time cat /dev/zero > /zeros ; sync ; sleep 1s ; sync ; ls -lh /zeros ; rm /zeros
+		df -h ; date ; time cat /dev/zero > /zeros ; sync ; sleep 1s ; sync ; ls -lh /zeros ; rm -v /zeros
 
 * Shutdown guest.
 
@@ -189,7 +192,7 @@ Reboot.
 
 1. Export VM .box file. This may take 5-15 minutes. The `--base` argument is the name of the base machine in virtualbox manager.
 
-		time vagrant package --base fwdev-w1604-base --output fwdev-w1604-0.0.0.box
+		date ; time vagrant package --base fwdev-w1604-base --output fwdev-w1604-0.0.0.box
 
 * Test that your new box is what you expect.
 
@@ -199,24 +202,24 @@ Reboot.
 		vim Vagrantfile # Uncomment provider virtualbox section that enables `vb.gui`.
 		vagrant up
 
-* For fwdev, verify that Monodevelop can start FieldWorks using the debugger, and that you can start flexbridge from fieldworks, such as by clicking "Get project from colleague".
+* See Smoke tests section below.
 
 * Clean up box test machine. In the `test` directory, run the following. Then delete the `test` directory. The `vagrant box remove` command removes the internally stored copy of the base box (to free disk space); it's not removing the '../foo' *file*, but internally stored data with the designation of '../foo'.
 
 		vagrant destroy
 		vagrant box remove '../fwdev-w1604-0.0.0.box'
 
-* Create a `.json` file to describe and version the box.
+* Create a `.json` file to describe and version the box. (Use another box's .json file as a template.)
 
 * Upload the `.json` and `.box` files to the server.
 
 * Adjust permissions on the files on the server so it's easier for others to maintain them.
 
-		chmod g+x *box *json
+		chmod g+w *box *json
 
 	If you created a new directory, also chmod g+x that new directory.
 
-* If this is a new box, then you may want to create a new file somewhere like `FwSupportTools/vagrant/testing/fwtest-w1804/Vagrant`.
+* If this is a new box, then you may want to create a new file somewhere like `FwSupportTools/vagrant/testing/fwtest-w1804/Vagrantfile`.
 
 ## Modifying the base box
 
@@ -243,8 +246,21 @@ Reboot.
 
 	* Upload the new `.box` file, and delete the oldest `.box` file from the server (for disk space).
 
+## Smoke tests
+
+### fwdev
+
+* Launch monodevelop. Start debugging FW. Remakefw from Tools menu. Start debugging FW.
+* Verify that you can start flexbridge from fieldworks, such as by clicking "Get project from colleague".
+
+### fwtest
+
+* Launch synaptic. Enable llso:experimental. Install fieldworks.
+
 ## Notes
 
 * The base box can't seem to be compressed any better as a vagrant box image, such as by using xz instead of gzip.
 
 * You can free up space by deleting old base boxes. `vagrant box prune`
+
+* You can make snapshots along the way if you suspect the next operation might fail, or if you want to test something and rollback so your test isn't in the product.
