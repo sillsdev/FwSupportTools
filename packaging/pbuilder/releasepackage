@@ -208,7 +208,7 @@ case $PROJECT in
 		JENKINS_JOB=Monobasic_Packaging-Linux-all-release_mono_sil_3.4-debug
 		;;
 	wesay)
-		JENKINS_JOB=WeSay_Packaging-Linux-all-master-release
+		JENKINS_JOB=WeSay_Packaging-Linux-all-release_1.6-stable
 		;;
 	wesay-beta)
 		JENKINS_JOB=WeSay_Packaging-Linux-all-master-beta
