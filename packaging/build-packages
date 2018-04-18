@@ -492,8 +492,8 @@ log "Binary package files exist with the following sha256sums:"
 
 getArgsForBinaryPackage() {
 	local changesFile=$1
-	if [ $(grep -q '.buildinfo$' $changesFile) ]; then
-		# Starting with Xenial the package contains a .buildinfo file that's required to
+	if grep -q '.buildinfo$' ${source_package_name}_*.changes ; then
+		# Starting with Bionic the package contains a .buildinfo file that's required to
 		# upload the package
 		echo "--deb --changes --buildinfo"
 	else
