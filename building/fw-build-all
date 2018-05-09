@@ -8,6 +8,6 @@
 
 program_name=$(basename "$0")
 
-/usr/bin/time -f "$program_name: Total time elapsed %E." cat <(. environ && cd Build && xbuild /t:refreshTargets && xbuild /v:m)
+/usr/bin/time -f "$program_name: Total time elapsed %E." cat <(. environ && cd Build && ./build /v:m )
 
 echo $program_name: Finished at $(date +"%F %T").
