@@ -1,8 +1,9 @@
+#!/bin/bash
 # Perform test on one file
 
 DoTest()
 {
-	mono --debug ../bin/IDLImp.exe /x 0 \
+	mono --debug ../bin/Debug/IDLImp.exe /x 0 \
 		/n SIL.Fieldworks.Test \
 		/c ../IDLImporter/IDLImp.xml \
 		/u LanguageLib \

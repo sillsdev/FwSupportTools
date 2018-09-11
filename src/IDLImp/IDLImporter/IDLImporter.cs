@@ -13,6 +13,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
 using System.Threading;
 using antlr;
+using Newtonsoft.Json;
 
 namespace SIL.FieldWorks.Tools
 {
@@ -293,7 +294,7 @@ namespace SIL.FieldWorks.Tools
 			conversions.Namespace = codeNamespace;
 
 #if SINGLE_THREADED
-			ParseIdhFile(idhFiles);
+			ParseIdhFiles(idhFiles);
 #else
 			m_waitHandle = new EventWaitHandle(false, EventResetMode.AutoReset);
 			ThreadPool.QueueUserWorkItem(new WaitCallback(ParseIdhFiles), idhFiles);
@@ -408,17 +409,21 @@ namespace SIL.FieldWorks.Tools
 		/// ------------------------------------------------------------------------------------
 		/// <summary>
 		/// Serializes the data to a file with the same name as the IDL file but with the
-		/// extension ".iip".
+		/// extension ".json" (and ".iip" for backwards compatibility).
 		/// </summary>
-		/// <param name="sFileName">Name of the IDL file.</param>
+		/// <param name="fileName">Name of the IDL file.</param>
 		/// <param name="cnamespace">The namespace definition with all classes and methods.</param>
 		/// ------------------------------------------------------------------------------------
-		private static void SerializeData(string sFileName, CodeNamespace cnamespace)
+		private static void SerializeData(string fileName, CodeNamespace cnamespace)
 		{
-			using (FileStream outFile = new FileStream(Path.ChangeExtension(sFileName, "iip"),
+			var serializedDefinition = JsonConvert.SerializeObject(cnamespace);
+			File.WriteAllText(Path.ChangeExtension(fileName, "json"), serializedDefinition);
+
+			// For backwards compatibility we additionally use binary serialization
+			using (var outFile = new FileStream(Path.ChangeExtension(fileName, "iip"),
 				FileMode.Create))
 			{
-				BinaryFormatter formatter = new BinaryFormatter();
+				var formatter = new BinaryFormatter();
 				try
 				{
 					formatter.Serialize(outFile, cnamespace);
@@ -435,28 +440,44 @@ namespace SIL.FieldWorks.Tools
 		/// <summary>
 		/// Deserializes the data.
 		/// </summary>
-		/// <param name="sFileName">Name of the IIP file.</param>
+		/// <param name="fileName">Name of the JSON or IIP file.</param>
 		/// <returns>The namespace definition with all classes and methods.</returns>
 		/// ------------------------------------------------------------------------------------
-		private static CodeNamespace DeserializeData(string sFileName)
+		private static CodeNamespace DeserializeData(string fileName)
 		{
-			if (!File.Exists(sFileName))
+			if (!File.Exists(fileName))
 				return null;
 
-			using (FileStream inFile = new FileStream(sFileName, FileMode.Open, FileAccess.Read))
+			if (Path.GetExtension(fileName) == "iip")
 			{
-				BinaryFormatter formatter = new BinaryFormatter();
-				try
+				using (var inFile = new FileStream(fileName, FileMode.Open, FileAccess.Read))
 				{
-					object obj = formatter.Deserialize(inFile);
-					return obj as CodeNamespace;
+					var formatter = new BinaryFormatter();
+					try
+					{
+						var obj = formatter.Deserialize(inFile);
+						return obj as CodeNamespace;
+					}
+					catch (SerializationException e)
+					{
+						Console.WriteLine(
+							"Failed to deserialize referenced data from file \"{0}\". Reason: {1}",
+							fileName, e.Message);
+					}
 				}
-				catch (SerializationException e)
-				{
-					Console.WriteLine(
-						"Failed to deserialize referenced data from file \"{0}\". Reason: {1}",
-						sFileName, e.Message);
-				}
+				return null;
+			}
+
+			try
+			{
+				var serializedData = File.ReadAllText(fileName);
+				return JsonConvert.DeserializeObject<CodeNamespace>(serializedData);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(
+					"Failed to deserialize referenced data from file \"{0}\". Reason: {1}",
+					fileName, e.Message);
 			}
 			return null;
 		}
