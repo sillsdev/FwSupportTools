@@ -416,7 +416,9 @@ namespace SIL.FieldWorks.Tools
 		/// ------------------------------------------------------------------------------------
 		private static void SerializeData(string fileName, CodeNamespace cnamespace)
 		{
-			var serializedDefinition = JsonConvert.SerializeObject(cnamespace);
+			var serializedDefinition = JsonConvert.SerializeObject(cnamespace,
+				/* Formatting.Indented, */
+				new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
 			File.WriteAllText(Path.ChangeExtension(fileName, "json"), serializedDefinition);
 
 			// For backwards compatibility we additionally use binary serialization
@@ -471,7 +473,8 @@ namespace SIL.FieldWorks.Tools
 			try
 			{
 				var serializedData = File.ReadAllText(fileName);
-				return JsonConvert.DeserializeObject<CodeNamespace>(serializedData);
+				return JsonConvert.DeserializeObject<CodeNamespace>(serializedData,
+					new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
 			}
 			catch (Exception e)
 			{
