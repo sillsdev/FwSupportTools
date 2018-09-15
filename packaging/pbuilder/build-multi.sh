@@ -41,7 +41,7 @@ has_arch() # ARCH SRC
 
 	for A in $(get_field Architecture $2)
 	do
-		if [ $A = $1 -o $A = any ]
+		if [ $A = $1 -o $A = any -o linux-any ]
 		then
 			return 0
 		fi
@@ -104,6 +104,7 @@ do
 				# Don't build if not for this arch
 				if ! has_arch $ARCH $SRC
 				then
+					log "not for $ARCH so not building for it"
 					continue
 				fi
 			fi
