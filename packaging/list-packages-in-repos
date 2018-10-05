@@ -15,15 +15,12 @@ import collections
 urls=collections.OrderedDict(
 (
 ('http://packages.sil.org/ubuntu/dists/bionic/main/binary-amd64/Packages', 'pso:bionic 64'),
-('http://packages.sil.org/ubuntu/dists/bionic/main/binary-i386/Packages', 'pso:bionic 32'),
 ('http://packages.sil.org/ubuntu/dists/bionic-experimental/main/binary-amd64/Packages', 'pso:bionic-experimental 64'),
 
 ('http://packages.sil.org/ubuntu/dists/xenial/main/binary-amd64/Packages', 'pso:xenial 64'),
-('http://packages.sil.org/ubuntu/dists/xenial/main/binary-i386/Packages', 'pso:xenial 32'),
 ('http://packages.sil.org/ubuntu/dists/xenial-experimental/main/binary-amd64/Packages', 'pso:xenial-experimental 64'),
 
 ('http://packages.sil.org/ubuntu/dists/trusty/main/binary-amd64/Packages', 'pso:trusty 64'),
-('http://packages.sil.org/ubuntu/dists/trusty/main/binary-i386/Packages', 'pso:trusty 32'),
 ('http://packages.sil.org/ubuntu/dists/trusty-experimental/main/binary-amd64/Packages', 'pso:trusty-experimental 64'),
 
 ('http://linux.lsdev.sil.org/ubuntu/dists/bionic/main/binary-amd64/Packages', 'llso:bionic 64'),
