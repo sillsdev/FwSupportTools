@@ -1,6 +1,6 @@
 # Instructions to create base box
 
-For fwdev-w1604 and fwtest-w1604.
+Such as for creating fwdev-w1604 and fwtest-w1604.
 
 Created 2017-12-01.
 
@@ -33,7 +33,7 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
   * fwtest-w1604 - green grass
   * fwdev-w1604 - park bench
   * fwtest-w1804 - green island
-  * fwdev-w1804 - lighthouse
+  * fwdev-w1804 - tan wall and door
 
 * You may need to wait 20 minutes for the machine's automated package upgrading to finish before apt will work.
 
@@ -52,6 +52,12 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 
 * In virtualbox, choose Devices > Shared clipboard > Bidirectional.
 
+* Ubuntu 18.04 uses a swapfile (rather than a swap partition). Swap shouldn't be necessary and may cause unnecessary churn when backing up the guest image. Disable and delete the swapfile. (Skip this for Ubuntu 16.04 and earlier, which did not default to swapfiles.)
+
+    sudo swapoff -a
+    sudo perl -ni -e 'print unless /swapfile/' /etc/fstab
+    sudo rm -v /swapfile
+
 * Install initial login key.
 
 		mkdir -p ~/.ssh
@@ -61,8 +67,7 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 
 * Passwordless sudo
 
-		sudo visudo
-		append: vagrant ALL=(ALL) NOPASSWD: ALL
+		sudo tee /etc/sudoers.d/passwordless >/dev/null <<< 'vagrant ALL=(ALL) NOPASSWD: ALL'
 
 * Don't let deja-dup hassle user.
 
@@ -78,42 +83,77 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 
   For fwtest, set "When there are security updates" to "Display immediately" to prevent the fwtest machine from starting downloads immediately upon boot, which gets in the way of the machine being used to immediately install software to test.
 
-* Prepare for re-generating ssh host keys by appending this line to `/etc/rc.local`. If /etc/rc.local doesn't exist yet, then prepend `#!/bin/bash` and chmod +x it.
+* Prepare for ssh host keys to be re-generated uniquely by users. (The following script is not indented in markdown to fix problems when pasting from this .md file.)
 
-		test -f /etc/ssh/ssh_host_rsa_key || dpkg-reconfigure openssh-server
+sudo tee /root/regenerate-ssh-host-keys >/dev/null << END
+#!/bin/bash
+# Regenerate ssh host keys if not present
+test -f /etc/ssh/ssh_host_rsa_key || dpkg-reconfigure openssh-server
+END
+sudo chmod +x /root/regenerate-ssh-host-keys
+
+sudo tee /etc/systemd/system/regenerate-ssh-host-keys.service >/dev/null << END
+[Unit]
+Description=regenerate-ssh-host-keys
+
+[Service]
+ExecStart=/root/regenerate-ssh-host-keys
+
+[Install]
+WantedBy=multi-user.target
+END
+sudo systemctl enable regenerate-ssh-host-keys
 
 * For fwdev, create `~/Desktop/dev-machine-instructions.txt` saying:
 
 	Linux FieldWorks Development Machine
 
-	This machine has FieldWorks and related repositories already cloned, in ~/fwrepo and ~/projects . Launchers for IDEs and other tools are available in the development-tools folder on the desktop. FieldWorks is pre-compiled and should run if you launch Monodevelop, open RunFieldWorks, and run. On the Outdated Build dialog, click Execute.
+    INTRODUCTION
+
+	This machine has FieldWorks and related repositories already cloned, in ~/fwrepo and ~/projects . Launchers for IDEs and other tools are available in the development-tools folder on the desktop. FieldWorks is pre-compiled and should run if you launch Visual Studio Code, open ~/fwrepo/fw/fw.code-workspace, and click Debug - Start Debugging.
 
 	Your ssh private key, to commit to gerrit, should have been copied to ~/.ssh/id_rsa .
 
-	Next steps:
+	NEXT STEPS
 
 	Set your git author name, git email address, and gerrit username by doing the following:
 
-	In the following four lines, replacing YOUR_GERRIT_USERNAME, YOUR_GIT_AUTHOR_NAME, and YOUR_GIT_EMAIL_ADDRESS with your gerrit username, git author name, and git email address. (Leave GERRIT_USER_PLACEHOLDER alone.) Then paste the lines into a terminal.
+	In the following four lines, right here in this file replace YOUR_GERRIT_USERNAME, YOUR_GIT_AUTHOR_NAME, and YOUR_GIT_EMAIL_ADDRESS with your gerrit username, git author name, and git email address. Then paste the lines into a terminal. Leave GERRIT_USER_PLACEHOLDER alone; don't replace it with anything.
 
 	    git config --global fwinit.gerrituser YOUR_GERRIT_USERNAME
 	    git config --global user.name YOUR_GIT_AUTHOR_NAME
 	    git config --global user.email YOUR_GIT_EMAIL_ADDRESS
 	    cd ~/fwrepo && find -path '.*\.git/config' | xargs perl -pi -e "s/GERRIT_USER_PLACEHOLDER/$(git config --get fwinit.gerrituser)/"
 
-	Note that to compile FieldWorks, in MonoDevelop click the Tools menu and then click one of "fw build remakefw" or "fw build recent". fw build recent will build projects whose files have changed within the last 30 minutes, allowing you to make a change to a code file and press ALT-T-T to quickly build your change.
+	An old NuGet.exe might be in the way. You can remove it before building FieldWorks if you are aware that it will cause a problem:
+
+	    rm ~/fwrepo/fw/Build/NuGet.exe
 
 	All git repositories were cloned with shallow history, to not take up as much space. If you want to search back in history in one of your git repositories, you can first deepen the history by running:
 
 		git fetch --unshallow
 
-	Note that if you switch between FW 9 and FW 8, you will need to switch the default .NET runtime between mono 4 and mono 3 in MonoDevelop, Edit, Preferences, Projects, .NET Runtimes.
+    MONODEVELOP
 
-	Packaging: (Not yet fully working.)
+    MonoDevelop 5 would debug FieldWorks 9, but that's no longer easily installable.
+    MonoDevelop 7 is installed in this vagrant, but it is not able to open some FW project files.
+    For now you can use Visual Studio Code until we fix FW for MonoDevelop 7.
 
-	To use this machine to build packages, first run
+    Open fwrepo/fw/RunFieldWorks.csproj in MonoDevelop to debug FieldWorks, and in Preferences set the .NET Runtimes default runtime to the latest mono in /opt .
 
-	    cd ~/pbuilder && DISTRIBUTIONS="bionic xenial trusty" ./setup.sh
+    To debug FW, launch Monodevelop, click File - Open, open ~/fwrepo/fw/RunFieldWorks.csproj, and click Run - Start Debugging. On the Outdated Build dialog, click Execute. The next time you load RunFieldWorks in Monodevelop, it may complain about MSBuild, but it seems to work to just add RunFieldworks.csproj to the solution again, and then you can run.
+
+    To compile FieldWorks, in MonoDevelop click the Tools menu and then click one of "fw build remakefw" or "fw build recent". fw build recent will build projects whose files have changed within the last 30 minutes, allowing you to make a change to a code file and press ALT-T-T to quickly build your change.
+
+    Note that if you switch between FW 9 and FW 8, you will need to switch the default .NET runtime between mono 4 and mono 3 in MonoDevelop, Edit, Preferences, Projects, .NET Runtimes.
+
+	PACKAGING
+
+	(Note: This feature is only partially tested.)
+
+    To use this machine to build packages, first run
+
+	    cd ~/pbuilder && DISTRIBUTIONS="bionic xenial" ./setup.sh
 
 	You can then build a package managed by build-packages by running a command such as
 
@@ -123,23 +163,6 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 
 	    cd someproject && debuild -uc -us -S -nc
 	    cd someproject/.. && sudo DISTRIBUTIONS=xenial ARCHES=amd64 ~/pbuilder/build-multi.sh source-package-name.dsc |& tee /var/tmp/log
-
-### Wastaize
-
-If you there is no Wasta .iso available and you are creating a Wasta machine from an Ubuntu 18.04 machine, then do the following. When installing wasta-cinnamon-bionic, it may ask which display manager to use. Make sure to use lightdm for Wasta.
-
-        sudo add-apt-repository -y ppa:wasta-linux/wasta
-        sudo add-apt-repository -y ppa:wasta-linux/wasta-apps
-        sudo add-apt-repository -y ppa:wasta-linux/wasta-testing
-        sudo add-apt-repository -y ppa:wasta-linux/cinnamon-3-6
-        sudo apt-get update
-        sudo apt-get install -y wasta-core-bionic
-        sudo apt-get install -y wasta-cinnamon-bionic
-        sudo wasta-initial-setup auto
-
-Reboot.
-
-If necessary, again turn off screen blanking and locking, set wallpaper, and adjust panel icons.
 
 ### Provision
 
@@ -165,34 +188,25 @@ If necessary, again turn off screen blanking and locking, set wallpaper, and adj
 
 		sudo apt-get install -dy fieldworks
 
-* Clear any clipboard rings in guest.
-* Shut down machine.
+* Clear any clipboard rings in guest and host.
 
 ### Finalize
 
-1. Boot to single user mode: Turn on the machine using virtualbox manager. When the virtualbox window says to press F12 to select boot device, hold left shift until Grub appears. For Wasta 16.04 and 18.04, choose Advanced options, and then the recovery option. Choose root from the recovery menu.
+1. Delete the guest's ssh host keys, so they will be re-generated uniquely by users.
 
-* Remount filesystem for writing
+		sudo rm -v /etc/ssh/ssh_host_*
 
-		mount -o remount,rw /
+* Zero-out deleted files so they don't take up space shipping with the product. Note: This does not appear to make the .vdi file on the host grow in size, so it should be safe to do for guests that need more space than the host has available. A `cat: write error: No space left on device` is expected and not a problem.
 
-* Delete the guest's host keys, so they will be re-generated uniquely by users.
-
-		rm -v /etc/ssh/ssh_host_*
-
-* Zero-out deleted files so they don't take up space shipping with the product. Note: This does not appear to make the .vdi file on the host grow in size, so it should be safe to do for guests that need more space than the host has available. The `cat: write error: No space left on device` is expected and not a problem.
-
-		df -h ; date ; time cat /dev/zero > /zeros ; sync ; sleep 1s ; sync ; ls -lh /zeros ; rm -v /zeros
+		cat /dev/zero > ~/zeros; sync; ls -lh ~/zeros; rm -v ~/zeros
 
 * Shutdown guest.
-
-		poweroff
 
 ### Generate and publish product
 
 1. Export VM .box file. This may take 5-15 minutes. The `--base` argument is the name of the base machine in virtualbox manager.
 
-		date ; time vagrant package --base fwdev-w1604-base --output fwdev-w1604-0.0.0.box
+		date; time vagrant package --base fwdev-w1604-base --output fwdev-w1604-0.0.0.box
 
 * Test that your new box is what you expect.
 

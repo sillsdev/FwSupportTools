@@ -59,8 +59,8 @@ sudo apt-get install -y \
   devscripts \
   tortoisehg \
   nunit
-# bionic may not have ack or geany-plugin-markdown
-sudo apt-get install -y ack || sudo apt-get install -y ack-grep || true
+sudo apt-get install -y ack || sudo apt-get install -y ack-grep
+# bionic missed geany-plugin-markdown, but Ubuntu 20.04 might have it.
 sudo apt-get install -y geany-plugin-markdown || true
 
 git config --global diff.tool meld
@@ -83,8 +83,8 @@ EOF
 perl -pi -e s/^#force_color_prompt/force_color_prompt/ ~/.bashrc
 grep __git_ps1 ~/.bashrc || echo 'export PS1="\$(__git_ps1) $PS1"' |tee -a ~/.bashrc
 # Don't report developer or tester usage to analytics.
-echo export FEEDBACK=false | tee -a ~/.bashrc
-echo export WESAY_TRACK_AS_DEVELOPER=1 | tee -a ~/.bashrc
+tee -a ~/.pam_environment  >/dev/null <<< 'export FEEDBACK=false'
+tee -a ~/.pam_environment  >/dev/null <<< 'export WESAY_TRACK_AS_DEVELOPER=1'
 
 # Enable debugging
 sudo perl -pi -e 's/kernel.yama.ptrace_scope = 1/kernel.yama.ptrace_scope = 0/' /etc/sysctl.d/10-ptrace.conf
@@ -94,24 +94,6 @@ echo '[profiles]
   [[default]]
 	scroll_on_output = False
 	scrollback_infinite = True'|tee ~/.config/terminator/config
-
-# git-cola settings for Ubuntu 12.04
-OUTPUTFILE="$HOME/.cola"
-cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
-{
-	"py/object": "cola.settings.SettingsModel",
-	"bookmarks": [],
-	"gui_state": {
-		"mainview": {
-			"y": 24,
-			"width": 954,
-			"windowstate": "AAAA/wAAAAH9AAAAAQAAAAIAAAO6AAACx/wBAAAAAvwAAAAAAAABhAAAAYQA/////AIAAAAE+wAAACIAUgBlAHAAbwBzAGkAdABvAHIAeQAgAFMAdABhAHQAdQBzAQAAAAAAAAFxAAAAZwD////7AAAADgBBAGMAdABpAG8AbgBzAQAAAXcAAAA4AAAAGgD////7AAAAKgBDAG8AbQBtAGkAdAAgAE0AZQBzAHMAYQBnAGUAIABFAGQAaQB0AG8AcgEAAAG1AAAAjgAAADsA////+wAAABwAQwBvAG0AbQBhAG4AZAAgAE8AdQB0AHAAdQB0AQAAAkkAAAB+AAAAZwD////7AAAAFgBEAGkAZgBmACAAVgBpAGUAdwBlAHIBAAABigAAAjAAAABPAP///wAAA7oAAAAAAAAABAAAAAQAAAAIAAAACPwAAAAA",
-			"height": 711,
-			"x": 65
-		}
-	}
-}
-ENDOFOUTPUTFILE
 
 OUTPUTFILE="$HOME/initial-config.sh"
 cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
@@ -132,13 +114,6 @@ dconf write /org/gnome/desktop/session/idle-delay 'uint32 0'
 dconf write /org/gnome/settings-daemon/plugins/power/sleep-display-ac 0
 dconf write /org/gnome/settings-daemon/plugins/power/sleep-display-battery 0
 
-# Make desktop a bit friendlier
-gsettings set com.canonical.desktop.interface scrollbar-mode normal
-dconf write /com/canonical/unity/integrated-menus false
-gsettings set com.canonical.Unity always-show-menus true
-# Make HUD less easy to accidentally open.
-gsettings set org.compiz.integrated show-hud "['<Alt><Super>']"
-
 dconf write  /apps/update-manager/check-new-release-ignore "'trusty'"
 
 mkdir -p $HOME/.config/autostart
@@ -153,30 +128,19 @@ indicator-multiload &
 
 zenity --warning --no-wrap --title='Rebooting' --text='Your computer will now be rebooted to finish applying initial configuration.'
 
-# Delay to let the launcher bar get populated with the desktop launchers before it's overwritten.
-sleep 20s
-# Ubuntu 12.04
-dconf write  /desktop/unity/launcher/favorites "['nautilus-home.desktop', 'firefox.desktop', 'chromium-browser.desktop', 'terminator.desktop', '$HOME/launchers/monodevelop.desktop', 'geany.desktop', 'gedit.desktop', '$HOME/launchers/fw-git-cola.desktop', '$HOME/launchers/xephyr.desktop']"
-# Ubuntu 14.04
-dconf write /com/canonical/unity/launcher/favorites "['application://nautilus.desktop', 'application://firefox.desktop', 'application://chromium-browser.desktop', 'application://terminator.desktop', 'application://$HOME/launchers/monodevelop.desktop', 'application://geany.desktop', 'application://gedit.desktop', 'application://$HOME/launchers/fw-git-cola.desktop', 'unity://running-apps', 'unity://expo-icon', 'unity://devices']"
-# Wasta 14.04 and 16.04
-if [[ -f /etc/wasta-release ]] || [[ $(lsb_release -sc) == "xenial" ]]; then
-  TOOLSDIR=$HOME/Desktop/development-tools
-  mkdir -p "\$TOOLSDIR"
-  mv $HOME/launchers/* "\$TOOLSDIR"
-  mv $HOME/Desktop/{fw-git-gui.desktop,fw-gitk.desktop,monowinformsspy.desktop} "\$TOOLSDIR"
-  cp -a /usr/share/applications/{terminator,geany,code}.desktop "\$TOOLSDIR"
-  chmod +x "\$TOOLSDIR"/{terminator,geany,code}.desktop
-fi
+TOOLSDIR=$HOME/Desktop/development-tools
+mkdir -p "\$TOOLSDIR"
 
-# On Ubuntu 18.04, trust the launchers.
+# Trust the launchers.
 if [[ $(lsb_release -sc) == "bionic" ]]; then
   cd $HOME/Desktop/development-tools
-  for launcher in *desktop; do
+  for launcher in *.desktop; do
     gio set "$launcher" metadata::trusted yes
   done
 fi
 
+# Breathe
+sleep 10s
 sudo reboot now
 
 ENDOFOUTPUTFILE
@@ -208,31 +172,75 @@ mkdir -p $BASEDIR/fwrepo/fw/DistFiles/Projects
 
 # Install build dependencies from the most recently released FW. (To install mono3 for fixing bugs in FW 8.3, for example.)
 cd $BASEDIR/fwrepo/fw/Build/Agent
-git checkout master -- .
+git checkout origin/master -- .
 $BASEDIR/fwrepo/fw/Build/Agent/install-deps
 git checkout develop -- .
 
 # Libraries
 
-[ -d ~/fwrepo/liblcm ] || git clone --depth=1 https://github.com/sillsdev/liblcm.git ~/fwrepo/liblcm
+[ -d ~/fwrepo/liblcm ] || git clone --depth=1 --branch develop https://github.com/sillsdev/liblcm.git ~/fwrepo/liblcm
 [ -d ~/fwrepo/flexbridge ] || git clone --depth=1 --branch develop https://github.com/sillsdev/flexbridge.git ~/fwrepo/flexbridge
 [ -d ~/projects/libpalaso ] || git clone --depth=1 https://github.com/sillsdev/libpalaso.git ~/projects/libpalaso
 [ -d ~/projects/ipcframework ] || git clone --depth=1 --branch develop https://bitbucket.org/smcconnel/ipcframework ~/projects/ipcframework
 [ -d ~/projects/chorus ] || git clone --depth=1 https://github.com/sillsdev/chorus.git ~/projects/chorus
 
+# WinFormsSpy tool
+cd ~
+[[ -d ~/winformsspy ]] || hg clone https://bitbucket.org/hindlemail/winformsspy
+cd winformsspy
+xbuild
+
+# GitKraken
+sudo apt-get install -y gconf2 libgnome-keyring-dev
+cd
+wget https://release.gitkraken.com/linux/gitkraken-amd64.deb -O gitkraken-amd64.deb
+sudo dpkg -i gitkraken-amd64.deb
+rm gitkraken-amd64.deb
+
+# Visual Studio Code https://code.visualstudio.com/docs/setup/linux
+sudo apt-get install -y curl
+cd
+curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
+sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
+sudo apt-get update
+sudo apt-get install code
+code --install-extension EditorConfig.EditorConfig
+code --install-extension eamodio.gitlens
+code --install-extension ms-vscode.cpptools
+code --install-extension ms-vscode.csharp
+code --install-extension ms-vscode.mono-debug
+
+# Mono
+
+# Mono 5 for Flexbridge 3
+sudo apt-get install -y mono5-sil gtk-sharp5-sil libgdiplus5-sil mono-basic5-sil mono5-sil-dev mono5-sil-msbuild
+
+# Mono 4 for FW 9
+sudo apt-get install -y mono4-sil gtk-sharp4-sil libgdiplus4-sil mono-basic4-sil mono4-sil-dev
+# Need to manually add /opt/mono4-sil in monodevelop .net runtimes list.
+
+# Mono 3 for FW 8.3
+sudo apt-get install -y mono-sil gtk-sharp2-sil libgdiplus-sil mono-basic-sil mono-sil-dev
+
+# For compiling mono
+
+sudo apt-get install -y libtiff5-dev || sudo apt-get install -y libtiff4-dev
+sudo apt-get install -y bison mono-devel libgif-dev libjpeg-dev libexif-dev git quilt mono-mcs
+
 # Monodevelop
 
-if [[ $(lsb_release -sc) == "bionic" ]]; then
-  # ermshiperete/monodevelop may not be available or necessary for bionic.
-  sudo apt-get install -y monodevelop
-else
-  sudo add-apt-repository -y ppa:ermshiperete/monodevelop
-  sudo apt-get update
-  sudo apt-get install -y monodevelop-current
-fi
+# https://www.monodevelop.com/download
+sudo apt-get install -y apt-transport-https dirmngr
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+echo "deb https://download.mono-project.com/repo/ubuntu vs-$(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/mono-official-vs.list
+sudo apt-get update
+sudo apt-get install -y monodevelop
 
 cp -a $BASEDIR/fwrepo/FwSupportTools/building/RunFieldWorks.csproj $BASEDIR/fwrepo/fw/
 sed -i $BASEDIR/fwrepo/fw/RunFieldWorks.csproj -e "s/USERNAME/$USER/"
+
+# These MD5 settings are getting carried over into MD7 successfully.
 
 mkdir -p "$HOME/.config/MonoDevelop-5.0"
 OUTPUTFILE="$HOME/.config/MonoDevelop-5.0/MonoDevelop-tools.xml"
@@ -254,7 +262,7 @@ OUTPUTFILE="$HOME/.config/MonoDevelop-5.0/MonoDevelopProperties.xml"
 cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
 <MonoDevelopProperties version="2.0">
   <Property key="BuildBeforeRunningTests" value="False" />
-  <Property key="MonoDevelop.Ide.DefaultTargetRuntime" value="Mono 3.4.0.1 (23d8e3b)" />
+  <Property key="MonoDevelop.Ide.DefaultTargetRuntime" value="Mono 4.6.1.1" />
   <Property key="MonoDevelop.Ide.BuildBeforeExecuting" value="False" />
   <Property key="MonoDevelop.Debugger.DebuggingService.ProjectAssembliesOnly" value="False" />
 </MonoDevelopProperties>
@@ -264,10 +272,12 @@ OUTPUTFILE="$HOME/.config/MonoDevelop-5.0/mono-runtimes.xml"
 cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
 <RuntimeCollection>
   <MonoRuntimeInfo prefix="/opt/mono-sil" />
+  <MonoRuntimeInfo prefix="/opt/mono4-sil" />
+  <MonoRuntimeInfo prefix="/opt/mono5-sil" />
 </RuntimeCollection>
 ENDOFOUTPUTFILE
 
-# C# code formatting style
+# C# code formatting style. This does not appear to be migrating to MD7.
 mkdir -p "$HOME/.local/share/MonoDevelop-5.0/Policies"
 OUTPUTFILE="$HOME/.local/share/MonoDevelop-5.0/Policies/Default.mdpolicy.xml"
 cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
@@ -311,30 +321,17 @@ ENDOFOUTPUTFILE
 
 # Launchers
 
-mkdir -p "$HOME/Desktop"
-mkdir -p "$HOME/launchers"
+TOOLSDIR="$HOME/Desktop/development-tools"
+mkdir -p "$TOOLSDIR"
 
-OUTPUTFILE="$HOME/launchers/monodevelop.desktop"
-MONODEVELOP_EXECUTABLE=/opt/monodevelop/bin/monodevelop-launcher.sh
-MONODEVELOP_ICON=/opt/monodevelop/share/icons/hicolor/scalable/apps/monodevelop.svg
-if [[ $(lsb_release -sc) == "bionic" ]]; then
-  MONODEVELOP_EXECUTABLE=/usr/bin/monodevelop
-  MONODEVELOP_ICON=/usr/share/icons/hicolor/scalable/apps/monodevelop.svg
-fi
-cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
-#!/usr/bin/env xdg-open
+cp /usr/share/applications/monodevelop.desktop "$TOOLSDIR"
+perl -pi -e 's/Name=MonoDevelop/Name=MonoDevelop Generic/' "$TOOLSDIR"/monodevelop.desktop
+cp /usr/share/applications/monodevelop.desktop "$TOOLSDIR"/monodevelop-fw.desktop
+perl -pi -e 's/Name=MonoDevelop/Name=MonoDevelop FW/' "$TOOLSDIR"/monodevelop-fw.desktop
+perl -pi -e 's:Exec=.*:Exec=bash -c "export MONO_ENVIRON=/home/vagrant/fwrepo/fw/environ; monodevelop":' "$TOOLSDIR"/monodevelop-fw.desktop
+perl -ni -e 'print unless /TryExec/' "$TOOLSDIR"/monodevelop-fw.desktop
 
-[Desktop Entry]
-Version=1.0
-Type=Application
-Terminal=false
-Exec=bash -c 'export MONO_ENVIRON="\$HOME/fwrepo/fw/environ"; $MONODEVELOP_EXECUTABLE'
-Name=Monodevelop FW
-Icon=$MONODEVELOP_ICON
-ENDOFOUTPUTFILE
-chmod +x "$OUTPUTFILE"
-
-OUTPUTFILE="$HOME/Desktop/fw-git-gui.desktop"
+OUTPUTFILE="$TOOLSDIR/fw-git-gui.desktop"
 cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
 #!/usr/bin/env xdg-open
 
@@ -348,7 +345,7 @@ Icon=/usr/share/git-gui/lib/git-gui.ico
 ENDOFOUTPUTFILE
 chmod +x "$OUTPUTFILE"
 
-OUTPUTFILE="$HOME/launchers/fw-git-cola.desktop"
+OUTPUTFILE="$TOOLSDIR/fw-git-cola.desktop"
 cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
 #!/usr/bin/env xdg-open
 
@@ -362,7 +359,7 @@ Icon=/usr/share/git-cola/icons/git-cola.svg
 ENDOFOUTPUTFILE
 chmod +x "$OUTPUTFILE"
 
-OUTPUTFILE="$HOME/Desktop/fw-gitk.desktop"
+OUTPUTFILE="$TOOLSDIR/fw-gitk.desktop"
 cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
 #!/usr/bin/env xdg-open
 
@@ -376,7 +373,7 @@ Icon=/usr/share/git-gui/lib/git-gui.ico
 ENDOFOUTPUTFILE
 chmod +x "$OUTPUTFILE"
 
-OUTPUTFILE="$HOME/launchers/xephyr.desktop"
+OUTPUTFILE="$TOOLSDIR/xephyr.desktop"
 cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
 #!/usr/bin/env xdg-open
 
@@ -386,10 +383,11 @@ Type=Application
 Terminal=false
 Exec=bash -c 'Xephyr :2 -screen 1000x700& sleep 2s; DISPLAY=:2 metacity& DISPLAY=:2 xclock& DISPLAY=:2 xterm& DISPLAY=:2 ibus-daemon &'
 Name=Xephyr
+Icon=/usr/share/icons/hicolor/scalable/apps/cinnamon-session-properties.svg
 ENDOFOUTPUTFILE
 chmod +x "$OUTPUTFILE"
 
-OUTPUTFILE="$HOME/Desktop/monowinformsspy.desktop"
+OUTPUTFILE="$TOOLSDIR/monowinformsspy.desktop"
 cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
 #!/usr/bin/env xdg-open
 
@@ -397,10 +395,9 @@ cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
 Version=1.0
 Type=Application
 Terminal=false
-Exec=MonoWinFormsSpy/bin/Debug/MonoWinFormsSpy.exe
-Exec=bash -c "$HOME/winformsspy/MonoWinFormsSpy/bin/Debug/MonoWinFormsSpy.exe"
+Exec=bash -c "mono $HOME/winformsspy/MonoWinFormsSpy/bin/Debug/MonoWinFormsSpy.exe"
 Name=MonoWinFormsSpy
-Icon=/usr/share/icons/hicolor/scalable/apps/usd-xrandr.svg
+Icon=/usr/share/icons/hicolor/scalable/apps/csd-xrandr.svg
 ENDOFOUTPUTFILE
 chmod +x "$OUTPUTFILE"
 
@@ -418,19 +415,8 @@ Name=Initial Machine Configuration
 ENDOFOUTPUTFILE
 chmod +x "$OUTPUTFILE"
 
-# Mono
-
-# Mono 4 for FW 9
-sudo apt-get install -y mono4-sil gtk-sharp4-sil libgdiplus4-sil mono-basic4-sil mono4-sil-dev
-# Need to manually add /opt/mono4-sil in monodevelop .net runtimes list.
-
-# Mono 3 for FW 8.3
-sudo apt-get install -y mono-sil gtk-sharp2-sil libgdiplus-sil mono-basic-sil mono-sil-dev
-
-# For compiling mono
-
-sudo apt-get install -y libtiff5-dev || sudo apt-get install -y libtiff4-dev
-sudo apt-get install -y bison mono-devel libgif-dev libjpeg-dev libexif-dev git quilt mono-mcs
+cp -aL /usr/share/applications/{terminator,geany,code,gitkraken,byobu}.desktop "$TOOLSDIR"
+chmod +x "$TOOLSDIR"/*.desktop
 
 # FieldWorks sample data
 
@@ -441,33 +427,23 @@ cd ~
 
 # The 'yes n |' part specifies to not use local artifacts. Temporarily unsetting pipefail.
 set +o pipefail
-cd $BASEDIR/fwrepo/fw/Build && yes n | ./build /t:UpdateDevelopmentPropertiesFile && ./build /t:refreshTargets && ./build /t:remakefw &&
-    echo $SCRIPTNAME: FieldWorks compiled successfully. ||
-    echo $SCRIPTNAME: FieldWorks failed to compile.
+cd $BASEDIR/fwrepo/fw/Build &&
+  yes n | ./build /t:UpdateDevelopmentPropertiesFile &&
+  ./build /t:refreshTargets &&
+  ./build /t:remakefw &&
+  echo $SCRIPTNAME: FieldWorks compiled successfully. ||
+  echo $SCRIPTNAME: FieldWorks failed to compile.
 set -o pipefail
 
 mkdir -p $BASEDIR/fwrepo/fw/Output_x86_64/registry/LocalMachine/software/sil/fieldworks/8
 
 # Compile FLExBridge
 
+sudo apt-get install -y libcurl3
+
 cd ~/fwrepo/flexbridge
-make debug
-
-# WinFormsSpy tool
-
-cd ~
-[[ -d ~/winformsspy ]] || hg clone https://bitbucket.org/hindlemail/winformsspy
-cd winformsspy
-xbuild
-
-# Visual Studio Code https://code.visualstudio.com/docs/setup/linux
-sudo apt-get install -y curl
-cd
-curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
-sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
-sudo apt-get update
-sudo apt-get install code
+# Work around quirks
+make debug || make debug
 
 # Set up machine to also be able to make packages
 
@@ -498,5 +474,5 @@ wget http://linux.lsdev.sil.org/downloads/sil-testing.gpg
 # If this vagrant box already has a GUI running, then report in the GUI.
 (DISPLAY=:0 zenity --warning --no-wrap --title='Provisioning' --text="$(date '+%F %T')\nProvisioning is almost finished.  See the vagrant output in the host terminal\nfor any errors or further instructions. You must reboot this vagrant box\nto finish the provisioning process." ||true) &
 
-echo $SCRIPTNAME: Reboot the vagrant guest to bring up the GUI. Open fwrepo/fw/RunFieldWorks.csproj in MonoDevelop to debug FieldWorks, and in Preferences set the .NET Runtimes default runtime to the latest mono in /opt.
+echo $SCRIPTNAME: Reboot the vagrant guest to bring up the GUI.
 echo $SCRIPTNAME: Done.
