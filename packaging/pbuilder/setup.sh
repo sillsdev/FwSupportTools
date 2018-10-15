@@ -43,6 +43,7 @@ cd "${PBUILDERDIR:-$(dirname "$0")}"
 KEYRINGLLSO="$PBUILDERDIR/sil-testing.gpg"
 KEYRINGPSO="$PBUILDERDIR/sil.gpg"
 KEYRINGNODE="$PBUILDERDIR/nodesource.gpg"
+KEYRINGMONO="$PBUILDERDIR/mono.gpg"
 
 if [ ! -f $KEYRINGPSO ]; then
 	wget --output-document=$KEYRINGPSO http://packages.sil.org/sil.gpg
@@ -50,6 +51,11 @@ fi
 
 if [ ! -f $KEYRINGNODE ]; then
 	wget --output-document=$KEYRINGNODE https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+fi
+
+if [ ! -f $KEYRINGMONO ]; then
+	gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+	gpg --armor --export 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF > $KEYRINGMONO
 fi
 
 for D in ${DISTRIBUTIONS:-$UBUNTU_DISTROS $UBUNTU_OLDDISTROS $DEBIAN_DISTROS}
@@ -87,7 +93,6 @@ do
 			done
 
 			# allow to install current mono
-			apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
 			addmirror "deb http://download.mono-project.com/repo/ubuntu stable-$D main"
 
 			if [ $D != "precise" ]; then
@@ -105,7 +110,6 @@ do
 			addmirror "deb $PSO $D $COMPONENTS"
 
 			# allow to install current mono
-			apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
 			addmirror "deb https://download.mono-project.com/repo/debian stable-$D main"
 
 			if [ $D != "wheezy" ]; then
@@ -141,6 +145,7 @@ do
 				sudo HOME=~ DIST=$D ARCH=$A pbuilder --execute --save-after-exec -- addkey < $KEYRINGLLSO
 				sudo HOME=~ DIST=$D ARCH=$A pbuilder --execute --save-after-exec -- addkey < $KEYRINGPSO
 				sudo HOME=~ DIST=$D ARCH=$A pbuilder --execute --save-after-exec -- addkey < $KEYRINGNODE
+				sudo HOME=~ DIST=$D ARCH=$A pbuilder --execute --save-after-exec -- addkey < $KEYRINGMONO
 				rm addkey
 
 				options="--update --override-config"
@@ -151,6 +156,7 @@ do
 			${KEYRINGLLSO:+--keyring }$KEYRINGLLSO \
 			${KEYRINGPSO:+--keyring }$KEYRINGPSO \
 			${KEYRINGNODE:+--keyring }$KEYRINGNODE \
+			${KEYRINGMONO:+--keyring }$KEYRINGMONO \
 			--extrapackages "apt-utils devscripts lsb-release apt-transport-https ca-certificates gnupg" \
 			--othermirror "$OTHERMIRROR" \
 			--mirror "$MIRROR" \
