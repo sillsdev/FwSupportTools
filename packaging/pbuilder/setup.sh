@@ -85,14 +85,14 @@ do
 				addmirror "deb $LLSO $D$S $COMPONENTS"
 				addmirror "deb $PSO $D$S $COMPONENTS"
 			done
-			# TODO Remove the following bionic exclusion when that section of the repository is available
-			if [ $D != "precise" -a $D != "bionic" ]; then
+
+			# allow to install current mono
+			apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+			addmirror "deb http://download.mono-project.com/repo/ubuntu stable-$D main"
+
+			if [ $D != "precise" ]; then
 				# allow to install current nodejs packages
-				if [ -n "$update" ]; then
-					# we can't use https when creating the chroot because apt-transport-https
-					# isn't available yet
-					addmirror "deb https://deb.nodesource.com/node_8.x $D main"
-				fi
+				addmirror "deb http://deb.nodesource.com/node_8.x $D main"
 			fi
 		elif [[ $DEBIAN_DISTROS == *$D* ]]; then
 			MIRROR="${DEBIAN_MIRROR:-http://ftp.ca.debian.org/debian/}"
@@ -103,13 +103,14 @@ do
 			PSO="http://packages.sil.org/debian/"
 			addmirror "deb $LLSO $D $COMPONENTS"
 			addmirror "deb $PSO $D $COMPONENTS"
+
+			# allow to install current mono
+			apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+			addmirror "deb https://download.mono-project.com/repo/debian stable-$D main"
+
 			if [ $D != "wheezy" ]; then
 				# allow to install current nodejs packages
-				if [ -n "$update" ]; then
-					# we can't use https when creating the chroot because apt-transport-https
-					# isn't available yet
-					addmirror "deb https://deb.nodesource.com/node_8.x $D main"
-				fi
+				addmirror "deb http://deb.nodesource.com/node_8.x $D main"
 			fi
 		else
 			err "Unknown distribution $D. Please update the script $0."
