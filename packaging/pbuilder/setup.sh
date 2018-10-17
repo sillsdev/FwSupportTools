@@ -37,7 +37,6 @@ function addmirror()
 
 PBUILDERDIR="${PBUILDERDIR:-$(dirname "$0")}"
 
-
 cd "${PBUILDERDIR:-$(dirname "$0")}"
 
 KEYRINGLLSO="$PBUILDERDIR/sil-testing.gpg"
@@ -149,6 +148,16 @@ do
 				rm addkey
 
 				options="--update --override-config"
+		fi
+
+		if [ -n "$update" ]; then
+			log "Adding mono gpg key for $D${DIST_ARCH_SEP}$A"
+			echo >addkey '/usr/bin/apt-key add -'
+			sudo HOME=~ DIST=$D ARCH=$A pbuilder --execute --save-after-exec -- addkey < $KEYRINGMONO
+			rm addkey
+			log "Updating base.tgz for $D${DIST_ARCH_SEP}$A"
+		else
+			log "Creating base.tgz for $D${DIST_ARCH_SEP}$A"
 		fi
 
 		sudo HOME=~ DIST=$D ARCH=$A pbuilder $options \
