@@ -2,7 +2,7 @@
 
 init()
 {
-	CONFIGFILE="build-multi.config"
+	CONFIGFILE="$(dirname $0)/build-multi.config"
 	[ -e $CONFIGFILE ] && . $CONFIGFILE # Settings for PBUILDERDIR, DISTRIBUTIONS, etc.
 
 	# currently supported and future Ubuntu versions
@@ -24,6 +24,8 @@ init()
 	UBUNTU_OLDMIRROR=${UBUNTU_OLDMIRROR:-http://old-releases.ubuntu.com/ubuntu/}
 
 	PBUILDERSUDO=${PBUILDERSUDO:-}
+
+	DIST_ARCH_SEP=${DIST_ARCH_SEP:-/}
 
 	RED='\033[0;31m'
 	GREEN='\033[0;32m'

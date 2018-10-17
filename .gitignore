@@ -27,3 +27,5 @@ obj/
 _UpgradeReport_Files/
 
 .vagrant
+
+packaging/pbuilder/build-multi.config

@@ -6,3 +6,6 @@ DEBIAN_MIRROR=${DEBIAN_MIRROR:-http://ftp.ca.debian.org/debian/}
 
 # Set this to "sudo" if $PBUILDERDIR is in /var/cache/pbuilder instead of your home directory
 PBUILDERSUDO=
+
+# Used to separate distribution from architecture.
+DIST_ARCH_SEP=/

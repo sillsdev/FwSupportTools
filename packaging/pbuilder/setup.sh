@@ -62,12 +62,12 @@ for D in ${DISTRIBUTIONS:-$UBUNTU_DISTROS $UBUNTU_OLDDISTROS $DEBIAN_DISTROS}
 do
 	for A in ${ARCHES-amd64 i386}
 	do
-		[ -e $D/$A/base.tgz -a -z "$update" ] && echo "$D/$A already exists - skipping creation" && continue
-		[ ! -e $D/$A/base.tgz -a -n "$update" ] && echo "$D/$A doesn't exist - skipping update" && continue
+		[ -e $D${DIST_ARCH_SEP}$A${DIST_ARCH_SEP}base.tgz -a -z "$update" ] && echo "$D${DIST_ARCH_SEP}$A already exists - skipping creation" && continue
+		[ ! -e $D${DIST_ARCH_SEP}$A${DIST_ARCH_SEP}base.tgz -a -n "$update" ] && echo "$D${DIST_ARCH_SEP}$A doesn't exist - skipping update" && continue
 
-		log "Processing $D/$A"
+		log "Processing $D${DIST_ARCH_SEP}$A"
 
-		mkdir -p $D/$A/{aptcache,build,result}
+		mkdir -p $D${DIST_ARCH_SEP}$A/{aptcache,build,result}
 
 		OTHERMIRROR=""
 
