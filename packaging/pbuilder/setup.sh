@@ -65,7 +65,7 @@ do
 		[ -e $D/$A/base.tgz -a -z "$update" ] && echo "$D/$A already exists - skipping creation" && continue
 		[ ! -e $D/$A/base.tgz -a -n "$update" ] && echo "$D/$A doesn't exist - skipping update" && continue
 
-		log "Processing $D/$A$"
+		log "Processing $D/$A"
 
 		mkdir -p $D/$A/{aptcache,build,result}
 
