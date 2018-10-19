@@ -166,7 +166,7 @@ do
 			${KEYRINGPSO:+--keyring }$KEYRINGPSO \
 			${KEYRINGNODE:+--keyring }$KEYRINGNODE \
 			${KEYRINGMONO:+--keyring }$KEYRINGMONO \
-			--extrapackages "apt-utils devscripts lsb-release apt-transport-https ca-certificates gnupg" \
+			--extrapackages "apt-utils devscripts lsb-release apt-transport-https ca-certificates gnupg tzdata" \
 			--othermirror "$OTHERMIRROR" \
 			--mirror "$MIRROR" \
 			--components "$COMPONENTS" \
