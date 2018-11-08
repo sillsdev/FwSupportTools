@@ -37,12 +37,12 @@ function addmirror()
 
 PBUILDERDIR="${PBUILDERDIR:-$(dirname "$0")}"
 
+
 cd "${PBUILDERDIR:-$(dirname "$0")}"
 
 KEYRINGLLSO="$PBUILDERDIR/sil-testing.gpg"
 KEYRINGPSO="$PBUILDERDIR/sil.gpg"
 KEYRINGNODE="$PBUILDERDIR/nodesource.gpg"
-KEYRINGMONO="$PBUILDERDIR/mono.gpg"
 
 if [ ! -f $KEYRINGPSO ]; then
 	wget --output-document=$KEYRINGPSO http://packages.sil.org/sil.gpg
@@ -50,11 +50,6 @@ fi
 
 if [ ! -f $KEYRINGNODE ]; then
 	wget --output-document=$KEYRINGNODE https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-fi
-
-if [ ! -f $KEYRINGMONO ]; then
-	gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-	gpg --armor --export 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF > $KEYRINGMONO
 fi
 
 for D in ${DISTRIBUTIONS:-$UBUNTU_DISTROS $UBUNTU_OLDDISTROS $DEBIAN_DISTROS}
@@ -90,13 +85,13 @@ do
 				addmirror "deb $LLSO $D$S $COMPONENTS"
 				addmirror "deb $PSO $D$S $COMPONENTS"
 			done
-
-			# allow to install current mono
-			addmirror "deb http://download.mono-project.com/repo/ubuntu stable-$D main"
-
 			if [ $D != "precise" ]; then
 				# allow to install current nodejs packages
-				addmirror "deb http://deb.nodesource.com/node_8.x $D main"
+				if [ -n "$update" ]; then
+					# we can't use https when creating the chroot because apt-transport-https
+					# isn't available yet
+					addmirror "deb https://deb.nodesource.com/node_8.x $D main"
+				fi
 			fi
 		elif [[ $DEBIAN_DISTROS == *$D* ]]; then
 			MIRROR="${DEBIAN_MIRROR:-http://ftp.ca.debian.org/debian/}"
@@ -107,13 +102,13 @@ do
 			PSO="http://packages.sil.org/debian/"
 			addmirror "deb $LLSO $D $COMPONENTS"
 			addmirror "deb $PSO $D $COMPONENTS"
-
-			# allow to install current mono
-			addmirror "deb https://download.mono-project.com/repo/debian stable-$D main"
-
 			if [ $D != "wheezy" ]; then
 				# allow to install current nodejs packages
-				addmirror "deb http://deb.nodesource.com/node_8.x $D main"
+				if [ -n "$update" ]; then
+					# we can't use https when creating the chroot because apt-transport-https
+					# isn't available yet
+					addmirror "deb https://deb.nodesource.com/node_8.x $D main"
+				fi
 			fi
 		else
 			err "Unknown distribution $D. Please update the script $0."
@@ -144,20 +139,9 @@ do
 				sudo HOME=~ DIST=$D ARCH=$A pbuilder --execute --save-after-exec -- addkey < $KEYRINGLLSO
 				sudo HOME=~ DIST=$D ARCH=$A pbuilder --execute --save-after-exec -- addkey < $KEYRINGPSO
 				sudo HOME=~ DIST=$D ARCH=$A pbuilder --execute --save-after-exec -- addkey < $KEYRINGNODE
-				sudo HOME=~ DIST=$D ARCH=$A pbuilder --execute --save-after-exec -- addkey < $KEYRINGMONO
 				rm addkey
 
 				options="--update --override-config"
-		fi
-
-		if [ -n "$update" ]; then
-			log "Adding mono gpg key for $D${DIST_ARCH_SEP}$A"
-			echo >addkey '/usr/bin/apt-key add -'
-			sudo HOME=~ DIST=$D ARCH=$A pbuilder --execute --save-after-exec -- addkey < $KEYRINGMONO
-			rm addkey
-			log "Updating base.tgz for $D${DIST_ARCH_SEP}$A"
-		else
-			log "Creating base.tgz for $D${DIST_ARCH_SEP}$A"
 		fi
 
 		sudo HOME=~ DIST=$D ARCH=$A pbuilder $options \
@@ -165,7 +149,6 @@ do
 			${KEYRINGLLSO:+--keyring }$KEYRINGLLSO \
 			${KEYRINGPSO:+--keyring }$KEYRINGPSO \
 			${KEYRINGNODE:+--keyring }$KEYRINGNODE \
-			${KEYRINGMONO:+--keyring }$KEYRINGMONO \
 			--extrapackages "apt-utils devscripts lsb-release apt-transport-https ca-certificates gnupg tzdata" \
 			--othermirror "$OTHERMIRROR" \
 			--mirror "$MIRROR" \
