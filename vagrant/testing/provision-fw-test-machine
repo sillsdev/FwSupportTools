@@ -7,15 +7,10 @@ set -e -o pipefail
 # Set up
 
 # Don't report tester usage to analytics.
-echo export FEEDBACK=false | tee -a ~/.bashrc
-echo export WESAY_TRACK_AS_DEVELOPER=1 | tee -a ~/.bashrc
+tee -a ~/.pam_environment  >/dev/null <<< 'export FEEDBACK=false'
+tee -a ~/.pam_environment  >/dev/null <<< 'export WESAY_TRACK_AS_DEVELOPER=1'
 
 RELEASE=$(lsb_release -sc)
-# Use codename of wasta Linux's Ubuntu base
-if [ -f /etc/wasta-release ]; then
-  source /etc/wasta-release
-  RELEASE=$CODENAME
-fi
 
 # Enable multiverse repository, if not already
 sudo perl -pi -e '/multiverse/ and !/backports/ and s/^# //' /etc/apt/sources.list

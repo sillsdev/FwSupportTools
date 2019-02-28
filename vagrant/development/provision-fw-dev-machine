@@ -132,12 +132,10 @@ TOOLSDIR=$HOME/Desktop/development-tools
 mkdir -p "\$TOOLSDIR"
 
 # Trust the launchers.
-if [[ $(lsb_release -sc) == "bionic" ]]; then
-  cd $HOME/Desktop/development-tools
-  for launcher in *.desktop; do
-    gio set "$launcher" metadata::trusted yes
-  done
-fi
+cd $HOME/Desktop/development-tools
+for launcher in *.desktop; do
+  gio set "\$launcher" metadata::trusted yes
+done
 
 # Breathe
 sleep 10s
@@ -213,7 +211,7 @@ code --install-extension ms-vscode.mono-debug
 
 # Mono
 
-# Mono 5 for Flexbridge 3
+# Mono 5
 sudo apt-get install -y mono5-sil gtk-sharp5-sil libgdiplus5-sil mono-basic5-sil mono5-sil-dev mono5-sil-msbuild
 
 # Mono 4 for FW 9
@@ -227,6 +225,15 @@ sudo apt-get install -y mono-sil gtk-sharp2-sil libgdiplus-sil mono-basic-sil mo
 
 sudo apt-get install -y libtiff5-dev || sudo apt-get install -y libtiff4-dev
 sudo apt-get install -y bison mono-devel libgif-dev libjpeg-dev libexif-dev git quilt mono-mcs
+
+# Mono from mono-project, for mono 5 that compiles flexbridge
+
+# https://www.mono-project.com/download/stable/
+sudo apt-get install gnupg ca-certificates
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+sudo apt-get update
+sudo apt-get install mono-devel
 
 # Monodevelop
 
@@ -383,7 +390,7 @@ Type=Application
 Terminal=false
 Exec=bash -c 'Xephyr :2 -screen 1000x700& sleep 2s; DISPLAY=:2 metacity& DISPLAY=:2 xclock& DISPLAY=:2 xterm& DISPLAY=:2 ibus-daemon &'
 Name=Xephyr
-Icon=/usr/share/icons/hicolor/scalable/apps/cinnamon-session-properties.svg
+Icon=/usr/share/icons/hicolor/scalable/apps/session-properties.svg
 ENDOFOUTPUTFILE
 chmod +x "$OUTPUTFILE"
 
@@ -397,7 +404,7 @@ Type=Application
 Terminal=false
 Exec=bash -c "mono $HOME/winformsspy/MonoWinFormsSpy/bin/Debug/MonoWinFormsSpy.exe"
 Name=MonoWinFormsSpy
-Icon=/usr/share/icons/hicolor/scalable/apps/csd-xrandr.svg
+Icon=/usr/share/icons/hicolor/scalable/apps/preferences-desktop-display.svg
 ENDOFOUTPUTFILE
 chmod +x "$OUTPUTFILE"
 

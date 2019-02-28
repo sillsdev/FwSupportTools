@@ -11,22 +11,24 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 ### Install machine
 
 1. Make sure you have at least 40 GB of disk space free, as you will end up with a few copies of the machine you are working on, in different forms.
-* Use virtualbox manager to create a new Ubuntu virtual machine. (named something like fwtest-w1604-base or fwdev-w1604-base). Give 60 GB dymanic storage (for fwdev, or 50 for fwtest). 0.75 GB ram is too small, give 2048 MB RAM for fwdev or 1536 for fwtest.
-* Boot new virtual machine, specifying wasta 16.04 or 18.04 iso file.
-* At wasta grub menu, specify to start installing right away.
+* Use virtualbox manager to create a new Ubuntu virtual machine. (named something like fwtest-w1604-base or fwdev-w1604-base). Give 2048 MB RAM and 60 GB dynamic storage.
+* Boot new virtual machine, specifying appropriate Ubuntu or Wasta iso file.
+* At boot menu, specify to start installing right away. (Press spacebar right away in Ubuntu to see options.)
 * Use default keyboard. Don't download updates while installing (it may use a slow mirror and take forever). Don't install flash, etc.
 * Choose "Something else" and make one big `/` partition with no swap.
-* Set location to near Dallas (for timezone and locale).
-* Name vagrant, computer name fwtest-w1604 or fwdev-w1604, user vagrant, pass vagrant. Choose Log in automatically.
+* Set location to Chicago (near Dallas, for timezone and locale).
+* Name vagrant, computer name something like fwtest-w1604 or fwdev-u1604, user vagrant, pass vagrant. Choose Log in automatically.
 * Reboot after installer finishes.
 * Check that your host clipboard ring doesn't have anything sensitive.
 * Log in to guest.
+* Upgrade: sudo apt update && sudo apt dist-upgrade
+* Reboot to run any new kernel.
 
 ### Configure
 
-1. Turn off screen blanking and locking.
+1. Turn off screen blanking, locking, suspend.
 
-* Remove anything from bottom panel that will just get in the way of use as a testing or dev machine, like thunderbird, libreoffice, vlc. On fwdev, remove all the launcher icons. On fwtest, add terminal and synaptic to dock/panel.
+* Remove anything from the panel that will just get in the way of use as a testing or dev machine, like thunderbird, libreoffice, vlc. On fwdev, remove all the launcher icons. On fwtest, add terminal and synaptic to dock/panel.
 
 * Change the desktop background to something specific to this machine.
 
@@ -34,57 +36,57 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
   * fwdev-w1604 - park bench
   * fwtest-w1804 - green island
   * fwdev-w1804 - tan wall and door
-
-* You may need to wait 20 minutes for the machine's automated package upgrading to finish before apt will work.
+  * fwtest-u1804 -
+  * fwdev-u1804 - bag of orange food
 
 * Install guest additions.
 
-		sudo apt install linux-headers-$(uname -r) build-essential dkms
-		wget http://download.virtualbox.org/virtualbox/5.2.0/VBoxGuestAdditions_5.2.0.iso
-		# Record for security
-		sha256sum *iso>VBoxGuestAdditionsUsed.sha256
-		sudo mount -o loop,ro VBoxGuestAdditions_5.2.0.iso /mnt
-		sudo sh /mnt/VBoxLinuxAdditions.run
-		sudo umount /mnt
-		rm VBoxGuestAdditions_5.2.0.iso
+  * On your host machine, run
+
+        sudo apt install virtualbox-guest-additions-iso
+
+  * In the guest machine, run
+
+        sudo apt install linux-headers-$(uname -r) build-essential dkms
+
+   In the guest machine window, choose Devices > Insert Guest Additions CD image. In the guest, a VBOXADDITIONS window appears; click Run. Right-click the CD icon on the desktop and Eject the VirtualBox Additions disc.
+
+   In the guest machine window, choose Devices > Shared clipboard > Bidirectional.
 
 * Reboot.
 
-* In virtualbox, choose Devices > Shared clipboard > Bidirectional.
+* Passwordless sudo
+
+        sudo tee /etc/sudoers.d/passwordless >/dev/null <<< 'vagrant ALL=(ALL) NOPASSWD: ALL'
 
 * Ubuntu 18.04 uses a swapfile (rather than a swap partition). Swap shouldn't be necessary and may cause unnecessary churn when backing up the guest image. Disable and delete the swapfile. (Skip this for Ubuntu 16.04 and earlier, which did not default to swapfiles.)
 
-    sudo swapoff -a
-    sudo perl -ni -e 'print unless /swapfile/' /etc/fstab
-    sudo rm -v /swapfile
+        sudo swapoff -a
+        sudo perl -ni -e 'print unless /swapfile/' /etc/fstab
+        sudo rm -v /swapfile
 
 * Install initial login key.
 
-		mkdir -p ~/.ssh
-		chmod 0700 ~/.ssh
-		wget  https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub  -O ~/.ssh/authorized_keys
-		chmod 0600 ~/.ssh/authorized_keys
-
-* Passwordless sudo
-
-		sudo tee /etc/sudoers.d/passwordless >/dev/null <<< 'vagrant ALL=(ALL) NOPASSWD: ALL'
+        mkdir -p ~/.ssh
+        chmod 0700 ~/.ssh
+        wget  https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub  -O ~/.ssh/authorized_keys
+        chmod 0600 ~/.ssh/authorized_keys
 
 * Don't let deja-dup hassle user.
 
-		sudo apt remove deja-dup
+        sudo apt remove deja-dup
 
-* Install some packages, and apply updates.
+* Install some packages.
 
-		sudo apt update
-		sudo apt install -y synaptic gdebi vim meld openssh-server
-		sudo apt dist-upgrade
+        sudo apt install -y synaptic gdebi vim meld openssh-server
 
-* Turn off automatic updates, so that a user won't turn off the machine during updates, which may make a mess. In Wasta 16.04, launch Software Settings, go to the Updates tab. Change 'When there are security updates' to 'Download automatically'. Change 'When there are other updates' to 'Display every two weeks'. Change 'Notify me of..' to 'Never'.
+* Turn off automatic updates, so that a user won't turn off the machine during updates, which may make a mess. In Wasta 16.04 or 18.04, launch Software Settings (or "Software & Updates" in Ubuntu 18.04), go to the Updates tab. 'Automatically check for updates' to 'Every two weeks'. Close and re-open the Software Settings window to make 'When there are security updates' work. Change 'When there are security updates' to 'Download automatically'. Change 'When there are other updates' to 'Display every two weeks'. Change 'Notify me of..' to 'Never'.
 
   For fwtest, set "When there are security updates" to "Display immediately" to prevent the fwtest machine from starting downloads immediately upon boot, which gets in the way of the machine being used to immediately install software to test.
 
 * Prepare for ssh host keys to be re-generated uniquely by users. (The following script is not indented in markdown to fix problems when pasting from this .md file.)
 
+```
 sudo tee /root/regenerate-ssh-host-keys >/dev/null << END
 #!/bin/bash
 # Regenerate ssh host keys if not present
@@ -103,80 +105,85 @@ ExecStart=/root/regenerate-ssh-host-keys
 WantedBy=multi-user.target
 END
 sudo systemctl enable regenerate-ssh-host-keys
+```
 
 * For fwdev, create `~/Desktop/dev-machine-instructions.txt` saying:
 
-	Linux FieldWorks Development Machine
+```
+Linux FieldWorks Development Machine
 
-    INTRODUCTION
+INTRODUCTION
 
-	This machine has FieldWorks and related repositories already cloned, in ~/fwrepo and ~/projects . Launchers for IDEs and other tools are available in the development-tools folder on the desktop. FieldWorks is pre-compiled and should run if you launch Visual Studio Code, open ~/fwrepo/fw/fw.code-workspace, and click Debug - Start Debugging.
+This machine has FieldWorks and related repositories already cloned, in ~/fwrepo and ~/projects . Launchers for IDEs and other tools are available in the development-tools folder on the desktop. FieldWorks is pre-compiled and should run if you launch Visual Studio Code, click File - Open Workspace, open ~/fwrepo/fw/fw.code-workspace, wait a bit for extensions and possibly click Reload in the lower right of the Code window, and then click Debug - Start Debugging.
 
-	Your ssh private key, to commit to gerrit, should have been copied to ~/.ssh/id_rsa .
+Your ssh private key, to commit to gerrit, should have been copied to ~/.ssh/id_rsa .
 
-	NEXT STEPS
+NEXT STEPS
 
-	Set your git author name, git email address, and gerrit username by doing the following:
+Set your git author name, git email address, and gerrit username by doing the following:
 
-	In the following four lines, right here in this file replace YOUR_GERRIT_USERNAME, YOUR_GIT_AUTHOR_NAME, and YOUR_GIT_EMAIL_ADDRESS with your gerrit username, git author name, and git email address. Then paste the lines into a terminal. Leave GERRIT_USER_PLACEHOLDER alone; don't replace it with anything.
+In the following four lines, right here in this file replace YOUR_GERRIT_USERNAME, YOUR_GIT_AUTHOR_NAME, and YOUR_GIT_EMAIL_ADDRESS with your gerrit username, git author name, and git email address. Then paste the lines into a terminal. Leave GERRIT_USER_PLACEHOLDER alone; don't replace it with anything.
 
-	    git config --global fwinit.gerrituser YOUR_GERRIT_USERNAME
-	    git config --global user.name YOUR_GIT_AUTHOR_NAME
-	    git config --global user.email YOUR_GIT_EMAIL_ADDRESS
-	    cd ~/fwrepo && find -path '.*\.git/config' | xargs perl -pi -e "s/GERRIT_USER_PLACEHOLDER/$(git config --get fwinit.gerrituser)/"
+	git config --global fwinit.gerrituser YOUR_GERRIT_USERNAME
+	git config --global user.name YOUR_GIT_AUTHOR_NAME
+	git config --global user.email YOUR_GIT_EMAIL_ADDRESS
+	cd ~/fwrepo && find -path '.*\.git/config' | xargs perl -pi -e "s/GERRIT_USER_PLACEHOLDER/$(git config --get fwinit.gerrituser)/"
 
-	An old NuGet.exe might be in the way. You can remove it before building FieldWorks if you are aware that it will cause a problem:
+An old NuGet.exe might be in the way. You can remove it before building FieldWorks if you are aware that it will cause a problem:
 
-	    rm ~/fwrepo/fw/Build/NuGet.exe
+	rm ~/fwrepo/fw/Build/NuGet.exe
 
-	All git repositories were cloned with shallow history, to not take up as much space. If you want to search back in history in one of your git repositories, you can first deepen the history by running:
+All git repositories were cloned with shallow history, to not take up as much space. If you want to search back in history in one of your git repositories, you can first deepen the history by running:
 
-		git fetch --unshallow
+	git fetch --unshallow
 
-    MONODEVELOP
+MONODEVELOP
 
-    MonoDevelop 5 would debug FieldWorks 9, but that's no longer easily installable.
-    MonoDevelop 7 is installed in this vagrant, but it is not able to open some FW project files.
-    For now you can use Visual Studio Code until we fix FW for MonoDevelop 7.
+MonoDevelop 5 would debug FieldWorks 9, but that's no longer easily installable.
+MonoDevelop 7 is installed in this vagrant, and can be jostled into running FW, but it is not a smooth experience.
+For now you can use Visual Studio Code until we adjust FW for MonoDevelop 7.
 
-    Open fwrepo/fw/RunFieldWorks.csproj in MonoDevelop to debug FieldWorks, and in Preferences set the .NET Runtimes default runtime to the latest mono in /opt .
+To set up MonoDevelop: Launch monodevelop. Choose File - Open, fwrepo/fw/RunFieldWorks.csproj. Choose Edit - Preferences. Click .NET Runtimes. Click Add. Click /opt/mono4-sil and Set as Default. Click OK.
 
-    To debug FW, launch Monodevelop, click File - Open, open ~/fwrepo/fw/RunFieldWorks.csproj, and click Run - Start Debugging. On the Outdated Build dialog, click Execute. The next time you load RunFieldWorks in Monodevelop, it may complain about MSBuild, but it seems to work to just add RunFieldworks.csproj to the solution again, and then you can run.
+If MonoDevelop later forgets about the runtime setting, then in Preferences set the .NET Runtimes default runtime to the latest mono in /opt .
 
-    To compile FieldWorks, in MonoDevelop click the Tools menu and then click one of "fw build remakefw" or "fw build recent". fw build recent will build projects whose files have changed within the last 30 minutes, allowing you to make a change to a code file and press ALT-T-T to quickly build your change.
+To debug FW, launch Monodevelop, click File - Open, open ~/fwrepo/fw/RunFieldWorks.csproj, and click Run - Start Debugging. On the Outdated Build dialog, click Execute. The next time you load RunFieldWorks in Monodevelop, it may complain about MSBuild, but you may be able to just add RunFieldworks.csproj to the solution again, and then run.
 
-    Note that if you switch between FW 9 and FW 8, you will need to switch the default .NET runtime between mono 4 and mono 3 in MonoDevelop, Edit, Preferences, Projects, .NET Runtimes.
+To compile FieldWorks, in MonoDevelop click the Tools menu and then click one of "fw build remakefw" or "fw build recent". fw build recent will build projects whose files have changed within the last 30 minutes, allowing you to make a change to a code file and press ALT-T-T to quickly build your change.
 
-	PACKAGING
+Note that if you switch between FW 9 and FW 8, you will need to switch the default .NET runtime between mono 4 and mono 3 in MonoDevelop, Edit, Preferences, Projects, .NET Runtimes.
 
-	(Note: This feature is only partially tested.)
+PACKAGING
 
-    To use this machine to build packages, first run
+(Note: This feature is only partially tested.)
 
-	    cd ~/pbuilder && DISTRIBUTIONS="bionic xenial" ./setup.sh
+To use this machine to build packages, first run
 
-	You can then build a package managed by build-packages by running a command such as
+	cd ~/pbuilder && DISTRIBUTIONS="bionic xenial" ./setup.sh
 
-	    ~/fwrepo/FwSupportTools/packaging/build-packages --main-package-name flexbridge --dists "xenial" --arches "amd64"  --repository-committishes flexbridge=origin/master --simulate-dput |& tee /var/tmp/log
+You can then build a package managed by build-packages by running a command such as
 
-	Or you can build a source and binary package by running commands such as
+	~/fwrepo/FwSupportTools/packaging/build-packages --main-package-name flexbridge --dists "xenial" --arches "amd64"  --repository-committishes flexbridge=origin/master --simulate-dput |& tee /var/tmp/log
 
-	    cd someproject && debuild -uc -us -S -nc
-	    cd someproject/.. && sudo DISTRIBUTIONS=xenial ARCHES=amd64 ~/pbuilder/build-multi.sh source-package-name.dsc |& tee /var/tmp/log
+Or you can build a source and binary package by running commands such as
+
+	cd someproject && debuild -uc -us -S -nc
+	cd someproject/.. && sudo DISTRIBUTIONS=xenial ARCHES=amd64 ~/pbuilder/build-multi.sh source-package-name.dsc |& tee /var/tmp/log
+```
 
 ### Provision
 
 * For a test machine:
 
-		wget https://raw.githubusercontent.com/sillsdev/FwSupportTools/develop/vagrant/testing/provision-fw-test-machine
+		cd && wget https://raw.githubusercontent.com/sillsdev/FwSupportTools/develop/vagrant/testing/provision-fw-test-machine
 		bash provision-fw-test-machine
 
 * For a dev machine:
 
-		wget https://raw.githubusercontent.com/sillsdev/FwSupportTools/develop/vagrant/development/provision-fw-dev-machine
+		cd && wget https://raw.githubusercontent.com/sillsdev/FwSupportTools/develop/vagrant/development/provision-fw-dev-machine
 		bash provision-fw-dev-machine
 
-	After the script, reboot a couple times. Launch monodevelop. Choose File - Open, fwrepo/fw/RunFieldWorks.csproj. Choose Edit - Preferences. Click .NET Runtimes. Click Add. Navigate to /opt/mono4-sil and click Open. Back in Preferences, click the mono4-sil option and click Set as Default. Click OK.
+	After the script, reboot a couple times to finish all initial automated configuration.
 
 ### Finish configuration
 
