@@ -6,14 +6,14 @@ Created 2017-12-01.
 
 ## Creating the base box
 
-This assumes using an Ubuntu 16.04 host machine. These instructions were used for Wasta 16.04 and Ubuntu 18.04 guests.
+This assumes using an Ubuntu 16.04 host machine. These instructions were used for Wasta 18.04 and Ubuntu 18.04 guests.
 
 ### Install machine
 
 1. Make sure you have at least 40 GB of disk space free, as you will end up with a few copies of the machine you are working on, in different forms.
-* Use virtualbox manager to create a new Ubuntu virtual machine. (named something like fwtest-w1604-base or fwdev-w1604-base). Give 2048 MB RAM and 60 GB dynamic storage.
+* Use virtualbox manager to create a new Ubuntu virtual machine. (named something like fwtest-w1604-base or fwdev-w1604-base). Give 2000 MB RAM to a dev machine and 1500 MB RAM to a test machine. Give 60 GB dynamic storage. Note that the actual RAM used after creating the box will depend on the Vagrantfile setting.
 * Boot new virtual machine, specifying appropriate Ubuntu or Wasta iso file.
-* At boot menu, specify to start installing right away. (Press spacebar right away in Ubuntu to see options.)
+* At the boot menu, specify to start installing right away. (Press shift right away in Ubuntu to see options.)
 * Use default keyboard. Don't download updates while installing (it may use a slow mirror and take forever). Don't install flash, etc.
 * Choose "Something else" and make one big `/` partition with no swap.
 * Set location to Chicago (near Dallas, for timezone and locale).
@@ -36,7 +36,7 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
   * fwdev-w1604 - park bench
   * fwtest-w1804 - green island
   * fwdev-w1804 - tan wall and door
-  * fwtest-u1804 -
+  * fwtest-u1804 - looking out of orange cave
   * fwdev-u1804 - bag of orange food
 
 * Install guest additions.
@@ -80,7 +80,7 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 
         sudo apt install -y synaptic gdebi vim meld openssh-server
 
-* Turn off automatic updates, so that a user won't turn off the machine during updates, which may make a mess. In Wasta 16.04 or 18.04, launch Software Settings (or "Software & Updates" in Ubuntu 18.04), go to the Updates tab. 'Automatically check for updates' to 'Every two weeks'. Close and re-open the Software Settings window to make 'When there are security updates' work. Change 'When there are security updates' to 'Download automatically'. Change 'When there are other updates' to 'Display every two weeks'. Change 'Notify me of..' to 'Never'.
+* Turn off automatic updates, so that a user won't turn off the machine during updates, which may make a mess. In Wasta 16.04 or 18.04, launch Software Settings (or "Software & Updates" in Ubuntu 18.04), go to the Updates tab. 'Automatically check for updates' to 'Every two weeks'. Close and re-open the Software Settings window if needed to make 'When there are security updates' work. Change 'When there are security updates' to 'Download automatically'. Change 'When there are other updates' to 'Display every two weeks'. Change 'Notify me of..' to 'Never'.
 
   For fwtest, set "When there are security updates" to "Display immediately" to prevent the fwtest machine from starting downloads immediately upon boot, which gets in the way of the machine being used to immediately install software to test.
 
@@ -271,8 +271,9 @@ Or you can build a source and binary package by running commands such as
 
 ### fwdev
 
-* Launch monodevelop. Start debugging FW. Remakefw from Tools menu. Start debugging FW.
+* Launch VSCode. Open FW workspace. Start debugging FW.
 * Verify that you can start flexbridge from fieldworks, such as by clicking "Get project from colleague".
+* Successfully rebuild FW by clicking Terminal - Run Build Task, with minimal unit test errors.
 
 ### fwtest
 

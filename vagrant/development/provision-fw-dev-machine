@@ -177,7 +177,8 @@ git checkout develop -- .
 # Libraries
 
 [ -d ~/fwrepo/liblcm ] || git clone --depth=1 --branch develop https://github.com/sillsdev/liblcm.git ~/fwrepo/liblcm
-[ -d ~/fwrepo/flexbridge ] || git clone --depth=1 --branch develop https://github.com/sillsdev/flexbridge.git ~/fwrepo/flexbridge
+# Not shallow since FlexBridge needs enough history for GitVersion to work.
+[ -d ~/fwrepo/flexbridge ] || git clone --branch develop https://github.com/sillsdev/flexbridge.git ~/fwrepo/flexbridge
 [ -d ~/projects/libpalaso ] || git clone --depth=1 https://github.com/sillsdev/libpalaso.git ~/projects/libpalaso
 [ -d ~/projects/ipcframework ] || git clone --depth=1 --branch develop https://bitbucket.org/smcconnel/ipcframework ~/projects/ipcframework
 [ -d ~/projects/chorus ] || git clone --depth=1 https://github.com/sillsdev/chorus.git ~/projects/chorus
@@ -233,7 +234,7 @@ sudo apt-get install gnupg ca-certificates
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
 echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
 sudo apt-get update
-sudo apt-get install mono-devel
+sudo apt-get install -y mono-devel
 
 # Monodevelop
 
