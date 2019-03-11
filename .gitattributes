@@ -13,6 +13,7 @@
 *.vcxproj -whitespace
 *.vcxproj.filters -whitespace
 *.md -whitespace
+*.json whitespace=-indent-with-non-tab
 provision-fw-dev-machine -whitespace
 LICENSING.txt whitespace=-indent-with-non-tab
 Vagrantfile -whitespace

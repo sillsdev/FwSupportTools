@@ -1,0 +1,20 @@
+{
+    "description": "FieldWorks Development Box running Ubuntu 18.04",
+    "name": "fwdev-u1804",
+    "versions":
+    [
+        {
+            "version": "1.0.0",
+            "status": "active",
+            "providers":
+            [
+                {
+                    "checksum": "df5ea27e5f6b0b7d4c8e50dc60fe4222d51f7ebf9142168627b82cea57f95f56",
+                    "checksum_type": "sha256",
+                    "name": "virtualbox",
+                    "url": "http://linux.lsdev.sil.org/vagrant/fwdev-u1804/fwdev-u1804-1.0.0.box"
+                }
+            ]
+        }
+    ]
+}

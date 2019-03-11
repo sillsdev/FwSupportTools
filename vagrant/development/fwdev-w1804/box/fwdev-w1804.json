@@ -1,0 +1,33 @@
+{
+    "description": "FieldWorks Development Box running Wasta 18.04",
+    "name": "fwdev-w1804",
+    "versions":
+    [
+        {
+            "version": "0.0.0",
+            "status": "active",
+            "providers":
+            [
+                {
+                    "checksum": "33dec7b00b035601bbfbba5f9f98e83a6f711e55414e411e6e81f69066f68176",
+                    "checksum_type": "sha256",
+                    "name": "virtualbox",
+                    "url": "http://linux.lsdev.sil.org/vagrant/fwdev-w1804/fwdev-w1804-0.0.0.box"
+                }
+            ]
+        },
+        {
+            "version": "1.0.0",
+            "status": "active",
+            "providers":
+            [
+                {
+                    "checksum": "0ebb9e778df39facb013d79ac9d0d314e0a83ac044aa4487707d1a5477bafdfc",
+                    "checksum_type": "sha256",
+                    "name": "virtualbox",
+                    "url": "http://linux.lsdev.sil.org/vagrant/fwdev-w1804/fwdev-w1804-1.0.0.box"
+                }
+            ]
+        }
+    ]
+}

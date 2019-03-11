@@ -10,7 +10,7 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 
 ### Install machine
 
-1. Make sure you have at least 40 GB of disk space free, as you will end up with a few copies of the machine you are working on, in different forms.
+1. Make sure you have at least 50 GB of disk space free, as you will end up with a few copies of the machine you are working on, in different forms.
 * Use virtualbox manager to create a new Ubuntu virtual machine. (named something like fwtest-w1604-base or fwdev-w1604-base). Give 2000 MB RAM to a dev machine and 1500 MB RAM to a test machine. Give 60 GB dynamic storage. Note that the actual RAM used after creating the box will depend on the Vagrantfile setting.
 * Boot new virtual machine, specifying appropriate Ubuntu or Wasta iso file.
 * At the boot menu, specify to start installing right away. (Press shift right away in Ubuntu to see options.)
@@ -21,6 +21,7 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 * Reboot after installer finishes.
 * Check that your host clipboard ring doesn't have anything sensitive.
 * Log in to guest.
+* Make guest machine window bigger to avoid guest windows staying maximized after opening and closing them. This resolution will be remembered in the product, so don't make it too big either. Maybe no bigger than 1860 x 960. How about 1600x900.
 * Upgrade: sudo apt update && sudo apt dist-upgrade
 * Reboot to run any new kernel.
 
@@ -34,7 +35,7 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 
   * fwtest-w1604 - green grass
   * fwdev-w1604 - park bench
-  * fwtest-w1804 - green island
+  * fwtest-w1804 - green mountain
   * fwdev-w1804 - tan wall and door
   * fwtest-u1804 - looking out of orange cave
   * fwdev-u1804 - bag of orange food
@@ -173,6 +174,8 @@ Or you can build a source and binary package by running commands such as
 
 ### Provision
 
+* This is a good time to take a snapshot of the guest, in case anything fails in the provision.
+
 * For a test machine:
 
 		cd && wget https://raw.githubusercontent.com/sillsdev/FwSupportTools/develop/vagrant/testing/provision-fw-test-machine
@@ -220,10 +223,10 @@ Or you can build a source and binary package by running commands such as
 		mkdir test
 		cd test
 		vagrant init ../fwdev-w1604-0.0.0.box
-		vim Vagrantfile # Uncomment provider virtualbox section that enables `vb.gui`.
+		vim Vagrantfile # Uncomment provider virtualbox section that enables `vb.gui`. Increase RAM.
 		vagrant up
 
-* See Smoke tests section below.
+* Perform smoke tests as described below.
 
 * Clean up box test machine. In the `test` directory, run the following. Then delete the `test` directory. The `vagrant box remove` command removes the internally stored copy of the base box (to free disk space); it's not removing the '../foo' *file*, but internally stored data with the designation of '../foo'.
 
@@ -277,7 +280,7 @@ Or you can build a source and binary package by running commands such as
 
 ### fwtest
 
-* Launch synaptic. Enable llso:experimental. Install fieldworks.
+* Launch synaptic. Enable llso:experimental. Install and launch fieldworks.
 
 ## Notes
 

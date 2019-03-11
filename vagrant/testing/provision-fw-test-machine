@@ -10,7 +10,7 @@ set -e -o pipefail
 tee -a ~/.pam_environment  >/dev/null <<< 'export FEEDBACK=false'
 tee -a ~/.pam_environment  >/dev/null <<< 'export WESAY_TRACK_AS_DEVELOPER=1'
 
-RELEASE=$(lsb_release -sc)
+RELEASE="$(lsb_release -sc)"
 
 # Enable multiverse repository, if not already
 sudo perl -pi -e '/multiverse/ and !/backports/ and s/^# //' /etc/apt/sources.list
@@ -20,16 +20,19 @@ sudo perl -ni -e 'print unless /sil\.org/' /etc/apt/sources.list
 
 wget -qO - http://packages.sil.org/sil.gpg | sudo apt-key add -
 wget -qO - http://linux.lsdev.sil.org/downloads/sil-testing.gpg | sudo apt-key add -
-sudo add-apt-repository "deb http://packages.sil.org/ubuntu $RELEASE main"
+sudo add-apt-repository "deb http://packages.sil.org/ubuntu ${RELEASE} main"
 # Go ahead and add all these repos, but then comment them out. That will make it easier to enable them by hand later.
-sudo add-apt-repository "deb http://packages.sil.org/ubuntu $RELEASE-experimental main"
-sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE main"
-sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE-updates main"
-sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE-proposed main"
-sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE-experimental main"
-sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE-dictionary main"
+sudo add-apt-repository "deb http://packages.sil.org/ubuntu ${RELEASE}-experimental main"
+sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu ${RELEASE} main"
+sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu ${RELEASE}-updates main"
+sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu ${RELEASE}-proposed main"
+sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu ${RELEASE}-experimental main"
+sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu ${RELEASE}-dictionary main"
 sudo perl -pi -e '/^deb.*linux.lsdev.sil.org/ and s/^/#/' /etc/apt/sources.list
-sudo perl -pi -e "/^deb.*$RELEASE-experimental/ and s/^/#/" /etc/apt/sources.list
+sudo perl -pi -e "/^deb.*${RELEASE}-experimental/ and s/^/#/" /etc/apt/sources.list /etc/apt/sources.list.d/packages-sil-org-*-experimental.list
+
+# This machine doesn't need deb-src lines, and they make repo selection more crowded.
+sudo perl -pi -e '/deb-src / and s/^/## /' /etc/apt/sources.list /etc/apt/sources.list.d/*.list
 
 sudo apt-get update
 if ! sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade; then
