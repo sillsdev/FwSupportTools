@@ -280,7 +280,7 @@ Or you can build a source and binary package by running commands such as
 
 ### fwtest
 
-* Launch synaptic. Enable llso:experimental. Install and launch fieldworks.
+* Launch synaptic. Enable pso:main, pso:experimental, llso:main, llso:experimental. Install and launch fieldworks.
 
 ## Notes
 

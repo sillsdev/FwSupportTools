@@ -1,0 +1,33 @@
+{
+    "description": "FieldWorks Test Box running Wasta 18.04",
+    "name": "fwtest-w1804",
+    "versions":
+    [
+        {
+            "version": "0.0.0",
+            "status": "active",
+            "providers":
+            [
+                {
+                    "checksum": "25683fe1f8ed7feffa62983f4f292261e170266ceee96c6e7e18a2f62bd2e332",
+                    "checksum_type": "sha256",
+                    "name": "virtualbox",
+                    "url": "http://linux.lsdev.sil.org/vagrant/fwtest-w1804/fwtest-w1804-0.0.0.box"
+                }
+            ]
+        },
+        {
+            "version": "1.0.0",
+            "status": "active",
+            "providers":
+            [
+                {
+                    "checksum": "779d8c23853eaf3b6363204ac4ac27ed7dd3a2996b7856ca3ff12406c80360ad",
+                    "checksum_type": "sha256",
+                    "name": "virtualbox",
+                    "url": "http://linux.lsdev.sil.org/vagrant/fwtest-w1804/fwtest-w1804-1.0.0.box"
+                }
+            ]
+        }
+    ]
+}
