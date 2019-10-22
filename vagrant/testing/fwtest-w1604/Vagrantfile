@@ -33,5 +33,5 @@ END
   # Fix too many comment characters in /etc/apt/sources.list, until this change is made in the base box.
   config.vm.provision "shell", inline: 'sudo perl -pi -e "/^##deb.*linux.lsdev.sil.org.*xenial-experimental/ && s/^##/#/" /etc/apt/sources.list'
 
-  config.vm.provision "file", source: "../dot-gdbinit", destination: "~/.gdbinit"
+  config.vm.provision "file", source: "../../development/dot-gdbinit", destination: "~/.gdbinit"
 end
