@@ -11,6 +11,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.memory = 3584
     v.cpus = 4
     v.gui = true
+    # Enable 3D acceleration and more video RAM for larger displays.
+    v.customize ["modifyvm", :id, "--accelerate3d", "on"]
+    v.customize ["modifyvm", :id, "--vram", "128"]
   end
 
   config.vm.provision "file", source: "~/.ssh/id_rsa", destination: "~/.ssh/id_rsa"
