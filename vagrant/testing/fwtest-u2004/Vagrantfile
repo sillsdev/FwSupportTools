@@ -1,0 +1,17 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "fwtest-u2004"
+  config.vm.box_url = "http://linux.lsdev.sil.org/vagrant/fwtest-u2004/fwtest-u2004.json"
+  config.vm.define :"testing"
+
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 2048
+    v.cpus = 1
+    v.gui = true
+  end
+
+  config.vm.provision "file", source: "../dot-gdbinit", destination: "~/.gdbinit"
+end
