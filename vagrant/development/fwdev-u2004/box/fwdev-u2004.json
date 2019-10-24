@@ -1,0 +1,20 @@
+{
+    "description": "FieldWorks Development Box running Ubuntu 20.04",
+    "name": "fwdev-u2004",
+    "versions":
+    [
+        {
+            "version": "0.0.0",
+            "status": "active",
+            "providers":
+            [
+                {
+                    "checksum": "a4f1cde54ce5f5dbf0eba368f8de0eb1d8c71d1d47fac0c825cba03d5dcfda96",
+                    "checksum_type": "sha256",
+                    "name": "virtualbox",
+                    "url": "http://linux.lsdev.sil.org/vagrant/fwdev-u2004/fwdev-u2004-0.0.0.box"
+                }
+            ]
+        }
+    ]
+}

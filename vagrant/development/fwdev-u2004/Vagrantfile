@@ -1,0 +1,22 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "fwdev-u2004"
+  config.vm.box_url = "http://linux.lsdev.sil.org/vagrant/fwdev-u2004/fwdev-u2004.json"
+  config.vm.define :"development"
+
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 3584
+    v.cpus = 4
+    v.gui = true
+    # Enable 3D acceleration and more video RAM for larger displays.
+    v.customize ["modifyvm", :id, "--accelerate3d", "on"]
+    v.customize ["modifyvm", :id, "--vram", "128"]
+  end
+
+  config.vm.provision "file", source: "../dot-gdbinit", destination: "~/.gdbinit"
+  config.vm.provision "file", source: "~/.ssh/id_rsa", destination: "~/.ssh/id_rsa"
+  config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/id_rsa.pub"
+end
