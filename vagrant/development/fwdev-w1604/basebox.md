@@ -13,7 +13,7 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 1. Make sure you have at least 50 GB of disk space free, as you will end up with a few copies of the machine you are working on, in different forms.
 * Use virtualbox manager to create a new Ubuntu virtual machine. (named something like fwtest-w1604-base or fwdev-w1604-base). Give 2000 MB RAM to a dev machine and 1500 MB RAM to a test machine. Give 60 GB dynamic storage. Note that the actual RAM used after creating the box will depend on the Vagrantfile setting.
 * Boot new virtual machine, specifying appropriate Ubuntu or Wasta iso file.
-* At the boot menu, specify to start installing right away. (Press shift right away in Ubuntu to see options.)
+* At the boot menu, specify to start installing right away (eg "Install Ubuntu"). (Press shift right away in Ubuntu to see options.)
 * Use default keyboard. Don't download updates while installing (it may use a slow mirror and take forever). Don't install flash, etc.
 * Choose "Something else" and make one big `/` partition with no swap.
 * Set location to Chicago (near Dallas, for timezone and locale).
@@ -22,7 +22,7 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 * Check that your host clipboard ring doesn't have anything sensitive.
 * Log in to guest.
 * Make guest machine window bigger to avoid guest windows staying maximized after opening and closing them. This resolution will be remembered in the product, so don't make it too big either. Maybe no bigger than 1860 x 960. How about 1600x900.
-* Upgrade: sudo apt update && sudo apt dist-upgrade
+* Upgrade using Software Updater. Then upgrade from Terminal: sudo apt update && sudo apt dist-upgrade
 * Reboot to run any new kernel.
 
 ### Configure
@@ -34,11 +34,15 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 * Change the desktop background to something specific to this machine.
 
   * fwtest-w1604 - green grass
-  * fwdev-w1604 - park bench
+  * fwdev-w1604  - park bench
   * fwtest-w1804 - green mountain
-  * fwdev-w1804 - tan wall and door
+  * fwdev-w1804  - tan wall and door
   * fwtest-u1804 - looking out of orange cave
-  * fwdev-u1804 - bag of orange food
+  * fwdev-u1804  - bag of orange food
+  * fwtest-w1804 -
+  * fwdev-w1804  -
+  * fwtest-u1804 - (temp: boat on lake)
+  * fwdev-u1804  - (temp: stone path thru forest)
 
 * Install guest additions.
 
@@ -50,7 +54,7 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 
         sudo apt install linux-headers-$(uname -r) build-essential dkms
 
-   In the guest machine window, choose Devices > Insert Guest Additions CD image. In the guest, a VBOXADDITIONS window appears; click Run. Right-click the CD icon on the desktop and Eject the VirtualBox Additions disc.
+   In the guest machine window, choose Devices > Insert Guest Additions CD image. In the guest, a VBOXADDITIONS window appears; click Run. Right-click the CD icon on the panel or desktop and Eject the VirtualBox Additions disc.
 
    In the guest machine window, choose Devices > Shared clipboard > Bidirectional.
 
@@ -62,14 +66,11 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 
 * Ubuntu 18.04 uses a swapfile (rather than a swap partition). Swap shouldn't be necessary and may cause unnecessary churn when backing up the guest image. Disable and delete the swapfile. (Skip this for Ubuntu 16.04 and earlier, which did not default to swapfiles.)
 
-        sudo swapoff -a
-        sudo perl -ni -e 'print unless /swapfile/' /etc/fstab
-        sudo rm -v /swapfile
+        sudo swapoff -a && sudo perl -ni -e 'print unless /swapfile/' /etc/fstab && sudo rm -v /swapfile
 
 * Install initial login key.
 
-        mkdir -p ~/.ssh
-        chmod 0700 ~/.ssh
+        mkdir -p ~/.ssh && chmod 0700 ~/.ssh
         wget  https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub  -O ~/.ssh/authorized_keys
         chmod 0600 ~/.ssh/authorized_keys
 
@@ -188,6 +189,18 @@ Or you can build a source and binary package by running commands such as
 
 	After the script, reboot a couple times to finish all initial automated configuration.
 
+* Make basebox version file, where 'name' is something like 'fwtest-u2004', 'creation date' is something like '2019-12-31', and 'installed from' mentions the installation media (or other base box) used to create the machine.
+
+```
+tee ~/machine-info.txt >/dev/null << END
+Vagrant base box information
+Name:
+Creation date:
+Installed from:
+Notes:
+END
+```
+
 ### Finish configuration
 
 1. Free up disk space
@@ -220,8 +233,7 @@ Or you can build a source and binary package by running commands such as
 
 * Test that your new box is what you expect.
 
-		mkdir test
-		cd test
+		mkdir test && cd test
 		vagrant init ../fwdev-w1604-0.0.0.box
 		vim Vagrantfile # Uncomment provider virtualbox section that enables `vb.gui`. Increase RAM.
 		vagrant up
