@@ -272,6 +272,8 @@ END
 
 * Decide whether or not to fetch and rebuild code from various VCS repositories. Fetching may add hundreds of megs to the box image (because they won't be entirely shallow checkouts).
 
+* Update basebox version file at ~/machine-info.txt.
+
 * Follow the "Finish creation" and "Finalize" instructions above.
 
 * Follow the "Generate and publish product" instructions above, but:
