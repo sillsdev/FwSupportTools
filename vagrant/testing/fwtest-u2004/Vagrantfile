@@ -13,5 +13,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.gui = true
   end
 
-  config.vm.provision "file", source: "../dot-gdbinit", destination: "~/.gdbinit"
+  config.vm.provision "file", source: "../../development/dot-gdbinit", destination: "~/.gdbinit"
 end
