@@ -3,7 +3,7 @@
 # setup.sh
 # Setup or update mirrors
 
-set -e
+set -e -o pipefail
 
 . $(dirname $0)/common.sh
 init
@@ -40,16 +40,28 @@ PBUILDERDIR="${PBUILDERDIR:-$(dirname "$0")}"
 
 cd "${PBUILDERDIR:-$(dirname "$0")}"
 
-KEYRINGLLSO="$PBUILDERDIR/sil-testing.gpg"
-KEYRINGPSO="$PBUILDERDIR/sil.gpg"
-KEYRINGNODE="$PBUILDERDIR/nodesource.gpg"
+KEYRINGLLSO="$PBUILDERDIR/llso-keyring-2013.gpg"
+KEYRINGPSO="$PBUILDERDIR/pso-keyring-2016.gpg"
+KEYRINGNODE="$PBUILDERDIR/nodesource-keyring.gpg"
 
-if [ ! -f $KEYRINGPSO ]; then
-	wget --output-document=$KEYRINGPSO http://packages.sil.org/sil.gpg
+if [ ! -f ${KEYRINGPSO} ]; then
+	wget --output-document=${KEYRINGPSO} https://packages.sil.org/keys/pso-keyring-2016.gpg
 fi
 
-if [ ! -f $KEYRINGNODE ]; then
-	wget --output-document=$KEYRINGNODE https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+if [ ! -f ${KEYRINGLLSO} ]; then
+	wget --output-document=${KEYRINGLLSO} http://linux.lsdev.sil.org/keys/llso-keyring-2013.gpg
+fi
+
+if [ ! -f ${KEYRINGNODE} ]; then
+	# Download node key and convert to keyring.
+
+	NODE_KEY="$(mktemp -d)/nodesource-key.asc"
+	# Use a temporary, intermediate keyring since it may be keybox format on Ubuntu 20.04, and we need it to be an older format for apt.
+	TMP_KEYRING=$(mktemp)
+	wget --output-document=${NODE_KEY} https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+	gpg --no-default-keyring --keyring ${TMP_KEYRING} --import ${NODE_KEY}
+	# Export without --armor since gpg seems to have trouble inspecting an armor export keyring.
+	gpg --no-default-keyring --keyring ${TMP_KEYRING} --export > ${KEYRINGNODE}
 fi
 
 for D in ${DISTRIBUTIONS:-$UBUNTU_DISTROS $UBUNTU_OLDDISTROS $DEBIAN_DISTROS}
