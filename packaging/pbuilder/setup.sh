@@ -157,11 +157,12 @@ do
 		fi
 
 		sudo HOME=~ DIST=$D ARCH=$A pbuilder $options \
+			--debootstrapopts --include="perl gnupg" \
 			${KEYRINGMAIN:+--debootstrapopts --keyring=}$KEYRINGMAIN \
 			${KEYRINGLLSO:+--keyring }$KEYRINGLLSO \
 			${KEYRINGPSO:+--keyring }$KEYRINGPSO \
 			${KEYRINGNODE:+--keyring }$KEYRINGNODE \
-			--extrapackages "apt-utils devscripts lsb-release apt-transport-https ca-certificates gnupg tzdata" \
+			--extrapackages "apt-utils devscripts lsb-release apt-transport-https ca-certificates tzdata" \
 			--othermirror "$OTHERMIRROR" \
 			--mirror "$MIRROR" \
 			--components "$COMPONENTS" \
