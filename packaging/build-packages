@@ -128,6 +128,25 @@ function UnescapeString() {
 	echo "$tmp"
 }
 
+installDotNetSdkIfNeeded() {
+	package="dotnet-sdk-2.1"
+	! dpkg -s ${package} &>/dev/null || return 0
+	log "Installing dotnet SDK"
+	# See also https://docs.microsoft.com/en-ca/dotnet/core/install/
+	pushd $(mktemp -d)
+	wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o microsoft.asc.gpg
+	sudo mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/
+	sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
+	sudo chmod 644 /etc/apt/trusted.gpg.d/microsoft.asc.gpg
+	(source /etc/os-release && wget -q https://packages.microsoft.com/config/${ID}/${VERSION_ID}/prod.list -O prod.list)
+	sudo mv prod.list /etc/apt/sources.list.d/microsoft-prod.list
+	sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
+	sudo chmod 644 /etc/apt/sources.list.d/microsoft-prod.list
+	sudo apt-get update
+	sudo apt-get install -y ${package}
+	popd
+}
+
 log "Updating sources"
 
 repo_base_dir=$PACKAGING_ROOT/$MAIN_PACKAGE_NAME
@@ -366,6 +385,7 @@ for repo in "${repository_directory_list[@]}"; do
 done
 
 if [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
+	installDotNetSdkIfNeeded
 	log "Building localization sources"
 	cd "$fwrepodir/fw"
 	if grep localize-source Makefile; then
