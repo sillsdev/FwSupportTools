@@ -5,7 +5,6 @@ using System.Xml;
 using System.IO;
 using System.Globalization;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using Microsoft.Win32;
 
@@ -18,44 +17,34 @@ namespace LocaleStrings
 		/// <summary>
 		/// These are the various ways that newlines may be represented in the input strings.
 		/// </summary>
-		static string[] s_rgsNewline = new string[] { "\r\n", "\n" };
+		static readonly string[] s_rgsNewline = { "\r\n", "\n" };
 		/// <summary>
 		/// These are the values that must be quoted by a backslash in a quoted string.
 		/// </summary>
-		static char[] s_rgchQuoted = new char[] { '"', '\\' };
+		static readonly char[] s_rgchQuoted = { '"', '\\' };
 		/// <summary>
 		/// Flag that a string in a resx file contains "\\t", "\\r", "\\n", or "\\\"".
 		/// These shouldn't be quoted in an XML file!
 		/// </summary>
-		static bool s_fBadStringValue = false;
-		/// <summary>
-		/// This program either extracts localizable strings from the files in the FieldWorks
-		/// source tree into a POT file, or stores a localized strings-xx.xml file based on a
-		/// PO file, or creates a test localization PO file.
-		/// </summary>
-		/// <param name="args"></param>
+		static bool s_fBadStringValue;
 		/// <summary>
 		/// DistFiles directory used on developer machine, but missing on end-user machines.
 		/// We want to be able to run this on end-user machines to build the strings-???.xml file.
 		/// </summary>
 		static string s_DistFiles = "";		// cannot be null -- used in Path.Combine below.
 
+		/// <summary>
+		/// This program either extracts localizable strings from the files in the FieldWorks
+		/// source tree into a POT file, or stores a localized strings-xx.xml file based on a
+		/// PO file, or creates a test localization PO file.
+		/// </summary>
 		static void Main(string[] args)
 		{
 			try
 			{
-				int iOpt;
 				var bpExtract = new CommandLineOptions.BoolParam("x",
 					"extract",
 					"Extract localizable strings into a POT file.",
-					false);
-				var bpExcludeFlex = new CommandLineOptions.BoolParam("",
-					"no-flex",
-					"Don't extract strings specific to Language Explorer",
-					false);
-				var bpExcludeTE = new CommandLineOptions.BoolParam("",
-					"no-te",
-					"Don't extract strings specific to Translation Editor",
 					false);
 				var bpStore = new CommandLineOptions.BoolParam("s",
 					"store",
@@ -63,7 +52,7 @@ namespace LocaleStrings
 					false);
 				var spRoot = new CommandLineOptions.StringParam("r",
 					"root",
-					"The root directory of the FieldWorks source tree (typically C:\\FW or /home/user/FW)",
+					"The root directory of the FieldWorks source tree (typically C:\\fwrepo\\fw or ~/fwrepo/fw)",
 					null);
 				var spPOTFile = new CommandLineOptions.StringParam("p",
 					"pot",
@@ -83,6 +72,10 @@ namespace LocaleStrings
 					"dir",
 					"Add a subdirectory to those searched under the root (default = Src)",
 					rgsDirs);
+				var spImport = new CommandLineOptions.StringParam("i",
+					"import",
+					"Import translations from the PO file into the POT file, storing them in a new PO file.",
+					"messages.xx.po");
 				var spMerge = new CommandLineOptions.StringParam("m",
 					"merge",
 					"Merge PO files together, overwriting the first one.",
@@ -97,14 +90,16 @@ namespace LocaleStrings
 					false);
 
 				var rgParam = new CommandLineOptions.Param[] {
-					bpExtract, bpExcludeFlex, bpExcludeTE, bpStore, spRoot, spPOTFile, spTest,
-					bpForce, slpDirs, spMerge, bpCheck, spUpdate
+					bpExtract, bpStore, spRoot, spPOTFile, spTest,
+					bpForce, slpDirs, spImport, spMerge, bpCheck, spUpdate
 				};
-				bool fOk = CommandLineOptions.Parse(args, ref rgParam, out iOpt);
+				bool fOk = CommandLineOptions.Parse(args, ref rgParam, out var iOpt);
 				int cOps = 0;
-				if (bpExtract.Value || bpExcludeFlex.Value || bpExcludeTE.Value)
+				if (bpExtract.Value)
 					++cOps;
 				if (bpStore.Value)
+					++cOps;
+				if (spImport.HasValue)
 					++cOps;
 				if (spMerge.HasValue)
 					++cOps;
@@ -130,29 +125,24 @@ namespace LocaleStrings
 					if (Directory.Exists(devPath))
 						s_DistFiles = "DistFiles";
 				}
-				else if (bpExtract.Value || bpExcludeFlex.Value || bpExcludeTE.Value || bpStore.Value || spTest.HasValue)
+				else if (bpExtract.Value|| bpStore.Value || spTest.HasValue)
 					sRoot = GetRootDir();
 
-				if (bpExtract.Value || bpExcludeFlex.Value || bpExcludeTE.Value)
+				if (bpExtract.Value)
 				{
 					string sOutputFile = spPOTFile.Value;
 					if (!spPOTFile.HasValue)
 					{
-						if (bpExcludeTE.Value && bpExcludeFlex.Value)
-							sOutputFile = "Common.pot";
-						else if (bpExcludeTE.Value)
-							sOutputFile = "Flex.pot";
-						else if (bpExcludeFlex.Value)
-							sOutputFile = "TE.pot";
+						sOutputFile = "Flex.pot";
 					}
-					ExtractPOTFile(sRoot, rgsDirs, bpExcludeTE.Value, bpExcludeFlex.Value, sOutputFile);
+					ExtractPOTFile(sRoot, rgsDirs, sOutputFile);
 				}
 				else if (bpStore.Value)
 				{
 					if (iOpt >= args.Length)
 						Usage(null, rgParam);
 					else if (!File.Exists(args[iOpt]))
-						Usage(String.Format("{0} does not exist!", args[iOpt]), rgParam);
+						Usage($"{args[iOpt]} does not exist!", rgParam);
 					else
 						StoreLocalizedStrings(args[iOpt], sRoot);
 				}
@@ -162,32 +152,41 @@ namespace LocaleStrings
 					if (VerifyValidLocale(sLocale))
 					{
 						string sBase = Path.Combine(sRoot, "Localizations");
-						string sOutputFile = Path.Combine(sBase,
-							String.Format("messages.{0}.po", sLocale));
+						string sOutputFile = Path.Combine(sBase, $"messages.{sLocale}.po");
 						if (File.Exists(sOutputFile) && !bpForce.Value)
 						{
-							Usage(String.Format("{0} already exists.  Use --force to overwrite",
-								sOutputFile), rgParam);
+							Usage($"{sOutputFile} already exists.  Use --force to overwrite", rgParam);
 						}
 						else
 						{
-							GenerateTestPOFile(sOutputFile, sRoot, rgsDirs, bpExcludeTE.Value,
-								bpExcludeFlex.Value, sLocale);
+							GenerateTestPOFile(sOutputFile, sRoot, rgsDirs, sLocale);
 						}
 					}
 					else
 					{
-						Usage(String.Format("{0} is not a valid system locale", sLocale), rgParam);
+						Usage($"{sLocale} is not a valid system locale", rgParam);
 					}
+				}
+				else if (spImport.HasValue)
+				{
+					if (iOpt > args.Length - 2)
+						Usage("Missing POT or target PO file", rgParam);
+					var potFile = args[iOpt];
+					var outFile = args[iOpt + 1];
+					if (!File.Exists(spImport.Value))
+						Usage($"Invalid source file: {spImport.Value}", rgParam);
+					if (!File.Exists(potFile))
+						Usage($"Invalid POT file {potFile}", rgParam);
+					ImportPOTranslations(spImport.Value, potFile, outFile);
 				}
 				else if (spMerge.HasValue)
 				{
 					if (iOpt >= args.Length)
 						Usage("Missing second merge file", rgParam);
 					else if (!File.Exists(spMerge.Value))
-						Usage(String.Format("Invalid first merge file {0}", spMerge.Value), rgParam);
+						Usage($"Invalid first merge file {spMerge.Value}", rgParam);
 					else if (!File.Exists(args[iOpt]))
-						Usage(String.Format("Invalid second merge file {0}", args[iOpt]), rgParam);
+						Usage($"Invalid second merge file {args[iOpt]}", rgParam);
 					else
 						MergePOFiles(spMerge.Value, args[iOpt]);
 				}
@@ -196,7 +195,7 @@ namespace LocaleStrings
 					if (iOpt >= args.Length)
 						Usage(null, rgParam);
 					else if (!File.Exists(args[iOpt]))
-						Usage(String.Format("{0} does not exist!", args[iOpt]), rgParam);
+						Usage($"{args[iOpt]} does not exist!", rgParam);
 					else
 						CheckLocalizedStrings(args[iOpt]);
 				}
@@ -205,9 +204,9 @@ namespace LocaleStrings
 					if (iOpt >= args.Length)
 						Usage("Missing POT file for update", rgParam);
 					else if (!File.Exists(spUpdate.Value))
-						Usage(String.Format("PO file {0} for update does not exist!", spUpdate.Value), rgParam);
+						Usage($"PO file {spUpdate.Value} for update does not exist!", rgParam);
 					else if (!File.Exists(args[iOpt]))
-						Usage(String.Format("POT file {0} for update does not exist!", args[iOpt]), rgParam);
+						Usage($"POT file {args[iOpt]} for update does not exist!", rgParam);
 					else
 						UpdatePoFile(spUpdate.Value, args[iOpt]);
 				}
@@ -225,10 +224,9 @@ namespace LocaleStrings
 		/// <summary>
 		/// Tersely explain how to use the program.
 		/// </summary>
-		/// <param name="sMsg">optional error message</param>
 		private static void Usage(string sMsg, CommandLineOptions.Param[] rgParam)
 		{
-			if (!String.IsNullOrEmpty(sMsg))
+			if (!string.IsNullOrEmpty(sMsg))
 			{
 				Console.WriteLine(sMsg);
 				Console.WriteLine("");
@@ -241,9 +239,11 @@ namespace LocaleStrings
 			Console.WriteLine("    or");
 			Console.WriteLine("       LocaleStrings.exe --test lg-co");
 			Console.WriteLine("    or");
+			Console.WriteLine("       LocaleStrings.exe [options] --import <old>.<xx>.po messages.pot <new>.<xx>.po");
+			Console.WriteLine("    or");
 			Console.WriteLine("       LocaleStrings.exe [options] --merge <old>.<xx>.po <new>.<xx>.po");
 			Console.WriteLine("    or");
-			Console.WriteLine("       LocaleStrings.exe [options] --update messages.<xx>.po message.pot");
+			Console.WriteLine("       LocaleStrings.exe [options] --update messages.<xx>.po messages.pot");
 			Console.WriteLine("");
 			CommandLineOptions.Usage(rgParam);
 			Console.WriteLine("");
@@ -265,6 +265,10 @@ namespace LocaleStrings
 			Console.WriteLine("The --test command create a messages.lg-co.po file which can be used to test");
 			Console.WriteLine("the internationalization of the FieldWorks programs.");
 			Console.WriteLine("");
+			Console.WriteLine("The --import command imports translations from <old>.<xx>.po into messages.pot,");
+			Console.WriteLine("preserving comments and also untranslated msgid strings from messages.pot,");
+			Console.WriteLine("and storing the result in <new>.<xx>.po");
+			Console.WriteLine("");
 			Console.WriteLine("The --merge command merges the strings from <new>.<xx>.po into <old>.<xx>.po,");
 			Console.WriteLine("overwriting any conflicts in the original (<old>.<xx>.po) file.");
 			Console.WriteLine("");
@@ -282,14 +286,11 @@ namespace LocaleStrings
 		/// </summary>
 		/// <param name="sRoot"></param>
 		/// <param name="rgsDirs"></param>
-		/// <param name="fExcludeTE">exclude strings from Translation Editor specific sources</param>
-		/// <param name="fExcludeFlex">exclude strings from Language Explorer specific sources</param>
 		/// <param name="sOutputFile"></param>
-		private static void ExtractPOTFile(string sRoot, List<string> rgsDirs, bool fExcludeTE,
-			bool fExcludeFlex, string sOutputFile)
+		private static void ExtractPOTFile(string sRoot, List<string> rgsDirs,
+			string sOutputFile)
 		{
-			List<POString> rgsPOStrings = ExtractLocalizableStrings(sRoot, rgsDirs, fExcludeTE,
-				fExcludeFlex);
+			List<POString> rgsPOStrings = ExtractLocalizableStrings(sRoot, rgsDirs);
 			StreamWriter swOut = null;
 			try
 			{
@@ -308,7 +309,7 @@ namespace LocaleStrings
 		/// </summary>
 		internal static void WritePotFile(TextWriter swOut, string sRoot, List<POString> rgsPOStrings)
 		{
-			WritePoHeader(swOut, sRoot, String.Empty);
+			WritePoHeader(swOut, sRoot, string.Empty);
 			for (int i = 0; i < rgsPOStrings.Count; ++i)
 			{
 				var poString = rgsPOStrings[i];
@@ -327,17 +328,12 @@ namespace LocaleStrings
 		/// </summary>
 		/// <param name="sRoot"></param>
 		/// <param name="rgsDirs"></param>
-		/// <param name="fExcludeTE"></param>
-		/// <param name="fExcludeFlex"></param>
 		/// <returns>Sorted and merged list of localizable strings</returns>
-		private static List<POString> ExtractLocalizableStrings(string sRoot, List<string> rgsDirs,
-			bool fExcludeTE, bool fExcludeFlex)
+		private static List<POString> ExtractLocalizableStrings(string sRoot, List<string> rgsDirs)
 		{
 			List<POString> rgsPOStrings = new List<POString>(1000);
-			ExtractFromResxFiles(sRoot, rgsDirs, fExcludeTE, fExcludeFlex, rgsPOStrings);
-			if (!fExcludeFlex)
-				ExtractFromXmlConfigFiles(sRoot, rgsPOStrings);
-			ExtractFromRcFiles(sRoot, rgsDirs, rgsPOStrings);
+			ExtractFromResxFiles(sRoot, rgsDirs, rgsPOStrings);
+			ExtractFromXmlConfigFiles(sRoot, rgsPOStrings);
 
 			rgsPOStrings.Sort(POString.CompareMsgIds);
 			POString.MergeDuplicateStrings(rgsPOStrings);
@@ -372,7 +368,7 @@ namespace LocaleStrings
 					case "FWREVISION": sRevision = xn.InnerText; break;
 				}
 			}
-			return String.Format("FieldWorks {0}.{1}.{2}", sMajor, sMinor, sRevision);
+			return $"FieldWorks {sMajor}.{sMinor}.{sRevision}";
 		}
 
 		/// <summary>
@@ -380,11 +376,9 @@ namespace LocaleStrings
 		/// </summary>
 		/// <param name="sRoot"></param>
 		/// <param name="rgsDirs"></param>
-		/// <param name="fExcludeTE"></param>
-		/// <param name="fExcludeFlex"></param>
 		/// <param name="rgsPOStrings"></param>
 		private static void ExtractFromResxFiles(string sRoot, List<string> rgsDirs,
-			bool fExcludeTE, bool fExcludeFlex, List<POString> rgsPOStrings)
+			List<POString> rgsPOStrings)
 		{
 			for (int iDir = 0; iDir < rgsDirs.Count; ++iDir)
 			{
@@ -397,12 +391,6 @@ namespace LocaleStrings
 				for (int i = 0; i < rgsResxFiles.Length; ++i)
 				{
 					string sFile = rgsResxFiles[i].ToLower();
-					if (fExcludeFlex)
-					{
-						if (sFile.IndexOf("\\lextext\\") >= 0)
-							continue;
-					}
-					if (fExcludeTE)
 					{
 						if (sFile.IndexOf("\\te\\") >= 0)
 							continue;
@@ -418,8 +406,7 @@ namespace LocaleStrings
 							continue;
 						if (sFile.IndexOf("\\fdo\\scr") >= 0)
 							continue;
-					}
-					if (!lssLocResx.Contains(sFile))
+					}					if (!lssLocResx.Contains(sFile))
 						ProcessResxFile(rgsResxFiles[i], sRoot, rgsPOStrings);
 				}
 				if (s_fBadStringValue)
@@ -490,8 +477,8 @@ namespace LocaleStrings
 					string sMimeType = xel.GetAttribute("mimetype");
 					string sValue = null;
 					string sComment = null;
-					if (!String.IsNullOrEmpty(sName) &&
-						String.IsNullOrEmpty(sType) && String.IsNullOrEmpty(sMimeType))
+					if (!string.IsNullOrEmpty(sName) &&
+						string.IsNullOrEmpty(sType) && string.IsNullOrEmpty(sMimeType))
 					{
 						if (!sName.StartsWith(">>") && IsTextName(sName))
 						{
@@ -504,13 +491,13 @@ namespace LocaleStrings
 							}
 						}
 					}
-					if (!String.IsNullOrEmpty(sValue))
+					if (!string.IsNullOrEmpty(sValue))
 					{
 						if (sValue.IndexOfAny("/\\".ToCharArray()) >= 0 && sValue.Trim().EndsWith(".htm"))
 							continue;
 						if (sComment != null && sComment.Trim().ToLower() == "do not translate")
 							continue;
-						if (String.IsNullOrEmpty(sValue.Trim()))
+						if (string.IsNullOrEmpty(sValue.Trim()))
 							continue;
 						if (sValue.IndexOf("\\n") >= 0 ||
 							sValue.IndexOf("\\r") >= 0 ||
@@ -520,11 +507,10 @@ namespace LocaleStrings
 						{
 							s_fBadStringValue = true;
 							Console.WriteLine(
-								string.Format("Backslash quoted character found for {0} in {1}",
-								sName, sAutoCommentFilePath));
+								$"Backslash quoted character found for {sName} in {sAutoCommentFilePath}");
 						}
 						string[] rgsComment = null;
-						if (!String.IsNullOrEmpty(sComment))
+						if (!string.IsNullOrEmpty(sComment))
 							rgsComment = sComment.Split(s_rgsNewline, StringSplitOptions.None);
 						sValue = FixStringForEmbeddedQuotes(sValue);
 						sValue = sValue.Replace(Environment.NewLine, "\\n" + Environment.NewLine);
@@ -533,7 +519,7 @@ namespace LocaleStrings
 						string[] rgsId = sValue.Split(s_rgsNewline, StringSplitOptions.None);
 						string[] rgsStr = new string[1] { "" };
 						POString pos = new POString(rgsComment, rgsId, rgsStr);
-						string sPath = String.Format("{0}::{1}", sAutoCommentFilePath, sName);
+						string sPath = $"{sAutoCommentFilePath}::{sName}";
 						pos.AddAutoComment(sPath);
 						rgsPOStrings.Add(pos);
 					}
@@ -565,9 +551,9 @@ namespace LocaleStrings
 		{
 			swOut.WriteLine("");	// StreamWriter writes a BOM for UTF-8: put it on a line by itself.
 			string sTime = DateTime.Now.ToLocalTime().ToString("o");
-			string s = String.Format("Created from FieldWorks sources", sTime);
+			string s = string.Format("Created from FieldWorks sources", sTime);
 			POString.WriteComment(s, ' ', swOut);
-			s = String.Format("Copyright (c) {0} SIL International", DateTime.Now.Year);
+			s = $"Copyright (c) {DateTime.Now.Year} SIL International";
 			POString.WriteComment(s, ' ', swOut);
 			POString.WriteComment("This software is licensed under the LGPL, version 2.1 or later",
 				' ', swOut);
@@ -579,16 +565,16 @@ namespace LocaleStrings
 			swOut.Write("msgstr ");
 			POString.WriteQuotedLine("", swOut);
 			string sVersion = GetFieldWorksVersion(sRoot);
-			POString.WriteQuotedLine(String.Format("Project-Id-Version: {0}\\n", sVersion), swOut);
+			POString.WriteQuotedLine($"Project-Id-Version: {sVersion}\\n", swOut);
 			POString.WriteQuotedLine("Report-Msgid-Bugs-To: FlexErrors@sil.org\\n", swOut);
-			POString.WriteQuotedLine(String.Format("POT-Creation-Date: {0}\\n", sTime), swOut);
+			POString.WriteQuotedLine($"POT-Creation-Date: {sTime}\\n", swOut);
 			POString.WriteQuotedLine("PO-Revision-Date: \\n", swOut);
 			POString.WriteQuotedLine("Last-Translator: Full Name <email@address>\\n", swOut);
 			POString.WriteQuotedLine("Language-Team: Language <email@address>\\n", swOut);
 			POString.WriteQuotedLine("MIME-Version: 1.0\\n", swOut);
 			POString.WriteQuotedLine("Content-Type: text/plain; charset=UTF-8\\n", swOut);
 			POString.WriteQuotedLine("Content-Transfer-Encoding: 8bit\\n", swOut);
-			if (String.IsNullOrEmpty(sLocale))
+			if (string.IsNullOrEmpty(sLocale))
 			{
 				POString.WriteQuotedLine("X-Poedit-Language: \\n", swOut);
 				POString.WriteQuotedLine("X-Poedit-Country: \\n", swOut);
@@ -598,8 +584,8 @@ namespace LocaleStrings
 				string[] rgsLocale = sLocale.Split(new char[] { '-', '_' });
 				CultureInfo ci = new CultureInfo(rgsLocale[0]);
 				string sLanguage = ci.EnglishName;
-				string sCountry = String.Empty;
-				string sVariant = String.Empty;
+				string sCountry = string.Empty;
+				string sVariant = string.Empty;
 				if (rgsLocale.Length > 1)
 				{
 					RegionInfo ri = new RegionInfo(rgsLocale[1]);
@@ -619,10 +605,10 @@ namespace LocaleStrings
 					sVariant = sVariant.Replace(')', ' ');
 					sVariant = sVariant.Trim(new char[] { ',', ' ', '\t', '\n', '\r' });
 				}
-				POString.WriteQuotedLine(String.Format("X-Poedit-Language: {0}\\n", sLanguage), swOut);
-				POString.WriteQuotedLine(String.Format("X-Poedit-Country: {0}\\n", sCountry), swOut);
-				if (!String.IsNullOrEmpty(sVariant))
-					POString.WriteQuotedLine(String.Format("X-Poedit-Variant: {0}\\n", sVariant), swOut);
+				POString.WriteQuotedLine($"X-Poedit-Language: {sLanguage}\\n", swOut);
+				POString.WriteQuotedLine($"X-Poedit-Country: {sCountry}\\n", swOut);
+				if (!string.IsNullOrEmpty(sVariant))
+					POString.WriteQuotedLine($"X-Poedit-Variant: {sVariant}\\n", swOut);
 			}
 			swOut.WriteLine("");
 		}
@@ -694,12 +680,51 @@ namespace LocaleStrings
 			return sRootDir;
 		}
 
+		/// <see cref="Usage"/>
+		private static void ImportPOTranslations(string sourceFile, string templateFile, string outFile)
+		{
+			//var locale = GetLocaleFromMsgFile(sourceFile);
+
+			var timeStamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
+			Dictionary<string, POString> templateWithTranslations;
+			POString posHeader;
+			using (var sourceReader = new StreamReader(sourceFile, Encoding.UTF8))
+			using (var templateReader = new StreamReader(templateFile, Encoding.UTF8))
+			using (var swLog = new StreamWriter($"Import-{timeStamp}.log"))
+			{
+				templateWithTranslations = ImportTranslations(swLog, sourceReader, templateReader, sourceFile, templateFile, out posHeader);
+			}
+
+			// Don't overwrite an existing file; move it out of the way
+			if (File.Exists(outFile))
+			{
+				File.Move(outFile, $"{outFile}-{timeStamp}.{Path.GetExtension(outFile)}");
+			}
+			using (var swOut = new StreamWriter(outFile))
+			{
+				WritePoFile(swOut, templateWithTranslations, posHeader, null);
+			}
+		}
+
+		internal static Dictionary<string, POString> ImportTranslations(TextWriter log, TextReader source, TextReader template,
+			string sourceFile, string templateFile, out POString poHeader)
+		{
+			var sources = ReadPoFile(source, out poHeader, out _);
+			var translated = ReadPoFile(template, out var templateHeader, out _);
+			MergePOHeaders(poHeader, templateHeader);
+			foreach (var msgId in translated.Keys.ToList())
+			{
+				if (sources.TryGetValue(msgId, out var poString))
+				{
+					translated[msgId].MsgStr = poString.MsgStr;
+				}
+			}
+			return translated;
+		}
 
 		/// <summary>
 		/// Merges the PO files.
 		/// </summary>
-		/// <param name="sMainFile">The s main file.</param>
-		/// <param name="sNewFile">The s new file.</param>
 		private static void MergePOFiles(string sMainFile, string sNewFile)
 		{
 			string sLoc = GetLocaleFromMsgFile(sMainFile);
@@ -710,9 +735,7 @@ namespace LocaleStrings
 					sLoc, sLoc2);
 				throw new Exception("MISMATCHED LOCALES IN MERGE FILES");
 			}
-			DateTime now = DateTime.Now;
-			string sTimeStamp = String.Format("{0:D4}{1:D2}{2:D2}{3:D2}{4:D2}{5:D2}",
-				now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second);
+			var timeStamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
 			Dictionary<string, POString> dictMerged;
 			POString posHeader;
 			POString posObsolete;
@@ -720,7 +743,7 @@ namespace LocaleStrings
 			{
 				using (StreamReader srNew = new StreamReader(sNewFile, Encoding.UTF8))
 				{
-					string sLogFile = String.Format("Merge-{0}.log", sTimeStamp);
+					string sLogFile = $"Merge-{timeStamp}.log";
 					using (StreamWriter swLog = new StreamWriter(sLogFile))
 					{
 						dictMerged = MergePoFileData(swLog, srMain, srNew, sMainFile, sNewFile, out posHeader, out posObsolete);
@@ -731,7 +754,7 @@ namespace LocaleStrings
 				srMain.Close();
 			}
 			// Save the original main file, and write out a new main file.
-			File.Copy(sMainFile, String.Format("{0}-{1}", sMainFile, sTimeStamp));
+			File.Copy(sMainFile, $"{sMainFile}-{timeStamp}");
 			using (StreamWriter swOut = new StreamWriter(sMainFile))
 			{
 				WritePoFile(swOut, dictMerged, posHeader, posObsolete);
@@ -772,7 +795,7 @@ namespace LocaleStrings
 			int cAdded = 0;
 			int cSame = 0;
 			int cMissing = 0;
-			swLog.WriteLine(String.Format("Merging {0} into {1} on {2}", sNewFile, sMainFile, now.ToString()));
+			swLog.WriteLine($"Merging {sNewFile} into {sMainFile} on {now.ToString()}");
 			using (Dictionary<string, POString>.Enumerator it = dictNew.GetEnumerator())
 			{
 				while (it.MoveNext())
@@ -780,12 +803,12 @@ namespace LocaleStrings
 					var newMsgStr = it.Current.Value.MsgStrAsString();
 					if (dictMain.ContainsKey(it.Current.Key))
 					{
-						if (!String.IsNullOrWhiteSpace(newMsgStr) && dictMain[it.Current.Key].MsgStrAsString() != newMsgStr)
+						if (!string.IsNullOrWhiteSpace(newMsgStr) && dictMain[it.Current.Key].MsgStrAsString() != newMsgStr)
 						{
 							swLog.WriteLine("");
-							swLog.WriteLine(String.Format("OLD VALUE"));
+							swLog.WriteLine(string.Format("OLD VALUE"));
 							dictMain[it.Current.Key].Write(swLog);
-							swLog.WriteLine(String.Format("NEW VALUE"));
+							swLog.WriteLine(string.Format("NEW VALUE"));
 							it.Current.Value.Write(swLog);
 							dictMain[it.Current.Key] = it.Current.Value;
 							++cReplaced;
@@ -795,7 +818,7 @@ namespace LocaleStrings
 							++cSame;
 						}
 					}
-					else if (!String.IsNullOrEmpty(newMsgStr))
+					else if (!string.IsNullOrEmpty(newMsgStr))
 					{
 						dictMain.Add(it.Current.Key, it.Current.Value);
 						++cAdded;
@@ -804,15 +827,14 @@ namespace LocaleStrings
 					{
 						swLog.WriteLine("");
 						swLog.WriteLine("Ignoring untranslated message from new file.");
-						swLog.WriteLine(String.Format("NEW VALUE"));
+						swLog.WriteLine(string.Format("NEW VALUE"));
 						it.Current.Value.Write(swLog);
 					}
 				}
 			}
 			cMissing = dictMain.Count - (cReplaced + cSame + cAdded);
 			swLog.WriteLine("");
-			swLog.WriteLine(String.Format("Merge: {0} replaced, {1} added, {2} same, {3} not in new",
-				cReplaced, cAdded, cSame, cMissing));
+			swLog.WriteLine($"Merge: {cReplaced} replaced, {cAdded} added, {cSame} same, {cMissing} not in new");
 			Console.WriteLine("Merge: {0} replaced, {1} added, {2} same, {3} not in new",
 				cReplaced, cAdded, cSame, cMissing);
 			posHeader = posMainHeader;
@@ -849,7 +871,7 @@ namespace LocaleStrings
 			int idx = sPo1.IndexOf(":");
 			string s1 = sPo1.Substring(idx + 1).Trim();
 			string s2 = sPo2.Substring(idx + 1).Trim();
-			if (String.IsNullOrEmpty(s1) || String.IsNullOrEmpty(s2))
+			if (string.IsNullOrEmpty(s1) || string.IsNullOrEmpty(s2))
 				return;
 			if (s1.ToLower() == s2.ToLower())
 				return;
@@ -904,7 +926,7 @@ namespace LocaleStrings
 			if (sPo2 == null)
 				return;		// no information in new file
 			string s2 = sPo2.Substring(sHeaderTag.Length).Trim();
-			if (String.IsNullOrEmpty(s2))
+			if (string.IsNullOrEmpty(s2))
 				return;		// no information in new file
 			int idx = posMainHeader.MsgStr.FindIndex(matchFn);
 			if (idx < 0)
@@ -915,17 +937,17 @@ namespace LocaleStrings
 			string s1 = posMainHeader.MsgStr[idx].Substring(sHeaderTag.Length).Trim();
 			if (s1.ToLower() == s2.ToLower())
 				return;		// same information as before
-			if (String.IsNullOrEmpty(s1))
+			if (string.IsNullOrEmpty(s1))
 			{
 				// empty information in the old file: store information from new file
-				posMainHeader.MsgStr[idx] = String.Format("{0} {1}\n", sHeaderTag, s2);
+				posMainHeader.MsgStr[idx] = $"{sHeaderTag} {s2}\n";
 				return;
 			}
 			int ich = s1.ToLower().IndexOf(s2.ToLower());
 			if (ich < 0)
 			{
 				// add the new info to the end of the old info
-				posMainHeader.MsgStr[idx] = String.Format("{0} {1}; {2}\n", sHeaderTag, s1, s2);
+				posMainHeader.MsgStr[idx] = $"{sHeaderTag} {s1}; {s2}\n";
 			}
 		}
 
@@ -961,9 +983,8 @@ namespace LocaleStrings
 			POString posNewHeader;
 			var dictNew = LoadPotFile(sNewPot, out posNewHeader);
 			DateTime now = DateTime.Now;
-			string sTimeStamp = String.Format("{0:D4}{1:D2}{2:D2}{3:D2}{4:D2}{5:D2}",
-				now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second);
-			File.Copy(sPoFile, String.Format("{0}-{1}", sPoFile, sTimeStamp));
+			string sTimeStamp = $"{now.Year:D4}{now.Month:D2}{now.Day:D2}{now.Hour:D2}{now.Minute:D2}{now.Second:D2}";
+			File.Copy(sPoFile, $"{sPoFile}-{sTimeStamp}");
 			using (StreamWriter swOut = new StreamWriter(sPoFile))
 			{
 				WriteUpdatedPoFile(swOut, dictMain, dictNew, posMainHeader, posObsolete, posNewHeader);
@@ -1011,7 +1032,7 @@ namespace LocaleStrings
 				{
 					if (msg.StartsWith(projectIdTag))
 					{
-						unusedMsg = String.Format("(Not used by {0})", msg.Substring(projectIdTag.Length).Trim());
+						unusedMsg = $"(Not used by {msg.Substring(projectIdTag.Length).Trim()})";
 						break;
 					}
 				}
@@ -1131,7 +1152,7 @@ namespace LocaleStrings
 			{
 				string sId = dictTrans[sKey].MsgIdAsString();
 				string sMsg = dictTrans[sKey].MsgStrAsString();
-				if (sId == sMsg || String.IsNullOrEmpty(sMsg))
+				if (sId == sMsg || string.IsNullOrEmpty(sMsg))
 					continue;
 				List<string> rgsArgsOrig = FindAllArgumentMarkers(sId);
 				List<string> rgsArgsTrans = FindAllArgumentMarkers(sMsg);
@@ -1259,7 +1280,7 @@ namespace LocaleStrings
 			{
 				POString pos = en.Current.Value;
 				string sValue = pos.MsgStrAsString();
-				if (String.IsNullOrEmpty(sValue))
+				if (string.IsNullOrEmpty(sValue))
 					continue;
 				List<string> rgs = pos.AutoComments;
 				if (rgs == null)
@@ -1303,7 +1324,7 @@ namespace LocaleStrings
 			{
 				POString pos = en.Current.Value;
 				string sValue = pos.MsgStrAsString();
-				if (String.IsNullOrEmpty(sValue))
+				if (string.IsNullOrEmpty(sValue))
 					continue;
 				List<string> rgs = pos.AutoComments;
 				if (rgs == null)
@@ -1333,7 +1354,7 @@ namespace LocaleStrings
 			{
 				POString pos = en.Current.Value;
 				string sValue = pos.MsgStrAsString();
-				if (String.IsNullOrEmpty(sValue))
+				if (string.IsNullOrEmpty(sValue))
 					continue;
 				List<string> rgs = pos.AutoComments;
 				if (rgs == null)
@@ -1341,7 +1362,7 @@ namespace LocaleStrings
 				for (int i = 0; i < rgs.Count; ++i)
 				{
 					string sId = FindContextHelpId(rgs[i]);
-					if (!String.IsNullOrEmpty(sId))
+					if (!string.IsNullOrEmpty(sId))
 					{
 						XmlElement xelString = xelRoot.OwnerDocument.CreateElement("string");
 						xelString.SetAttribute("id", sId);
@@ -1390,7 +1411,7 @@ namespace LocaleStrings
 				int cch = idx2 - idx1;
 				sLoc1 = sMsgFile.Substring(idx1, cch);
 			}
-			if (String.IsNullOrEmpty(sLoc1))
+			if (string.IsNullOrEmpty(sLoc1))
 			{
 				Console.WriteLine("ERROR: cannot determine locale from filename!");
 				throw new Exception("CANNOT DETERMINE LOCALE");
@@ -1463,58 +1484,58 @@ namespace LocaleStrings
 		/// </summary>
 		internal static void ProcessConfigElement(XmlElement xel, string sAutoCommentFilePath, List<POString> rgsPOStrings)
 		{
-			if (xel.Name == "lit" && !String.IsNullOrEmpty(xel.InnerText.Trim()))
+			if (xel.Name == "lit" && !string.IsNullOrEmpty(xel.InnerText.Trim()))
 				StoreLiteralString(xel, rgsPOStrings, sAutoCommentFilePath);
 
 			string sLabel = xel.GetAttribute("label");
-			if (!String.IsNullOrEmpty(sLabel.Trim()) && sLabel.Trim() != "$label")
+			if (!string.IsNullOrEmpty(sLabel.Trim()) && sLabel.Trim() != "$label")
 				StoreAttributeString(xel, "label", sLabel, rgsPOStrings, sAutoCommentFilePath);
 			string sAbbr = xel.GetAttribute("abbr");
-			if (!String.IsNullOrEmpty(sAbbr.Trim()))
+			if (!string.IsNullOrEmpty(sAbbr.Trim()))
 				StoreAttributeString(xel, "abbr", sAbbr, rgsPOStrings, sAutoCommentFilePath);
 			string sTitle = xel.GetAttribute("title");
-			if (!String.IsNullOrEmpty(sTitle.Trim()))
+			if (!string.IsNullOrEmpty(sTitle.Trim()))
 				StoreAttributeString(xel, "title", sTitle, rgsPOStrings, sAutoCommentFilePath);
 			sLabel = xel.GetAttribute("formlabel");
-			if (!String.IsNullOrEmpty(sLabel.Trim()))
+			if (!string.IsNullOrEmpty(sLabel.Trim()))
 				StoreAttributeString(xel, "formlabel", sLabel, rgsPOStrings, sAutoCommentFilePath);
 			sLabel = xel.GetAttribute("okbuttonlabel");
-			if (!String.IsNullOrEmpty(sLabel.Trim()))
+			if (!string.IsNullOrEmpty(sLabel.Trim()))
 				StoreAttributeString(xel, "okbuttonlabel", sLabel, rgsPOStrings, sAutoCommentFilePath);
 			sLabel = xel.GetAttribute("headerlabel");
-			if (!String.IsNullOrEmpty(sLabel.Trim()))
+			if (!string.IsNullOrEmpty(sLabel.Trim()))
 				StoreAttributeString(xel, "headerlabel", sLabel, rgsPOStrings, sAutoCommentFilePath);
 			sLabel = xel.GetAttribute("ghostLabel");
-			if (!String.IsNullOrEmpty(sLabel.Trim()))
+			if (!string.IsNullOrEmpty(sLabel.Trim()))
 				StoreAttributeString(xel, "ghostLabel", sLabel, rgsPOStrings, sAutoCommentFilePath);
 			string sAfter = xel.GetAttribute("after");
-			if (!String.IsNullOrEmpty(sAfter.Trim()))
+			if (!string.IsNullOrEmpty(sAfter.Trim()))
 				StoreAttributeString(xel, "after", sAfter, rgsPOStrings, sAutoCommentFilePath);
 			string sBefore = xel.GetAttribute("before");
-			if (!String.IsNullOrEmpty(sBefore.Trim()))
+			if (!string.IsNullOrEmpty(sBefore.Trim()))
 				StoreAttributeString(xel, "before", sBefore, rgsPOStrings, sAutoCommentFilePath);
 			string sTooltip = xel.GetAttribute("tooltip");
-			if (!String.IsNullOrEmpty(sTooltip.Trim()))
+			if (!string.IsNullOrEmpty(sTooltip.Trim()))
 				StoreAttributeString(xel, "tooltip", sTooltip, rgsPOStrings, sAutoCommentFilePath);
 
 			string sEditor = xel.GetAttribute("editor");
 			string sMessage = xel.GetAttribute("message");
-			if (sEditor.Trim().ToLower() == "lit" && !String.IsNullOrEmpty(sMessage.Trim()))
+			if (sEditor.Trim().ToLower() == "lit" && !string.IsNullOrEmpty(sMessage.Trim()))
 				StoreAttributeString(xel, "message", sMessage, rgsPOStrings, sAutoCommentFilePath);
 
 			if (xel.Name == "item" &&
-				!String.IsNullOrEmpty(xel.InnerText.Trim()) &&
+				!string.IsNullOrEmpty(xel.InnerText.Trim()) &&
 				xel.ParentNode.Name == "strings")
 			{
 				string sId = xel.GetAttribute("id");
-				if (!String.IsNullOrEmpty(sId))
+				if (!string.IsNullOrEmpty(sId))
 				{
 					StoreLiteralString(xel, rgsPOStrings, sAutoCommentFilePath);
 					string sCaption = xel.GetAttribute("caption");
-					if (!String.IsNullOrEmpty(sCaption))
+					if (!string.IsNullOrEmpty(sCaption))
 						StoreAttributeString(xel, "caption", sCaption, rgsPOStrings, sAutoCommentFilePath);
 					sCaption = xel.GetAttribute("captionformat");
-					if (!String.IsNullOrEmpty(sCaption))
+					if (!string.IsNullOrEmpty(sCaption))
 						StoreAttributeString(xel, "captionformat", sCaption, rgsPOStrings, sAutoCommentFilePath);
 				}
 			}
@@ -1541,7 +1562,7 @@ namespace LocaleStrings
 				return;
 			string sPath = ComputePathComment(xel, sName, sAutoCommentFilePath);
 			string[] rgsComment = null;
-			if (String.IsNullOrEmpty(sTranslate))
+			if (string.IsNullOrEmpty(sTranslate))
 				rgsComment = new string[1] { sPath };
 			else
 				rgsComment = new string[2] { sPath, FixStringForEmbeddedQuotes(sTranslate) };
@@ -1567,15 +1588,15 @@ namespace LocaleStrings
 				if (xel.Name == "part" || xel.Name == "item")
 				{
 					string s = xel.GetAttribute("id");
-					if (!String.IsNullOrEmpty(s))
+					if (!string.IsNullOrEmpty(s))
 					{
-						bldr.Insert(0, String.Format("[@id=\"{0}\"]", s));
+						bldr.Insert(0, $"[@id=\"{s}\"]");
 					}
 					else
 					{
 						s = xel.GetAttribute("ref");
-						if (!String.IsNullOrEmpty(s))
-							bldr.Insert(0, String.Format("[@ref=\"{0}\"]", s));
+						if (!string.IsNullOrEmpty(s))
+							bldr.Insert(0, $"[@ref=\"{s}\"]");
 					}
 				}
 				else if (xel.Name == "layout")
@@ -1583,7 +1604,7 @@ namespace LocaleStrings
 					string s1 = xel.GetAttribute("class");
 					string s2 = xel.GetAttribute("type");
 					string s3 = xel.GetAttribute("name");
-					bldr.Insert(0, String.Format("[\"{0}-{1}-{2}\"]", s1, s2, s3));
+					bldr.Insert(0, $"[\"{s1}-{s2}-{s3}\"]");
 				}
 				bldr.Insert(0, xel.Name);
 				bldr.Insert(0, "/");
@@ -1606,7 +1627,7 @@ namespace LocaleStrings
 				return;
 			string sPath = ComputePathComment(xel, null, sAutoCommentFilePath);
 			string[] rgsComment = null;
-			if (String.IsNullOrEmpty(sTranslate))
+			if (string.IsNullOrEmpty(sTranslate))
 				rgsComment = new string[1] { sPath };
 			else
 				rgsComment = new string[2] { sPath, FixStringForEmbeddedQuotes(sTranslate) };
@@ -1633,19 +1654,19 @@ namespace LocaleStrings
 		internal static void ProcessFwDictConfigElement(XmlElement xel, string sAutoFilePath, List<POString> rgsPOStrings)
 		{
 			string sName = xel.GetAttribute("name");
-			if (!String.IsNullOrEmpty(sName.Trim()))
+			if (!string.IsNullOrEmpty(sName.Trim()))
 				StoreFwDictAttributeString(xel, "name", sName, sAutoFilePath, rgsPOStrings);
 			string sNameSuffix = xel.GetAttribute("nameSuffix");
-			if (!String.IsNullOrEmpty(sNameSuffix.Trim()))
+			if (!string.IsNullOrEmpty(sNameSuffix.Trim()))
 				StoreFwDictAttributeString(xel, "nameSuffix", sNameSuffix, sAutoFilePath, rgsPOStrings);
 			string sAfter = xel.GetAttribute("after");
-			if (!String.IsNullOrEmpty(sAfter.Trim()))
+			if (!string.IsNullOrEmpty(sAfter.Trim()))
 				StoreFwDictAttributeString(xel, "after", sAfter, sAutoFilePath, rgsPOStrings);
 			string sBefore = xel.GetAttribute("before");
-			if (!String.IsNullOrEmpty(sBefore.Trim()))
+			if (!string.IsNullOrEmpty(sBefore.Trim()))
 				StoreFwDictAttributeString(xel, "before", sBefore, sAutoFilePath, rgsPOStrings);
 			string sBetween = xel.GetAttribute("between");
-			if (!String.IsNullOrEmpty(sBetween.Trim()))
+			if (!string.IsNullOrEmpty(sBetween.Trim()))
 				StoreFwDictAttributeString(xel, "between", sBetween, sAutoFilePath, rgsPOStrings);
 			foreach (XmlNode xn in xel.ChildNodes)
 			{
@@ -1662,7 +1683,7 @@ namespace LocaleStrings
 			POString pos = new POString(
 				new string[1] { ComputeFwDictConfigPathComment(xel, sAutoFilePath, sName) },
 				new string[1] { FixStringForEmbeddedQuotes(sValue) },
-				new string[1] { String.Empty });
+				new string[1] { string.Empty });
 			rgsPOStrings.Add(pos);
 		}
 
@@ -1671,7 +1692,7 @@ namespace LocaleStrings
 		/// </summary>
 		private static string ComputeFwDictConfigPathComment(XmlElement xel, string sAutoFilePath, string sName)
 		{
-			return String.Format("{0}:://{1}/@{2}", sAutoFilePath, xel.Name, sName);
+			return $"{sAutoFilePath}:://{xel.Name}/@{sName}";
 		}
 
 		/// <summary>
@@ -1698,14 +1719,14 @@ namespace LocaleStrings
 			if (xel.Name == "string")
 			{
 				string sTxt = FixStringForEmbeddedQuotes(xel.GetAttribute("txt"));
-				if (!String.IsNullOrEmpty(sTxt.Trim()))
+				if (!string.IsNullOrEmpty(sTxt.Trim()))
 				{
 					string sComment = xel.GetAttribute("translate");
 					if (sComment.Trim().ToLower() != "do not translate")
 					{
 						string sPath = ComputeStringPathComment(xel);
 						string[] rgsComments = null;
-						if (!String.IsNullOrEmpty(sComment.Trim()))
+						if (!string.IsNullOrEmpty(sComment.Trim()))
 							rgsComments = new string[2] { sComment, sPath };
 						else
 							rgsComments = new string[1] { sPath };
@@ -1733,7 +1754,7 @@ namespace LocaleStrings
 			while (xel != null)
 			{
 				if (xel.Name == "string" || xel.Name == "group")
-					bldr.Insert(0, String.Format("/{0}", xel.GetAttribute("id")));
+					bldr.Insert(0, $"/{xel.GetAttribute("id")}");
 				xel = xel.ParentNode as XmlElement;
 			}
 			bldr.Insert(0, "/|strings-en.xml::");
@@ -1750,31 +1771,12 @@ namespace LocaleStrings
 		}
 
 		/// <summary>
-		/// Extract localizable strings from the C/C++ (.rc) files in the source tree.
-		/// </summary>
-		/// <param name="sRoot"></param>
-		/// <param name="rgsDirs"></param>
-		/// <param name="rgsPOStrings"></param>
-		private static void ExtractFromRcFiles(string sRoot, List<string> rgsDirs,
-			List<POString> rgsPOStrings)
-		{
-			// The method or operation is not yet implemented.
-		}
-
-		/// <summary>
 		/// Create a test "localized" PO file.
 		/// </summary>
-		/// <param name="sOutputFile"></param>
-		/// <param name="sRoot"></param>
-		/// <param name="rgsDirs"></param>
-		/// <param name="fExcludeTE"></param>
-		/// <param name="fExcludeFlex"></param>
-		/// <param name="sLocale"></param>
 		private static void GenerateTestPOFile(string sOutputFile, string sRoot,
-			List<string> rgsDirs, bool fExcludeTE, bool fExcludeFlex, string sLocale)
+			List<string> rgsDirs, string sLocale)
 		{
-			List<POString> rgPOStrings = ExtractLocalizableStrings(sRoot, rgsDirs, fExcludeTE,
-				fExcludeFlex);
+			List<POString> rgPOStrings = ExtractLocalizableStrings(sRoot, rgsDirs);
 			StreamWriter swOut = null;
 			try
 			{
@@ -1829,7 +1831,7 @@ namespace LocaleStrings
 			// Third, add an @ to the beginning and ending of the string.
 			for (int idx = 0; idx < bldr.Length; ++idx)
 			{
-				if (!Char.IsWhiteSpace(bldr[idx]))
+				if (!char.IsWhiteSpace(bldr[idx]))
 				{
 					bldr.Insert(idx, '@');
 					break;
@@ -1837,7 +1839,7 @@ namespace LocaleStrings
 			}
 			for (int idx = bldr.Length - 1; idx >= 0; --idx)
 			{
-				if (!Char.IsWhiteSpace(bldr[idx]))
+				if (!char.IsWhiteSpace(bldr[idx]))
 				{
 					bldr.Insert(idx+1, '@');
 					break;

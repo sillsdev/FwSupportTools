@@ -22,6 +22,7 @@ UpgradeLog*
 
 .dotest/
 .depend
+.vs
 
 obj/
 _UpgradeReport_Files/

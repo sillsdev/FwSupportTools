@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using NUnit.Framework;
 using LocaleStrings;
@@ -29,8 +27,8 @@ namespace LocaleStringsTests
 			Assert.AreEqual("/home/steve/fwrepo/fw/DistFiles/Language Explorer/Configuration/Parts/LexEntry.fwlayout", sAuto);
 		}
 
-#region TestData
-		private readonly string _sResxData =
+#region ResxData
+		private static readonly string _sResxData =
 "<?xml version=\"1.0\" encoding=\"utf-8\"?>" + Environment.NewLine +
 "<root>" + Environment.NewLine +
 "  <xsd:schema id=\"root\" xmlns=\"\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:msdata=\"urn:schemas-microsoft-com:xml-msdata\">" + Environment.NewLine +
@@ -101,7 +99,7 @@ namespace LocaleStringsTests
 "    <comment>{1} will be a long string...don't leave it out.</comment>" + Environment.NewLine +
 "  </data>" + Environment.NewLine +
 "</root>";
-#endregion
+#endregion ResxData
 
 		[Test]
 		public void TestReadingResxData()
@@ -156,8 +154,8 @@ namespace LocaleStringsTests
 			Assert.AreEqual("/Src/FwCoreDlgs/AddCnvtrDlg.resx::kstidPleaseEmailThisTo0WithASuitableSubject", postr5.AutoComments[1], "Sixth resx string has the expected AutoComment[1]");
 		}
 
-#region TestData
-		private readonly string _sConfigData =
+#region ConfigData
+		private static readonly string _sConfigData =
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + Environment.NewLine +
 "<LayoutInventory xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation='ViewsLayout.xsd'>" + Environment.NewLine +
 "  <layout class=\"LexEntry\" type=\"detail\" name=\"Normal\">" + Environment.NewLine +
@@ -200,7 +198,7 @@ namespace LocaleStringsTests
 "    <part ref=\"MLHeadWordPub\" label=\"Headword\" before=\" [\" after=\"]\" visibility=\"ifdata\" ws=\"vernacular\" sep=\"; \" hideConfig=\"true\" showLabels=\"false\" style=\"Dictionary-CrossReferences\"/>" + Environment.NewLine +
 "  </layout>" + Environment.NewLine +
 "</LayoutInventory>";
-#endregion
+#endregion ConfigData
 
 		[Test]
 		public void TestReadingDetailConfigData()
@@ -277,8 +275,8 @@ namespace LocaleStringsTests
 				postr11.AutoComments[0], "Detail Config string[11] has the expected Auto Comment");
 		}
 
-#region TestData
-		private readonly string _sStringsEnData =
+#region StringsEnData
+		private static readonly string _sStringsEnData =
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + Environment.NewLine +
 "<strings>" + Environment.NewLine +
 "  <group id=\"Misc\">" + Environment.NewLine +
@@ -310,7 +308,7 @@ namespace LocaleStringsTests
 "    </group>" + Environment.NewLine +
 "  </group>" + Environment.NewLine +
 "</strings>";
-#endregion
+#endregion StringsEnData
 
 		[Test]
 		public void TestReadingStringsEnData()
@@ -351,8 +349,8 @@ namespace LocaleStringsTests
 			Assert.AreEqual("/|strings-en.xml::/Linguistics/Morphology/Adjacency/Anywhere|", postr6.AutoComments[0], "strings-en string[6] has the expected Auto Comment");
 		}
 
-#region TestData
-		private readonly string _sDictConfigData =
+#region DictConfigData
+		private static readonly string _sDictConfigData =
 "<?xml version=\"1.0\" encoding=\"utf-8\"?>" + Environment.NewLine +
 "<DictionaryConfiguration name=\"Root-based (complex forms as subentries)\" allPublications=\"true\" version=\"1\" lastModified=\"2014-10-07\">" + Environment.NewLine +
 "  <ConfigurationItem name=\"Main Entry\" style=\"Dictionary-Normal\" isEnabled=\"true\" field=\"LexEntry\" cssClassNameOverride=\"entry\">" + Environment.NewLine +
@@ -398,7 +396,7 @@ namespace LocaleStringsTests
 "    <ConfigurationItem name=\"Date Modified\" before=\"modified on: \" after=\" \" isEnabled=\"false\" field=\"DateModified\"/>" + Environment.NewLine +
 "  </ConfigurationItem>" + Environment.NewLine +
 "</DictionaryConfiguration>";
-#endregion
+#endregion DictConfigData
 
 		[Test]
 		public void TestReadingDictConfigData()
@@ -522,8 +520,8 @@ namespace LocaleStringsTests
 			Assert.AreEqual("(String used 3 times.)", posComma.AutoComments[1]);
 		}
 
-#region TestData
-		static private readonly string _sFrenchPoData =
+#region FrenchPoData
+		private static readonly string _sFrenchPoData =
 "#  Copyright (c) 2005-2015 SIL International" + Environment.NewLine +
 "#  This software is licensed under the LGPL, version 2.1 or later" + Environment.NewLine +
 "#  (http://www.gnu.org/licenses/lgpl-2.1.html)" + Environment.NewLine +
@@ -816,7 +814,7 @@ namespace LocaleStringsTests
 "#~ msgid \"Send this Lexicon for the first time...\"" + Environment.NewLine +
 "#~ msgstr \"Envoyer ce lexique pour la première fois...\"" + Environment.NewLine +
 "" + Environment.NewLine;
-#endregion
+#endregion FrenchPoData
 
 		[Test]
 		public void TestReadPoData()
@@ -902,8 +900,153 @@ namespace LocaleStringsTests
 			Assert.AreEqual(postr49.Flags[0], "fuzzy");
 		}
 
-#region TestData
-		static private readonly string _sFrenchPoData2 =
+
+		#region PotData
+		private const string PotData = @"
+# Created from FieldWorks sources
+# Copyright (c) 2020 SIL International
+# This software is licensed under the LGPL, version 2.1 or later
+# (http://www.gnu.org/licenses/lgpl-2.1.html)
+#
+msgid """"
+msgstr """"
+""Project-Id-Version: FieldWorks ?.?.?\n""
+""Report-Msgid-Bugs-To: FlexErrors@sil.org\n""
+""POT-Creation-Date: 2020-03-02T15:35:02.5126333-06:00\n""
+""PO-Revision-Date: \n""
+""Last-Translator: Full Name <email@address>\n""
+""Language-Team: Language <email@address>\n""
+""MIME-Version: 1.0\n""
+""Content-Type: text/plain; charset=UTF-8\n""
+""Content-Transfer-Encoding: 8bit\n""
+""X-Poedit-Language: \n""
+""X-Poedit-Country: \n""
+
+#. /Src/xWorks/xWorksStrings.resx::ksAbbreviation
+msgid ""Abbreviation""
+msgstr """"
+
+#. /|strings-en.xml::/PossibilityListItemTypeNames/DomainTypes|
+msgid ""Academic Domain""
+msgstr """"
+
+#. /Src/FwCoreDlgs/AddCnvtrDlg.resx::$this.Text
+msgid ""Encoding Converters""
+msgstr """"
+
+#. /|strings-en.xml::/ClassNames/LexEntry|
+#. /Language Explorer/Configuration/Main.xml::/window/contextMenus/menu/menu/item/@label
+#. /Src/LexText/LexTextControls/LexTextControls.resx::ksEntry
+msgid ""Entry""
+msgstr """"
+
+#. /|strings-en.xml::/AlternativeTitles/PhEnvironment-Plural|
+#. /Language Explorer/Configuration/Grammar/Edit/toolConfiguration.xml::/root/tools/tool/@label
+msgid ""Environments""
+msgstr """"
+
+#. /Language Explorer/Configuration/Lexicon/browseDialogColumns.xml::/doc/browseColumns/column/@headerlabel
+#. /Language Explorer/Configuration/Parts/LexSenseParts.xml::/PartInventory/bin/part[@id=""LexSense-Detail-MsaCombo""]/slice/@label
+#. /Src/LexText/LexTextControls/MSAGroupBox.resx::m_groupBox.Text
+msgid ""Grandfather Clock""
+msgstr """"
+
+#. /Src/UnicodeCharEditor/CharEditorWindow.resx::HelpButton.Text
+#. /Language Explorer/Configuration/Main.xml::/window/Menus/menu/menu/item/@label
+msgid ""Help""
+msgstr """"
+
+#. /Language Explorer/Configuration/Grammar/areaConfiguration.xml::/root/controls/parameters/guicontrol/parameters/columns/column/@label
+#. /Src/LexText/LexTextControls/LexOptionsDlg.resx::m_chName.Text
+#. /Src/LexText/LexTextControls/LexTextControls.resx::ksName
+msgid ""Name""
+msgstr """"
+
+# JDX
+#. {1} will be a long string...don't leave it out.
+#. /Src/Utilities/Reporting/ReportingStrings.resx::kstidPleaseEmailThisTo0WithASuitableSubject
+msgid """"
+""Please email this report to {0} with a suitable subject:\n""
+""\n""
+""{1}""
+msgstr """"
+
+#. /|strings-en.xml::/AlternativeTitles/SemanticDomain-Plural|
+#. /Language Explorer/Configuration/Lexicon/browseDialogColumns.xml::/doc/browseColumns/column/@label
+msgid ""Something totally off the wall""
+msgstr """"
+
+#. /|strings-en.xml::/AlternativeTitles/LexSense-Plural|
+#. /Language Explorer/Configuration/Parts/ReversalParts.xml::/PartInventory/bin/part[@id=""ReversalIndexEntry-Detail-CurrentSenses""]/slice/@label
+#. /Src/LexText/Lexicon/LexEdStrings.resx::ksSenses
+msgid ""Senses""
+msgstr """"
+
+# JDX:JN
+#. /|strings-en.xml::/Linguistics/Morphology/TemplateTable/Stem|
+#. /Language Explorer/Configuration/Parts/MorphologyParts.xml::/PartInventory/bin/part[@id=""MoInflAffixTemplate-Jt-TemplateTabley""]/table/if/row/cell/para/lit
+msgid ""STEM""
+msgstr """"
+";
+		#endregion PotData
+
+		[Test]
+		public void TestImportTranslations()
+		{
+			var sourceReader = new StringReader(_sFrenchPoData);
+			var templateReader = new StringReader(PotData);
+			var result = Program.ImportTranslations(new StringWriter(), sourceReader, templateReader, "Test.fr.po", "Test.pot", out var poHeader);
+			Assert.IsNotNull(poHeader, "should have a header");
+			Assert.AreEqual(12, result.Count, "There should be the same number of strings as were in the POT file to begin with.");
+			AssertPoTranslation(result, "Abbreviation", "Abréviation");
+			AssertPoTranslation(result, "Academic Domain", "Domaine technique");
+			AssertPoTranslation(result, "Encoding Converters", "Convertisseurs d'encodage");
+			AssertPoTranslation(result, "Grandfather Clock", "");
+			AssertPoTranslation(result, "Help", "Aide",
+				new[]
+				{
+					"/Src/UnicodeCharEditor/CharEditorWindow.resx::HelpButton.Text",
+					"/Language Explorer/Configuration/Main.xml::/window/Menus/menu/menu/item/@label"
+				});
+			AssertPoTranslation(result, "Please email this report to {0} with a suitable subject:\n\n{1}", new []
+			{
+				"Veuillez envoyer ce rapport à {0} avec un sujet approprié:\n",
+				"\n",
+				"{1}"
+			});
+			AssertPoTranslation(result, "Something totally off the wall", "");
+			AssertPoTranslation(result, "STEM", "BASE");
+		}
+
+		private static void AssertPoTranslation(Dictionary<string, POString> poStrings, string msgId, string msgStr, string[] autoComments = null)
+		{
+			AssertPoTranslation(poStrings, msgId, new[] {msgStr}, autoComments);
+		}
+
+		private static void AssertPoTranslation(Dictionary<string, POString> poStrings, string msgId, string[] msgStr, string[] autoComments = null)
+		{
+			Assert.IsTrue(poStrings.TryGetValue(msgId, out var actual), $"Should contain '{msgId}'");
+			Assert.IsNotNull(actual, $"[{msgId}] should not be null");
+			Assert.IsNotNull(actual.MsgStr, $"[{msgId}].MsgStr should not be null");
+			Assert.AreEqual(msgStr.Length, actual.MsgStr.Count, $"Line count in [{msgId}]");
+			for (var i = 0; i < msgStr.Length; i++)
+			{
+				Assert.AreEqual(msgStr[i], actual.MsgStr[i], $"[{msgId}].MsgStr[{i}]");
+			}
+
+			if (autoComments != null)
+			{
+				Assert.IsNotNull(actual.AutoComments, $"[{msgId}].AutoComments should not be null");
+				Assert.AreEqual(autoComments.Length, actual.AutoComments.Count, $"AutoComment count in [{msgId}]");
+				for (var i = 0; i < autoComments.Length; i++)
+				{
+					Assert.AreEqual(autoComments[i], actual.AutoComments[i], $"[{msgId}].AutoComments[{i}]");
+				}
+			}
+		}
+
+#region FrenchPoData2
+		private static readonly string _sFrenchPoData2 =
 "#  Copyright (c) 2005-2015 SIL International" + Environment.NewLine +
 "#  This software is licensed under the LGPL, version 2.1 or later" + Environment.NewLine +
 "#  (http://www.gnu.org/licenses/lgpl-2.1.html)" + Environment.NewLine +
@@ -1037,7 +1180,7 @@ namespace LocaleStringsTests
 "msgid \"Zechariah\"" + Environment.NewLine +
 "msgstr \"Zacharie\"" + Environment.NewLine +
 "" + Environment.NewLine;
-#endregion
+#endregion FrenchPoData2
 
 		[Test]
 		public void TestMergePoFiles()

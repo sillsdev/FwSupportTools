@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LocaleStrings">
-      <HintPath>..\bin\Debug\LocaleStrings.exe</HintPath>
-    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\Bin\XmlUnit\bin\nunit.framework.dll</HintPath>
     </Reference>
@@ -46,6 +43,12 @@
   <ItemGroup>
     <Compile Include="LocaleStringsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LocaleStrings.csproj">
+      <Project>{37eefe1f-26f8-4901-b9f5-fdc6b948e0be}</Project>
+      <Name>LocaleStrings</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
