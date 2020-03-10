@@ -401,7 +401,7 @@ if [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 	log "Building localization sources"
 	cd "$fwrepodir/fw"
 	if grep localize-source Makefile; then
-		LcmLocalArtifactsDir="${liblcm_repodir}" make localize-source
+		LcmLocalArtifactsDir="${liblcm_repodir}/artifacts/Release" make localize-source
 	else
 		log "Skipping localize-source for older FW, such as 8.3"
 	fi
