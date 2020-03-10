@@ -217,10 +217,13 @@ elif [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 		git clone --recurse-submodules http://github.com/sillsdev/FwDebian.git debian
 	fi
 
+	liblcm_repodir="${repo_base_dir}"/liblcm
+	[[ -d "${liblcm_repodir}" ]] || git clone --depth=1 --branch develop https://github.com/sillsdev/liblcm.git "${liblcm_repodir}"
+
 	cd "$fwrepodir"
 
 	debian_path=$fwrepodir/debian
-	repository_directory_list=(fwrepo/fw fwrepo/fw/Localizations fwrepo/fw/DistFiles/Helps fwrepo/libcom fwrepo/debian)
+	repository_directory_list=(fwrepo/fw fwrepo/fw/Localizations fwrepo/fw/DistFiles/Helps fwrepo/libcom fwrepo/debian liblcm)
 	VCS="git"
 elif [ "$MAIN_PACKAGE_NAME" = "mono-sil" -o \
 	"$MAIN_PACKAGE_NAME" = "libgdiplus-sil" -o \
@@ -398,7 +401,7 @@ if [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 	log "Building localization sources"
 	cd "$fwrepodir/fw"
 	if grep localize-source Makefile; then
-		make localize-source
+		LcmLocalArtifactsDir="${liblcm_repodir}" make localize-source
 	else
 		log "Skipping localize-source for older FW, such as 8.3"
 	fi
