@@ -217,13 +217,16 @@ elif [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 		git clone --recurse-submodules http://github.com/sillsdev/FwDebian.git debian
 	fi
 
-	liblcm_repodir="${repo_base_dir}"/liblcm
+	# Temporary to clean up old liblcm path.
+	[[ ! -d "${repo_base_dir}"/liblcm ]] || rm -rfv "${repo_base_dir}"/liblcm
+
+	liblcm_repodir="${repo_base_dir}"/fwrepo/liblcm
 	[[ -d "${liblcm_repodir}" ]] || git clone --depth=1 --branch develop https://github.com/sillsdev/liblcm.git "${liblcm_repodir}"
 
 	cd "$fwrepodir"
 
 	debian_path=$fwrepodir/debian
-	repository_directory_list=(fwrepo/fw fwrepo/fw/Localizations fwrepo/fw/DistFiles/Helps fwrepo/libcom fwrepo/debian liblcm)
+	repository_directory_list=(fwrepo/fw fwrepo/fw/Localizations fwrepo/fw/DistFiles/Helps fwrepo/libcom fwrepo/debian fwrepo/liblcm)
 	VCS="git"
 elif [ "$MAIN_PACKAGE_NAME" = "mono-sil" -o \
 	"$MAIN_PACKAGE_NAME" = "libgdiplus-sil" -o \
