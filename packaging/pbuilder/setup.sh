@@ -43,6 +43,7 @@ cd "${PBUILDERDIR:-$(dirname "$0")}"
 KEYRINGLLSO="$PBUILDERDIR/llso-keyring-2013.gpg"
 KEYRINGPSO="$PBUILDERDIR/pso-keyring-2016.gpg"
 KEYRINGNODE="$PBUILDERDIR/nodesource-keyring.gpg"
+KEYRINGMICROSOFT="$PBUILDERDIR/microsoft.asc.gpg"
 
 if [ ! -f ${KEYRINGPSO} ]; then
 	wget --output-document=${KEYRINGPSO} https://packages.sil.org/keys/pso-keyring-2016.gpg
@@ -64,6 +65,10 @@ if [ ! -f ${KEYRINGNODE} ]; then
 	gpg --no-default-keyring --keyring ${TMP_KEYRING} --export > ${KEYRINGNODE}
 fi
 
+if [ ! -f ${KEYRINGMICROSOFT} ]; then
+	wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o ${KEYRINGMICROSOFT}
+fi
+
 for D in ${DISTRIBUTIONS:-$UBUNTU_DISTROS $UBUNTU_OLDDISTROS $DEBIAN_DISTROS}
 do
 	for A in ${ARCHES-amd64 i386}
@@ -78,6 +83,9 @@ do
 		OTHERMIRROR=""
 
 		CheckOrLinkDebootstrapScript $D
+
+		# 64-bit only repo. 32-bit can be downloaded as a tar.
+		MICROSOFT_APT="deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-${D}-prod ${D} main"
 
 		if [[ "$UBUNTU_DISTROS $UBUNTU_OLDDISTROS" == *$D* ]]; then
 			if [[ $UBUNTU_DISTROS == *$D* ]]; then
@@ -98,11 +106,13 @@ do
 				addmirror "deb $PSO $D$S $COMPONENTS"
 			done
 			if [ $D != "precise" ]; then
-				# allow to install current nodejs packages
+				# Allow to install current nodejs packages
 				if [ -n "$update" ]; then
-					# we can't use https when creating the chroot because apt-transport-https
-					# isn't available yet
+					# We can't use https when creating the chroot because apt-transport-https
+					# isn't available yet. This is so for Ubuntu 16.04, but beginning in Ubuntu 18.04 the capability is probably built-in.
+					# Adding apt-transport-https to pbuilder --debootstrapopts --include does not solve it.
 					addmirror "deb https://deb.nodesource.com/node_8.x $D main"
+					addmirror "${MICROSOFT_APT}"
 				fi
 			fi
 		elif [[ $DEBIAN_DISTROS == *$D* ]]; then
@@ -115,11 +125,12 @@ do
 			addmirror "deb $LLSO $D $COMPONENTS"
 			addmirror "deb $PSO $D $COMPONENTS"
 			if [ $D != "wheezy" ]; then
-				# allow to install current nodejs packages
+				# Allow to install current nodejs packages
 				if [ -n "$update" ]; then
-					# we can't use https when creating the chroot because apt-transport-https
-					# isn't available yet
+					# We can't use https when creating the chroot because apt-transport-https
+					# isn't available yet. This is so for Debian stretch, but beginning in Debian buster the capability is probably built-in.
 					addmirror "deb https://deb.nodesource.com/node_8.x $D main"
+					addmirror "${MICROSOFT_APT}"
 				fi
 			fi
 		else
@@ -139,6 +150,7 @@ do
 			${KEYRINGLLSO:+--keyring }$KEYRINGLLSO \
 			${KEYRINGPSO:+--keyring }$KEYRINGPSO \
 			${KEYRINGNODE:+--keyring }$KEYRINGNODE \
+			${KEYRINGMICROSOFT:+--keyring }$KEYRINGMICROSOFT \
 			--extrapackages "apt-utils devscripts lsb-release apt-transport-https ca-certificates tzdata" \
 			--othermirror "$OTHERMIRROR" \
 			--mirror "$MIRROR" \
