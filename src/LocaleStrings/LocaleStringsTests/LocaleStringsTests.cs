@@ -5,6 +5,8 @@ using System.Xml;
 using NUnit.Framework;
 using LocaleStrings;
 using System.IO;
+using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace LocaleStringsTests
 {
@@ -110,7 +112,7 @@ namespace LocaleStringsTests
 			Assert.IsNotNull(xdoc.DocumentElement);
 			Program.ProcessResxData(xdoc.DocumentElement, @"/Src/FwCoreDlgs/AddCnvtrDlg.resx", rgsPoStrings);
 			//SUT
-			Assert.AreEqual(6, rgsPoStrings.Count, "Five localizable strings found in resx data");
+			Assert.AreEqual(6, rgsPoStrings.Count, "localizable strings found in resx data");
 			var postr2 = rgsPoStrings[2];
 			Assert.IsNotNull(postr2, "Third resx string has data");
 			Assert.IsNotNull(postr2.MsgId, "Third resx string has MsgId data");
@@ -588,7 +590,7 @@ namespace LocaleStringsTests
 "" + Environment.NewLine +
 "#. /Src/FwCoreDlgs/AddCnvtrDlg.resx::label1.Text" + Environment.NewLine +
 "msgid \"&Available Converters:\"" + Environment.NewLine +
-"msgstr \"Convertisseurs disponibles:\"" + Environment.NewLine +
+"msgstr \"Convertisseurs &disponibles:\"" + Environment.NewLine +
 "" + Environment.NewLine +
 "#. /|strings-en.xml::/DialogStrings/EditMorphBreaks-Example1|" + Environment.NewLine +
 "msgid \"blackbird → {0}black{1} {0}bird{1}\"" + Environment.NewLine +
@@ -819,10 +821,8 @@ namespace LocaleStringsTests
 		[Test]
 		public void TestReadPoData()
 		{
-			POString posHeader;
-			POString posObsolete;
 			var srIn = new StringReader(_sFrenchPoData);
-			var dictFrenchPo = Program.ReadPoFile(srIn, out posHeader, out posObsolete);
+			var dictFrenchPo = Program.ReadPoFile(srIn, out var posHeader, out var posObsolete);
 			Assert.IsNotNull(posHeader);
 			Assert.IsNotNull(posObsolete);
 			Assert.IsNull(posObsolete.AutoComments);
@@ -1045,7 +1045,47 @@ msgstr """"
 			}
 		}
 
-#region FrenchPoData2
+		[Test]
+		public void TestLocalizeResx()
+		{
+			var pos = Program.ReadPoFile(new StringReader(_sFrenchPoData), out _, out _);
+			var resxDoc = new XmlDocument();
+			resxDoc.LoadXml(_sResxData);
+
+			Program.LocalizeResx(pos, resxDoc);
+			var docElt = resxDoc.DocumentElement;
+			Assert.IsNotNull(docElt, "ReSharper whines about this");
+			Assert.AreEqual(22, docElt.ChildNodes.Count, "should have the same number of elements");
+			var dataEltIter = docElt.GetElementsByTagName("data").GetEnumerator();
+			var dataElts = new List<XmlElement>();
+			while (dataEltIter.MoveNext())
+			{
+				dataElts.Add((XmlElement)dataEltIter.Current);
+			}
+			Assert.AreEqual(16, dataElts.Count, "should have the same number of elements");
+			AssertResxDataValue(dataElts, "btnHelp.Text", "Aide");
+			AssertResxDataValue(dataElts, "label1.Text", "Convertisseurs &disponibles:");
+			AssertResxDataValue(dataElts, "$this.Text", "Convertisseurs d'encodage");
+			AssertResxDataValue(dataElts, "kstidPleaseEmailThisTo0WithASuitableSubject",
+				"Veuillez envoyer ce rapport à {0} avec un sujet approprié:\n\n{1}",
+				"{1} will be a long string...don't leave it out.");
+		}
+
+		private static void AssertResxDataValue(List<XmlElement> dataElts, string name, string expectedValue, string expectedComment = null)
+		{
+			var dataElt = dataElts.FirstOrDefault(elt => elt.GetAttribute("name") == name);
+			Assert.IsNotNull(dataElt, $"no data elt for {name}");
+			var valElts = dataElt.GetElementsByTagName("value");
+			Assert.AreEqual(1, valElts.Count, $"no value elt for {name}");
+			Assert.AreEqual(expectedValue, valElts[0].InnerText, $"value of {name}");
+			if (expectedComment == null)
+				return;
+			var commentElts = dataElt.GetElementsByTagName("comment");
+			Assert.AreEqual(1, commentElts.Count, $"no comment elt for {name}");
+			Assert.AreEqual(expectedComment, commentElts[0].InnerText, $"comment on {name}");
+		}
+
+		#region FrenchPoData2
 		private static readonly string _sFrenchPoData2 =
 "#  Copyright (c) 2005-2015 SIL International" + Environment.NewLine +
 "#  This software is licensed under the LGPL, version 2.1 or later" + Environment.NewLine +

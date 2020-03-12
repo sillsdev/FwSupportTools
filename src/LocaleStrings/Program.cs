@@ -66,8 +66,7 @@ namespace LocaleStrings
 					"force",
 					"Overwrite existing (test?) PO file",
 					false);
-				var rgsDirs = new List<string>();
-				rgsDirs.Add("Src");
+				var rgsDirs = new List<string> {"Src"};
 				var slpDirs = new CommandLineOptions.StringListParam("d",
 					"dir",
 					"Add a subdirectory to those searched under the root (default = Src)",
@@ -75,6 +74,10 @@ namespace LocaleStrings
 				var spImport = new CommandLineOptions.StringParam("i",
 					"import",
 					"Import translations from the PO file into the POT file, storing them in a new PO file.",
+					"messages.xx.po");
+				var spLocalize = new CommandLineOptions.StringParam("l",
+					"localize",
+					"Using the given PO file, localize the given .resx files, saving them in the specified directory",
 					"messages.xx.po");
 				var spMerge = new CommandLineOptions.StringParam("m",
 					"merge",
@@ -91,7 +94,7 @@ namespace LocaleStrings
 
 				var rgParam = new CommandLineOptions.Param[] {
 					bpExtract, bpStore, spRoot, spPOTFile, spTest,
-					bpForce, slpDirs, spImport, spMerge, bpCheck, spUpdate
+					bpForce, slpDirs, spImport, spLocalize, spMerge, bpCheck, spUpdate
 				};
 				bool fOk = CommandLineOptions.Parse(args, ref rgParam, out var iOpt);
 				int cOps = 0;
@@ -100,6 +103,8 @@ namespace LocaleStrings
 				if (bpStore.Value)
 					++cOps;
 				if (spImport.HasValue)
+					++cOps;
+				if (spLocalize.HasValue)
 					++cOps;
 				if (spMerge.HasValue)
 					++cOps;
@@ -117,25 +122,20 @@ namespace LocaleStrings
 					return;
 				}
 
-				string sRoot = null;
+				var root = string.Empty;
 				if (spRoot.HasValue)
 				{
-					sRoot = spRoot.Value;
-					string devPath = Path.Combine(sRoot, "DistFiles");
+					root = spRoot.Value;
+					string devPath = Path.Combine(root, "DistFiles");
 					if (Directory.Exists(devPath))
 						s_DistFiles = "DistFiles";
 				}
 				else if (bpExtract.Value|| bpStore.Value || spTest.HasValue)
-					sRoot = GetRootDir();
+					root = GetRootDir();
 
 				if (bpExtract.Value)
 				{
-					string sOutputFile = spPOTFile.Value;
-					if (!spPOTFile.HasValue)
-					{
-						sOutputFile = "Flex.pot";
-					}
-					ExtractPOTFile(sRoot, rgsDirs, sOutputFile);
+					ExtractPOTFile(root, rgsDirs, spPOTFile.HasValue ? spPOTFile.Value : "Flex.pot");
 				}
 				else if (bpStore.Value)
 				{
@@ -144,14 +144,14 @@ namespace LocaleStrings
 					else if (!File.Exists(args[iOpt]))
 						Usage($"{args[iOpt]} does not exist!", rgParam);
 					else
-						StoreLocalizedStrings(args[iOpt], sRoot);
+						StoreLocalizedStrings(args[iOpt], root);
 				}
 				else if (spTest.HasValue)
 				{
 					string sLocale = spTest.Value;
 					if (VerifyValidLocale(sLocale))
 					{
-						string sBase = Path.Combine(sRoot, "Localizations");
+						string sBase = Path.Combine(root, "Localizations");
 						string sOutputFile = Path.Combine(sBase, $"messages.{sLocale}.po");
 						if (File.Exists(sOutputFile) && !bpForce.Value)
 						{
@@ -159,7 +159,7 @@ namespace LocaleStrings
 						}
 						else
 						{
-							GenerateTestPOFile(sOutputFile, sRoot, rgsDirs, sLocale);
+							GenerateTestPOFile(sOutputFile, root, rgsDirs, sLocale);
 						}
 					}
 					else
@@ -178,6 +178,24 @@ namespace LocaleStrings
 					if (!File.Exists(potFile))
 						Usage($"Invalid POT file {potFile}", rgParam);
 					ImportPOTranslations(spImport.Value, potFile, outFile);
+				}
+				else if (spLocalize.HasValue)
+				{
+					if (iOpt > args.Length - 2)
+						Usage("Destination dir or resx files not specified", rgParam);
+					if (!File.Exists(spLocalize.Value))
+						Usage($"Invalid PO file: {spLocalize.Value}", rgParam);
+					var destDir = args[iOpt++];
+					var resxFiles = new List<string>();
+					for (; iOpt < args.Length; iOpt++)
+					{
+						resxFiles.AddRange(args[iOpt].Split(';'));
+					}
+					foreach (var file in resxFiles.Where(file => !File.Exists(file)))
+					{
+						Usage($"Nonexistant .resx file {file}", rgParam);
+					}
+					LocalizeResxFiles(spLocalize.Value, destDir, resxFiles);
 				}
 				else if (spMerge.HasValue)
 				{
@@ -243,6 +261,10 @@ namespace LocaleStrings
 			Console.WriteLine("    or");
 			Console.WriteLine("       LocaleStrings.exe [options] --merge <old>.<xx>.po <new>.<xx>.po");
 			Console.WriteLine("    or");
+			Console.WriteLine("       LocaleStrings.exe [options] --localize messages.<xx>.po /destination/directory/ resx1.resx [resx2.resx [...]]");
+			Console.WriteLine("    or");
+			Console.WriteLine("       LocaleStrings.exe [options] --localize messages.<xx>.po /destination/directory/ resx1.resx;[resx2.resx;[...]]");
+			Console.WriteLine("    or");
 			Console.WriteLine("       LocaleStrings.exe [options] --update messages.<xx>.po messages.pot");
 			Console.WriteLine("");
 			CommandLineOptions.Usage(rgParam);
@@ -268,6 +290,10 @@ namespace LocaleStrings
 			Console.WriteLine("The --import command imports translations from <old>.<xx>.po into messages.pot,");
 			Console.WriteLine("preserving comments and also untranslated msgid strings from messages.pot,");
 			Console.WriteLine("and storing the result in <new>.<xx>.po");
+			Console.WriteLine("");
+			Console.WriteLine("The --localize command localizes all specified .resx files using the translations");
+			Console.WriteLine("in messages.<xx>.po, saving the results in the destination directory.");
+			Console.WriteLine("NOTE: this will not save localized versions of .resx files that had no localized strings");
 			Console.WriteLine("");
 			Console.WriteLine("The --merge command merges the strings from <new>.<xx>.po into <old>.<xx>.po,");
 			Console.WriteLine("overwriting any conflicts in the original (<old>.<xx>.po) file.");
@@ -467,78 +493,68 @@ namespace LocaleStrings
 		/// </summary>
 		internal static void ProcessResxData(XmlElement xdoc, string sAutoCommentFilePath, List<POString> rgsPOStrings)
 		{
-			foreach (XmlNode x in xdoc.ChildNodes)
+			foreach (XmlElement x in xdoc.GetElementsByTagName("data"))
 			{
-				XmlElement xel = x as XmlElement;
-				if (xel != null && xel.Name == "data")
+				if (!IsLocalizableElement(x, out var name, out var value, out var comment))
 				{
-					string sName = xel.GetAttribute("name");
-					string sType = xel.GetAttribute("type");
-					string sMimeType = xel.GetAttribute("mimetype");
-					string sValue = null;
-					string sComment = null;
-					if (!string.IsNullOrEmpty(sName) &&
-						string.IsNullOrEmpty(sType) && string.IsNullOrEmpty(sMimeType))
-					{
-						if (!sName.StartsWith(">>") && IsTextName(sName))
-						{
-							for (int i = 0; i < xel.ChildNodes.Count; ++i)
-							{
-								if (xel.ChildNodes[i].Name == "value")
-									sValue = xel.ChildNodes[i].InnerText;
-								if (xel.ChildNodes[i].Name == "comment")
-									sComment = xel.ChildNodes[i].InnerText;
-							}
-						}
-					}
-					if (!string.IsNullOrEmpty(sValue))
-					{
-						if (sValue.IndexOfAny("/\\".ToCharArray()) >= 0 && sValue.Trim().EndsWith(".htm"))
-							continue;
-						if (sComment != null && sComment.Trim().ToLower() == "do not translate")
-							continue;
-						if (string.IsNullOrEmpty(sValue.Trim()))
-							continue;
-						if (sValue.IndexOf("\\n") >= 0 ||
-							sValue.IndexOf("\\r") >= 0 ||
-							sValue.IndexOf("\\t") >= 0 ||
-							sValue.IndexOf("\\\\") >= 0 ||
-							sValue.IndexOf("\\\"") >= 0)
-						{
-							s_fBadStringValue = true;
-							Console.WriteLine(
-								$"Backslash quoted character found for {sName} in {sAutoCommentFilePath}");
-						}
-						string[] rgsComment = null;
-						if (!string.IsNullOrEmpty(sComment))
-							rgsComment = sComment.Split(s_rgsNewline, StringSplitOptions.None);
-						sValue = FixStringForEmbeddedQuotes(sValue);
-						sValue = sValue.Replace(Environment.NewLine, "\\n" + Environment.NewLine);
-						if (sValue.EndsWith(Environment.NewLine))
-							sValue = sValue.Substring(0, sValue.Length - Environment.NewLine.Length);
-						string[] rgsId = sValue.Split(s_rgsNewline, StringSplitOptions.None);
-						string[] rgsStr = new string[1] { "" };
-						POString pos = new POString(rgsComment, rgsId, rgsStr);
-						string sPath = $"{sAutoCommentFilePath}::{sName}";
-						pos.AddAutoComment(sPath);
-						rgsPOStrings.Add(pos);
-					}
+					continue;
 				}
+				if (value.IndexOf(@"\n",  StringComparison.Ordinal) >= 0 ||
+					value.IndexOf(@"\r",  StringComparison.Ordinal) >= 0 ||
+					value.IndexOf(@"\t",  StringComparison.Ordinal) >= 0 ||
+					value.IndexOf(@"\\",  StringComparison.Ordinal) >= 0 ||
+					value.IndexOf(@"\""", StringComparison.Ordinal) >= 0)
+				{
+					s_fBadStringValue = true;
+					Console.WriteLine(
+						$"Backslash-escaped character found for {name} in {sAutoCommentFilePath}");
+				}
+
+				string[] rgsComment = null;
+				if (!string.IsNullOrEmpty(comment))
+					rgsComment = comment.Split(s_rgsNewline, StringSplitOptions.None);
+				var rgsId = ConvertValueToMsgIdParts(value);
+				var rgsStr = new string[1] {""};
+				var pos = new POString(rgsComment, rgsId, rgsStr);
+				var sPath = $"{sAutoCommentFilePath}::{name}";
+				pos.AddAutoComment(sPath);
+				rgsPOStrings.Add(pos);
 			}
 		}
 
-		private static bool IsTextName(string sName)
+		private static bool IsLocalizableElement(XmlElement xel, out string name, out string value, out string comment)
 		{
-			if (sName.EndsWith(".Name") ||
-				sName.EndsWith(".AccessibleName") ||
-				sName.EndsWith(".AccessibleDescription"))
+			value = comment = null;
+			name = xel.GetAttribute("name");
+			if (string.IsNullOrEmpty(name) || name.StartsWith(">>") ||
+				!string.IsNullOrEmpty(xel.GetAttribute("type")) || !string.IsNullOrEmpty(xel.GetAttribute("mimetype")) ||
+				!(name.EndsWith(".Text") || !name.Contains(".") ||
+					name.EndsWith(".AccessibleName") || name.EndsWith(".AccessibleDescription")))
 			{
 				return false;
 			}
-			else
+
+			for (var i = 0; i < xel.ChildNodes.Count; ++i)
 			{
-				return true;
+				if (xel.ChildNodes[i].Name == "value")
+					value = xel.ChildNodes[i].InnerText;
+				if (xel.ChildNodes[i].Name == "comment")
+					comment = xel.ChildNodes[i].InnerText;
 			}
+
+			// TODO (Hasso) 2020.03: this return statement is not unit tested
+			return !string.IsNullOrWhiteSpace(value) &&
+					(value.IndexOfAny(@"/\".ToCharArray()) < 0 || !value.Trim().EndsWith(".htm")) &&
+					comment?.Trim().ToLower() != "do not translate";
+		}
+
+		private static string[] ConvertValueToMsgIdParts(string value)
+		{
+			value = FixStringForEmbeddedQuotes(value);
+			value = value.Replace(Environment.NewLine, @"\n" + Environment.NewLine);
+			if (value.EndsWith(Environment.NewLine))
+				value = value.Remove(value.Length - Environment.NewLine.Length);
+			return value.Split(s_rgsNewline, StringSplitOptions.None);
 		}
 
 		/// <summary>
@@ -550,11 +566,8 @@ namespace LocaleStrings
 		private static void WritePoHeader(TextWriter swOut, string sRoot, string sLocale)
 		{
 			swOut.WriteLine("");	// StreamWriter writes a BOM for UTF-8: put it on a line by itself.
-			string sTime = DateTime.Now.ToLocalTime().ToString("o");
-			string s = string.Format("Created from FieldWorks sources", sTime);
-			POString.WriteComment(s, ' ', swOut);
-			s = $"Copyright (c) {DateTime.Now.Year} SIL International";
-			POString.WriteComment(s, ' ', swOut);
+			POString.WriteComment("Created from FieldWorks sources", ' ', swOut);
+			POString.WriteComment($"Copyright (c) {DateTime.Now.Year} SIL International", ' ', swOut);
 			POString.WriteComment("This software is licensed under the LGPL, version 2.1 or later",
 				' ', swOut);
 			POString.WriteComment("(http://www.gnu.org/licenses/lgpl-2.1.html)", ' ', swOut);
@@ -567,7 +580,7 @@ namespace LocaleStrings
 			string sVersion = GetFieldWorksVersion(sRoot);
 			POString.WriteQuotedLine($"Project-Id-Version: {sVersion}\\n", swOut);
 			POString.WriteQuotedLine("Report-Msgid-Bugs-To: FlexErrors@sil.org\\n", swOut);
-			POString.WriteQuotedLine($"POT-Creation-Date: {sTime}\\n", swOut);
+			POString.WriteQuotedLine($"POT-Creation-Date: {DateTime.Now.ToLocalTime():o}\\n", swOut);
 			POString.WriteQuotedLine("PO-Revision-Date: \\n", swOut);
 			POString.WriteQuotedLine("Last-Translator: Full Name <email@address>\\n", swOut);
 			POString.WriteQuotedLine("Language-Team: Language <email@address>\\n", swOut);
@@ -614,13 +627,13 @@ namespace LocaleStrings
 		}
 
 		/// <summary>
-		/// Add backslashes as needed to quote quotation marks and backslashes.
+		/// Add backslashes as needed to escape quotation marks and backslashes.
 		/// </summary>
 		/// <param name="sValue">string value which needs backslashes added</param>
-		/// <returns>revised string (or possibly the original one)</returns>
+		/// <returns>revised string with backslashes added (or possibly the original one)</returns>
 		private static string FixStringForEmbeddedQuotes(string sValue)
 		{
-			// remove any current quoting of the quotation marks, which obviously isn't
+			// remove any current escaping of the quotation marks, which obviously isn't
 			// needed in the XML based RESX files.
 			int idx = sValue.IndexOf("\\\"");
 			while (idx >= 0)
@@ -683,8 +696,6 @@ namespace LocaleStrings
 		/// <see cref="Usage"/>
 		private static void ImportPOTranslations(string sourceFile, string templateFile, string outFile)
 		{
-			//var locale = GetLocaleFromMsgFile(sourceFile);
-
 			var timeStamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
 			Dictionary<string, POString> templateWithTranslations;
 			POString posHeader;
@@ -710,7 +721,7 @@ namespace LocaleStrings
 			string sourceFile, string templateFile, out POString poHeader)
 		{
 			var sources = ReadPoFile(source, out poHeader, out _);
-			var translated = ReadPoFile(template, out var templateHeader, out _);
+			var translated = ReadPotFile(template, out var templateHeader);
 			MergePOHeaders(poHeader, templateHeader);
 			foreach (var msgId in translated.Keys.ToList())
 			{
@@ -720,6 +731,47 @@ namespace LocaleStrings
 				}
 			}
 			return translated;
+		}
+
+		/// <see cref="Usage"/>
+		private static void LocalizeResxFiles(string poFile, string destDir, List<string> resxfiles)
+		{
+			var locale = GetLocaleFromMsgFile(poFile);
+			var poStrings = LoadPOFile(poFile, out _, out _);
+			var curDir = Directory.GetCurrentDirectory();
+			foreach (var resxfile in resxfiles.Select(rf => new FileInfo(rf).FullName))
+			{
+				var resxDoc = new XmlDocument();
+				resxDoc.Load(resxfile);
+				if (!LocalizeResx(poStrings, resxDoc))
+					continue;
+
+				var sourceDirName = Path.GetDirectoryName(resxfile);
+				// ReSharper disable once PossibleNullReferenceException
+				var innerDestDir = Path.Combine(destDir, locale,
+					sourceDirName.StartsWith(curDir) ? sourceDirName.Substring(curDir.Length + 1) : sourceDirName.Replace(":", ""));
+				if (!Directory.Exists(innerDestDir))
+				{
+					Directory.CreateDirectory(innerDestDir);
+				}
+				resxDoc.Save(Path.Combine(innerDestDir, $"{Path.GetFileNameWithoutExtension(resxfile)}.{locale}{Path.GetExtension(resxfile)}"));
+			}
+		}
+
+		/// <returns>true if any strings were localized; false otherwise</returns>
+		internal static bool LocalizeResx(Dictionary<string, POString> translations, XmlDocument resxDoc)
+		{
+			var hasTranslations = false;
+			foreach (XmlElement xel in resxDoc.GetElementsByTagName("data"))
+			{
+				if (IsLocalizableElement(xel, out _, out var value, out _) &&
+					translations.TryGetValue(string.Join("\n", value.Split(s_rgsNewline, StringSplitOptions.None)), out var poString))
+				{
+					xel.GetElementsByTagName("value")[0].InnerText = poString.MsgStrAsString();
+					hasTranslations = true;
+				}
+			}
+			return hasTranslations;
 		}
 
 		/// <summary>
@@ -1087,11 +1139,9 @@ namespace LocaleStrings
 
 		private static Dictionary<string, POString> LoadPotFile(string sPotFile, out POString posHeader)
 		{
-			using (StreamReader srIn = new StreamReader(sPotFile, Encoding.UTF8))
+			using (var srIn = new StreamReader(sPotFile, Encoding.UTF8))
 			{
-				var dictTrans =  ReadPotFile(srIn, out posHeader);
-				srIn.Close();
-				return dictTrans;
+				return ReadPotFile(srIn, out posHeader);
 			}
 		}
 
@@ -1193,11 +1243,9 @@ namespace LocaleStrings
 
 		private static Dictionary<string, POString> LoadPOFile(string sMsgFile, out POString posHeader, out POString posFinalObsolete)
 		{
-			using (StreamReader srIn = new StreamReader(sMsgFile, Encoding.UTF8))
+			using (var srIn = new StreamReader(sMsgFile, Encoding.UTF8))
 			{
-				var dictTrans = ReadPoFile(srIn, out posHeader, out posFinalObsolete);
-				srIn.Close();
-				return dictTrans;
+				return ReadPoFile(srIn, out posHeader, out posFinalObsolete);
 			}
 		}
 
