@@ -1,0 +1,480 @@
+#!/bin/bash
+
+# provision-fw-dev-machine
+# Set up a FieldWorks development environment on a vagrant machine. Don't require user interaction.
+# See also http://linux.lsdev.sil.org/wiki/index.php/Set_up_new_FieldWorks_development_workstation
+
+set -e -o pipefail
+
+BASEDIR="$HOME"
+SCRIPTNAME="provisioner"
+
+# Setup
+
+RELEASE=$(lsb_release -sc)
+# Use codename of wasta Linux's Ubuntu base
+if [ -f /etc/wasta-release ]; then
+  source /etc/wasta-release
+  RELEASE=$CODENAME
+fi
+
+# Remove any existing SIL repositories, and add pso-main, pso-experimental, and llso-main.
+sudo perl -ni -e 'print unless /sil\.org/' /etc/apt/sources.list
+wget -qO - http://packages.sil.org/sil.gpg | sudo apt-key add -
+wget -qO - http://linux.lsdev.sil.org/downloads/sil-testing.gpg | sudo apt-key add -
+sudo add-apt-repository "deb http://packages.sil.org/ubuntu $RELEASE main"
+sudo add-apt-repository "deb http://packages.sil.org/ubuntu $RELEASE-experimental main"
+sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE main"
+# llso:experimental for some mono or icu-fw pieces until they are promoted to llso:main.
+sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE-experimental main"
+
+# Enable multiverse repository
+sudo perl -pi -e '/multiverse/ and !/backports/ and s/^# //' /etc/apt/sources.list
+# Enable partner repository for skype
+sudo perl -pi -e '/partner/ and s/^# //' /etc/apt/sources.list
+sudo apt-get update
+# If this vagrant box already has a GUI running, then report in the GUI.
+(DISPLAY=:0 zenity --warning --no-wrap --title='Provisioning' --text="$(date '+%F %T')\nPlease wait for your vagrant to finish provisioning." ||true) &
+sudo DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" --force-yes
+# (For Ubuntu 14.04: python-pyinotify. For Wasta 14.04: xterm.)
+sudo apt-get install -y \
+  git-gui \
+  mercurial \
+  vim \
+  wget \
+  terminator \
+  meld \
+  kdiff3-qt \
+  links2 \
+  gdb \
+  synaptic \
+  geany \
+  chromium-browser \
+  byobu \
+  indicator-multiload \
+  dconf-editor \
+  dconf-cli \
+  git-cola \
+  python-pyinotify \
+  xterm \
+  devscripts \
+  ack \
+  nunit
+
+git config --global diff.tool meld
+git config --global merge.conflictstyle diff3
+git config --global merge.tool kdiff3
+git config --global color.ui true
+git config --global rerere.enabled true
+git config --global gui.editor gedit
+git config --global rebase.autosquash true
+# Set the textwidth on the commit tool so commit messages are automatically restrained within the policy settings.
+git config --global cola.textwidth 70
+# Don't absorb Windows line ending settings from host, if .gitconfig was copied in from Windows.
+git config --global --unset core.autocrlf ||true
+
+cat > ~/.hgrc <<EOF
+[extensions]
+purge =
+EOF
+
+perl -pi -e s/^#force_color_prompt/force_color_prompt/ ~/.bashrc
+grep __git_ps1 ~/.bashrc || echo 'export PS1="\$(__git_ps1) $PS1"' |tee -a ~/.bashrc
+# Don't report developer or tester usage to analytics.
+tee -a ~/.pam_environment  >/dev/null <<< 'export FEEDBACK=false'
+tee -a ~/.pam_environment  >/dev/null <<< 'export WESAY_TRACK_AS_DEVELOPER=1'
+
+# Enable debugging
+sudo perl -pi -e 's/kernel.yama.ptrace_scope = 1/kernel.yama.ptrace_scope = 0/' /etc/sysctl.d/10-ptrace.conf
+
+mkdir -p ~/.config/terminator
+echo '[profiles]
+  [[default]]
+	scroll_on_output = False
+	scrollback_infinite = True'|tee ~/.config/terminator/config
+
+OUTPUTFILE="$HOME/initial-config.sh"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+#!/bin/bash
+
+echo 'Applying initial configuration settings ...'
+
+if [ -e ~/.config/initial-config/has-run ]; then
+  echo 'Settings have already been applied.'
+  exit 0
+fi
+
+mkdir -p ~/.config/initial-config
+touch ~/.config/initial-config/has-run
+
+dconf write /org/gnome/desktop/screensaver/lock-enabled false
+dconf write /org/gnome/desktop/session/idle-delay 'uint32 0'
+dconf write /org/gnome/settings-daemon/plugins/power/sleep-display-ac 0
+dconf write /org/gnome/settings-daemon/plugins/power/sleep-display-battery 0
+
+mkdir -p $HOME/.config/autostart
+dconf write /apps/indicators/multiload/autostart true
+dconf write /apps/indicators/multiload/size 'uint16 10'
+dconf write /apps/indicators/multiload/speed 'uint16 10000'
+dconf write /apps/indicators/multiload/view-diskload true
+dconf write /apps/indicators/multiload/view-loadavg true
+dconf write /apps/indicators/multiload/view-memload true
+dconf write /apps/indicators/multiload/view-netload true
+indicator-multiload &
+
+zenity --warning --no-wrap --title='Rebooting' --text='Your machine will finish applying initial configuration and power off. Start it again with "vagrant up".'
+
+TOOLSDIR=$HOME/Desktop/development-tools
+
+# Trust the launchers. Seems to only work on desktop in Ubuntu 20.04.
+cd "\${TOOLSDIR}"
+mv *.desktop ~/Desktop/
+cd ~/Desktop
+for launcher in *.desktop; do
+  gio set "\$launcher" metadata::trusted true
+done
+
+# Breathe
+sleep 10s
+sudo poweroff
+
+ENDOFOUTPUTFILE
+chmod +x "$OUTPUTFILE"
+
+# FieldWorks
+
+# If absent, set placeholder variables for git and gerrit settings so we can provision on a machine without any existing personalization or authentication.
+[[ -n $(git config --get fwinit.gerrituser) ]] || git config --global fwinit.gerrituser GERRIT_USER_PLACEHOLDER
+[[ -n $(git config --get user.name) ]] || git config --global user.name GIT_USERNAME_PLACEHOLDER
+[[ -n $(git config --get user.email) ]] || git config --global user.email GIT_EMAIL_PLACEHOLDER
+
+# Clone from the develop branch of fwmeta until the --shallow argument, introduced on 2017-11-29, is merged to master.
+if [ ! -d "$BASEDIR/fwrepo" ]; then
+    git clone --depth=1 --branch develop git://github.com/sillsdev/fwmeta.git $BASEDIR/fwrepo
+    cd $BASEDIR/fwrepo
+    repos="FieldWorks mono-calgary mono mono-basic gtk-sharp libgdiplus libcom FwDebian FwSupportTools FwLocalizations FwHelps FwInstaller"
+    branches="master develop feature/* release/* hotfix/* support/*"
+    echo $SCRIPTNAME: Note that cloning may not report its progress during provisioning.
+    echo -e "$repos\n$branches\n" | fwmeta/initrepo --shallow
+fi
+
+echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
+echo ttf-mscorefonts-installer msttcorefonts/present-mscorefonts-eula note | sudo debconf-set-selections
+$BASEDIR/fwrepo/fw/Build/Agent/install-deps || true # mono basic
+sudo apt-get install -y fieldworks-enc-converters
+
+mkdir -p $BASEDIR/fwrepo/fw/DistFiles/Projects
+
+# Install build dependencies from the most recently released FW. (To install mono3 for fixing bugs in FW 8.3, for example.)
+cd $BASEDIR/fwrepo/fw/Build/Agent
+git checkout origin/master -- .
+$BASEDIR/fwrepo/fw/Build/Agent/install-deps || true # mono basic
+git checkout develop -- .
+
+# Libraries
+
+[ -d ~/fwrepo/liblcm ] || git clone --depth=1 --branch develop https://github.com/sillsdev/liblcm.git ~/fwrepo/liblcm
+# Not shallow since FlexBridge needs enough history for GitVersion to work.
+[ -d ~/fwrepo/flexbridge ] || git clone --branch develop https://github.com/sillsdev/flexbridge.git ~/fwrepo/flexbridge
+[ -d ~/projects/libpalaso ] || git clone --depth=1 https://github.com/sillsdev/libpalaso.git ~/projects/libpalaso
+[ -d ~/projects/ipcframework ] || git clone --depth=1 --branch develop https://bitbucket.org/smcconnel/ipcframework ~/projects/ipcframework
+[ -d ~/projects/chorus ] || git clone --depth=1 https://github.com/sillsdev/chorus.git ~/projects/chorus
+
+# WinFormsSpy tool
+cd ~
+[[ -d ~/winformsspy ]] || hg clone https://bitbucket.org/hindlemail/winformsspy
+cd winformsspy
+xbuild
+
+# GitKraken
+sudo snap install gitkraken
+
+# Visual Studio Code https://code.visualstudio.com/docs/setup/linux
+sudo apt-get install -y curl
+cd
+curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
+sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
+sudo apt-get update
+sudo apt-get install code
+code --install-extension EditorConfig.EditorConfig
+code --install-extension eamodio.gitlens
+code --install-extension ms-vscode.cpptools
+code --install-extension ms-dotnettools.csharp
+code --install-extension ms-vscode.mono-debug
+
+# Mono
+
+# Mono 5 for FW 9
+sudo apt-get install -y mono5-sil gtk-sharp5-sil libgdiplus5-sil mono5-sil-dev mono5-sil-msbuild
+sudo apt-get install -y mono-basic5-sil || true
+
+# Mono 4 if useful, or for FW 9 Beta
+sudo apt-get install -y mono4-sil gtk-sharp4-sil libgdiplus4-sil mono-basic4-sil mono4-sil-dev
+# Need to manually add /opt/mono4-sil in monodevelop .net runtimes list.
+
+# Mono 3 for FW 8.3
+sudo apt-get install -y mono-sil gtk-sharp2-sil libgdiplus-sil mono-basic-sil mono-sil-dev
+
+# For compiling mono
+
+sudo apt-get install -y libtiff5-dev || sudo apt-get install -y libtiff4-dev
+sudo apt-get install -y bison mono-devel libgif-dev libjpeg-dev libexif-dev git quilt mono-mcs
+
+# Mono from mono-project, for mono 5 that compiles flexbridge
+
+# https://www.mono-project.com/download/stable/
+sudo apt-get install gnupg ca-certificates
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+sudo apt-get update
+sudo apt-get install -y mono-devel
+
+# Monodevelop
+
+# https://www.monodevelop.com/download
+sudo apt-get install -y apt-transport-https dirmngr
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+echo "deb https://download.mono-project.com/repo/ubuntu vs-bionic main" | sudo tee /etc/apt/sources.list.d/mono-official-vs.list
+sudo apt-get update
+sudo apt-get install -y monodevelop
+
+cp -a $BASEDIR/fwrepo/FwSupportTools/building/RunFieldWorks.csproj $BASEDIR/fwrepo/fw/
+sed -i $BASEDIR/fwrepo/fw/RunFieldWorks.csproj -e "s/USERNAME/$USER/"
+
+# These MD5 settings are getting carried over into MD7 successfully.
+
+mkdir -p "$HOME/.config/MonoDevelop-5.0"
+OUTPUTFILE="$HOME/.config/MonoDevelop-5.0/MonoDevelop-tools.xml"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+<?xml version="1.0" encoding="utf-8"?>
+<Tools version="2.0">
+  <ExternalTool menuCommand="fw build recent (_t)" command="/home/USERNAME/fwrepo/FwSupportTools/building/fw-build-recent" arguments="" initialDirectory="/home/USERNAME/fwrepo/fw" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
+  <ExternalTool menuCommand="fw build all" command="/home/USERNAME/fwrepo/FwSupportTools/building/fw-build-all" arguments="" initialDirectory="/home/USERNAME/fwrepo/fw" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
+  <ExternalTool menuCommand="fw build remakefw" command="/home/USERNAME/fwrepo/FwSupportTools/building/fw-build-remakefw" arguments="" initialDirectory="/home/USERNAME/fwrepo/fw" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
+  <ExternalTool menuCommand="fw build remakefw with tests" command="/home/USERNAME/fwrepo/fw/agent-build-fw.sh" arguments="" initialDirectory="/home/USERNAME/fwrepo/fw" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
+  <ExternalTool menuCommand="Build FLExBridge" command="bash" arguments="-c 'cd ~/fwrepo/flexbridge &amp;&amp; time make debug;date'" initialDirectory="" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
+  <ExternalTool menuCommand="Build and install IPCFramework" command="bash" arguments=" -c 'cd ~/projects/ipcframework &amp;&amp; (cd ~/fwrepo/fw &amp;&amp; . environ &amp;&amp; cd - &amp;&amp; time xbuild &amp;&amp;  mkdir -p ~/fwrepo/flexbridge/output/DebugMono &amp;&amp; sudo mkdir -p  /usr/lib/flexbridge &amp;&amp; for target in ~/fwrepo/fw/Output/Debug/ ~/fwrepo/flexbridge/output/*Mono; do cp -a output/Debug/IPCFramework.dll* $target  &amp;&amp; sudo cp -a output/Debug/IPCFramework.dll* /usr/lib/flexbridge/;done &amp;&amp;echo SUCCESS ||echo FAILURE );date'" initialDirectory="" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
+  <ExternalTool menuCommand="Build and install libpalaso" command="bash" arguments="-c 'cd ~/fwrepo/fw &amp;&amp; . environ &amp;&amp; cd ~/projects/libpalaso/build &amp;&amp; time ./buildupdate.mono.sh &amp;&amp; time ./TestBuild.sh &amp;&amp; for DEST in ~/fwrepo/fw/Downloads ~/fwrepo/fw/Output/Debug; do cp -a ~/projects/libpalaso/output/DebugMono/Palaso*WindowsForms*dll* $DEST/;done;date'" initialDirectory="" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
+</Tools>
+ENDOFOUTPUTFILE
+sed -i "$OUTPUTFILE" -e "s/USERNAME/$USER/g"
+
+OUTPUTFILE="$HOME/.config/MonoDevelop-5.0/MonoDevelopProperties.xml"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+<MonoDevelopProperties version="2.0">
+  <Property key="BuildBeforeRunningTests" value="False" />
+  <Property key="MonoDevelop.Ide.DefaultTargetRuntime" value="Mono 4.6.1.1" />
+  <Property key="MonoDevelop.Ide.BuildBeforeExecuting" value="False" />
+  <Property key="MonoDevelop.Debugger.DebuggingService.ProjectAssembliesOnly" value="False" />
+</MonoDevelopProperties>
+ENDOFOUTPUTFILE
+
+OUTPUTFILE="$HOME/.config/MonoDevelop-5.0/mono-runtimes.xml"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+<RuntimeCollection>
+  <MonoRuntimeInfo prefix="/opt/mono-sil" />
+  <MonoRuntimeInfo prefix="/opt/mono4-sil" />
+  <MonoRuntimeInfo prefix="/opt/mono5-sil" />
+</RuntimeCollection>
+ENDOFOUTPUTFILE
+
+# C# code formatting style. This does not appear to be migrating to MD7.
+mkdir -p "$HOME/.local/share/MonoDevelop-5.0/Policies"
+OUTPUTFILE="$HOME/.local/share/MonoDevelop-5.0/Policies/Default.mdpolicy.xml"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+<?xml version="1.0" encoding="utf-8"?>
+<Policies>
+  <PolicySet name="Default" id="Default">
+    <TextStylePolicy inheritsSet="null" scope="text/x-csharp" />
+    <CSharpFormattingPolicy inheritsSet="Mono" inheritsScope="text/x-csharp" scope="text/x-csharp">
+      <IndentSwitchBody>True</IndentSwitchBody>
+      <IndentBlocksInsideExpressions>True</IndentBlocksInsideExpressions>
+      <AnonymousMethodBraceStyle>NextLine</AnonymousMethodBraceStyle>
+      <PropertyBraceStyle>NextLine</PropertyBraceStyle>
+      <PropertyGetBraceStyle>NextLine</PropertyGetBraceStyle>
+      <PropertySetBraceStyle>NextLine</PropertySetBraceStyle>
+      <EventBraceStyle>NextLine</EventBraceStyle>
+      <EventAddBraceStyle>NextLine</EventAddBraceStyle>
+      <EventRemoveBraceStyle>NextLine</EventRemoveBraceStyle>
+      <StatementBraceStyle>NextLine</StatementBraceStyle>
+      <ElseNewLinePlacement>NewLine</ElseNewLinePlacement>
+      <CatchNewLinePlacement>NewLine</CatchNewLinePlacement>
+      <FinallyNewLinePlacement>NewLine</FinallyNewLinePlacement>
+      <WhileNewLinePlacement>DoNotCare</WhileNewLinePlacement>
+      <ArrayInitializerWrapping>DoNotChange</ArrayInitializerWrapping>
+      <ArrayInitializerBraceStyle>NextLine</ArrayInitializerBraceStyle>
+      <BeforeMethodDeclarationParentheses>False</BeforeMethodDeclarationParentheses>
+      <BeforeMethodCallParentheses>False</BeforeMethodCallParentheses>
+      <BeforeConstructorDeclarationParentheses>False</BeforeConstructorDeclarationParentheses>
+      <NewLineBeforeConstructorInitializerColon>NewLine</NewLineBeforeConstructorInitializerColon>
+      <NewLineAfterConstructorInitializerColon>SameLine</NewLineAfterConstructorInitializerColon>
+      <BeforeDelegateDeclarationParentheses>False</BeforeDelegateDeclarationParentheses>
+      <NewParentheses>False</NewParentheses>
+      <SpacesBeforeBrackets>False</SpacesBeforeBrackets>
+    </CSharpFormattingPolicy>
+    <TextStylePolicy inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/plain">
+      <FileWidth>120</FileWidth>
+      <TabsToSpaces>False</TabsToSpaces>
+    </TextStylePolicy>
+  </PolicySet>
+</Policies>
+ENDOFOUTPUTFILE
+
+# Launchers
+
+TOOLSDIR="$HOME/Desktop/development-tools"
+mkdir -p "$TOOLSDIR"
+
+cp /usr/share/applications/monodevelop.desktop "$TOOLSDIR"
+perl -pi -e 's/Name=MonoDevelop/Name=MonoDevelop Generic/' "$TOOLSDIR"/monodevelop.desktop
+cp /usr/share/applications/monodevelop.desktop "$TOOLSDIR"/monodevelop-fw.desktop
+perl -pi -e 's/Name=MonoDevelop/Name=MonoDevelop FW/' "$TOOLSDIR"/monodevelop-fw.desktop
+perl -pi -e 's:Exec=.*:Exec=bash -c "export MONO_ENVIRON=/home/vagrant/fwrepo/fw/environ; monodevelop":' "$TOOLSDIR"/monodevelop-fw.desktop
+perl -ni -e 'print unless /TryExec/' "$TOOLSDIR"/monodevelop-fw.desktop
+
+OUTPUTFILE="$TOOLSDIR/fw-git-gui.desktop"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=bash -c 'cd \$HOME/fwrepo/fw && git gui'
+Name=FW Git Gui Commit Tool
+Icon=/usr/share/git-gui/lib/git-gui.ico
+ENDOFOUTPUTFILE
+chmod +x "$OUTPUTFILE"
+
+OUTPUTFILE="$TOOLSDIR/fw-git-cola.desktop"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=bash -c 'cd \$HOME/fwrepo/fw && git cola'
+Name=FW Git Cola Commit Tool
+Icon=/usr/share/git-cola/icons/git-cola.svg
+ENDOFOUTPUTFILE
+chmod +x "$OUTPUTFILE"
+
+OUTPUTFILE="$TOOLSDIR/fw-gitk.desktop"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=bash -c 'cd \$HOME/fwrepo/fw && gitk --branches --remotes --tags'
+Name=FW Git History Viewer
+Icon=/usr/share/git-gui/lib/git-gui.ico
+ENDOFOUTPUTFILE
+chmod +x "$OUTPUTFILE"
+
+OUTPUTFILE="$TOOLSDIR/xephyr.desktop"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=bash -c 'Xephyr :2 -screen 1000x700& sleep 2s; DISPLAY=:2 metacity& DISPLAY=:2 xclock& DISPLAY=:2 xterm& DISPLAY=:2 ibus-daemon &'
+Name=Xephyr
+Icon=/usr/share/icons/hicolor/scalable/apps/session-properties.svg
+ENDOFOUTPUTFILE
+chmod +x "$OUTPUTFILE"
+
+OUTPUTFILE="$TOOLSDIR/monowinformsspy.desktop"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=bash -c "mono $HOME/winformsspy/MonoWinFormsSpy/bin/Debug/MonoWinFormsSpy.exe"
+Name=MonoWinFormsSpy
+Icon=/usr/share/icons/hicolor/scalable/apps/preferences-desktop-display.svg
+ENDOFOUTPUTFILE
+chmod +x "$OUTPUTFILE"
+
+mkdir -p "$HOME/.config/autostart"
+OUTPUTFILE="$HOME/.config/autostart/initial-config.desktop"
+cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=bash -c '$HOME/initial-config.sh'
+Name=Initial Machine Configuration
+ENDOFOUTPUTFILE
+chmod +x "$OUTPUTFILE"
+
+cp -aL /usr/share/applications/{terminator,geany,code,byobu}.desktop /snap/gitkraken/current/meta/gui/gitkraken.desktop "$TOOLSDIR"
+chmod +x "$TOOLSDIR"/*.desktop
+
+# FieldWorks sample data
+
+cd ~
+[ -e Sena*.fwbackup ] || wget 'http://downloads.sil.org/FieldWorks/8.3.9/Sena%203%202017-07-27%201102.fwbackup'
+
+# Compile FieldWorks
+
+# The 'yes n |' part specifies to not use local artifacts. Temporarily unsetting pipefail.
+set +o pipefail
+cd $BASEDIR/fwrepo/fw/Build &&
+  yes n | ./build /t:UpdateDevelopmentPropertiesFile &&
+  ./build /t:refreshTargets &&
+  ./build /t:remakefw &&
+  echo $SCRIPTNAME: FieldWorks compiled successfully. ||
+  echo $SCRIPTNAME: FieldWorks failed to compile.
+set -o pipefail
+
+mkdir -p $BASEDIR/fwrepo/fw/Output_x86_64/registry/LocalMachine/software/sil/fieldworks/8
+
+# Compile FLExBridge
+
+sudo apt-get install -y curl
+
+cd ~/fwrepo/flexbridge
+# Work around quirks
+make debug || make debug || true
+
+# Set up machine to also be able to make packages
+
+sudo apt-get -y install \
+  debhelper \
+  dh-autoreconf \
+  quilt \
+  git-buildpackage \
+  pbuilder
+
+[[ -f ~/.dput.cf ]] || cat > ~/.dput.cf <<EOF
+[pso]
+method = rsync
+fqdn = packager.lsdev.sil.org
+login = upload
+incoming = %(pso)s
+EOF
+
+FWSUPPORTTOOLS=$HOME/fwrepo/FwSupportTools
+cd ~
+ln -sf "$FWSUPPORTTOOLS"/packaging/pbuilder
+ln -sf "$FWSUPPORTTOOLS"/packaging/pbuilder/pbuilderrc .pbuilderrc
+
+cd ~/pbuilder
+wget http://linux.lsdev.sil.org/downloads/sil-testing.gpg
+
+# Wrapup
+# If this vagrant box already has a GUI running, then report in the GUI.
+(DISPLAY=:0 zenity --warning --no-wrap --title='Provisioning' --text="$(date '+%F %T')\nProvisioning is almost finished.  See the vagrant output in the host terminal\nfor any errors or further instructions. You must reboot this vagrant box\nto finish the provisioning process." ||true) &
+
+echo $SCRIPTNAME: Reboot the vagrant guest to bring up the GUI.
+echo $SCRIPTNAME: Done.

@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# provision-fw-test-machine
+
+set -e -o pipefail
+
+# Set up
+
+# Don't report tester usage to analytics.
+tee -a ~/.pam_environment  >/dev/null <<< 'export FEEDBACK=false'
+tee -a ~/.pam_environment  >/dev/null <<< 'export WESAY_TRACK_AS_DEVELOPER=1'
+
+RELEASE="$(lsb_release -sc)"
+
+# Enable multiverse repository, if not already
+sudo perl -pi -e '/multiverse/ and !/backports/ and s/^# //' /etc/apt/sources.list
+
+# Remove existing SIL repositories
+sudo perl -ni -e 'print unless /sil\.org/' /etc/apt/sources.list
+
+wget -qO - http://packages.sil.org/sil.gpg | sudo apt-key add -
+wget -qO - http://linux.lsdev.sil.org/downloads/sil-testing.gpg | sudo apt-key add -
+sudo add-apt-repository "deb http://packages.sil.org/ubuntu ${RELEASE} main"
+# Go ahead and add all these repos, but then comment them out. That will make it easier to enable them by hand later.
+sudo add-apt-repository "deb http://packages.sil.org/ubuntu ${RELEASE}-experimental main"
+sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu ${RELEASE} main"
+sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu ${RELEASE}-updates main"
+sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu ${RELEASE}-proposed main"
+sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu ${RELEASE}-experimental main"
+sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu ${RELEASE}-dictionary main"
+sudo perl -pi -e '/^deb.*linux.lsdev.sil.org/ and s/^/#/' /etc/apt/sources.list
+sudo perl -pi -e "/^deb.*${RELEASE}-experimental/ and s/^/#/" /etc/apt/sources.list /etc/apt/sources.list.d/packages-sil-org-*-experimental.list
+
+# This machine doesn't need deb-src lines, and they make repo selection more crowded.
+sudo perl -pi -e '/deb-src / and s/^/## /' /etc/apt/sources.list /etc/apt/sources.list.d/*.list
+
+sudo apt-get update
+if ! sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade; then
+  echo provisioner: There were errors while updating system packages. Ignoring.
+fi
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y install wget curl vim meld ack-grep dconf-editor synaptic terminator
+
+# Enable debugging
+sudo perl -pi -e 's/kernel.yama.ptrace_scope = 1/kernel.yama.ptrace_scope = 0/' /etc/sysctl.d/10-ptrace.conf
+
+# FieldWorks
+
+# Download but don't install FieldWorks and its dependencies
+sudo DEBIAN_FRONTEND=noninteractive apt-get -dy install fieldworks
+
+# Sample data
+
+mkdir -p ~/Desktop
+cd ~/Desktop
+wget 'http://downloads.sil.org/FieldWorks/8.2.9/Sena%203%202013-11-27%200947.fwbackup'
+
+echo provisioner: Done.
