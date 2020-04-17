@@ -70,11 +70,12 @@ if [ ! -f ${KEYRINGMICROSOFT} ]; then
 	wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o ${KEYRINGMICROSOFT}
 fi
 
-if [ ! -f ${KEYRING_MONO} ]; then
-	TMP_KEYRING=$(mktemp)
+if [ ! -f "${KEYRING_MONO}" ]; then
+	TMP_KEYRING="$(mktemp)"
 	XAMARIN_KEY_FINGERPRINT="3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF"
-	gpg --no-default-keyring --keyring ${TMP_KEYRING} --recv-keys ${XAMARIN_KEY_FINGERPRINT}
-	gpg --no-default-keyring --keyring ${TMP_KEYRING} --export > ${KEYRING_MONO}
+	gpg --no-default-keyring --keyring "${TMP_KEYRING}" --keyserver keyserver.ubuntu.com \
+		--recv-keys "${XAMARIN_KEY_FINGERPRINT}"
+	gpg --no-default-keyring --keyring "${TMP_KEYRING}" --export > "${KEYRING_MONO}"
 fi
 
 for D in ${DISTRIBUTIONS:-$UBUNTU_DISTROS $UBUNTU_OLDDISTROS $DEBIAN_DISTROS}
