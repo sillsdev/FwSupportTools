@@ -452,7 +452,7 @@ archiveSourcePackageFiles() {
 	local resultsPath=$1
 
 	cp -a "$repo_base_dir"/${source_package_name}_${base_version}*.{dsc,build,changes,tar.[xg]z} "$resultsPath"/
-	cp -a "$repo_base_dir"/${source_package_name}*.orig.tar.[xg]z "$resultsPath"/ || true
+	cp -a "$repo_base_dir"/${source_package_name}*.tar.[xg]z "$resultsPath"/ || true
 	cp -a "$repo_base_dir"/${source_package_name}-packageversion.properties "$resultsPath"/ || true
 }
 if [ -n "$preserve_products_arg" ]; then
