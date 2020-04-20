@@ -470,13 +470,18 @@ log "Building binary package(s)"
 mkdir -p "$pbuilder_path"
 
 # Make sure base.tgz is in place for any distributions being used.
-for distribution in $DISTRIBUTIONS_TO_PACKAGE; do
-	for arch in $ARCHES_TO_PACKAGE; do
-		if [ ! -e "$pbuilder_path"/$distribution/$arch/base.tgz ]; then
-			PBUILDERDIR="$pbuilder_path" DISTRIBUTIONS="$distribution" ARCHES="$arch" $SCRIPTDIR/pbuilder/setup.sh
-		fi
+if [[ "${BUILD_PACKAGES_SKIP_DEBOOTSTRAP}" == "true" ]]; then
+	log "Skipping setup.sh"
+else
+	log "Running setup.sh"
+	for distribution in $DISTRIBUTIONS_TO_PACKAGE; do
+		for arch in $ARCHES_TO_PACKAGE; do
+			if [ ! -e "$pbuilder_path"/$distribution/$arch/base.tgz ]; then
+				PBUILDERDIR="$pbuilder_path" DISTRIBUTIONS="$distribution" ARCHES="$arch" $SCRIPTDIR/pbuilder/setup.sh
+			fi
+		done
 	done
-done
+fi
 
 cd "$repo_base_dir"
 packagedsc="${full_package_name}.dsc"
