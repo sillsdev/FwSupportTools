@@ -167,7 +167,7 @@ do
 			${KEYRINGNODE:+--keyring }$KEYRINGNODE \
 			${KEYRINGMICROSOFT:+--keyring }$KEYRINGMICROSOFT \
 			${KEYRING_MONO:+--keyring }$KEYRING_MONO \
-			--extrapackages "apt-utils devscripts lsb-release apt-transport-https ca-certificates tzdata" \
+			--extrapackages "apt-utils devscripts lsb-release apt-transport-https ca-certificates tzdata libdistro-info-perl" \
 			--othermirror "$OTHERMIRROR" \
 			--mirror "$MIRROR" \
 			--components "$COMPONENTS" \
