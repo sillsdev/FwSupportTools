@@ -477,7 +477,13 @@ else
 	for distribution in $DISTRIBUTIONS_TO_PACKAGE; do
 		for arch in $ARCHES_TO_PACKAGE; do
 			if [ ! -e "$pbuilder_path"/$distribution/$arch/base.tgz ]; then
-				PBUILDERDIR="$pbuilder_path" DISTRIBUTIONS="$distribution" ARCHES="$arch" $SCRIPTDIR/pbuilder/setup.sh
+				# setup.sh fails with 'gpg: can't connect to the agent: IPC
+				# connect call failed', so far perhaps only on a xenial
+				# agent and when distribution is bionic. Not a problem on
+				# bionic workstation. Experimenting has shown that
+				# setup.sh --update helps it, so OR into that.
+				PBUILDERDIR="$pbuilder_path" DISTRIBUTIONS="$distribution" ARCHES="$arch" $SCRIPTDIR/pbuilder/setup.sh \
+					|| PBUILDERDIR="$pbuilder_path" DISTRIBUTIONS="$distribution" ARCHES="$arch" $SCRIPTDIR/pbuilder/setup.sh --update
 			fi
 		done
 	done
