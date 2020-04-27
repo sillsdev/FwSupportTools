@@ -42,7 +42,6 @@ cd "${PBUILDERDIR:-$(dirname "$0")}"
 
 KEYRINGLLSO="$PBUILDERDIR/llso-keyring-2013.gpg"
 KEYRINGPSO="$PBUILDERDIR/pso-keyring-2016.gpg"
-KEYRINGNODE="$PBUILDERDIR/nodesource-keyring.gpg"
 KEYRINGMICROSOFT="$PBUILDERDIR/microsoft.asc.gpg"
 KEYRING_MONO="$PBUILDERDIR/mono-project.asc.gpg"
 
@@ -52,21 +51,6 @@ fi
 
 if [ ! -f ${KEYRINGLLSO} ]; then
 	wget --output-document=${KEYRINGLLSO} http://linux.lsdev.sil.org/keys/llso-keyring-2013.gpg
-fi
-
-if [ ! -f ${KEYRINGNODE} ]; then
-	# Download node key and convert to keyring.
-
-	NODE_KEY="$(mktemp -d)/nodesource-key.asc"
-	# Use a temporary, intermediate keyring since it may be keybox format on Ubuntu 20.04,
-	# and we need it to be an older format for apt.
-	TMP_KEYRING=$(mktemp)
-	wget --output-document=${NODE_KEY} https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-	gpg --trust-model always --no-default-keyring --keyring ${TMP_KEYRING} \
-		--import ${NODE_KEY}
-	# Export without --armor since gpg seems to have trouble inspecting an armor export
-	# keyring.
-	gpg --no-default-keyring --keyring ${TMP_KEYRING} --export > ${KEYRINGNODE}
 fi
 
 if [ ! -f ${KEYRINGMICROSOFT} ]; then
@@ -118,16 +102,12 @@ do
 				addmirror "deb $LLSO $D$S $COMPONENTS"
 				addmirror "deb $PSO $D$S $COMPONENTS"
 			done
-			if [ $D != "precise" ]; then
-				# Allow to install current nodejs packages
-				if [ -n "$update" ]; then
-					# We can't use https when creating the chroot because apt-transport-https
-					# isn't available yet. This is so for Ubuntu 16.04, but beginning in Ubuntu 18.04 the capability is probably built-in.
-					# Adding apt-transport-https to pbuilder --debootstrapopts --include does not solve it.
-					addmirror "deb https://deb.nodesource.com/node_8.x $D main"
-					addmirror "${MICROSOFT_APT}"
-					addmirror "${MONO_APT}"
-				fi
+			if [ -n "$update" ]; then
+				# We can't use https when creating the chroot because apt-transport-https
+				# isn't available yet. This is so for Ubuntu 16.04, but beginning in Ubuntu 18.04 the capability is probably built-in.
+				# Adding apt-transport-https to pbuilder --debootstrapopts --include does not solve it.
+				addmirror "${MICROSOFT_APT}"
+				addmirror "${MONO_APT}"
 			fi
 		elif [[ $DEBIAN_DISTROS == *$D* ]]; then
 			MIRROR="${DEBIAN_MIRROR:-http://ftp.ca.debian.org/debian/}"
@@ -138,15 +118,11 @@ do
 			PSO="http://packages.sil.org/debian/"
 			addmirror "deb $LLSO $D $COMPONENTS"
 			addmirror "deb $PSO $D $COMPONENTS"
-			if [ $D != "wheezy" ]; then
-				# Allow to install current nodejs packages
-				if [ -n "$update" ]; then
-					# We can't use https when creating the chroot because apt-transport-https
-					# isn't available yet. This is so for Debian stretch, but beginning in Debian buster the capability is probably built-in.
-					addmirror "deb https://deb.nodesource.com/node_8.x $D main"
-					addmirror "${MICROSOFT_APT}"
-					addmirror "${MONO_APT}"
-				fi
+			if [ -n "$update" ]; then
+				# We can't use https when creating the chroot because apt-transport-https
+				# isn't available yet. This is so for Debian stretch, but beginning in Debian buster the capability is probably built-in.
+				addmirror "${MICROSOFT_APT}"
+				addmirror "${MONO_APT}"
 			fi
 		else
 			err "Unknown distribution $D. Please update the script $0."
@@ -164,7 +140,6 @@ do
 			${KEYRINGMAIN:+--debootstrapopts --keyring=}$KEYRINGMAIN \
 			${KEYRINGLLSO:+--keyring }$KEYRINGLLSO \
 			${KEYRINGPSO:+--keyring }$KEYRINGPSO \
-			${KEYRINGNODE:+--keyring }$KEYRINGNODE \
 			${KEYRINGMICROSOFT:+--keyring }$KEYRINGMICROSOFT \
 			${KEYRING_MONO:+--keyring }$KEYRING_MONO \
 			--extrapackages "apt-utils devscripts lsb-release apt-transport-https ca-certificates tzdata libdistro-info-perl" \
