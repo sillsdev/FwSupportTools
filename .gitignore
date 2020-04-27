@@ -29,4 +29,8 @@ _UpgradeReport_Files/
 
 .vagrant
 
-packaging/pbuilder/build-multi.config
+/packaging/pbuilder/build-multi.config
+/packaging/pbuilder/xenial
+/packaging/pbuilder/bionic
+/packaging/pbuilder/focal
+/packaging/pbuilder/*.gpg
