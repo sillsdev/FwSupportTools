@@ -765,7 +765,8 @@ namespace LocaleStrings
 			foreach (XmlElement xel in resxDoc.GetElementsByTagName("data"))
 			{
 				if (IsLocalizableElement(xel, out _, out var value, out _) &&
-					translations.TryGetValue(string.Join("\n", value.Split(s_rgsNewline, StringSplitOptions.None)), out var poString))
+					translations.TryGetValue(string.Join("\n", value.Split(s_rgsNewline, StringSplitOptions.None)), out var poString) &&
+					!string.IsNullOrWhiteSpace(poString.MsgStrAsString()))
 				{
 					xel.GetElementsByTagName("value")[0].InnerText = poString.MsgStrAsString();
 					hasTranslations = true;

@@ -94,6 +94,10 @@ namespace LocaleStringsTests
 "  <data name=\"&gt;&gt;$this.Name\" xml:space=\"preserve\">" + Environment.NewLine +
 "        <value>AddCnvtrDlg</value>" + Environment.NewLine +
 "  </data>" + Environment.NewLine +
+"  <data name=\"kstidWritingSystemDiff\" xml:space=\"preserve\">" + Environment.NewLine +
+"        <value>Writing System Difference</value>" + Environment.NewLine +
+"        <comment>This string exists in the PO file, but it has not been translated.</comment>" + Environment.NewLine +
+"  </data>" + Environment.NewLine +
 "  <data name=\"kstidPleaseEmailThisTo0WithASuitableSubject\" xml:space=\"preserve\">" + Environment.NewLine +
 "    <value>Please email this report to {0} with a suitable subject:" + Environment.NewLine +
 "" + Environment.NewLine +
@@ -112,7 +116,7 @@ namespace LocaleStringsTests
 			Assert.IsNotNull(xdoc.DocumentElement);
 			Program.ProcessResxData(xdoc.DocumentElement, @"/Src/FwCoreDlgs/AddCnvtrDlg.resx", rgsPoStrings);
 			//SUT
-			Assert.AreEqual(6, rgsPoStrings.Count, "localizable strings found in resx data");
+			Assert.AreEqual(7, rgsPoStrings.Count, "localizable strings found in resx data");
 			var postr2 = rgsPoStrings[2];
 			Assert.IsNotNull(postr2, "Third resx string has data");
 			Assert.IsNotNull(postr2.MsgId, "Third resx string has MsgId data");
@@ -139,21 +143,21 @@ namespace LocaleStringsTests
 			Assert.AreEqual(1, postr4.AutoComments.Count, "Fifth resx string has one line of Auto Comments");
 			Assert.AreEqual("/Src/FwCoreDlgs/AddCnvtrDlg.resx::$this.Text", postr4.AutoComments[0], "Fifth resx string has the expected Auto Comment");
 
-			var postr5 = rgsPoStrings[5];
-			Assert.IsNotNull(postr5, "Sixth resx string has data");
-			Assert.IsNotNull(postr5.MsgId, "Sixth resx string has MsgId data");
-			Assert.AreEqual(3, postr5.MsgId.Count, "Sixth resx string has three lines of MsgId data");
-			Assert.AreEqual("Please email this report to {0} with a suitable subject:\\n", postr5.MsgId[0], "Sixth resx string has the expected MsgId[0] data");
-			Assert.AreEqual("\\n", postr5.MsgId[1], "Sixth resx string has the expected MsgId[1] data");
-			Assert.AreEqual("{1}", postr5.MsgId[2], "Sixth resx string has the expected MsgId[2] data");
-			Assert.IsTrue(postr5.HasEmptyMsgStr, "Sixth resx string has no MsgStr data");
-			Assert.IsNull(postr5.UserComments, "Sixth resx string has no User Comments");
-			Assert.IsNull(postr5.Reference, "Sixth resx string has no Reference data");
-			Assert.IsNull(postr5.Flags, "Sixth resx string has no Flags data");
-			Assert.IsNotNull(postr5.AutoComments, "Sixth resx string has Auto Comments");
-			Assert.AreEqual(2, postr5.AutoComments.Count, "Sixth resx string has two lines of Auto Comments");
-			Assert.AreEqual("{1} will be a long string...don't leave it out.", postr5.AutoComments[0], "Sixth resx string has the expected AutoComment0]");
-			Assert.AreEqual("/Src/FwCoreDlgs/AddCnvtrDlg.resx::kstidPleaseEmailThisTo0WithASuitableSubject", postr5.AutoComments[1], "Sixth resx string has the expected AutoComment[1]");
+			var postr5 = rgsPoStrings[6];
+			Assert.IsNotNull(postr5, "Seventh resx string has data");
+			Assert.IsNotNull(postr5.MsgId, "Seventh resx string has MsgId data");
+			Assert.AreEqual(3, postr5.MsgId.Count, "Seventh resx string has three lines of MsgId data");
+			Assert.AreEqual("Please email this report to {0} with a suitable subject:\\n", postr5.MsgId[0], "Seventh resx string has the expected MsgId[0] data");
+			Assert.AreEqual("\\n", postr5.MsgId[1], "Seventh resx string has the expected MsgId[1] data");
+			Assert.AreEqual("{1}", postr5.MsgId[2], "Seventh resx string has the expected MsgId[2] data");
+			Assert.IsTrue(postr5.HasEmptyMsgStr, "Seventh resx string has no MsgStr data");
+			Assert.IsNull(postr5.UserComments, "Seventh resx string has no User Comments");
+			Assert.IsNull(postr5.Reference, "Seventh resx string has no Reference data");
+			Assert.IsNull(postr5.Flags, "Seventh resx string has no Flags data");
+			Assert.IsNotNull(postr5.AutoComments, "Seventh resx string has Auto Comments");
+			Assert.AreEqual(2, postr5.AutoComments.Count, "Seventh resx string has two lines of Auto Comments");
+			Assert.AreEqual("{1} will be a long string...don't leave it out.", postr5.AutoComments[0], "Seventh resx string has the expected AutoComment0]");
+			Assert.AreEqual("/Src/FwCoreDlgs/AddCnvtrDlg.resx::kstidPleaseEmailThisTo0WithASuitableSubject", postr5.AutoComments[1], "Seventh resx string has the expected AutoComment[1]");
 		}
 
 #region ConfigData
@@ -488,13 +492,13 @@ namespace LocaleStringsTests
 			xdoc.LoadXml(_sDictConfigData);
 			Assert.IsNotNull(xdoc.DocumentElement);
 			Program.ProcessFwDictConfigElement(xdoc.DocumentElement, "/Language Explorer/DefaultConfigurations/Dictionary/Root.fwdictconfig", rgsPoStrings);
-			Assert.AreEqual(68, rgsPoStrings.Count);
+			Assert.AreEqual(69, rgsPoStrings.Count);
 			Assert.AreEqual("Help", rgsPoStrings[0].MsgIdAsString());
-			Assert.AreEqual("modified on: ", rgsPoStrings[67].MsgIdAsString());
+			Assert.AreEqual("modified on: ", rgsPoStrings[68].MsgIdAsString());
 			rgsPoStrings.Sort(POString.CompareMsgIds);
 			POString.MergeDuplicateStrings(rgsPoStrings);
 			// SUT (everything before is tested already in another test)
-			Assert.AreEqual(56, rgsPoStrings.Count);
+			Assert.AreEqual(57, rgsPoStrings.Count);
 			Assert.AreEqual(" - ", rgsPoStrings[0].MsgIdAsString());
 			Assert.AreEqual("Variants", rgsPoStrings[55].MsgIdAsString());
 			StringWriter sw = new StringWriter();
@@ -504,7 +508,7 @@ namespace LocaleStringsTests
 			StringReader sr = new StringReader(potFileStr);
 			POString posHeader;
 			var dictPot = Program.ReadPotFile(sr, out posHeader);
-			Assert.AreEqual(56, dictPot.Count);
+			Assert.AreEqual(57, dictPot.Count);
 			var rgsPot = dictPot.ToList();
 			Assert.AreEqual(" - ", rgsPot[0].Value.MsgIdAsString());
 			Assert.AreEqual("Variants", rgsPot[55].Value.MsgIdAsString());
@@ -1055,17 +1059,18 @@ msgstr """"
 			Program.LocalizeResx(pos, resxDoc);
 			var docElt = resxDoc.DocumentElement;
 			Assert.IsNotNull(docElt, "ReSharper whines about this");
-			Assert.AreEqual(22, docElt.ChildNodes.Count, "should have the same number of elements");
+			Assert.AreEqual(23, docElt.ChildNodes.Count, "should have the same number of elements");
 			var dataEltIter = docElt.GetElementsByTagName("data").GetEnumerator();
 			var dataElts = new List<XmlElement>();
 			while (dataEltIter.MoveNext())
 			{
 				dataElts.Add((XmlElement)dataEltIter.Current);
 			}
-			Assert.AreEqual(16, dataElts.Count, "should have the same number of elements");
+			Assert.AreEqual(17, dataElts.Count, "should have the same number of elements");
 			AssertResxDataValue(dataElts, "btnHelp.Text", "Aide");
 			AssertResxDataValue(dataElts, "label1.Text", "Convertisseurs &disponibles:");
 			AssertResxDataValue(dataElts, "$this.Text", "Convertisseurs d'encodage");
+			AssertResxDataValue(dataElts, "kstidWritingSystemDiff", "Writing System Difference");
 			AssertResxDataValue(dataElts, "kstidPleaseEmailThisTo0WithASuitableSubject",
 				"Veuillez envoyer ce rapport à {0} avec un sujet approprié:\n\n{1}",
 				"{1} will be a long string...don't leave it out.");
@@ -1312,7 +1317,7 @@ msgstr """"
 			Assert.AreEqual(50, dictFrenchPo.Count);
 			POString posNewHeader;
 			var dictPot = Program.ReadPotFile(srPot, out posNewHeader);
-			Assert.AreEqual(56, dictPot.Count);
+			Assert.AreEqual(57, dictPot.Count);
 			var swOut = new StringWriter();
 			Program.WriteUpdatedPoFile(swOut, dictFrenchPo, dictPot, posHeader, posObsolete, posNewHeader);
 			// SUT (everything before is tested already in another test)
