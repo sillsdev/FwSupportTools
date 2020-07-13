@@ -1,6 +1,12 @@
+# Run and debug from one command:
+#   Build/run-in-environ gdb mono-sgen --ex "run --debug $HOME/fwrepo/fw/Output/Debug/FieldWorks.exe"
+# Run and debug from separate terminals:
+#   Build/run-in-environ mono-sgen --debug $HOME/fwrepo/fw/Output/Debug/FieldWorks.exe
+#   Build/run-in-environ gdb mono-sgen $(pgrep -f FieldWorks.exe)
+#
 # http://www.mono-project.com/docs/debug+profile/debug/
 
-handle SIGXCPU SIG33 SIG35 SIGPWR SIG38 nostop noprint
+handle SIGXCPU SIG33 SIG35 SIG36 SIG37 SIG38 SIGPWR SIG38 nostop noprint
 
 define mono_backtrace
  select-frame 0
@@ -28,3 +34,5 @@ define mono_stack
    call (void) free ($ucp)
  end
 end
+
+add-auto-load-safe-path /opt/mono5-sil/bin/mono-sgen-gdb.py
