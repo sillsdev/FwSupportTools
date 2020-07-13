@@ -15,6 +15,33 @@
                     "url": "http://linux.lsdev.sil.org/vagrant/fwdev-u2004/fwdev-u2004-0.0.0.box"
                 }
             ]
+        },
+        {
+            "version": "0.0.1",
+            "status": "active",
+            "providers":
+            [
+                {
+                    "checksum": "9ae7844c7e66ef9a1c6288c6ae5a2f5c4ba09ed329ecbc4f4ecd8a64c331b118",
+                    "checksum_type": "sha256",
+                    "name": "virtualbox",
+                    "url": "http://linux.lsdev.sil.org/vagrant/fwdev-u2004/fwdev-u2004-0.0.1.box"
+                }
+            ]
+        },
+        {
+            "version": "0.0.2",
+            "status": "active",
+            "providers":
+            [
+                {
+                    "checksum": "4274aa5e8ab7baecf50ae93bbc956c636e1a2ca7f8cd46f0f2a1ed1da0a56a2e",
+                    "checksum_type": "sha256",
+                    "name": "virtualbox",
+                    "url": "http://linux.lsdev.sil.org/vagrant/fwdev-u2004/fwdev-u2004-0.0.2.box"
+                }
+            ]
         }
+
     ]
 }

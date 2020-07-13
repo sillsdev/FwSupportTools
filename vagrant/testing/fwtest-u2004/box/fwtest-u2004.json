@@ -28,6 +28,19 @@
                     "url": "http://linux.lsdev.sil.org/vagrant/fwtest-u2004/fwtest-u2004-0.0.1.box"
                 }
             ]
+        },
+        {
+            "version": "0.0.2",
+            "status": "active",
+            "providers":
+            [
+                {
+                    "checksum": "00937f4ab9e095491d7047f96fb2df966c9a51a8b76ec7ade7af5a561e30ba08",
+                    "checksum_type": "sha256",
+                    "name": "virtualbox",
+                    "url": "http://linux.lsdev.sil.org/vagrant/fwtest-u2004/fwtest-u2004-0.0.2.box"
+                }
+            ]
         }
     ]
 }
