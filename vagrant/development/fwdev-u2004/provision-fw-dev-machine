@@ -122,7 +122,7 @@ dconf write /apps/indicators/multiload/view-memload true
 dconf write /apps/indicators/multiload/view-netload true
 indicator-multiload &
 
-zenity --warning --no-wrap --title='Rebooting' --text='Your machine will finish applying initial configuration and power off. Start it again with "vagrant up".'
+zenity --warning --no-wrap --title='Rebooting' --text='Your machine will finish applying initial configuration and reboot.'
 
 TOOLSDIR=$HOME/Desktop/development-tools
 
@@ -136,7 +136,7 @@ done
 
 # Breathe
 sleep 10s
-sudo poweroff
+sudo reboot now
 
 ENDOFOUTPUTFILE
 chmod +x "$OUTPUTFILE"

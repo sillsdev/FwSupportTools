@@ -11,10 +11,10 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 ### Install machine
 
 1. Make sure you have at least 50 GB of disk space free, as you will end up with a few copies of the machine you are working on, in different forms.
-* Use virtualbox manager to create a new Ubuntu virtual machine. (named something like fwtest-w1604-base or fwdev-w1604-base). Give 2000 MB RAM to a dev machine and 1500 MB RAM to a test machine. Give 60 GB dynamic storage. Note that the actual RAM used after creating the box will depend on the Vagrantfile setting.
+* Use virtualbox manager to create a new Ubuntu virtual machine. (named something like fwtest-w1604-base or fwdev-w1604-base). Give 2000 MB RAM to a dev machine and 1500~2000 MB RAM to a test machine. Give 200 GB dynamic storage (as 60 GB was not enough). Note that the actual RAM used after creating the box will depend on the Vagrantfile setting.
 * Boot new virtual machine, specifying appropriate Ubuntu or Wasta iso file.
-* At the boot menu, specify to start installing right away (eg "Install Ubuntu"). (Press shift right away in Ubuntu to see options.)
-* Use default keyboard. Don't download updates while installing (it may use a slow mirror and take forever). Don't install flash, etc.
+* When asked, specify to start installing.
+* Use default keyboard. Don't download updates while installing (it may use a slow mirror and take forever). Don't install the unneeded "third-party software".
 * Choose "Something else" and make one big `/` partition with no swap.
 * Set location to Chicago (near Dallas, for timezone and locale).
 * Name vagrant, computer name something like fwtest-w1604 or fwdev-u1604, user vagrant, pass vagrant. Choose Log in automatically.
@@ -29,8 +29,6 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 
 1. Turn off screen blanking, locking, suspend.
 
-* Remove anything from the panel that will just get in the way of use as a testing or dev machine, like thunderbird, libreoffice, vlc. On fwdev, remove all the launcher icons. On fwtest, add terminal and synaptic to dock/panel.
-
 * Change the desktop background to something specific to this machine.
 
   * fwtest-w1604 - green grass
@@ -39,10 +37,10 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
   * fwdev-w1804  - tan wall and door
   * fwtest-u1804 - looking out of orange cave
   * fwdev-u1804  - bag of orange food
-  * fwtest-w1804 -
-  * fwdev-w1804  -
-  * fwtest-u1804 - (temp: boat on lake)
-  * fwdev-u1804  - (temp: stone path thru forest)
+  * fwtest-w2004 -
+  * fwdev-w2004  -
+  * fwtest-u2004 - tree shadow
+  * fwdev-u2004  - looking down wood bridge
 
 * Install guest additions.
 
@@ -54,17 +52,22 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 
         sudo apt install linux-headers-$(uname -r) build-essential dkms
 
-   In the guest machine window, choose Devices > Insert Guest Additions CD image. In the guest, a VBOXADDITIONS window appears; click Run. Right-click the CD icon on the panel or desktop and Eject the VirtualBox Additions disc.
+   Or for Ubuntu 20.04, instead run
+
+        sudo apt install virtualbox-guest-utils virtualbox-guest-dkms
+
+   (Including for Ubuntu 20.04) In the guest machine window, choose Devices > Insert Guest Additions CD image. In the guest, a VBOXADDITIONS window appears; click Run. A terminal window will appear, asking if you want to replace versions of additions. Enter yes. It will say something went wrong.
+   Right-click the CD icon on the panel or desktop and Eject the VirtualBox Additions disc.
 
    In the guest machine window, choose Devices > Shared clipboard > Bidirectional.
 
-* Reboot.
+* Shut down and make a snapshot.
 
 * Passwordless sudo
 
         sudo tee /etc/sudoers.d/passwordless >/dev/null <<< 'vagrant ALL=(ALL) NOPASSWD: ALL'
 
-* Ubuntu 18.04 uses a swapfile (rather than a swap partition). Swap shouldn't be necessary and may cause unnecessary churn when backing up the guest image. Disable and delete the swapfile. (Skip this for Ubuntu 16.04 and earlier, which did not default to swapfiles.)
+* Ubuntu 18.04+ uses a swapfile (rather than a swap partition). Swap shouldn't be necessary and may cause unnecessary churn when backing up the guest image. Disable and delete the swapfile. (Skip this for Ubuntu 16.04 and earlier, which did not default to swapfiles.)
 
         sudo swapoff -a && sudo perl -ni -e 'print unless /swapfile/' /etc/fstab && sudo rm -v /swapfile
 
@@ -82,7 +85,9 @@ This assumes using an Ubuntu 16.04 host machine. These instructions were used fo
 
         sudo apt install -y synaptic gdebi vim meld openssh-server
 
-* Turn off automatic updates, so that a user won't turn off the machine during updates, which may make a mess. In Wasta 16.04 or 18.04, launch Software Settings (or "Software & Updates" in Ubuntu 18.04), go to the Updates tab. 'Automatically check for updates' to 'Every two weeks'. Close and re-open the Software Settings window if needed to make 'When there are security updates' work. Change 'When there are security updates' to 'Download automatically'. Change 'When there are other updates' to 'Display every two weeks'. Change 'Notify me of..' to 'Never'.
+* Remove anything from the panel that will just get in the way of use as a testing or dev machine, like thunderbird, libreoffice, vlc. On fwdev, remove all the launcher icons. On fwtest, add terminal and synaptic to dock/panel.
+
+* Turn off automatic updates, so that a user won't turn off the machine during updates, which may make a mess. In Wasta 16.04 or 18.04, launch Software Settings (or "Software & Updates" in Ubuntu 18.04~20.04), go to the Updates tab. 'Automatically check for updates' to 'Every two weeks'. Close and re-open the Software Settings window if needed to make 'When there are security updates' work. Change 'When there are security updates' to 'Download automatically'. Change 'When there are other updates' to 'Display every two weeks'. Change 'Notify me of..' to 'Never'.
 
   For fwtest, set "When there are security updates" to "Display immediately" to prevent the fwtest machine from starting downloads immediately upon boot, which gets in the way of the machine being used to immediately install software to test.
 
@@ -142,7 +147,7 @@ All git repositories were cloned with shallow history, to not take up as much sp
 MONODEVELOP
 
 MonoDevelop 5 would debug FieldWorks 9, but that's no longer easily installable.
-MonoDevelop 7 is installed in this vagrant, and can be jostled into running FW, but it is not a smooth experience.
+MonoDevelop 7 is installed in this vagrant, and can be jostled into running FW, but it is not as smooth an experience.
 For now you can use Visual Studio Code until we adjust FW for MonoDevelop 7.
 
 To set up MonoDevelop: Launch monodevelop. Choose File - Open, fwrepo/fw/RunFieldWorks.csproj. Choose Edit - Preferences. Click .NET Runtimes. Click Add. Click /opt/mono4-sil and Set as Default. Click OK.
@@ -157,34 +162,32 @@ Note that if you switch between FW 9 and FW 8, you will need to switch the defau
 
 PACKAGING
 
-(Note: This feature is only partially tested.)
-
 To use this machine to build packages, first run
 
-	cd ~/pbuilder && DISTRIBUTIONS="bionic xenial" ./setup.sh
+	cd ~/pbuilder && DISTRIBUTIONS="focal bionic" ./setup.sh
 
 You can then build a package managed by build-packages by running a command such as
 
-	~/fwrepo/FwSupportTools/packaging/build-packages --main-package-name flexbridge --dists "xenial" --arches "amd64"  --repository-committishes flexbridge=origin/master --simulate-dput |& tee /var/tmp/log
+	~/fwrepo/FwSupportTools/packaging/build-packages --main-package-name flexbridge --dists "focal" --arches "amd64" --repository-committishes flexbridge=origin/master --simulate-dput |& tee /var/tmp/log
 
 Or you can build a source and binary package by running commands such as
 
 	cd someproject && debuild -uc -us -S -nc
-	cd someproject/.. && sudo DISTRIBUTIONS=xenial ARCHES=amd64 ~/pbuilder/build-multi.sh source-package-name.dsc |& tee /var/tmp/log
+	cd someproject/.. && sudo DISTRIBUTIONS=focal ARCHES=amd64 ~/pbuilder/build-multi.sh source-package-name.dsc |& tee /var/tmp/log
 ```
 
 ### Provision
 
-* This is a good time to take a snapshot of the guest, in case anything fails in the provision.
+* Power off and take a snapshot of the guest, in case anything fails in the provision. Start guest.
 
-* For a test machine:
+* For a test machine, replacing '2004' as needed:
 
-		cd && wget https://raw.githubusercontent.com/sillsdev/FwSupportTools/develop/vagrant/testing/provision-fw-test-machine
+		cd && wget https://raw.githubusercontent.com/sillsdev/FwSupportTools/develop/vagrant/testing/fwtest-u2004/provision-fw-test-machine
 		bash provision-fw-test-machine
 
-* For a dev machine:
+* For a dev machine, replacing '2004' as needed:
 
-		cd && wget https://raw.githubusercontent.com/sillsdev/FwSupportTools/develop/vagrant/development/provision-fw-dev-machine
+		cd && wget https://raw.githubusercontent.com/sillsdev/FwSupportTools/develop/vagrant/development/fwdev-u2004/provision-fw-dev-machine
 		bash provision-fw-dev-machine
 
 	After the script, reboot a couple times to finish all initial automated configuration.
@@ -201,11 +204,13 @@ Notes:
 END
 ```
 
+* Power off and take a snapshot of the guest. Start guest.
+
 ### Finish configuration
 
 1. Free up disk space
 
-		sudo apt-get update && sudo apt-get autoremove && sudo apt-get clean
+		sudo apt-get update && sudo apt-get -y autoremove && sudo apt-get -y clean
 
 * For fwtest, after apt clean, pre-download FW and dependencies.
 
@@ -223,27 +228,29 @@ END
 
 		cat /dev/zero > ~/zeros; sync; ls -lh ~/zeros; rm -v ~/zeros
 
-* Shutdown guest.
+* Power off and take a snapshot of the guest.
 
 ### Generate and publish product
 
 1. Export VM .box file. This may take 5-15 minutes. The `--base` argument is the name of the base machine in virtualbox manager.
 
-		date; time vagrant package --base fwdev-w1604-base --output fwdev-w1604-0.0.0.box
+		export BOX="fwdev-u2004"
+		export VERSION="0.0.2"
+		export WHERE="development" # testing or development
+		cd ~/FwSupportTools/vagrant/${WHERE}/${BOX}/box
+		date; time vagrant package --base ${BOX}-base --output ${BOX}-${VERSION}.box; ls -lh ${BOX}-${VERSION}.box; sha256sum ${BOX}-${VERSION}.box
 
-* Test that your new box is what you expect.
+* Test that your new box is what you expect. In Vagrantfile, uncomment provider virtualbox section that enables `vb.gui`. Increase RAM.
 
-		mkdir test && cd test
-		vagrant init ../fwdev-w1604-0.0.0.box
-		vim Vagrantfile # Uncomment provider virtualbox section that enables `vb.gui`. Increase RAM.
+		mkdir test && cd test && vagrant init ../${BOX}-${VERSION}.box && vim Vagrantfile
+
 		vagrant up
 
 * Perform smoke tests as described below.
 
 * Clean up box test machine. In the `test` directory, run the following. Then delete the `test` directory. The `vagrant box remove` command removes the internally stored copy of the base box (to free disk space); it's not removing the '../foo' *file*, but internally stored data with the designation of '../foo'.
 
-		vagrant destroy
-		vagrant box remove '../fwdev-w1604-0.0.0.box'
+		vagrant destroy && vagrant box remove "../${BOX}-${VERSION}.box"
 
 * Create a `.json` file to describe and version the box. (Use another box's .json file as a template.)
 
@@ -256,6 +263,8 @@ END
 	If you created a new directory, also chmod g+x that new directory.
 
 * If this is a new box, then you may want to create a new file somewhere like `FwSupportTools/vagrant/testing/fwtest-w1804/Vagrantfile`.
+
+* Use `vagrant up` or `vagrant box update` on a host machine to download the new or updated box, which will help verify that there is not a json formatting problem.
 
 ## Modifying the base box
 
