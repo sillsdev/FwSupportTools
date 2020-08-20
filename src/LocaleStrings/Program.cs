@@ -299,7 +299,7 @@ namespace LocaleStrings
 			Console.WriteLine("overwriting any conflicts in the original (<old>.<xx>.po) file.");
 			Console.WriteLine("");
 			Console.WriteLine("The --update command merges the strings from messages.pot into messages.<xx>.po,");
-			Console.WriteLine("replacing all the commments in messages.<xx>.po and adding any missing msgid strings.");
+			Console.WriteLine("replacing all the comments in messages.<xx>.po and adding any missing msgid strings.");
 
 			throw new Exception("Invalid command arguments.");
 		}
