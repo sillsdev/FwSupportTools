@@ -1,0 +1,12 @@
+#!/bin/bash
+# Fetch package listings from repositories, and open as a spreadsheet.
+# Usage: ./show-packages
+
+set -ueo pipefail
+
+STORE="${HOME}/.local/share/package-repo-lists"
+FILE="packages-$(date -Is).csv"
+OUTPUT_PATH="${STORE}/${FILE}"
+mkdir -p "${STORE}"
+./list-packages-in-repos > "${OUTPUT_PATH}"
+xdg-open "${OUTPUT_PATH}"
