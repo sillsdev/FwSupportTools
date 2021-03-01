@@ -20,7 +20,7 @@ TMPDIR="$(mktemp -d)"
 pushd "$TMPDIR"
 
 wget --auth-no-challenge --http-user=${JENKINS_USER} --http-password=${JENKINS_APITOKEN} --secure-protocol=TLSv1 \
-	https://jenkins.lsdev.sil.org:45192/view/Packaging/job/${JENKINS_JOB}/${BUILD}/artifact/*zip*/archive.zip
+	https://jenkins.lsdev.sil.org/view/Packaging/job/${JENKINS_JOB}/${BUILD}/artifact/*zip*/archive.zip
 
 unzip archive.zip
 mv archive/* "$WHENCE"/
