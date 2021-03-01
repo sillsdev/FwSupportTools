@@ -4,6 +4,9 @@
 # Modify the list of Packages URLs as desired to get the repositories you are interested in examining
 # (by putting a # character before undesired lines).
 #
+# USAGE
+#     ./list-packages-in-repos > packages-$(date -Is).csv
+#
 # This quick and dirty script may not be an example of how to write good python :-).
 # Original author: MarkS 2016-03-18
 
@@ -14,29 +17,22 @@ import collections
 # Dictionary of URLs to Packages files, and an abbreviated name for that repository.
 urls=collections.OrderedDict(
 (
+('http://packages.sil.org/ubuntu/dists/focal/main/binary-amd64/Packages', 'pso:focal 64'),
+('http://packages.sil.org/ubuntu/dists/focal-experimental/main/binary-amd64/Packages', 'pso:focal-experimental 64'),
+
 ('http://packages.sil.org/ubuntu/dists/bionic/main/binary-amd64/Packages', 'pso:bionic 64'),
 ('http://packages.sil.org/ubuntu/dists/bionic-experimental/main/binary-amd64/Packages', 'pso:bionic-experimental 64'),
 
-('http://packages.sil.org/ubuntu/dists/xenial/main/binary-amd64/Packages', 'pso:xenial 64'),
-('http://packages.sil.org/ubuntu/dists/xenial-experimental/main/binary-amd64/Packages', 'pso:xenial-experimental 64'),
-
-('http://packages.sil.org/ubuntu/dists/trusty/main/binary-amd64/Packages', 'pso:trusty 64'),
-('http://packages.sil.org/ubuntu/dists/trusty-experimental/main/binary-amd64/Packages', 'pso:trusty-experimental 64'),
+('http://linux.lsdev.sil.org/ubuntu/dists/focal/main/binary-amd64/Packages', 'llso:focal 64'),
+('http://linux.lsdev.sil.org/ubuntu/dists/focal-updates/main/binary-amd64/Packages', 'llso:focal-updates 64'),
+('http://linux.lsdev.sil.org/ubuntu/dists/focal-proposed/main/binary-amd64/Packages', 'llso:focal-proposed 64'),
+('http://linux.lsdev.sil.org/ubuntu/dists/focal-experimental/main/binary-amd64/Packages', 'llso:focal-experimental 64'),
 
 ('http://linux.lsdev.sil.org/ubuntu/dists/bionic/main/binary-amd64/Packages', 'llso:bionic 64'),
 ('http://linux.lsdev.sil.org/ubuntu/dists/bionic-updates/main/binary-amd64/Packages', 'llso:bionic-updates 64'),
 ('http://linux.lsdev.sil.org/ubuntu/dists/bionic-proposed/main/binary-amd64/Packages', 'llso:bionic-proposed 64'),
 ('http://linux.lsdev.sil.org/ubuntu/dists/bionic-experimental/main/binary-amd64/Packages', 'llso:bionic-experimental 64'),
 
-('http://linux.lsdev.sil.org/ubuntu/dists/xenial/main/binary-amd64/Packages', 'llso:xenial 64'),
-('http://linux.lsdev.sil.org/ubuntu/dists/xenial-updates/main/binary-amd64/Packages', 'llso:xenial-updates 64'),
-('http://linux.lsdev.sil.org/ubuntu/dists/xenial-proposed/main/binary-amd64/Packages', 'llso:xenial-proposed 64'),
-('http://linux.lsdev.sil.org/ubuntu/dists/xenial-experimental/main/binary-amd64/Packages', 'llso:xenial-experimental 64'),
-
-('http://linux.lsdev.sil.org/ubuntu/dists/trusty/main/binary-amd64/Packages', 'llso:trusty 64'),
-('http://linux.lsdev.sil.org/ubuntu/dists/trusty-updates/main/binary-amd64/Packages', 'llso:trusty-updates 64'),
-('http://linux.lsdev.sil.org/ubuntu/dists/trusty-proposed/main/binary-amd64/Packages', 'llso:trusty-proposed 64'),
-('http://linux.lsdev.sil.org/ubuntu/dists/trusty-experimental/main/binary-amd64/Packages', 'llso:trusty-experimental 64'),
 )
 )
 
@@ -45,8 +41,8 @@ package_list={}
 # Collect data
 
 for url in urls.keys():
-	package_list[url]={}
-	response=urllib.request.urlopen(url)
+	package_list[url] = {}
+	response = urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': 'Query'}))
 	text = response.read().decode('utf-8')
 	for item in re.findall('Package: (.+?)\n(?:Source: .+\n)?Version: (.+?)\nArchitecture: (.+?)\n',text,re.MULTILINE):
 		package_name=item[0]
