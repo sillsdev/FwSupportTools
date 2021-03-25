@@ -41,7 +41,19 @@
                     "url": "http://linux.lsdev.sil.org/vagrant/fwdev-u2004/fwdev-u2004-0.0.2.box"
                 }
             ]
+        },
+        {
+            "version": "1.0.0",
+            "status": "active",
+            "providers":
+            [
+                {
+                    "checksum": "3b37e60dd05cff5c6768234e760c3e8edaf33cb1c4bfc7945e5c3fae9dea8766",
+                    "checksum_type": "sha256",
+                    "name": "virtualbox",
+                    "url": "http://linux.lsdev.sil.org/vagrant/fwdev-u2004/fwdev-u2004-1.0.0.box"
+                }
+            ]
         }
-
     ]
 }

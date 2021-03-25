@@ -8,7 +8,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define :"development"
 
   config.vm.provider "virtualbox" do |v|
-    v.memory = 3584
+    v.memory = ENV['FWDEV_RAM'] || "4000"
     v.cpus = 4
     v.gui = true
     # Enable 3D acceleration and more video RAM for larger displays.
@@ -16,7 +16,38 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.customize ["modifyvm", :id, "--vram", "128"]
   end
 
-  config.vm.provision "file", source: "../dot-gdbinit", destination: "~/.gdbinit"
   config.vm.provision "file", source: "~/.ssh/id_rsa", destination: "~/.ssh/id_rsa"
   config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/id_rsa.pub"
+
+  config.vm.provision "shell", privileged: false, inline: <<~SHELL
+    set -ueo pipefail
+
+    function tryharderto() { i=0; until "$@"; do ((++i > 3)) && false; echo >&2 Retrying "${i}"; sleep 2m; done }
+
+    # If available in host, copy in gerrit username and git author info.
+    GIT_USER="#{`git config --get user.name`.strip}"
+    GIT_EMAIL="#{`git config --get user.email`.strip}"
+    GIT_GERRITUSER="#{`git config --get fwinit.gerrituser`.strip}"
+    [[ -z ${GIT_USER} ]] || git config --global user.name "${GIT_USER}"
+    [[ -z ${GIT_EMAIL} ]] || git config --global user.email "${GIT_EMAIL}"
+    [[ -z ${GIT_GERRITUSER} ]] || git config --global fwinit.gerrituser "${GIT_GERRITUSER}"
+    echo The guest vagrant understands gerrit username, git author user, and git author email to be:
+    git config --get fwinit.gerrituser || echo Missing gerrit username
+    git config --get user.name || echo Missing git author name
+    git config --get user.email || echo Missing git author email
+
+    # Set gerrit username in the fwrepo git configs.
+    cd ~/fwrepo && find -path '.*\.git/config' |
+      xargs perl -pi -e "s/GERRIT_USER_PLACEHOLDER/$(git config --get fwinit.gerrituser)/"
+
+    # Fetch code updates
+    cd ~/fwrepo/flexbridge && git fetch || echo Ignoring trouble fetching
+    cd ~/fwrepo/fw && git fetch || echo Ignoring trouble fetching
+
+    # Changes since basebox 1.0.0
+    perl -pi -e 's#s/GERRIT_USER_PLACEHOLDER/GERRIT_USER_PLACEHOLDER/#s/GERRIT_USER_PLACEHOLDER/\\$(git config --get fwinit.gerrituser)/#' \
+      ~/Desktop/machine-instructions.txt
+
+    echo Provisioning finished successfully.
+  SHELL
 end

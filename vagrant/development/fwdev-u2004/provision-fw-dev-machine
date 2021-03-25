@@ -1,13 +1,346 @@
 #!/bin/bash
-
-# provision-fw-dev-machine
-# Set up a FieldWorks development environment on a vagrant machine. Don't require user interaction.
+# Vagrant provision script, to be run in guest when creating basebox.
+# Provisions a FieldWorks development machine.
 # See also http://linux.lsdev.sil.org/wiki/index.php/Set_up_new_FieldWorks_development_workstation
 
-set -e -o pipefail
+set -ueo pipefail
+
+# Helper method to avoid failing from a network hiccup during provision
+function tryharderto() { i=0; until "$@"; do ((++i > 3)) && false
+  echo >&2 Retrying ${i}; sleep 2m; done }
+
+# Vagrant Ubuntu setup
+# --------------------
+
+# Passwordless sudo
+sudo tee /etc/sudoers.d/passwordless >/dev/null <<< 'vagrant ALL=(ALL) NOPASSWD: ALL'
+
+# Set mirror to generic
+sudo perl -pi -e 's#/...archive.ubuntu.com#/archive.ubuntu.com#g' /etc/apt/sources.list
+
+# Apply all available updates
+tryharderto sudo apt-get update
+tryharderto sudo apt-get -dy upgrade
+tryharderto sudo apt-get -y upgrade
+tryharderto sudo apt-get -y dist-upgrade
+
+# Swap shouldn't be necessary and may cause unnecessary churn when backing up the guest
+# image. Disable and delete the swapfile.
+sudo swapoff -a && sudo perl -ni -e 'print unless /swapfile/' /etc/fstab \
+  && sudo rm -fv /swapfile
+
+# Don't prompt for OS upgrade to newer release
+sudo perl -pi -e 's/Prompt=lts/Prompt=never/' /etc/update-manager/release-upgrades
+
+sudo tee /etc/sudoers.d/stars >/dev/null <<END
+# Show stars when typing sudo password.
+Defaults pwfeedback
+END
+sudo chmod 0400 /etc/sudoers.d/stars
+
+# Make vagrant accessible via ssh
+sudo apt-get install -y openssh-server
+
+# Install initial vagrant login key.
+mkdir -p ~/.ssh && chmod 0700 ~/.ssh
+wget https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub \
+  -O ~/.ssh/authorized_keys
+chmod 0600 ~/.ssh/authorized_keys
+
+# Prepare for ssh host keys to be re-generated uniquely by users
+sudo tee /root/regenerate-ssh-host-keys >/dev/null << END
+#!/bin/bash
+# Regenerate ssh host keys if not present
+test -f /etc/ssh/ssh_host_rsa_key || dpkg-reconfigure openssh-server
+END
+sudo chmod +x /root/regenerate-ssh-host-keys
+sudo tee /etc/systemd/system/regenerate-ssh-host-keys.service >/dev/null << END
+[Unit]
+Description=regenerate-ssh-host-keys
+
+[Service]
+ExecStart=/root/regenerate-ssh-host-keys
+
+[Install]
+WantedBy=multi-user.target
+END
+sudo systemctl enable regenerate-ssh-host-keys
+
+# Don't blank or lock VM screen
+gsettings set org.gnome.desktop.session idle-delay 0
+gsettings set org.gnome.desktop.screensaver lock-enabled false
+
+# Don't let deja-dup hassle user about backing up from within guest
+sudo apt-get remove -y deja-dup
+
+# Adjust bash prompt for colour, $ on next line, and exit code display
+perl -pi -e '/#force/ and s/^#//' ~/.bashrc
+perl -pi -e '/PS1/ and s/\\\$ /\\n\\\$ /' ~/.bashrc
+perl -pi -e '/PS1/ and s/@/\$?/' ~/.bashrc
+
+mkdir -p ~/.config/terminator
+echo '[profiles]
+  [[default]]
+	scroll_on_output = False
+	scrollback_infinite = True' | tee ~/.config/terminator/config
+
+# Don't report developer or tester usage to analytics
+tee -a ~/.pam_environment <<< 'FEEDBACK=false'
+tee -a ~/.pam_environment <<< 'WESAY_TRACK_AS_DEVELOPER=1'
+
+# Record some base box version info, to help with diagnosis
+tee ~/machine-info.txt >/dev/null << END
+Vagrant base box information
+Name: fwdev-u2004
+Version:
+Creation date: $(date -I)
+Installed from:
+Notes:
+END
+
+# Install some communication tools, in case helpful
+sudo snap install slack --classic
+sudo snap install skype
+tryharderto sudo apt-get install -y flatpak
+flatpak --user install --assumeyes https://flathub.org/repo/appstream/us.zoom.Zoom.flatpakref
+
+# Configure task bar
+# ------------------
+
+tryharderto sudo apt-get install -y \
+  gnome-shell-extension-dash-to-panel \
+  gnome-shell-extension-system-monitor \
+  gnome-shell-extension-arc-menu \
+  gnome-shell-extensions
+
+# Settings - Notifications - Do Not Disturb. Can be turned back on if important.
+gsettings set org.gnome.desktop.notifications show-banners false
+# Settings - Appearance - Window theme - Dark
+# (Sadly, FieldWorks has trouble with the dark theme.)
+#gsettings set org.gnome.desktop.interface gtk-theme 'Yaru-dark'
+# Gedit: Menu - Preferences - Fonts & Colours - Solarized Dark
+gsettings set org.gnome.gedit.preferences.editor scheme 'solarized-dark'
+# Terminal: Menu - Preferences - Profiles > Unnamed - Colours.
+# Under Text and Background Color, clear "Use colors from system theme"; Built-in schemes: Tango dark.
+# Under Palette, Build-in schemes: Tango.
+dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/use-theme-colors false
+dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/background-color "'rgb(46,52,54)'"
+dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/foreground-color "'rgb(211,215,207)'"
+dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/palette \
+  "['rgb(46,52,54)', 'rgb(204,0,0)', 'rgb(78,154,6)', 'rgb(196,160,0)', 'rgb(52,101,164)', 'rgb(117,80,123)', 'rgb(6,152,154)', 'rgb(211,215,207)', 'rgb(85,87,83)', 'rgb(239,41,41)', 'rgb(138,226,52)', 'rgb(252,233,79)', 'rgb(114,159,207)', 'rgb(173,127,168)', 'rgb(52,226,226)', 'rgb(238,238,236)']"
+
+# Tweaks - Extensions
+gsettings set org.gnome.shell enabled-extensions \
+  "['arc-menu@linxgem33.com', 'dash-to-panel@jderose9.github.com', 'system-monitor@paradoxxx.zero.gmail.com']"
+# Dash to panel: Position - Clock location - Right of system indicators
+gsettings set org.gnome.shell.extensions.dash-to-panel location-clock 'STATUSRIGHT'
+# Dash to panel: Behavior - Show Applications icon - Off
+gsettings set org.gnome.shell.extensions.dash-to-panel show-show-apps-button false
+# Arc menu: General - Arc Menu Default View - Categories List
+dconf write /org/gnome/shell/extensions/arc-menu/enable-pinned-apps false
+# Arc menu: Appearance - Override Arc Menu Theme - On
+dconf write /org/gnome/shell/extensions/arc-menu/enable-custom-arc-menu true
+# Arc menu: Appearance - Arc Menu Icon Settings - Arc Menu Icon: Start Box
+dconf write /org/gnome/shell/extensions/arc-menu/menu-button-icon "'Start_Box'"
+# Arc menu: Appearance - Arc Menu Icon Settings - 24 px
+dconf write /org/gnome/shell/extensions/arc-menu/custom-menu-button-icon-size 24.0
+# System-monitor: Display Icon: Off. Cpu, Memory, Net - Graph Width: 10, Refresh Time: 10000, Show Text: Off
+dconf write /org/gnome/shell/extensions/system-monitor/icon-display false
+dconf write /org/gnome/shell/extensions/system-monitor/cpu-graph-width 10
+dconf write /org/gnome/shell/extensions/system-monitor/cpu-refresh-time 10000
+dconf write /org/gnome/shell/extensions/system-monitor/cpu-show-text false
+dconf write /org/gnome/shell/extensions/system-monitor/memory-graph-width 10
+dconf write /org/gnome/shell/extensions/system-monitor/memory-refresh-time 10000
+dconf write /org/gnome/shell/extensions/system-monitor/memory-show-text false
+dconf write /org/gnome/shell/extensions/system-monitor/net-graph-width 10
+dconf write /org/gnome/shell/extensions/system-monitor/net-refresh-time 10000
+dconf write /org/gnome/shell/extensions/system-monitor/net-show-text false
+
+# Configure desktop for development
+# ---------------------------------
+
+# Tools
+
+tryharderto sudo apt-get install -y \
+  ack \
+  curl \
+  flatpak \
+  net-tools \
+  tig \
+  vim \
+  wget \
+  glances \
+  inotify-tools \
+  python-pyinotify \
+  synaptic \
+  chromium-browser \
+  dconf-cli \
+  git-gui \
+  git-cola \
+  terminator \
+  byobu \
+  meld \
+  xonsh \
+  kdiff3-qt
+
+# GitKraken
+sudo snap install --classic gitkraken
+
+# Visual Studio Code https://code.visualstudio.com/docs/setup/linux
+tryharderto sudo apt-get install -y curl
+cd
+curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
+sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
+tryharderto sudo apt-get update
+tryharderto sudo apt-get install code
+code --install-extension EditorConfig.EditorConfig
+code --install-extension eamodio.gitlens
+code --install-extension ms-vscode.cpptools
+code --install-extension ms-dotnettools.csharp
+code --install-extension ms-vscode.mono-debug
+# Let VS Code watch lots of files.
+sudo tee -a /etc/sysctl.conf >/dev/null <<< 'fs.inotify.max_user_watches=524288'
+sudo sysctl -p
+# mono-devel for OmniSharp
+tryharderto sudo apt-get install -y mono-devel
+
+# Paratext
+(wget -O- https://packages.sil.org/keys/pso-keyring-2016.gpg \
+  | sudo tee /etc/apt/trusted.gpg.d/pso-keyring-2016.gpg) &> /dev/null
+(. /etc/os-release && sudo tee /etc/apt/sources.list.d/packages-sil-org.list>/dev/null \
+  <<< "deb http://packages.sil.org/$ID $VERSION_CODENAME main")
+sudo apt-get update
+tryharderto sudo apt-get install -y paratext-9.0
+
+# Git and GUI git tools settings
+git config --global diff.tool meld
+git config --global merge.conflictstyle diff3
+git config --global merge.tool kdiff3
+git config --global color.ui true
+git config --global rerere.enabled true
+git config --global gui.editor gedit
+git config --global rebase.autosquash true
+# Git Cola settings. Set textwidth to help auto wrap commit messages.
+git config --global cola.textwidth 70
+git config --global cola.tabwidth 2
+git config --global cola.linebreak true
+git config --global cola.theme flat-dark-blue
+git config --global cola.icontheme dark
+# Arrange diff, commit, status, actions, branches, and console areas.
+mkdir -p "${HOME}/.config/git-cola"
+tee "${HOME}/.config/git-cola/settings" >/dev/null << END
+{
+    "gui_state": {
+        "mainview": {
+            "geometry": "AdnQywADAAAAAAA9AAAABwAABNsAAANKAAAAPQAAACwAAATbAAADSgAAAAAAAAAABkAAAAA9AAAALAAABNsAAANK",
+            "width": 1200,
+            "height": 800,
+            "x": 50,
+            "y": 10,
+            "lock_layout": false,
+            "windowstate": "AAAA/wAAAAL9AAAAAQAAAAIAAASfAAADB/wBAAAAA/sAAAAIAEQAaQBmAGYBAAAAAAAAAqoAAAB1AP////wAAAKtAAAB8gAAARUA/////AIAAAAE+wAAAAwAQwBvAG0AbQBpAHQBAAAAGAAAALsAAABFAP////sAAAAMAFMAdABhAHQAdQBzAQAAANYAAAEKAAAARQD////7AAAADgBBAGMAdABpAG8AbgBzAQAAAeMAAABFAAAARQD////8AAACKwAAAPQAAABFAP////wBAAAAAvsAAAAQAEIAcgBhAG4AYwBoAGUAcwEAAAKtAAAA7AAAAKIA////+wAAAA4AQwBvAG4AcwBvAGwAZQEAAAOcAAABAwAAAHAA/////AAAAqYAAAH5AAAAAAD////6/////wEAAAAD+wAAABQAUwB1AGIAbQBvAGQAdQBsAGUAcwAAAAAA/////wAAALgA////+wAAABIARgBhAHYAbwByAGkAdABlAHMAAAAAAP////8AAAC2AP////sAAAAMAFIAZQBjAGUAbgB0AAAAAAD/////AAAAkgD///8AAASfAAAAAAAAAAQAAAAEAAAACAAAAAj8AAAAAA=="
+        }
+    }
+}
+END
+# gitk solarized dark colour scheme
+mkdir -p "${HOME}/.config/git"
+tee "${HOME}/.config/git/gitk" >/dev/null << END
+set mainfont {sans 9}
+set textfont {monospace 9}
+set uifont {sans 9 bold}
+set tabstop 8
+set findmergefiles 0
+set maxgraphpct 50
+set maxwidth 16
+set cmitmode patch
+set wrapcomment none
+set autoselect 1
+set autosellen 40
+set showneartags 1
+set maxrefs 20
+set visiblerefs {"master"}
+set hideremotes 0
+set showlocalchanges 1
+set datetimeformat {%Y-%m-%d %H:%M:%S}
+set limitdiffs 1
+set uicolor #657b83
+set want_ttk 1
+set bgcolor #002b36
+set fgcolor #839496
+set uifgcolor #839496
+set uifgdisabledcolor #586e75
+set colors {"#6c71c4" "#268bd2" "#2aa198" "#859900" "#b58900" "#cb4b16" "#dc322f" "#d33682"}
+set diffcolors {"#dc322f" "#859900" "#268bd2"}
+set mergecolors {"#dc322f" "#268bd2" "#859900" "#6c71c4" brown "#009090" #d33682 "#808000" "#009000" "#ff0080" "#2aa198" "#b07070" "#70b0f0" "#70f0b0" "#f0b070" "#ff70b0"}
+set markbgcolor #073642
+set diffcontext 3
+set selectbgcolor #586e75
+set foundbgcolor #b58900
+set currentsearchhitbgcolor #cb4b16
+set extdifftool meld
+set perfile_attrs 0
+set headbgcolor #2aa198
+set headfgcolor #002b36
+set headoutlinecolor #839496
+set remotebgcolor #6c71c4
+set tagbgcolor #d33682
+set tagfgcolor #002b36
+set tagoutlinecolor #002b36
+set reflinecolor #839496
+set filesepbgcolor #073642
+set filesepfgcolor #839496
+set linehoverbgcolor #073642
+set linehoverfgcolor #839496
+set linehoveroutlinecolor #839496
+set mainheadcirclecolor #fdf6e3
+set workingfilescirclecolor #dc322f
+set indexcirclecolor #859900
+set circlecolors {white #268bd2 gray #268bd2 #268bd2}
+set linkfgcolor #268bd2
+set circleoutlinecolor #073642
+set web_browser xdg-open
+set geometry(main) 1227x739+53+11
+set geometry(state) normal
+set geometry(topwidth) 1227
+set geometry(topheight) 425
+set geometry(pwsash0) "684 1"
+set geometry(pwsash1) "1046 1"
+set geometry(botwidth) 773
+set geometry(botheight) 309
+set permviews {}
+END
+
+# Geany colour scheme Solarized Dark
+mkdir -p ~/.config/geany/colorschemes
+cd ~/.config/geany/colorschemes
+wget 'https://raw.github.com/geany/geany-themes/master/colorschemes/solarized-dark.conf'
+[[ -f ~/.config/geany/geany.conf ]] || tee ~/.config/geany/geany.conf <<END
+[geany]
+color_scheme=solarized-dark.conf
+END
+
+# Launchers
+
+TOOLSDIR=${HOME}/Desktop
+mkdir -p "${TOOLSDIR}"
+cp -aL /usr/share/applications/{terminator,code,byobu,chromium-browser,paratext9}.desktop \
+  /snap/gitkraken/current/meta/gui/gitkraken.desktop "${TOOLSDIR}"
+chmod +x "${TOOLSDIR}"/*.desktop
+
+# Fix icon
+perl -pi -e '/Icon/ and s#.*#Icon=/snap/gitkraken/current/usr/share/gitkraken/gitkraken.png#' \
+  "${TOOLSDIR}"/gitkraken.desktop
+
+# Set panel icons
+gsettings set org.gnome.shell favorite-apps \
+  "['firefox.desktop', 'org.gnome.Nautilus.desktop', 'chromium_chromium.desktop', 'code.desktop']"
+
+# FieldWorks Development machine setup
+# ------------------------------------
 
 BASEDIR="$HOME"
-SCRIPTNAME="provisioner"
 
 # Setup
 
@@ -18,7 +351,7 @@ if [ -f /etc/wasta-release ]; then
   RELEASE=$CODENAME
 fi
 
-# Remove any existing SIL repositories, and add pso-main, pso-experimental, and llso-main.
+# Remove any existing SIL repositories (such as already in wasta), and add pso-main, pso-experimental, and llso-main.
 sudo perl -ni -e 'print unless /sil\.org/' /etc/apt/sources.list
 wget -qO - http://packages.sil.org/sil.gpg | sudo apt-key add -
 wget -qO - http://linux.lsdev.sil.org/downloads/sil-testing.gpg | sudo apt-key add -
@@ -27,121 +360,71 @@ sudo add-apt-repository "deb http://packages.sil.org/ubuntu $RELEASE-experimenta
 sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE main"
 # llso:experimental for some mono or icu-fw pieces until they are promoted to llso:main.
 sudo add-apt-repository "deb http://linux.lsdev.sil.org/ubuntu $RELEASE-experimental main"
-
 # Enable multiverse repository
 sudo perl -pi -e '/multiverse/ and !/backports/ and s/^# //' /etc/apt/sources.list
-# Enable partner repository for skype
-sudo perl -pi -e '/partner/ and s/^# //' /etc/apt/sources.list
-sudo apt-get update
-# If this vagrant box already has a GUI running, then report in the GUI.
-(DISPLAY=:0 zenity --warning --no-wrap --title='Provisioning' --text="$(date '+%F %T')\nPlease wait for your vagrant to finish provisioning." ||true) &
-sudo DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" --force-yes
-# (For Ubuntu 14.04: python-pyinotify. For Wasta 14.04: xterm.)
-sudo apt-get install -y \
-  git-gui \
+
+tryharderto sudo apt-get update
+tryharderto sudo apt-get install -y \
   mercurial \
-  vim \
-  wget \
-  terminator \
-  meld \
-  kdiff3-qt \
-  links2 \
   gdb \
-  synaptic \
   geany \
-  chromium-browser \
-  byobu \
-  indicator-multiload \
   dconf-editor \
-  dconf-cli \
-  git-cola \
-  python-pyinotify \
-  xterm \
   devscripts \
-  ack \
+  icu-dev-fw \
+  lame \
   nunit
 
-git config --global diff.tool meld
-git config --global merge.conflictstyle diff3
-git config --global merge.tool kdiff3
-git config --global color.ui true
-git config --global rerere.enabled true
-git config --global gui.editor gedit
-git config --global rebase.autosquash true
-# Set the textwidth on the commit tool so commit messages are automatically restrained within the policy settings.
-git config --global cola.textwidth 70
 # Don't absorb Windows line ending settings from host, if .gitconfig was copied in from Windows.
 git config --global --unset core.autocrlf ||true
 
-cat > ~/.hgrc <<EOF
+tee ~/.hgrc > /dev/null << END
 [extensions]
 purge =
-EOF
-
-perl -pi -e s/^#force_color_prompt/force_color_prompt/ ~/.bashrc
-grep __git_ps1 ~/.bashrc || echo 'export PS1="\$(__git_ps1) $PS1"' |tee -a ~/.bashrc
-# Don't report developer or tester usage to analytics.
-tee -a ~/.pam_environment  >/dev/null <<< 'export FEEDBACK=false'
-tee -a ~/.pam_environment  >/dev/null <<< 'export WESAY_TRACK_AS_DEVELOPER=1'
+END
 
 # Enable debugging
 sudo perl -pi -e 's/kernel.yama.ptrace_scope = 1/kernel.yama.ptrace_scope = 0/' /etc/sysctl.d/10-ptrace.conf
 
-mkdir -p ~/.config/terminator
-echo '[profiles]
-  [[default]]
-	scroll_on_output = False
-	scrollback_infinite = True'|tee ~/.config/terminator/config
+tee ~/.gdbinit > /dev/null << END
+# Run and debug from one command:
+#   Build/run-in-environ gdb mono-sgen --ex "run --debug \$HOME/fwrepo/fw/Output/Debug/FieldWorks.exe"
+# Run and debug from separate terminals:
+#   Build/run-in-environ mono-sgen --debug \$HOME/fwrepo/fw/Output/Debug/FieldWorks.exe
+#   Build/run-in-environ gdb mono-sgen \$(pgrep -f FieldWorks.exe)
+#
+# http://www.mono-project.com/docs/debug+profile/debug/
 
-OUTPUTFILE="$HOME/initial-config.sh"
-cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
-#!/bin/bash
+handle SIGXCPU SIG33 SIG35 SIG36 SIG37 SIG38 SIGPWR SIG38 nostop noprint
 
-echo 'Applying initial configuration settings ...'
+define mono_backtrace
+ select-frame 0
+ set \$i = 0
+ while (\$i < \$arg0)
+   set \$foo = (char*) mono_pmip (\$pc)
+   if (\$foo)
+     printf "#%d %p in %s\n", \$i, \$pc, \$foo
+   else
+     frame
+   end
+   up-silently
+   set \$i = \$i + 1
+ end
+end
 
-if [ -e ~/.config/initial-config/has-run ]; then
-  echo 'Settings have already been applied.'
-  exit 0
-fi
+define mono_stack
+ set \$mono_thread = mono_thread_current ()
+ if (\$mono_thread == 0x00)
+   printf "No mono thread associated with this thread\n"
+ else
+   set \$ucp = malloc (sizeof (ucontext_t))
+   call (void) getcontext (\$ucp)
+   call (void) mono_print_thread_dump (\$ucp)
+   call (void) free (\$ucp)
+ end
+end
 
-mkdir -p ~/.config/initial-config
-touch ~/.config/initial-config/has-run
-
-dconf write /org/gnome/desktop/screensaver/lock-enabled false
-dconf write /org/gnome/desktop/session/idle-delay 'uint32 0'
-dconf write /org/gnome/settings-daemon/plugins/power/sleep-display-ac 0
-dconf write /org/gnome/settings-daemon/plugins/power/sleep-display-battery 0
-
-mkdir -p $HOME/.config/autostart
-dconf write /apps/indicators/multiload/autostart true
-dconf write /apps/indicators/multiload/size 'uint16 10'
-dconf write /apps/indicators/multiload/speed 'uint16 10000'
-dconf write /apps/indicators/multiload/view-diskload true
-dconf write /apps/indicators/multiload/view-loadavg true
-dconf write /apps/indicators/multiload/view-memload true
-dconf write /apps/indicators/multiload/view-netload true
-indicator-multiload &
-
-zenity --warning --no-wrap --title='Rebooting' --text='Your machine will finish applying initial configuration and reboot.'
-
-TOOLSDIR=$HOME/Desktop/development-tools
-
-# Trust the launchers. Seems to only work on desktop in Ubuntu 20.04.
-cd "\${TOOLSDIR}"
-mv *.desktop ~/Desktop/
-cd ~/Desktop
-for launcher in *.desktop; do
-  gio set "\$launcher" metadata::trusted true
-done
-
-# Breathe
-sleep 10s
-sudo reboot now
-
-ENDOFOUTPUTFILE
-chmod +x "$OUTPUTFILE"
-
-# FieldWorks
+add-auto-load-safe-path /opt/mono5-sil/bin/mono-sgen-gdb.py
+END
 
 # If absent, set placeholder variables for git and gerrit settings so we can provision on a machine without any existing personalization or authentication.
 [[ -n $(git config --get fwinit.gerrituser) ]] || git config --global fwinit.gerrituser GERRIT_USER_PLACEHOLDER
@@ -149,13 +432,13 @@ chmod +x "$OUTPUTFILE"
 [[ -n $(git config --get user.email) ]] || git config --global user.email GIT_EMAIL_PLACEHOLDER
 
 # Clone from the develop branch of fwmeta until the --shallow argument, introduced on 2017-11-29, is merged to master.
-if [ ! -d "$BASEDIR/fwrepo" ]; then
-    git clone --depth=1 --branch develop git://github.com/sillsdev/fwmeta.git $BASEDIR/fwrepo
-    cd $BASEDIR/fwrepo
+if [ ! -d "${BASEDIR}/fwrepo" ]; then
+    git clone --depth=1 --branch develop git://github.com/sillsdev/fwmeta.git "${BASEDIR}/fwrepo"
+    cd "${BASEDIR}/fwrepo"
     repos="FieldWorks mono-calgary mono mono-basic gtk-sharp libgdiplus libcom FwDebian FwSupportTools FwLocalizations FwHelps FwInstaller"
     branches="master develop feature/* release/* hotfix/* support/*"
-    echo $SCRIPTNAME: Note that cloning may not report its progress during provisioning.
-    echo -e "$repos\n$branches\n" | fwmeta/initrepo --shallow
+    echo Note that cloning may not report its progress during provisioning.
+    echo -e "${repos}\n${branches}\n" | fwmeta/initrepo --shallow
 fi
 
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
@@ -163,13 +446,7 @@ echo ttf-mscorefonts-installer msttcorefonts/present-mscorefonts-eula note | sud
 $BASEDIR/fwrepo/fw/Build/Agent/install-deps || true # mono basic
 sudo apt-get install -y fieldworks-enc-converters
 
-mkdir -p $BASEDIR/fwrepo/fw/DistFiles/Projects
-
-# Install build dependencies from the most recently released FW. (To install mono3 for fixing bugs in FW 8.3, for example.)
-cd $BASEDIR/fwrepo/fw/Build/Agent
-git checkout origin/master -- .
-$BASEDIR/fwrepo/fw/Build/Agent/install-deps || true # mono basic
-git checkout develop -- .
+mkdir -p "${BASEDIR}/fwrepo/fw/DistFiles/Projects"
 
 # Libraries
 
@@ -181,27 +458,7 @@ git checkout develop -- .
 [ -d ~/projects/chorus ] || git clone --depth=1 https://github.com/sillsdev/chorus.git ~/projects/chorus
 
 # WinFormsSpy tool
-cd ~
-[[ -d ~/winformsspy ]] || hg clone https://bitbucket.org/hindlemail/winformsspy
-cd winformsspy
-xbuild
-
-# GitKraken
-sudo snap install gitkraken
-
-# Visual Studio Code https://code.visualstudio.com/docs/setup/linux
-sudo apt-get install -y curl
-cd
-curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
-sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
-sudo apt-get update
-sudo apt-get install code
-code --install-extension EditorConfig.EditorConfig
-code --install-extension eamodio.gitlens
-code --install-extension ms-vscode.cpptools
-code --install-extension ms-dotnettools.csharp
-code --install-extension ms-vscode.mono-debug
+sudo snap install monowinformsspy
 
 # Mono
 
@@ -242,7 +499,7 @@ sudo apt-get install -y monodevelop
 cp -a $BASEDIR/fwrepo/FwSupportTools/building/RunFieldWorks.csproj $BASEDIR/fwrepo/fw/
 sed -i $BASEDIR/fwrepo/fw/RunFieldWorks.csproj -e "s/USERNAME/$USER/"
 
-# These MD5 settings are getting carried over into MD7 successfully.
+# These Monodevelop 5 settings are getting carried over into Monodevelop 7 successfully.
 
 mkdir -p "$HOME/.config/MonoDevelop-5.0"
 OUTPUTFILE="$HOME/.config/MonoDevelop-5.0/MonoDevelop-tools.xml"
@@ -254,8 +511,8 @@ cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
   <ExternalTool menuCommand="fw build remakefw" command="/home/USERNAME/fwrepo/FwSupportTools/building/fw-build-remakefw" arguments="" initialDirectory="/home/USERNAME/fwrepo/fw" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
   <ExternalTool menuCommand="fw build remakefw with tests" command="/home/USERNAME/fwrepo/fw/agent-build-fw.sh" arguments="" initialDirectory="/home/USERNAME/fwrepo/fw" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
   <ExternalTool menuCommand="Build FLExBridge" command="bash" arguments="-c 'cd ~/fwrepo/flexbridge &amp;&amp; time make debug;date'" initialDirectory="" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
-  <ExternalTool menuCommand="Build and install IPCFramework" command="bash" arguments=" -c 'cd ~/projects/ipcframework &amp;&amp; (cd ~/fwrepo/fw &amp;&amp; . environ &amp;&amp; cd - &amp;&amp; time xbuild &amp;&amp;  mkdir -p ~/fwrepo/flexbridge/output/DebugMono &amp;&amp; sudo mkdir -p  /usr/lib/flexbridge &amp;&amp; for target in ~/fwrepo/fw/Output/Debug/ ~/fwrepo/flexbridge/output/*Mono; do cp -a output/Debug/IPCFramework.dll* $target  &amp;&amp; sudo cp -a output/Debug/IPCFramework.dll* /usr/lib/flexbridge/;done &amp;&amp;echo SUCCESS ||echo FAILURE );date'" initialDirectory="" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
-  <ExternalTool menuCommand="Build and install libpalaso" command="bash" arguments="-c 'cd ~/fwrepo/fw &amp;&amp; . environ &amp;&amp; cd ~/projects/libpalaso/build &amp;&amp; time ./buildupdate.mono.sh &amp;&amp; time ./TestBuild.sh &amp;&amp; for DEST in ~/fwrepo/fw/Downloads ~/fwrepo/fw/Output/Debug; do cp -a ~/projects/libpalaso/output/DebugMono/Palaso*WindowsForms*dll* $DEST/;done;date'" initialDirectory="" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
+  <ExternalTool menuCommand="Build and install IPCFramework" command="bash" arguments=" -c 'cd ~/projects/ipcframework &amp;&amp; (cd ~/fwrepo/fw &amp;&amp; . environ &amp;&amp; cd - &amp;&amp; time xbuild &amp;&amp;  mkdir -p ~/fwrepo/flexbridge/output/DebugMono &amp;&amp; sudo mkdir -p  /usr/lib/flexbridge &amp;&amp; for target in ~/fwrepo/fw/Output/Debug/ ~/fwrepo/flexbridge/output/*Mono; do cp -a output/Debug/IPCFramework.dll* \${target}  &amp;&amp; sudo cp -a output/Debug/IPCFramework.dll* /usr/lib/flexbridge/;done &amp;&amp;echo SUCCESS ||echo FAILURE );date'" initialDirectory="" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
+  <ExternalTool menuCommand="Build and install libpalaso" command="bash" arguments="-c 'cd ~/fwrepo/fw &amp;&amp; . environ &amp;&amp; cd ~/projects/libpalaso/build &amp;&amp; time ./buildupdate.mono.sh &amp;&amp; time ./TestBuild.sh &amp;&amp; for DEST in ~/fwrepo/fw/Downloads ~/fwrepo/fw/Output/Debug; do cp -a ~/projects/libpalaso/output/DebugMono/Palaso*WindowsForms*dll* \${DEST}/;done;date'" initialDirectory="" promptForArguments="False" useOutputPad="True" saveCurrentFile="False" />
 </Tools>
 ENDOFOUTPUTFILE
 sed -i "$OUTPUTFILE" -e "s/USERNAME/$USER/g"
@@ -321,10 +578,7 @@ cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
 </Policies>
 ENDOFOUTPUTFILE
 
-# Launchers
-
-TOOLSDIR="$HOME/Desktop/development-tools"
-mkdir -p "$TOOLSDIR"
+# Launchers 
 
 cp /usr/share/applications/monodevelop.desktop "$TOOLSDIR"
 perl -pi -e 's/Name=MonoDevelop/Name=MonoDevelop Generic/' "$TOOLSDIR"/monodevelop.desktop
@@ -397,55 +651,23 @@ cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
 Version=1.0
 Type=Application
 Terminal=false
-Exec=bash -c "mono $HOME/winformsspy/MonoWinFormsSpy/bin/Debug/MonoWinFormsSpy.exe"
+Exec=bash -c "/snap/bin/monowinformsspy"
 Name=MonoWinFormsSpy
 Icon=/usr/share/icons/hicolor/scalable/apps/preferences-desktop-display.svg
 ENDOFOUTPUTFILE
 chmod +x "$OUTPUTFILE"
 
-mkdir -p "$HOME/.config/autostart"
-OUTPUTFILE="$HOME/.config/autostart/initial-config.desktop"
-cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
-#!/usr/bin/env xdg-open
-
-[Desktop Entry]
-Version=1.0
-Type=Application
-Terminal=false
-Exec=bash -c '$HOME/initial-config.sh'
-Name=Initial Machine Configuration
-ENDOFOUTPUTFILE
-chmod +x "$OUTPUTFILE"
-
-cp -aL /usr/share/applications/{terminator,geany,code,byobu}.desktop /snap/gitkraken/current/meta/gui/gitkraken.desktop "$TOOLSDIR"
+cp -aL /usr/share/applications/{terminator,geany,code,byobu}.desktop "$TOOLSDIR"
 chmod +x "$TOOLSDIR"/*.desktop
+
 
 # FieldWorks sample data
 
 cd ~
 [ -e Sena*.fwbackup ] || wget 'http://downloads.sil.org/FieldWorks/8.3.9/Sena%203%202017-07-27%201102.fwbackup'
 
-# Compile FieldWorks
-
-# The 'yes n |' part specifies to not use local artifacts. Temporarily unsetting pipefail.
-set +o pipefail
-cd $BASEDIR/fwrepo/fw/Build &&
-  yes n | ./build /t:UpdateDevelopmentPropertiesFile &&
-  ./build /t:refreshTargets &&
-  ./build /t:remakefw &&
-  echo $SCRIPTNAME: FieldWorks compiled successfully. ||
-  echo $SCRIPTNAME: FieldWorks failed to compile.
-set -o pipefail
-
-mkdir -p $BASEDIR/fwrepo/fw/Output_x86_64/registry/LocalMachine/software/sil/fieldworks/8
-
-# Compile FLExBridge
-
-sudo apt-get install -y curl
-
-cd ~/fwrepo/flexbridge
-# Work around quirks
-make debug || make debug || true
+# Not compiling FW since use of different branches and configuration over time may just result in a muddle if we 
+# pre-compile. Users of the machine can do the first compile from a chosen branch using an up-to-date configuration. 
 
 # Set up machine to also be able to make packages
 
@@ -466,15 +688,144 @@ EOF
 
 FWSUPPORTTOOLS=$HOME/fwrepo/FwSupportTools
 cd ~
-ln -sf "$FWSUPPORTTOOLS"/packaging/pbuilder
-ln -sf "$FWSUPPORTTOOLS"/packaging/pbuilder/pbuilderrc .pbuilderrc
+ln -sf "${FWSUPPORTTOOLS}"/packaging/pbuilder
+ln -sf "${FWSUPPORTTOOLS}"/packaging/pbuilder/pbuilderrc .pbuilderrc
 
 cd ~/pbuilder
 wget http://linux.lsdev.sil.org/downloads/sil-testing.gpg
 
-# Wrapup
-# If this vagrant box already has a GUI running, then report in the GUI.
-(DISPLAY=:0 zenity --warning --no-wrap --title='Provisioning' --text="$(date '+%F %T')\nProvisioning is almost finished.  See the vagrant output in the host terminal\nfor any errors or further instructions. You must reboot this vagrant box\nto finish the provisioning process." ||true) &
+# Trust the launchers. In Ubuntu 20.04 it seems to only work on the desktop.
+cd ~/Desktop
+for launcher in *.desktop; do
+  gio set "${launcher}" metadata::trusted true
+done
 
-echo $SCRIPTNAME: Reboot the vagrant guest to bring up the GUI.
-echo $SCRIPTNAME: Done.
+# Create machine readme
+tee ~/Desktop/machine-instructions.txt >/dev/null <<END
+Linux FieldWorks Development Machine
+
+NEXT STEPS
+
+- Your gerrit username and git author info should have been copied in from your
+  host machine. You can verify by printing the current values with the
+  following commands, or see the Notes section to set the values where they
+  need to be.
+
+  git config --get fwinit.gerrituser
+  git config --get user.name
+  git config --get user.email
+
+- Choose FW branch. Change "develop" to the branch you intend to work on, such 
+  as "support/9.0" or "release/9.1".
+
+  cd ~/fwrepo/fw && git fetch && git checkout develop
+
+- Install any build dependencies that were specified after this vagrant
+  base box was made.
+
+  cd ~/fwrepo/fw &&
+  git rebase &&
+  ~/fwrepo/fw/Build/Agent/install-deps
+
+- Build FieldWorks
+
+  cd ~/fwrepo/fw/Build &&
+  ./build /t:remakefw
+
+- Run FieldWorks
+
+  - Launch Visual Studio Code.
+  - Click File - Open Workspace, open ~/fwrepo/fw/fw.code-workspace .
+  - Wait a couple minutes for extensions and omnisharp. Don't worry about
+    .NET errors. When the Output tab is done, click Reload Window in the
+    bottom right.
+  - Click Run - Start Debugging.
+
+- OS automatic update installation is turned off. Install updates
+  (including security updates) since the basebox was created. Try again
+  in a few minutes if the system is already busy fetching updates in the
+  background.
+
+  sudo apt update &&
+  sudo apt dist-upgrade --yes
+
+NOTES
+
+- This machine has FieldWorks and related repositories already cloned, in
+  ~/fwrepo and ~/projects . Launchers for IDEs and other tools are available
+  on the desktop.
+
+- Visual Studio Code has launchers for debugging FW or tests, and build tasks
+  for compiling all of FieldWorks or compiling recently changed projects
+  (Terminal - Run Task). Debugging tests may need enabled in launch.json and
+  configured for a particular task.
+
+- If you have trouble with an old NuGet.exe, remove it so an updated copy will
+  be fetched:
+
+  rm -fv ~/fwrepo/fw/Build/NuGet.exe
+
+- Your ssh private key, to commit to gerrit, should have been copied to
+  ~/.ssh/id_rsa .
+
+- Gerrit username and git author info
+
+  If your gerrit username and git author info were not set, your commits will
+  show a placeholder for your author name. Set the values by doing the following.
+  Right here in this file, replace  YOUR_GERRIT_USERNAME, YOUR_GIT_AUTHOR_NAME,
+  and YOUR_GIT_EMAIL_ADDRESS below with your gerrit username, git author name,
+  and git email address. Do not touch "GERRIT_USER_PLACEHOLDER". Paste the lines
+  into a terminal.
+
+  git config --global fwinit.gerrituser "YOUR_GERRIT_USERNAME"
+  git config --global user.name "YOUR_GIT_AUTHOR_NAME"
+  git config --global user.email "YOUR_GIT_EMAIL_ADDRESS"
+  cd ~/fwrepo && find -path '.*\.git/config' |
+    xargs perl -pi -e "s/GERRIT_USER_PLACEHOLDER/\$(git config --get fwinit.gerrituser)/"
+
+- All git repositories were cloned with shallow history, to not take up as much
+  space. If you want to search back in history in one of your git repositories,
+  you can first deepen the history by running:
+
+	git fetch --unshallow
+
+- You may find it helpful to increase the amount of RAM your virtual machine
+  is given. To do this, run the following in your host (not this guest vagrant),
+  possibly replacing 8000 MB with even higher. Log out and back in to your host
+  and start the vagrant guest again.
+
+  tee -a ~/.pam_environment <<< "FWDEV_RAM=8000"
+
+MONODEVELOP
+
+MonoDevelop 5 would debug FieldWorks 9, but that's no longer easily installable.
+MonoDevelop 7 is installed in this vagrant, and can be jostled into running FW, but it is not as smooth an experience.
+For now you can use Visual Studio Code until we adjust FW for MonoDevelop 7.
+
+To set up MonoDevelop: Launch monodevelop. Choose File - Open, fwrepo/fw/RunFieldWorks.csproj. Choose Edit - Preferences. Click .NET Runtimes. Click Add. Click /opt/mono4-sil and Set as Default. Click OK.
+
+If MonoDevelop later forgets about the runtime setting, then in Preferences set the .NET Runtimes default runtime to the latest mono in /opt .
+
+To debug FW, launch Monodevelop, click File - Open, open ~/fwrepo/fw/RunFieldWorks.csproj, and click Run - Start Debugging. On the Outdated Build dialog, click Execute. The next time you load RunFieldWorks in Monodevelop, it may complain about MSBuild, but you may be able to just add RunFieldworks.csproj to the solution again, and then run.
+
+To compile FieldWorks, in MonoDevelop click the Tools menu and then click one of "fw build remakefw" or "fw build recent". fw build recent will build projects whose files have changed within the last 30 minutes, allowing you to make a change to a code file and press ALT-T-T to quickly build your change.
+
+Note that if you switch between FW 9 and FW 8, you will need to switch the default .NET runtime between mono 4 and mono 3 in MonoDevelop, Edit, Preferences, Projects, .NET Runtimes.
+
+PACKAGING
+
+To use this machine to build packages, first run
+
+	cd ~/pbuilder && DISTRIBUTIONS="focal bionic" ./setup.sh
+
+You can then build a package managed by build-packages by running a command such as
+
+	~/fwrepo/FwSupportTools/packaging/build-packages --main-package-name flexbridge --dists "focal" --arches "amd64" --repository-committishes flexbridge=origin/master --simulate-dput |& tee /var/tmp/log
+
+Or you can build a source and binary package by running commands such as
+
+	cd someproject && debuild -uc -us -S -nc
+	cd someproject/.. && sudo DISTRIBUTIONS=focal ARCHES=amd64 ~/pbuilder/build-multi.sh source-package-name.dsc |& tee /var/tmp/log
+END
+
+echo "$0: $(date -Is): Script finished successfully."
