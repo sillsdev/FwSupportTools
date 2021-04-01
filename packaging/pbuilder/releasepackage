@@ -90,7 +90,7 @@ help()
 	log ""
 	log "<project>"
 	log "	One of bloom, bloom-master, geckofx29, gtk-sharp, gtk-sharp-4, gtk-sharp-3.4,"
-	log "	lfmerge-fdo, lfmerge, lfmerge-qa, lfmerge-master, libgdiplus, libgdiplus-4,"
+	log "	keyman, lfmerge-fdo, lfmerge, lfmerge-qa, lfmerge-master, libgdiplus, libgdiplus-4,"
 	log "	libgdiplus-3.4, mono, mono-4, mono-3.4, monobasic, monobasic-4, monobasic-3.4,"
 	log "	wesay, wesay-beta, wesay-alpha"
 	log ""
@@ -168,6 +168,12 @@ case $PROJECT in
 	gtk-sharp-3.4)
 		JENKINS_JOB=Gtksharp_Packaging-Linux-all-release_mono_sil_3.4-debug
 		;;
+	keyman)
+		JENKINS_JOB=pipeline-keyman-packaging/job/stable-14.0
+		# ssh doesn't like '.' in paths when using wildcards, so replacing with '?'
+		JENKINS_REMOTE_JOB=pipeline-keyman-packaging/branches/stable-14?0*
+		IS_PIPELINE=1
+		;;
 	lfmerge-master)
 		JENKINS_JOB=LfMerge_Packaging-Linux-all-master-release
 		BINARY_DIR=archive/finalresults
@@ -232,7 +238,7 @@ runLocal()
 	cd $TMPDIR
 
 	wget --auth-no-challenge --http-user=${JENKINS_USER} --http-password=${JENKINS_APITOKEN} --secure-protocol=TLSv1 \
-		https://jenkins.lsdev.sil.org:45192/view/Packaging/job/${JENKINS_JOB}/${BUILD}/artifact/*zip*/archive.zip
+		https://jenkins.lsdev.sil.org/view/Packaging/job/${JENKINS_JOB}/${BUILD}/artifact/*zip*/archive.zip
 
 	unzip archive.zip
 
@@ -266,11 +272,23 @@ runRemote()
 	# Copy package to temp directory on the server where we have write permission
 	log "Copy package to temporary directory"
 	TMP_PACKAGE_DIR=$(mktemp -d tmp-package.XXXXXX)
-	$NOOP ssh -T $JENKINS_HOST >/dev/null << EOF
+	if [ -z ${IS_PIPELINE} ]; then
+		$NOOP ssh -T $JENKINS_HOST >/dev/null << EOF
 mkdir -p ${TMP_PACKAGE_DIR}
 rm -rf ${TMP_PACKAGE_DIR}/*
 cp -a ~jenkins/jobs/${JENKINS_JOB}/builds/${BUILD}/archive ${TMP_PACKAGE_DIR}/
 EOF
+	else
+		# Pipeline jobs are slightly different
+		if [ "${BUILD}" == "lastSuccessfulBuild" ]; then
+			BUILD=$($NOOP ssh -T $JENKINS_HOST grep lastSuccessfulBuild ~jenkins/jobs/${JENKINS_REMOTE_JOB}/builds/permalinks | cut -f 2 -d' ')
+		fi
+		$NOOP ssh -T $JENKINS_HOST >/dev/null << EOF
+mkdir -p ${TMP_PACKAGE_DIR}
+rm -rf ${TMP_PACKAGE_DIR}/*
+cp -a ~jenkins/jobs/${JENKINS_REMOTE_JOB}/builds/${BUILD}/archive ${TMP_PACKAGE_DIR}/
+EOF
+	fi
 
 	if [ "${SOURCE_DIR}" = "${BINARY_DIR}" ]; then
 		# Source package is part of binary package
