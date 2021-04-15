@@ -3,7 +3,9 @@
 # Sign source and binary packages.
 # Usage: ./sign-packages CHANGES_FILES...
 
-set -e
+set -ueo pipefail
+
+which debsign >/dev/null || { echo Error: Missing debsign command. Install package devscripts. ; exit 1 ; }
 
 . $(dirname "$0")/pbuilder/releasepackage.config
 
