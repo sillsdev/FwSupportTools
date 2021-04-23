@@ -17,4 +17,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.provision "file", source: "../../development/dot-gdbinit", destination: "~/.gdbinit"
+
+  config.vm.provision "shell", privileged: false, inline: <<~SHELL
+    set -ueo pipefail
+    # Changes since basebox
+	tee -a ~/.pam_environment >/dev/null <<< 'LANGUAGEFORGESERVER=-qa.languageforge.org'
+
+    echo Provisioning finished successfully.
+  SHELL
 end

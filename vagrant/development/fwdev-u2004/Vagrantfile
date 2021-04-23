@@ -47,6 +47,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Changes since basebox 1.0.0
     perl -pi -e 's#s/GERRIT_USER_PLACEHOLDER/GERRIT_USER_PLACEHOLDER/#s/GERRIT_USER_PLACEHOLDER/\\$(git config --get fwinit.gerrituser)/#' \
       ~/Desktop/machine-instructions.txt
+	tee -a ~/.pam_environment >/dev/null <<< 'LANGUAGEFORGESERVER=-qa.languageforge.org'
 
     echo Provisioning finished successfully.
   SHELL

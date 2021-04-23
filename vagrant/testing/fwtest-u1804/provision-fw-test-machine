@@ -7,8 +7,10 @@ set -e -o pipefail
 # Set up
 
 # Don't report tester usage to analytics.
-tee -a ~/.pam_environment  >/dev/null <<< 'export FEEDBACK=false'
-tee -a ~/.pam_environment  >/dev/null <<< 'export WESAY_TRACK_AS_DEVELOPER=1'
+tee -a ~/.pam_environment >/dev/null <<< 'export FEEDBACK=false'
+tee -a ~/.pam_environment >/dev/null <<< 'export WESAY_TRACK_AS_DEVELOPER=1'
+# Allow testers to log in to the QA server to send and receive
+tee -a ~/.pam_environment >/dev/null <<< 'LANGUAGEFORGESERVER=-qa.languageforge.org'
 
 RELEASE="$(lsb_release -sc)"
 

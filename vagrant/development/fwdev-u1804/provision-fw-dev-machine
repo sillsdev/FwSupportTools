@@ -82,9 +82,12 @@ EOF
 
 perl -pi -e s/^#force_color_prompt/force_color_prompt/ ~/.bashrc
 grep __git_ps1 ~/.bashrc || echo 'export PS1="\$(__git_ps1) $PS1"' |tee -a ~/.bashrc
+
 # Don't report developer or tester usage to analytics.
-tee -a ~/.pam_environment  >/dev/null <<< 'export FEEDBACK=false'
-tee -a ~/.pam_environment  >/dev/null <<< 'export WESAY_TRACK_AS_DEVELOPER=1'
+tee -a ~/.pam_environment >/dev/null <<< 'export FEEDBACK=false'
+tee -a ~/.pam_environment >/dev/null <<< 'export WESAY_TRACK_AS_DEVELOPER=1'
+# Allow testers to log in to the QA server to send and receive
+tee -a ~/.pam_environment >/dev/null <<< 'LANGUAGEFORGESERVER=-qa.languageforge.org'
 
 # Enable debugging
 sudo perl -pi -e 's/kernel.yama.ptrace_scope = 1/kernel.yama.ptrace_scope = 0/' /etc/sysctl.d/10-ptrace.conf

@@ -85,8 +85,10 @@ echo '[profiles]
 	scrollback_infinite = True' | tee ~/.config/terminator/config
 
 # Don't report developer or tester usage to analytics
-tee -a ~/.pam_environment <<< 'FEEDBACK=false'
-tee -a ~/.pam_environment <<< 'WESAY_TRACK_AS_DEVELOPER=1'
+tee -a ~/.pam_environment >/dev/null <<< 'FEEDBACK=false'
+tee -a ~/.pam_environment >/dev/null <<< 'WESAY_TRACK_AS_DEVELOPER=1'
+# Allow testers to log in to the QA server to send and receive
+tee -a ~/.pam_environment >/dev/null <<< 'LANGUAGEFORGESERVER=-qa.languageforge.org'
 
 # Record some base box version info, to help with diagnosis
 tee ~/machine-info.txt >/dev/null << END
