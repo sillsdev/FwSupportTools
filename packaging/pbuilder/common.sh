@@ -6,13 +6,13 @@ init()
 	[ -e $CONFIGFILE ] && . $CONFIGFILE # Settings for PBUILDERDIR, DISTRIBUTIONS, etc.
 
 	# currently supported and future Ubuntu versions
-	UBUNTU_DISTROS="devel trusty xenial bionic cosmic disco eoan focal"
+	UBUNTU_DISTROS="devel trusty xenial bionic cosmic disco eoan focal groovy hirsute impish"
 	# no longer supported Ubuntu versions that live in old-releases.ubuntu.com
 	UBUNTU_OLDDISTROS=""
 	# We're no longer building packages for: precise quantal raring saucy utopic vivid wily yakkety zesty artful
 
 	# Debian versions
-	DEBIAN_DISTROS="wheezy jessie stretch buster bullseye"
+	DEBIAN_DISTROS="wheezy jessie stretch buster bullseye bookworm trixie"
 
 	# set default values in case we don't have a config file or the config file
 	# doesn't set all variables
