@@ -3,8 +3,7 @@
 
 VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "fwdev-u2004"
-  config.vm.box_url = "http://linux.lsdev.sil.org/vagrant/fwdev-u2004/fwdev-u2004.json"
+  config.vm.box = "marksvc/fwdev-u2004"
   config.vm.define :"development"
 
   config.vm.provider "virtualbox" do |v|

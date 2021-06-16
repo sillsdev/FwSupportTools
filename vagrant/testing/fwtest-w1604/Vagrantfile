@@ -3,8 +3,7 @@
 
 VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "fwtest-w1604"
-  config.vm.box_url = "http://linux.lsdev.sil.org/vagrant/fwtest-w1604/fwtest-w1604.json"
+  config.vm.box = "marksvc/fwtest-w1604"
   config.vm.define :"testing"
 
   config.vm.provider "virtualbox" do |v|
