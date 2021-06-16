@@ -24,6 +24,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     function tryharderto() { i=0; until "$@"; do ((++i > 3)) && false; echo >&2 Retrying "${i}"; sleep 2m; done }
 
+    chmod 600 ~/.ssh/id_rsa
+
     # If available in host, copy in gerrit username and git author info.
     GIT_USER="#{`git config --get user.name`.strip}"
     GIT_EMAIL="#{`git config --get user.email`.strip}"
