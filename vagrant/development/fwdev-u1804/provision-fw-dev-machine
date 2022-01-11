@@ -156,7 +156,7 @@ chmod +x "$OUTPUTFILE"
 
 # Clone from the develop branch of fwmeta until the --shallow argument, introduced on 2017-11-29, is merged to master.
 if [ ! -d "$BASEDIR/fwrepo" ]; then
-    git clone --depth=1 --branch develop git://github.com/sillsdev/fwmeta.git $BASEDIR/fwrepo
+    git clone --depth=1 --branch develop https://github.com/sillsdev/fwmeta.git $BASEDIR/fwrepo
     cd $BASEDIR/fwrepo
     repos="FieldWorks mono-calgary mono mono-basic gtk-sharp libgdiplus libcom FwDebian FwSupportTools FwLocalizations FwHelps FwInstaller"
     branches="master develop feature/* release/* hotfix/* support/*"

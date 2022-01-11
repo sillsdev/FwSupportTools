@@ -200,7 +200,7 @@ elif [ "$MAIN_PACKAGE_NAME" = "fieldworks-enc-converters" ]; then
 elif [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 	if [ ! -d fwrepo ]; then
 		log "Initial clone of fwrepo"
-		git clone --recurse-submodules http://github.com/sillsdev/fwmeta.git fwrepo
+		git clone --recurse-submodules https://github.com/sillsdev/fwmeta.git fwrepo
 	fi
 
 	fwrepodir="$repo_base_dir"/fwrepo
@@ -214,7 +214,7 @@ elif [ "$MAIN_PACKAGE_NAME" = "fieldworks" ]; then
 		cd "$fwrepodir"
 		echo -e "$repos\n$branches\n" | fwmeta/initrepo -m
 
-		git clone --recurse-submodules http://github.com/sillsdev/FwDebian.git debian
+		git clone --recurse-submodules https://github.com/sillsdev/FwDebian.git debian
 	fi
 
 	# Temporary to clean up old liblcm path.

@@ -82,7 +82,7 @@ cd "$pkgdir"
 
 if [ ! -d "$pkgdir"/fwrepo ]; then
 	stderr "Initial clone of fwrepo"
-	git clone http://github.com/sillsdev/fwmeta.git fwrepo
+	git clone https://github.com/sillsdev/fwmeta.git fwrepo
 fi
 
 fwrepodir="$pkgdir"/fwrepo
@@ -106,7 +106,7 @@ if [ ! -d "$fwrepodir"/fw ]; then
 	ret=$?
 	wait $pid
 	echo $ret
-	git clone http://github.com/sillsdev/FwDebian.git debian
+	git clone https://github.com/sillsdev/FwDebian.git debian
 
 	rm -f "$fifo"
 	rmdir "$tmpdir"
