@@ -127,7 +127,7 @@ do
 		fi
 
 		sudo HOME=~ DIST=$D ARCH=$A pbuilder $options \
-			--debootstrapopts --include="perl gnupg" \
+			--debootstrapopts --include="perl gnupg ca-certificates" \
 			${KEYRINGMAIN:+--debootstrapopts --keyring=}$KEYRINGMAIN \
 			${KEYRINGLLSO:+--keyring }$KEYRINGLLSO \
 			${KEYRINGPSO:+--keyring }$KEYRINGPSO \
