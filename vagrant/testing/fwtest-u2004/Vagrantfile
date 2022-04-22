@@ -20,7 +20,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell", privileged: false, inline: <<~SHELL
     set -ueo pipefail
     # Changes since basebox
-	tee -a ~/.pam_environment >/dev/null <<< 'LANGUAGEFORGESERVER=-qa.languageforge.org'
+    tee -a ~/.pam_environment >/dev/null <<< 'LANGUAGEFORGESERVER=-qa.languageforge.org'
+    # 'export ' shouldn't be on the lines. .pam_environment is not shell.
+    perl -pi -e 's/export //'  ~/.pam_environment
 
     echo Provisioning finished successfully.
   SHELL

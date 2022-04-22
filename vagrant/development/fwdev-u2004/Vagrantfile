@@ -7,6 +7,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define :"development"
 
   config.vm.provider "virtualbox" do |v|
+    # Note that 4000 MB RAM may not be enough to run the IDE and build
+    # flatpak at the same time.
     v.memory = ENV['FWDEV_RAM'] || "4000"
     v.cpus = 4
     v.gui = true
@@ -41,9 +43,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     cd ~/fwrepo && find -path '.*\.git/config' |
       xargs perl -pi -e "s/GERRIT_USER_PLACEHOLDER/$(git config --get fwinit.gerrituser)/"
 
+    # Switch from git: to https: protocol
+    find ~/fwrepo -type f -name config | xargs perl -pi -e 's,git://,https://,'
+
     # Fetch code updates
-    cd ~/fwrepo/flexbridge && git fetch || echo Ignoring trouble fetching
-    cd ~/fwrepo/fw && git fetch || echo Ignoring trouble fetching
+    cd ~/fwrepo/flexbridge && git fetch || echo "Ignoring trouble fetching flexbridge."
+    cd ~/fwrepo/fw && git fetch || echo "Ignoring trouble fetching FW."
+    cd ~/fwrepo/libcom && git pull --rebase || echo "Warning: FW may have trouble building until libcom is updated."
 
     # Changes since basebox 1.0.0
     perl -pi -e 's#s/GERRIT_USER_PLACEHOLDER/GERRIT_USER_PLACEHOLDER/#s/GERRIT_USER_PLACEHOLDER/\\$(git config --get fwinit.gerrituser)/#' \
