@@ -169,9 +169,9 @@ case $PROJECT in
 		JENKINS_JOB=Gtksharp_Packaging-Linux-all-release_mono_sil_3.4-debug
 		;;
 	keyman)
-		JENKINS_JOB=pipeline-keyman-packaging/job/stable-14.0
+		JENKINS_JOB=pipeline-keyman-packaging/job/stable-15.0
 		# ssh doesn't like '.' in paths when using wildcards, so replacing with '?'
-		JENKINS_REMOTE_JOB=pipeline-keyman-packaging/branches/stable-14?0*
+		JENKINS_REMOTE_JOB=pipeline-keyman-packaging/branches/stable-15?0*
 		IS_PIPELINE=1
 		;;
 	lfmerge-master)
