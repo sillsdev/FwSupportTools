@@ -66,37 +66,47 @@ BUILD=lastSuccessfulBuild
 help()
 {
 	log "Usage:"
-	log "$(basename $0) [-n|-nn] [--component <experimental|main>] [--repo <llso|pso>] [--build <buildno>] <project>"
+	log "$(basename $0) [-n|-nn] [--component <experimental|main>] [--repo <llso|pso>]"
+	log "    [--build <buildno>] <project>"
 	log ""
 	log "-n "
-	log "	Run script without doing anything"
+	log "    Run script without doing anything"
 	log "-nn "
-	log "	Run script without doing anything and print commands"
+	log "    Run script without doing anything and print commands"
 	log ""
 	log "--component <experimental|proposed|main>"
-	log "	Where the package should go: experimental, proposed or main section."
-	log "	Default: experimental"
+	log "    Where the package should go: experimental, proposed or main section."
+	log "    Default: experimental"
 	log ""
 	log "--repo <llso|pso>"
-	log "	Repo to upload to. Default: llso"
+	log "    Repo to upload to. Default: llso"
 	log ""
 	log "--build <buildno>"
-	log "	Build number/string where the archifacts can be found"
+	log "    Build number/string where the archifacts can be found"
 	log ""
 	log "--remote|--local"
-	log "	Mode to run in. Determines whether to completely download packages before signing or"
-	log "	leaving them on the server."
-	log "	Default: --local"
+	log "    Mode to run in. Determines whether to completely download packages"
+	log "    before signing or leaving them on the server."
+	log "    Default: --local"
+	log ""
+	log "--keep"
+	log "    Don't delete temporary directory after uploading packages"
+	Log ""
+	log "--repack"
+	log "    Repack packages for Ubuntu >= 21.10 to remove compression method not"
+	log "    supported on pso (only supported with --local)"
 	log ""
 	log "<project>"
-	log "	One of bloom, bloom-master, geckofx29, gtk-sharp, gtk-sharp-4, gtk-sharp-3.4,"
-	log "	keyman, lfmerge-fdo, lfmerge, lfmerge-qa, lfmerge-master, libgdiplus, libgdiplus-4,"
-	log "	libgdiplus-3.4, mono, mono-4, mono-3.4, monobasic, monobasic-4, monobasic-3.4,"
-	log "	wesay, wesay-beta, wesay-alpha"
+	log "    One of bloom, bloom-master, geckofx29, gtk-sharp, gtk-sharp-4,"
+	log "    gtk-sharp-3.4, keyman, lfmerge-fdo, lfmerge, lfmerge-qa,"
+	log "    lfmerge-master, libgdiplus, libgdiplus-4, libgdiplus-3.4, "
+	log "    mono, mono-4, mono-3.4, monobasic, monobasic-4, monobasic-3.4,"
+	log "    wesay, wesay-beta, wesay-alpha"
 	log ""
 	log ""
 	log "Example:"
-	log "$0 --repo pso --component experimental --build 324 bloom"
+	log "$0 --repo pso \\ "
+	log "    --component experimental --build 324 bloom"
 	exit 0
 }
 
@@ -125,6 +135,8 @@ while (( $# )); do
 		--build) BUILD=$2; shift;;
 		--remote) REMOTE=1;;
 		--local) ;;
+		--keep) KEEP=1;;
+		--repack) REPACK=1;;
 		*)
 			if [ $# -eq 1 ]; then
 				break
@@ -230,6 +242,50 @@ esac
 BINARY_DIR=${BINARY_DIR-archive/results}
 SOURCE_DIR=${SOURCE_DIR-$BINARY_DIR}
 
+# repack .deb files for impish+ so that they can be uploaded to pso
+# Impish/Jammy use zstd compression which isn't available on pso
+# Requires changestool from reprepro
+repack_deb() {
+	ar x $1
+	mv $1{,.bak}
+	unzstd control.tar.zst
+	unzstd data.tar.zst
+	rm control.tar.zst
+	rm data.tar.zst
+	xz control.tar
+	xz data.tar
+	ar r $1 debian-binary control.tar.xz data.tar.xz
+	rm *
+}
+
+repack() {
+	# extract distros that we have packages for
+	declare -A dists
+	for f in *.deb; do
+		[[ "$f" =~ \+([a-z]+) ]] && dists[${BASH_REMATCH[1]}]=0
+	done
+
+	for distro in ${!dists[@]}; do
+		if (( $(ubuntu-distro-info --series=$distro -r|cut -d'.' -f1) >= 21 )); then
+			log "Repacking packages for $distro"
+			mkdir -p tmp
+			cd tmp
+
+			for f in ../*$distro*deb; do
+				log "Processing $f"
+				repack_deb $f
+			done
+			cd ..
+			rm -rf tmp
+
+			for changesfile in *+${distro}*.changes; do
+				distro=$(sed 's/^.*+\([a-z]*\)[0-9]*_\(amd64\|i386\).changes$/\1/' <<< $changesfile)
+				changestool $changesfile updatechecksums
+			done
+		fi
+	done
+}
+
 runLocal()
 {
 	TMPDIR=/tmp/$PROJECT-package
@@ -248,6 +304,7 @@ runLocal()
 	else
 		cd $TMPDIR/$SOURCE_DIR
 		# Source package
+		[ -n "$REPACK" ] && repack
 		log "Signing and uploading source package"
 		$NOOP debsign --re-sign $DEBSIGNKEY *_source.changes
 		$NOOP dput -U $REPO:ubuntu/${SOURCEDIST}$DESTINATION *_source.changes
@@ -255,8 +312,9 @@ runLocal()
 	fi
 
 	# binary packages
-	log "Signing and uploading binary packages"
 	cd $TMPDIR/$BINARY_DIR
+	[ -n "$REPACK" ] && repack
+	log "Signing and uploading binary packages"
 	for changesfile in *+*.changes; do
 		distro=$(sed 's/^.*+\([a-z]*\)[0-9]*_\(amd64\|i386\).changes$/\1/' <<< $changesfile)
 		$NOOP debsign --re-sign $DEBSIGNKEY $changesfile
@@ -264,7 +322,10 @@ runLocal()
 	done
 
 	cd $WHERE
-	rm -rf $TMPDIR
+
+	if [ -n "$KEEP" ]; then
+		rm -rf $TMPDIR
+	fi
 }
 
 runRemote()
@@ -317,7 +378,9 @@ done
 rm -rf $TMP_PACKAGE_DIR
 EOF
 
-	rm -rf $TMP_PACKAGE_DIR
+	if [ -n "$KEEP" ]; then
+		rm -rf $TMP_PACKAGE_DIR
+	fi
 }
 
 if [ -n "$REMOTE" ]; then
