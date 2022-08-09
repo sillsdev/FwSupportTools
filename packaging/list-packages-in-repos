@@ -17,11 +17,19 @@ import collections
 # Dictionary of URLs to Packages files, and an abbreviated name for that repository.
 urls=collections.OrderedDict(
 (
+('http://packages.sil.org/ubuntu/dists/jammy/main/binary-amd64/Packages', 'pso:jammy 64'),
+('http://packages.sil.org/ubuntu/dists/jammy-experimental/main/binary-amd64/Packages', 'pso:jammy-experimental 64'),
+
 ('http://packages.sil.org/ubuntu/dists/focal/main/binary-amd64/Packages', 'pso:focal 64'),
 ('http://packages.sil.org/ubuntu/dists/focal-experimental/main/binary-amd64/Packages', 'pso:focal-experimental 64'),
 
 ('http://packages.sil.org/ubuntu/dists/bionic/main/binary-amd64/Packages', 'pso:bionic 64'),
 ('http://packages.sil.org/ubuntu/dists/bionic-experimental/main/binary-amd64/Packages', 'pso:bionic-experimental 64'),
+
+('http://linux.lsdev.sil.org/ubuntu/dists/jammy/main/binary-amd64/Packages', 'llso:jammy 64'),
+('http://linux.lsdev.sil.org/ubuntu/dists/jammy-updates/main/binary-amd64/Packages', 'llso:jammy-updates 64'),
+('http://linux.lsdev.sil.org/ubuntu/dists/jammy-proposed/main/binary-amd64/Packages', 'llso:jammy-proposed 64'),
+('http://linux.lsdev.sil.org/ubuntu/dists/jammy-experimental/main/binary-amd64/Packages', 'llso:jammy-experimental 64'),
 
 ('http://linux.lsdev.sil.org/ubuntu/dists/focal/main/binary-amd64/Packages', 'llso:focal 64'),
 ('http://linux.lsdev.sil.org/ubuntu/dists/focal-updates/main/binary-amd64/Packages', 'llso:focal-updates 64'),
