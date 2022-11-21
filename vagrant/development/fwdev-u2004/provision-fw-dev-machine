@@ -6,8 +6,8 @@
 set -ueo pipefail
 
 # Helper method to avoid failing from a network hiccup during provision
-function tryharderto() { i=0; until "$@"; do ((++i > 3)) && false
-  echo >&2 Retrying ${i}; sleep 2m; done }
+function tryharderto() { i=0; until "$@"; do ((++i <= 3))
+  echo >&2 "Retrying ${i}"; sleep 2m; done }
 
 # Vagrant Ubuntu setup
 # --------------------
@@ -580,7 +580,7 @@ cat > "$OUTPUTFILE" <<ENDOFOUTPUTFILE
 </Policies>
 ENDOFOUTPUTFILE
 
-# Launchers 
+# Launchers
 
 cp /usr/share/applications/monodevelop.desktop "$TOOLSDIR"
 perl -pi -e 's/Name=MonoDevelop/Name=MonoDevelop Generic/' "$TOOLSDIR"/monodevelop.desktop
@@ -668,8 +668,8 @@ chmod +x "$TOOLSDIR"/*.desktop
 cd ~
 [ -e Sena*.fwbackup ] || wget 'http://downloads.sil.org/FieldWorks/8.3.9/Sena%203%202017-07-27%201102.fwbackup'
 
-# Not compiling FW since use of different branches and configuration over time may just result in a muddle if we 
-# pre-compile. Users of the machine can do the first compile from a chosen branch using an up-to-date configuration. 
+# Not compiling FW since use of different branches and configuration over time may just result in a muddle if we
+# pre-compile. Users of the machine can do the first compile from a chosen branch using an up-to-date configuration.
 
 # Set up machine to also be able to make packages
 
@@ -717,7 +717,7 @@ NEXT STEPS
   git config --get user.name
   git config --get user.email
 
-- Choose FW branch. Change "develop" to the branch you intend to work on, such 
+- Choose FW branch. Change "develop" to the branch you intend to work on, such
   as "support/9.0" or "release/9.1".
 
   cd ~/fwrepo/fw && git fetch && git checkout develop
