@@ -143,6 +143,8 @@ END
 tryharderto sudo apt-get --assume-yes install ibus-libpinyin ibus-table-thai
 gsettings set org.freedesktop.ibus.general preload-engines \
   "['xkb:us::eng', 'xkb:us:dvorak:eng', 'xkb:il::heb', 'xkb:ru::rus', 'libpinyin', 'table:thai']"
+gsettings set org.gnome.desktop.input-sources sources \
+  "[('xkb', 'us'), ('xkb', 'us+dvorak'), ('xkb', 'il'), ('xkb', 'ru'), ('ibus', 'libpinyin'), ('ibus', 'table:thai')]"
 
 # Set unique background
 IMAGE_CODE="M5L0vUGqX84" # Yellow butterfly

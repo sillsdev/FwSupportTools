@@ -16,10 +16,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.provision "shell", privileged: false, inline: <<~SHELL
-    set -ueo pipefail
+    set -xueo pipefail
 
     # Changes since basebox
-    # ...
+    # More needed keyboard setting. Wait until desktop is loaded.
+    sleep 30s
+    gsettings set org.gnome.desktop.input-sources sources \
+      "[('xkb', 'us'), ('xkb', 'us+dvorak'), ('xkb', 'il'), ('xkb', 'ru'), ('ibus', 'libpinyin'), ('ibus', 'table:thai')]"
+    echo "The vagrant guest will benefit from a reboot now, after the keyboard setting."
 
     echo "Provisioning finished successfully."
   SHELL
