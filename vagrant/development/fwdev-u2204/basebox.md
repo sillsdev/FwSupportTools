@@ -44,8 +44,8 @@ using it.
       sudo apt install --assume-yes build-essential &&
       sudo /media/vagrant/VBox*/VBoxLinuxAdditions.run
 
-  * Right-click the CD icon on the panel and Eject the VirtualBox Additions
-    disc.
+  * Right-click the CD icon on the panel or desktop and Eject the
+    VirtualBox Additions disc.
 
   * In the guest machine window, choose Devices > Shared clipboard >
     Bidirectional.
@@ -56,12 +56,17 @@ using it.
   when making new versions of this virtual machine. Or when fixing problems with
   the provision script.
 
+* For Wasta: Settings, Screensaver, Delay before starting the screensaver: Never
+
 * Run provision script on guest. Possibly by copying and pasting its contents
   into a new file on guest and running it. For example,
 
   nano ~/provision && bash ~/provision
 
 * Reboot.
+
+* Launch Keyman Configuration. Click Download. Search for sil_ipa and
+  install it.
 
 * For development guest: Launch Extension Manager. Enable Dash to Panel. Open
   settings for Dash to Panel. On the Position tab move the "Date menu" down to
@@ -85,6 +90,8 @@ using it.
 
 ## Finalize
 
+* For Wasta: Clear clipboard ring.
+
 * Do the following to free up disk space, delete the guest's ssh host keys so
   they will be re-generated uniquely by users, and zero-out deleted files so
   they don't take up space shipping with the product.
@@ -107,7 +114,7 @@ using it.
 export BOX="fwdev-u2204" && export VERSION="1.0.0" &&
   date && vagrant package --base ${BOX}-base --output ${BOX}-${VERSION}.box &&
   date && ls -lh ${BOX}-${VERSION}.box &&
-  sha256sum ${BOX}-${VERSION}.box | tee --append "${BOX}".json >/dev/null &&
+  sha256sum ${BOX}-${VERSION}.box | tee --append "${BOX}".json &&
   date && mkdir test && tee test/Vagrantfile <<END &&
 Vagrant.configure("2") do |config|
   config.vm.box = "../${BOX}-${VERSION}.box"
