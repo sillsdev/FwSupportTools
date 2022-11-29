@@ -16,10 +16,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.provision "shell", privileged: false, inline: <<~SHELL
-    set -ueo pipefail
+    set -xueo pipefail
 
     # Changes since basebox
-    # ...
+    sudo apt-get update
+    sudo apt-get --assume-yes install keyman
 
     echo "Provisioning finished successfully."
   SHELL

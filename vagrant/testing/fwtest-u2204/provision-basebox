@@ -335,6 +335,9 @@ add-auto-load-safe-path /opt/mono5-sil/bin/mono-sgen-gdb.py
 END
 
 
+tryharderto sudo apt-get update
+tryharderto sudo apt-get --assume-yes install keyman
+
 # Paratext
 sudo snap install paratext --edge
 sudo snap install paratextlite

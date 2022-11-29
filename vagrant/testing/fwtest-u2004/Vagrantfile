@@ -18,11 +18,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "file", source: "../../development/dot-gdbinit", destination: "~/.gdbinit"
 
   config.vm.provision "shell", privileged: false, inline: <<~SHELL
-    set -ueo pipefail
+    set -xueo pipefail
     # Changes since basebox
     tee -a ~/.pam_environment >/dev/null <<< 'LANGUAGEFORGESERVER=-qa.languageforge.org'
     # 'export ' shouldn't be on the lines. .pam_environment is not shell.
     perl -pi -e 's/export //'  ~/.pam_environment
+
+    sudo apt-get update
+    sudo apt-get --assume-yes install keyman
 
     echo Provisioning finished successfully.
   SHELL
