@@ -7,9 +7,9 @@
 # your home directory on $JENKINS_HOST with the following content:
 # [llso]
 # method   = rsync
-# fqdn     = linux.lsdev.sil.org
-# login    = <yourusername>
-# incoming = /var/tmp/reprepro/incoming/%(llso)s
+# fqdn     = package-drop.psonet
+# login    = <your username>
+# incoming = ~/upload_areas/llso/%(llso)s
 # [pso]
 # method   = rsync
 # fqdn     = packager.lsdev.sil.org
