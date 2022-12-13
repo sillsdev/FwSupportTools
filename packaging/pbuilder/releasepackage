@@ -37,7 +37,8 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 
-. $(dirname "$0")/${PROGRAM_NAME}.config
+# shellcheck disable=SC1090
+. "$(dirname "$0")/${PROGRAM_NAME}.config"
 
 err() {
 	echo -e "${RED}$1${NC}"
@@ -47,7 +48,7 @@ log() {
 	echo -e "${GREEN}$1${NC}"
 }
 
-if [ -z "$JENKINS_USER" -o -z "$JENKINS_APITOKEN" -o -z "$JENKINS_HOST" ]; then
+if [ -z "$JENKINS_USER" ] || [ -z "$JENKINS_APITOKEN" ] || [ -z "$JENKINS_HOST" ]; then
 	err "Please set JENKINS_USER, JENKINS_APITOKEN, and JENKINS_HOST variables in"
 	err "$PROGRAM_NAME.config"
 	exit 1
@@ -66,7 +67,7 @@ BUILD=lastSuccessfulBuild
 help()
 {
 	log "Usage:"
-	log "$(basename $0) [-n|-nn] [--component <experimental|main>] [--repo <llso|pso>]"
+	log "$(basename "$0") [-n|-nn] [--component <experimental|main>] [--repo <llso|pso>]"
 	log "    [--build <buildno>] <project>"
 	log ""
 	log "-n "
@@ -115,7 +116,7 @@ while (( $# )); do
 	case $1 in
 		# Process individual arguments here. Use shift and $1 to get an argument value.
 		-n)  NOOP=: ;;
-		-nn) NOOP=echo ;;
+		-nn) NOOP="echo" ;;
 		--component)
 			if [ "$2" == "experimental" ]; then
 				DESTINATION=-experimental
@@ -183,6 +184,7 @@ case $PROJECT in
 	keyman)
 		JENKINS_JOB=pipeline-keyman-packaging/job/stable-15.0
 		# ssh doesn't like '.' in paths when using wildcards, so replacing with '?'
+		# shellcheck disable=SC2125
 		JENKINS_REMOTE_JOB=pipeline-keyman-packaging/branches/stable-15?0*
 		IS_PIPELINE=1
 		;;
@@ -246,16 +248,16 @@ SOURCE_DIR=${SOURCE_DIR-$BINARY_DIR}
 # Impish/Jammy use zstd compression which isn't available on pso
 # Requires changestool from reprepro
 repack_deb() {
-	ar x $1
-	mv $1{,.bak}
+	ar x "$1"
+	mv "$1"{,.bak}
 	unzstd control.tar.zst
 	unzstd data.tar.zst
 	rm control.tar.zst
 	rm data.tar.zst
 	xz control.tar
 	xz data.tar
-	ar r $1 debian-binary control.tar.xz data.tar.xz
-	rm *
+	ar r "$1" debian-binary control.tar.xz data.tar.xz
+	rm ./*
 }
 
 repack() {
@@ -265,22 +267,23 @@ repack() {
 		[[ "$f" =~ \+([a-z]+) ]] && dists[${BASH_REMATCH[1]}]=0
 	done
 
-	for distro in ${!dists[@]}; do
+	for distro in "${!dists[@]}"; do
 		if (( $(ubuntu-distro-info --series=$distro -r|cut -d'.' -f1) >= 21 )); then
 			log "Repacking packages for $distro"
 			mkdir -p tmp
 			cd tmp
 
-			for f in ../*$distro*deb; do
+			for f in ../*"$distro"*deb; do
 				log "Processing $f"
-				repack_deb $f
+				repack_deb "$f"
 			done
 			cd ..
 			rm -rf tmp
 
-			for changesfile in *+${distro}*.changes; do
-				distro=$(sed 's/^.*+\([a-z]*\)[0-9]*_\(amd64\|i386\).changes$/\1/' <<< $changesfile)
-				changestool $changesfile updatechecksums
+			for changesfile in *+"${distro}"*.changes; do
+				# shellcheck disable=SC2001
+				distro=$(sed 's/^.*+\([a-z]*\)[0-9]*_\(amd64\|i386\).changes$/\1/' <<< "$changesfile")
+				changestool "$changesfile" updatechecksums
 			done
 		fi
 	done
@@ -289,12 +292,12 @@ repack() {
 runLocal()
 {
 	TMPDIR=/tmp/$PROJECT-package
-	rm -rf $TMPDIR
-	mkdir -p $TMPDIR
-	cd $TMPDIR
+	rm -rf "$TMPDIR"
+	mkdir -p "$TMPDIR"
+	cd "$TMPDIR"
 
-	wget --auth-no-challenge --http-user=${JENKINS_USER} --http-password=${JENKINS_APITOKEN} --secure-protocol=TLSv1 \
-		https://jenkins.lsdev.sil.org/view/Packaging/job/${JENKINS_JOB}/${BUILD}/artifact/*zip*/archive.zip
+	wget --auth-no-challenge --http-user="${JENKINS_USER}" --http-password="${JENKINS_APITOKEN}" --secure-protocol=TLSv1 \
+		"https://jenkins.lsdev.sil.org/view/Packaging/job/${JENKINS_JOB}/${BUILD}/artifact/*zip*/archive.zip"
 
 	unzip archive.zip
 
@@ -302,29 +305,30 @@ runLocal()
 		# Source package is part of binary package
 		PackagesToUpload="source and binary"
 	else
-		cd $TMPDIR/$SOURCE_DIR
+		cd "$TMPDIR/$SOURCE_DIR"
 		# Source package
 		[ -n "$REPACK" ] && repack
 		log "Signing and uploading source package"
-		$NOOP debsign --re-sign $DEBSIGNKEY *_source.changes
-		$NOOP dput -U $REPO:ubuntu/${SOURCEDIST}$DESTINATION *_source.changes
+		$NOOP debsign --re-sign "$DEBSIGNKEY" "*_source.changes"
+		$NOOP dput -U "$REPO":ubuntu/${SOURCEDIST}"$DESTINATION" "*_source.changes"
 		PackagesToUpload="binary"
 	fi
 
 	# binary packages
-	cd $TMPDIR/$BINARY_DIR
+	cd "$TMPDIR/$BINARY_DIR"
 	[ -n "$REPACK" ] && repack
 	log "Signing and uploading binary packages"
 	for changesfile in *+*.changes; do
-		distro=$(sed 's/^.*+\([a-z]*\)[0-9]*_\(amd64\|i386\).changes$/\1/' <<< $changesfile)
-		$NOOP debsign --re-sign $DEBSIGNKEY $changesfile
-		$NOOP dput $REPO:ubuntu/$distro$DESTINATION $changesfile
+		# shellcheck disable=SC2001
+		distro=$(sed 's/^.*+\([a-z]*\)[0-9]*_\(amd64\|i386\).changes$/\1/' <<< "$changesfile")
+		$NOOP debsign --re-sign "$DEBSIGNKEY" "$changesfile"
+		$NOOP dput "$REPO":ubuntu/"$distro""$DESTINATION" "$changesfile"
 	done
 
-	cd $WHERE
+	cd "$WHERE"
 
 	if [ -n "$KEEP" ]; then
-		rm -rf $TMPDIR
+		rm -rf "$TMPDIR"
 	fi
 }
 
@@ -334,20 +338,20 @@ runRemote()
 	log "Copy package to temporary directory"
 	TMP_PACKAGE_DIR=$(mktemp -d tmp-package.XXXXXX)
 	if [ -z ${IS_PIPELINE} ]; then
-		$NOOP ssh -T $JENKINS_HOST >/dev/null << EOF
-mkdir -p ${TMP_PACKAGE_DIR}
-rm -rf ${TMP_PACKAGE_DIR}/*
-cp -a ~jenkins/jobs/${JENKINS_JOB}/builds/${BUILD}/archive ${TMP_PACKAGE_DIR}/
+		$NOOP ssh -T "$JENKINS_HOST" >/dev/null << EOF
+mkdir -p "${TMP_PACKAGE_DIR}"
+rm -rf "${TMP_PACKAGE_DIR}"/*
+cp -a ~jenkins/jobs/${JENKINS_JOB}/builds/${BUILD}/archive "${TMP_PACKAGE_DIR}"/
 EOF
 	else
 		# Pipeline jobs are slightly different
 		if [ "${BUILD}" == "lastSuccessfulBuild" ]; then
-			BUILD=$($NOOP ssh -T $JENKINS_HOST grep lastSuccessfulBuild ~jenkins/jobs/${JENKINS_REMOTE_JOB}/builds/permalinks | cut -f 2 -d' ')
+			BUILD=$($NOOP ssh -T "$JENKINS_HOST" grep lastSuccessfulBuild ~jenkins/jobs/"${JENKINS_REMOTE_JOB}"/builds/permalinks | cut -f 2 -d' ')
 		fi
-		$NOOP ssh -T $JENKINS_HOST >/dev/null << EOF
-mkdir -p ${TMP_PACKAGE_DIR}
-rm -rf ${TMP_PACKAGE_DIR}/*
-cp -a ~jenkins/jobs/${JENKINS_REMOTE_JOB}/builds/${BUILD}/archive ${TMP_PACKAGE_DIR}/
+		$NOOP ssh -T "$JENKINS_HOST" >/dev/null << EOF
+mkdir -p "${TMP_PACKAGE_DIR}"
+rm -rf "${TMP_PACKAGE_DIR}"/*
+cp -a ~jenkins/jobs/"${JENKINS_REMOTE_JOB}"/builds/${BUILD}/archive "${TMP_PACKAGE_DIR}"/
 EOF
 	fi
 
@@ -357,9 +361,9 @@ EOF
 	else
 		# Source package
 		log "Signing source package"
-		$NOOP debsign --re-sign $DEBSIGNKEY -r $JENKINS_HOST ${TMP_PACKAGE_DIR}/${SOURCE_DIR}/*_source.changes
+		$NOOP debsign --re-sign "$DEBSIGNKEY" -r "$JENKINS_HOST" "${TMP_PACKAGE_DIR}"/"${SOURCE_DIR}"/*_source.changes
 		log "Uploading source package"
-		$NOOP ssh $JENKINS_HOST dput -U $REPO:ubuntu/${SOURCEDIST}${DESTINATION} ${TMP_PACKAGE_DIR}/${SOURCE_DIR}/*_source.changes
+		$NOOP ssh "$JENKINS_HOST" dput -U "$REPO":ubuntu/${SOURCEDIST}"${DESTINATION}" "${TMP_PACKAGE_DIR}"/"${SOURCE_DIR}"/*_source.changes
 		PackagesToUpload="binary"
 	fi
 
@@ -367,19 +371,19 @@ EOF
 	log ""
 	log "Signing ${PackagesToUpload} packages"
 
-	$NOOP debsign --re-sign $DEBSIGNKEY -r $JENKINS_HOST ${TMP_PACKAGE_DIR}/${BINARY_DIR}/*+*.changes
+	$NOOP debsign --re-sign "$DEBSIGNKEY" -r "$JENKINS_HOST" "${TMP_PACKAGE_DIR}"/${BINARY_DIR}/*+*.changes
 
 	log "Uploading ${PackagesToUpload} packages"
-	$NOOP ssh -T $JENKINS_HOST >/dev/null << EOF
-for changesfile in ${TMP_PACKAGE_DIR}/${BINARY_DIR}/*+*.changes; do
-	distro=\$(sed 's/^.*+\([a-z]*\)[0-9]*_\(amd64\|i386\).changes$/\1/' <<< \$changesfile)
-	dput $REPO:ubuntu/\$distro$DESTINATION \$changesfile
+	$NOOP ssh -T "$JENKINS_HOST" >/dev/null << EOF
+for changesfile in "${TMP_PACKAGE_DIR}"/${BINARY_DIR}/*+*.changes; do
+	distro=\$(sed 's/^.*+\([a-z]*\)[0-9]*_\(amd64\|i386\).changes$/\1/' <<< "\$changesfile")
+	dput "$REPO":ubuntu/"\$distro""$DESTINATION" "\$changesfile"
 done
-rm -rf $TMP_PACKAGE_DIR
+rm -rf "$TMP_PACKAGE_DIR"
 EOF
 
 	if [ -n "$KEEP" ]; then
-		rm -rf $TMP_PACKAGE_DIR
+		rm -rf "$TMP_PACKAGE_DIR"
 	fi
 }
 
