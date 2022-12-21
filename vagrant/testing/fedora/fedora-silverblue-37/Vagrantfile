@@ -1,0 +1,19 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "fkrull/fedora37-silverblue"
+  config.vm.define :"sys"
+
+  config.vm.provider "virtualbox" do |v|
+    v.memory = ENV['FWTEST_RAM'] || "4096"
+    v.cpus = 2
+    v.gui = true
+    # Enable 3D acceleration and more video RAM for larger displays.
+    v.customize ["modifyvm", :id, "--accelerate3d", "on"]
+    v.customize ["modifyvm", :id, "--vram", "128"]
+  end
+
+  config.vm.provision "shell", privileged: false, path: "first-time-setup"
+end
