@@ -1,0 +1,95 @@
+#!/bin/bash
+# To be run automatically in the vagrant guest the first time the basebox
+# starts to be used.
+# Sets up machine for testing FieldWorks.
+
+set -xueo pipefail
+
+# Duplicate output to a log file
+exec &> >(tee "$(mktemp --tmpdir "provision-$(date +"%F-%H%M%S")-XXXXXXXXXX.log")")
+
+# Helper method to avoid failing from a network hiccup during provision
+function tryharderto() { i=0; until "$@"; do ((++i <= 3))
+  echo >&2 "Retrying ${i}"; sleep 2m; done }
+
+
+# Vagrant OS setup
+# --------------------
+
+# sshd security settings
+sudo mkdir --parents /etc/ssh/sshd_config.d
+sudo tee /etc/ssh/sshd_config.d/no-password-authentication-or-root.conf >/dev/null <<END
+PasswordAuthentication no
+PermitRootLogin no
+END
+
+# Don't blank or lock VM screen
+gsettings set org.gnome.desktop.session idle-delay 0 ||:
+gsettings set org.gnome.desktop.screensaver lock-enabled false ||:
+
+# Adjust bash prompt
+# Use colour
+sed -i '/#force/ s/^#//' ~/.bashrc
+# Place $ on next line
+sed -i '/PS1/ s/\\\$ /\\n\\\$ /' ~/.bashrc
+# Show exit code
+sed -i '/PS1/ s/@/\$?/' ~/.bashrc
+
+# Don't report developer or tester usage to analytics
+tee --append ~/.pam_environment >/dev/null <<END
+FEEDBACK=false
+WESAY_TRACK_AS_DEVELOPER=1
+END
+
+# Allow testers to log in to the QA server to send and receive
+tee --append ~/.pam_environment >/dev/null <<< \
+  'LANGUAGEFORGESERVER=-qa.languageforge.org'
+
+# Keyboarding
+# May also need to install ibus-libpinyin ibus-table-thai
+gsettings set org.gnome.desktop.input-sources sources \
+  "[('xkb', 'us'), ('xkb', 'us+dvorak'), ('xkb', 'il'), ('xkb', 'ru'), ('ibus', 'libpinyin'), ('ibus', 'table:thai')]" ||:
+
+# Gedit: Menu - Preferences - Fonts & Colours - Solarized Dark
+gsettings set org.gnome.gedit.preferences.editor scheme 'solarized-dark' ||:
+# Terminal: Menu - Preferences - Profiles > Unnamed - Colours.
+# Under Text and Background Color, clear "Use colors from system theme"; Built-in schemes: Tango dark.
+# Under Palette, Build-in schemes: Tango.
+dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/use-theme-colors false ||:
+dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/background-color "'rgb(46,52,54)'" ||:
+dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/foreground-color "'rgb(211,215,207)'" ||:
+dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/palette \
+  "['rgb(46,52,54)', 'rgb(204,0,0)', 'rgb(78,154,6)', 'rgb(196,160,0)', 'rgb(52,101,164)', 'rgb(117,80,123)', 'rgb(6,152,154)', 'rgb(211,215,207)', 'rgb(85,87,83)', 'rgb(239,41,41)', 'rgb(138,226,52)', 'rgb(252,233,79)', 'rgb(114,159,207)', 'rgb(173,127,168)', 'rgb(52,226,226)', 'rgb(238,238,236)']" ||:
+
+
+# Configure desktop for investigating
+# ---------------------------------
+
+# Enable debugging
+sudo sed -i 's/kernel.yama.ptrace_scope = 1/kernel.yama.ptrace_scope = 0/' /etc/sysctl.d/10-ptrace.conf ||:
+
+# Further adjust bash prompt
+# Show if in flatpak
+perl -pi -e '/PS1/ and s/chroot\)\}/chroot\)\}\${FLATPAK_ID+📦 \${FLATPAK_ID} }/' ~/.bashrc ||:
+# Show git repo info
+sed -i '/PS1/ s#\\n#\$(! type __git_ps1 &>/dev/null || __git_ps1)\\n#' ~/.bashrc
+tee --append ~/.bashrc <<END
+export GIT_PS1_SHOWDIRTYSTATE=true
+export GIT_PS1_SHOWSTASHSTATE=true
+export GIT_PS1_SHOWUNTRACKEDFILES=true
+export GIT_PS1_SHOWUPSTREAM="auto"
+export GIT_PS1_HIDE_IF_PWD_IGNORED=true
+export GIT_PS1_SHOWCOLORHINTS=true
+END
+
+
+# FieldWorks testing machine setup
+# ------------------------------------
+
+# FieldWorks sample data
+
+cd ~
+[[ -f 'Sena 3 2017-07-27 1102.fwbackup' ]] ||
+  wget 'http://downloads.sil.org/FieldWorks/8.3.9/Sena%203%202017-07-27%201102.fwbackup'
+
+echo "$0: $(date -Is): Script finished successfully."
