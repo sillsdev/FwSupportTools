@@ -24,8 +24,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # 'export ' shouldn't be on the lines. .pam_environment is not shell.
     perl -pi -e 's/export //'  ~/.pam_environment
 
+    # Keyboarding
     sudo apt-get update
-    sudo apt-get --assume-yes install keyman
+    sudo apt-get --assume-yes install keyman ibus-libpinyin ibus-table-thai
+    gsettings set org.gnome.desktop.input-sources sources \
+      "[('xkb', 'us'), ('xkb', 'us+dvorak'), ('xkb', 'il'), ('xkb', 'ru'), ('ibus', 'libpinyin'), ('ibus', 'table:thai')]"
 
     echo Provisioning finished successfully.
   SHELL
